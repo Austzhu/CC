@@ -1,18 +1,18 @@
 CC = arm-linux-emfure-gcc
 #CC = arm-linux-gcc
-CFLAGS =  -Wall  
-CFLAGS += -Wno-implicit-function-declaration  
+CFLAGS =  -Wall
+CFLAGS += -Wno-implicit-function-declaration
 #关闭由-O2优化选项带来的"警告"提示
 CFLAGS += -Wno-strict-aliasing
 #关闭数据包data数组越界的"警告"提示
 CFLAGS += -Wno-array-bounds
 
 LDFLAGS = -L$(PWD)/sqlite/lib -L$(PWD)/Software/emfuture/lib  -lsqlite3 -lEM_Middleware_Lib
-#LDFLAGS = -L$(PWD)/sqlite/lib   -lsqlite3 
-#LDFLAGS = -L/usr/local/sqlite3/lib/   -lsqlite3 
+#LDFLAGS = -L$(PWD)/sqlite/lib   -lsqlite3
+#LDFLAGS = -L/usr/local/sqlite3/lib/   -lsqlite3
 
-LINKFLAGS = -lpthread 
-DFLAGS = 
+LINKFLAGS = -lpthread
+DFLAGS =
 
 OBJS :=
 output := output
@@ -32,31 +32,36 @@ include $(INCLUDE)
 
 DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
 
-all: svnver test_App
+all: Version test_App
 
 test_App: compile
-	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS) 
-
-svnver:
-	@echo "#ifndef _H_VWESION_H_" > ./version/version.h
-	@echo "#define _H_VWESION_H_" >> ./version/version.h
-	@echo "#define VERSION \"(0.2) `./version/setlocalversion`\"" >> ./version/version.h
-	@echo "#endif" >> ./version/version.h 
+	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS)
+Version:
+	@`./version/setlocalversion`
 
 
 #编译子目录的c文件
 compile:
 	@$(foreach N,$(OBJS_PATH),make -C $(N) CC=$(CC);)
 
-tar:
-	tar -zcvf flash.gz autorun.sh ./bin/test_App
-	tar -zcvf conf.gz term.ini net_params.conf
-
 #将可程序拷贝到nfs目录下
 install:
 	@cp -frd ./Applications/test_App  $(PRJROOT)/rootfs/
 	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/config/
 	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/config/
+
+
+
+
+svnver:
+	@echo "#ifndef _H_VWESION_H_" > ./version/version.h
+	@echo "#define _H_VWESION_H_" >> ./version/version.h
+	@echo "#define VERSION \"(0.2) `./version/setlocalversion`\"" >> ./version/version.h
+	@echo "#endif" >> ./version/version.h
+
+tar:
+	tar -zcvf flash.gz autorun.sh ./bin/test_App
+	tar -zcvf conf.gz term.ini net_params.conf
 
 version:
 	./makeversion
@@ -66,5 +71,5 @@ version:
 clean:
 	@find -type f \( -name '*.o' \) -print | xargs rm -f
 distclean:clean
-	@rm ./bin/test_App -f  
-	
+	@rm ./bin/test_App -f
+
