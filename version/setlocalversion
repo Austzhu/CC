@@ -4,7 +4,10 @@ rm -f ./version/version.h
 VER=`git rev-list origin/master | wc -l | awk '{print $1}'`
 
 if [ $VER -ge 1 ] ; then
-    VER="V${VER}_$(git rev-list HEAD -n 1 | cut -c 1-7)"
+    #BRANCH=`git branch | sed -e '/^[^*]/d' -e 's/* //' | tr '[a-z]' '[A-Z]'`
+    # #获取当前的分支，取前面3个字符,首字母转大写
+    BRANCH=`git branch | sed -e '/^[^*]/d' -e 's/* //' | sed 's/^[a-z]/\u&/'`
+    VER="V${VER}_$(git rev-list HEAD -n 1 | cut -c 1-7)_${BRANCH}"
 else
     VER="XXX"
 fi

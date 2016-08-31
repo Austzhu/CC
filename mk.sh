@@ -15,9 +15,9 @@ DirSoft=$Topdir/Software
 CPATH=$Topdir/Common:$Topdir/Common/My_lib:$Topdir/Common/common:$Topdir/config:$DirHard/coordinate:\
 $DirHard/ethernet:$DirHard/gprs_ppp:$DirHard/serial:$DirSoft/analysis:$DirSoft/burglar_alarm:$DirSoft/cc_param:\
 $DirSoft/cmd_process:$DirSoft/communication:$DirSoft/info_output:$DirSoft/initstart:$DirSoft/link_method:$DirHard/Zt_Meter:\
-$DirSoft/Log:$DirSoft/meter_crc:$Topdir/sqlite:$Topdir/task/tasklist:$Topdir/task/timertask:$CPATH:$DirHard/update:$Topdir/User
+$DirSoft/Log:$DirSoft/meter_crc:$Topdir/sqlite:$Topdir/task/tasklist:$Topdir/task/timertask:$DirHard/update:$Topdir/User:$Topdir/version:$CPATH
 
-export CPATH 
+export CPATH
 
 #env | grep 'PATH'
 

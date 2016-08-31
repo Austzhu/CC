@@ -65,6 +65,7 @@ pthread_mutex_t mutex_task;
 		debug(1,"database not exist! we must create it!\n");
 		system("./config/Create_Database.sh");//重新建数据库
 	}
+	debug(1,"Version:%s\n",VERSION_NUMBER);
 	InitTimeTASK();		//定时任务的初始化
  #	ifdef UsePthread
 	pthread_mutex_init(&mutex_ether,NULL);

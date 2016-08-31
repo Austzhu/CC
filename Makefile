@@ -23,7 +23,7 @@ export output CFLAGS Rootdir
 OBJS_PATH +=./Common/common ./Common/My_lib ./hardware/coordinate ./hardware/ethernet ./hardware/gprs_ppp 	\
 	./hardware/serial ./Software/analysis ./Software/burglar_alarm ./Software/cc_param ./Software/communication 	\
 	./Software/info_output ./Software/initstart ./Software/link_method ./Software/Log ./Software/meter_crc 		\
-	./Software/cmd_process ./sqlite ./task/tasklist ./User ./hardware/update ./task/timertask  ././hardware/Zt_Meter
+	./Software/cmd_process ./sqlite ./task/tasklist ./User ./hardware/update ./task/timertask  ./hardware/Zt_Meter
 
 
 #包含子目录的工程文件

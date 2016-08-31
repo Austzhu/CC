@@ -32,6 +32,7 @@
 #include "err_code.h"
 #include "config.h"
 #include "Mstring.h"
+#include "version.h"
 
 extern pthread_mutex_t mutex_ether;
 extern pthread_mutex_t mutex_task;
