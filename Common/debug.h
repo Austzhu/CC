@@ -31,6 +31,7 @@ typedef enum{
 #define DEBUG_chktime 				1 		//对时调试
 #define DEBUG_reset 					1 		//复位调试
 #define DEBUG_inqTime 				1 		//查询时间命令调试
+#define DEBUG_inqVersion				1		//查询版本号
 #define DEBUG_DIDO 					1 		//DIDO调试
 #define DEBUG_Broadcast 				1 		//广播命令
 #define DEBUG_sqlite3 				1 		//sqlite数据库调试

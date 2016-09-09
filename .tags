@@ -130,6 +130,7 @@ CC_ETH_TEST3_CMD	.\Software\communication\communication.h	44;"	d
 CC_ETH_TEST4_CMD	.\Software\communication\communication.h	45;"	d
 CC_GEOGRA_CMD	.\Software\communication\communication.h	64;"	d
 CC_Init	.\User\main.c	/^ void CC_Init(void)$/;"	f
+CC_Inquire_Version	.\Software\cmd_process\cmd_process.c	/^s32 CC_Inquire_Version(u8 *AckBuf,u8 Ctrl,u8 Cmd)$/;"	f
 CC_KEEPALIVE_ERR	.\Common\err_code.h	53;"	d
 CC_LINE_HEATBEAT	.\Common\common\frame.h	49;"	d
 CC_LINE_HEATBEAT_DATA	.\Common\common\frame.h	51;"	d
@@ -651,7 +652,7 @@ Config_EC_6018	.\config\config.h	14;"	d
 Config_Log	.\config\config.h	12;"	d
 Config_NewProtocol	.\config\config.h	13;"	d
 Config_PWM_	.\config\config.h	22;"	d
-ControlMethod	.\Software\initstart\loadfile.h	/^	u8 ControlMethod;	\/\/手自		$/;"	m	struct:__anon24
+ControlMethod	.\Software\initstart\loadfile.h	/^	u8 ControlMethod;	\/\/手自$/;"	m	struct:__anon24
 ControlMethod	.\Software\initstart\softwareinit.h	/^	UCHAR ControlMethod;			\/\/手自$/;"	m	struct:GlobalCCparam
 ControlMode	.\task\timertask\timertask.h	/^	UCHAR ControlMode;		\/\/1-timecontrol$/;"	m	struct:ServerCommunTimerTaskStruct
 ControlMode	.\task\timertask\timertask.h	/^	u8 	ControlMode;		\/\/控制方式timecontrol\/ 2\\timeandarry$/;"	m	struct:TimerTaskToSaveFormatStruct
@@ -702,34 +703,34 @@ DATASIZE	.\task\basetask\task_list.h	16;"	d
 DATASIZE	.\task\tasklist\tasklist.h	12;"	d
 DEBUG	.\Common\debug.h	/^	DEBUG$/;"	e	enum:__anon3
 DEBUG	.\Software\emfuture\include\libs_emfuture_odm.h	1760;"	d
-DEBUG_Broadcast	.\Common\debug.h	35;"	d
+DEBUG_Broadcast	.\Common\debug.h	36;"	d
 DEBUG_CC_Config	.\Common\debug.h	22;"	d
-DEBUG_DIDO	.\Common\debug.h	34;"	d
+DEBUG_DIDO	.\Common\debug.h	35;"	d
 DEBUG_ERR	.\Common\debug.h	23;"	d
-DEBUG_ERR_RECD_ETHNET	.\Common\debug.h	55;"	d
-DEBUG_ERR_RECD_LINK	.\Common\debug.h	56;"	d
-DEBUG_ERR_RECD_SERIAL	.\Common\debug.h	57;"	d
-DEBUG_Ethnet	.\Common\debug.h	42;"	d
-DEBUG_LOCAL_BURGLAR	.\Common\debug.h	54;"	d
-DEBUG_LOCAL_CC2SERVER_HEARTBEAT	.\Common\debug.h	66;"	d
-DEBUG_LOCAL_CC2SERVER_RIGISTER	.\Common\debug.h	65;"	d
-DEBUG_LOCAL_CMD_RESET	.\Common\debug.h	68;"	d
-DEBUG_LOCAL_DATABASE	.\Common\debug.h	52;"	d
-DEBUG_LOCAL_DIDO	.\Common\debug.h	59;"	d
-DEBUG_LOCAL_ETHNET	.\Common\debug.h	47;"	d
-DEBUG_LOCAL_FILEPARAM_LOAD	.\Common\debug.h	53;"	d
-DEBUG_LOCAL_FORMAT_CH	.\Common\debug.h	49;"	d
-DEBUG_LOCAL_GLOBAL_INFOR	.\Common\debug.h	60;"	d
-DEBUG_LOCAL_GPRS_ATSEND	.\Common\debug.h	69;"	d
-DEBUG_LOCAL_HEAPMEM_INCREASE	.\Common\debug.h	67;"	d
-DEBUG_LOCAL_HEATBEAT	.\Common\debug.h	64;"	d
-DEBUG_LOCAL_LINK_METH	.\Common\debug.h	48;"	d
-DEBUG_LOCAL_METTER	.\Common\debug.h	58;"	d
-DEBUG_LOCAL_PARAFILE_SAVE	.\Common\debug.h	62;"	d
-DEBUG_LOCAL_PARA_RECIV	.\Common\debug.h	63;"	d
-DEBUG_LOCAL_TASK	.\Common\debug.h	50;"	d
-DEBUG_LOCAL_TASK_EXCUT	.\Common\debug.h	51;"	d
-DEBUG_LOCAL_TIME_TASK	.\Common\debug.h	61;"	d
+DEBUG_ERR_RECD_ETHNET	.\Common\debug.h	56;"	d
+DEBUG_ERR_RECD_LINK	.\Common\debug.h	57;"	d
+DEBUG_ERR_RECD_SERIAL	.\Common\debug.h	58;"	d
+DEBUG_Ethnet	.\Common\debug.h	43;"	d
+DEBUG_LOCAL_BURGLAR	.\Common\debug.h	55;"	d
+DEBUG_LOCAL_CC2SERVER_HEARTBEAT	.\Common\debug.h	67;"	d
+DEBUG_LOCAL_CC2SERVER_RIGISTER	.\Common\debug.h	66;"	d
+DEBUG_LOCAL_CMD_RESET	.\Common\debug.h	69;"	d
+DEBUG_LOCAL_DATABASE	.\Common\debug.h	53;"	d
+DEBUG_LOCAL_DIDO	.\Common\debug.h	60;"	d
+DEBUG_LOCAL_ETHNET	.\Common\debug.h	48;"	d
+DEBUG_LOCAL_FILEPARAM_LOAD	.\Common\debug.h	54;"	d
+DEBUG_LOCAL_FORMAT_CH	.\Common\debug.h	50;"	d
+DEBUG_LOCAL_GLOBAL_INFOR	.\Common\debug.h	61;"	d
+DEBUG_LOCAL_GPRS_ATSEND	.\Common\debug.h	70;"	d
+DEBUG_LOCAL_HEAPMEM_INCREASE	.\Common\debug.h	68;"	d
+DEBUG_LOCAL_HEATBEAT	.\Common\debug.h	65;"	d
+DEBUG_LOCAL_LINK_METH	.\Common\debug.h	49;"	d
+DEBUG_LOCAL_METTER	.\Common\debug.h	59;"	d
+DEBUG_LOCAL_PARAFILE_SAVE	.\Common\debug.h	63;"	d
+DEBUG_LOCAL_PARA_RECIV	.\Common\debug.h	64;"	d
+DEBUG_LOCAL_TASK	.\Common\debug.h	51;"	d
+DEBUG_LOCAL_TASK_EXCUT	.\Common\debug.h	52;"	d
+DEBUG_LOCAL_TIME_TASK	.\Common\debug.h	62;"	d
 DEBUG_Log	.\Common\debug.h	24;"	d
 DEBUG_Logon	.\Common\debug.h	20;"	d
 DEBUG_RECV	.\Common\debug.h	27;"	d
@@ -738,22 +739,23 @@ DEBUG_TaskAppend	.\Common\debug.h	26;"	d
 DEBUG_Timetask	.\Common\debug.h	21;"	d
 DEBUG_cc2server	.\Common\debug.h	29;"	d
 DEBUG_chktime	.\Common\debug.h	31;"	d
-DEBUG_coordinate	.\Common\debug.h	37;"	d
+DEBUG_coordinate	.\Common\debug.h	38;"	d
 DEBUG_inqTime	.\Common\debug.h	33;"	d
-DEBUG_list	.\Common\debug.h	40;"	d
-DEBUG_loadfile	.\Common\debug.h	39;"	d
+DEBUG_inqVersion	.\Common\debug.h	34;"	d
+DEBUG_list	.\Common\debug.h	41;"	d
+DEBUG_loadfile	.\Common\debug.h	40;"	d
 DEBUG_reboot	.\Common\debug.h	30;"	d
 DEBUG_reset	.\Common\debug.h	32;"	d
 DEBUG_server2cc	.\Common\debug.h	28;"	d
-DEBUG_single	.\Common\debug.h	38;"	d
-DEBUG_sqlite3	.\Common\debug.h	36;"	d
-DEBUG_update	.\Common\debug.h	41;"	d
+DEBUG_single	.\Common\debug.h	39;"	d
+DEBUG_sqlite3	.\Common\debug.h	37;"	d
+DEBUG_update	.\Common\debug.h	42;"	d
 DEFCFGFORCOM	.\Software\emfuture\include\libs_emfuture_odm.h	532;"	d
 DEVICE485_TYPE_QUEUE	.\task\basetask\task.h	22;"	d
 DEVICE485_TYPE_QUEUE	.\task\tasklist\tasklist.h	16;"	d
 DEVICE_NAME	.\hardware\gprs_ppp\gprs_ppp.c	102;"	d	file:
 DEVICE_NAME	.\hardware\gprs_ppp\gprs_ppp.c	71;"	d	file:
-DIDI_START_ADDR	.\Software\initstart\loadfile.h	35;"	d
+DIDI_START_ADDR	.\Software\initstart\loadfile.h	36;"	d
 DIDI_START_ADDR	.\Software\initstart\softwareinit.h	13;"	d
 DIDOOprate	.\Software\meter_crc\meter_cmdrdwr.c	/^SINT DIDOOprate(UCHAR DeviceId,UCHAR chanel,UCHAR action)$/;"	f
 DIDOOutInputStatQuery	.\Software\meter_crc\meter_cmdrdwr.c	/^SINT DIDOOutInputStatQuery(UCHAR DeviceId,UCHAR chanel,UCHAR type,UCHAR *stat)$/;"	f
@@ -763,7 +765,7 @@ DIDO_8DO	.\hardware\Zt_Meter\Zt_Meter.h	16;"	d
 DIDO_All	.\hardware\Zt_Meter\Zt_Meter.h	19;"	d
 DIDO_CLOSE	.\Software\meter_crc\meter_cmdrdwr.h	8;"	d
 DIDO_Close	.\hardware\Zt_Meter\Zt_Meter.c	/^s32 DIDO_Close(struct task_node *node)$/;"	f
-DIDO_DEVICE_QUANTITY	.\Software\initstart\loadfile.h	36;"	d
+DIDO_DEVICE_QUANTITY	.\Software\initstart\loadfile.h	37;"	d
 DIDO_DEVICE_QUANTITY	.\Software\initstart\softwareinit.h	14;"	d
 DIDO_INPUT_QUERY	.\Software\cmd_process\cmd_process.c	21;"	d	file:
 DIDO_INPUT_QUERY_ERR	.\Common\err_code.h	98;"	d
@@ -800,7 +802,7 @@ DatabaseOpen	.\sqlite\database.c	/^static sqlite3 * DatabaseOpen(s8 *DB_PathName
 DatabaseRead	.\sqlite\database.c	/^s32 DatabaseRead(s8* sql_string,  void* result)$/;"	f
 DatabaseWrite	.\sqlite\database.c	/^s32 DatabaseWrite(s8* sql_string)$/;"	f
 Database_Path	.\sqlite\database.c	12;"	d	file:
-DebugLevel	.\Software\initstart\loadfile.h	/^	u8 DebugLevel;		$/;"	m	struct:__anon24
+DebugLevel	.\Software\initstart\loadfile.h	/^	u8 DebugLevel;$/;"	m	struct:__anon24
 DebugLevel	.\Software\initstart\softwareinit.h	/^	UCHAR DebugLevel;		$/;"	m	struct:GlobalCCparam
 DebugPrint	.\config\config.h	11;"	d
 Default_CCUID	.\Software\initstart\loadfile.h	29;"	d
@@ -809,6 +811,7 @@ Default_ItfWay	.\Software\initstart\loadfile.h	32;"	d
 Default_Method	.\Software\initstart\loadfile.h	31;"	d
 Default_ServerIp	.\Software\initstart\loadfile.h	27;"	d
 Default_ServerPort	.\Software\initstart\loadfile.h	28;"	d
+Default_TCP	.\Software\initstart\loadfile.h	34;"	d
 Default_debuglevel	.\Software\initstart\loadfile.h	30;"	d
 DefineParamCheck	.\Software\initstart\softwareinit.c	/^UINT DefineParamCheck()$/;"	f
 DefineParamLoad	.\Software\initstart\softwareinit.c	/^UINT DefineParamLoad()$/;"	f
@@ -892,7 +895,7 @@ End_Date	.\sqlite\database.h	/^	time_t	End_Date;		\/\/结束日期$/;"	m	struct:
 EndofFileBufstr	.\Software\initstart\softwareinit.c	/^SINT EndofFileBufstr(CHAR c)$/;"	f
 Errmsg	.\sqlite\database.c	/^struct Errmsg{$/;"	s	file:
 ErrorMessage	.\sqlite\database.c	/^void ErrorMessage(int err)$/;"	f
-Ether_Connect	.\hardware\ethernet\ether.c	/^SINT Ether_Connect(void)$/;"	f
+Ether_Connect	.\hardware\ethernet\ether.c	/^int Ether_Connect(void){$/;"	f
 Ether_Disconnect	.\hardware\ethernet\ether.c	/^SINT Ether_Disconnect(void)$/;"	f
 Ether_Getchar	.\hardware\ethernet\ether.c	/^SINT Ether_Getchar(UCHAR *buf)$/;"	f
 Ether_HeartBeat	.\hardware\ethernet\ether.c	/^SINT Ether_HeartBeat(void)$/;"	f
@@ -980,7 +983,7 @@ GPRS_TEST4_CMD	.\Software\communication\communication.h	39;"	d
 GPRS_TEST5_CMD	.\Software\communication\communication.h	40;"	d
 GPRS_TYPE_QUEUE	.\task\basetask\task.h	20;"	d
 GPRS_TYPE_QUEUE	.\task\tasklist\tasklist.h	14;"	d
-GROUP_LED_QUANTITY	.\Software\initstart\loadfile.h	39;"	d
+GROUP_LED_QUANTITY	.\Software\initstart\loadfile.h	40;"	d
 GROUP_LED_QUANTITY	.\Software\initstart\softwareinit.h	17;"	d
 G_Ether_Rcvbuf	.\Software\link_method\link_method.c	/^ULONG 	G_Ether_Rcvbuf[ETHER_RECV_BUF_MAX\/4];$/;"	v
 G_Ether_Sndbuf	.\Software\link_method\link_method.c	/^ULONG 	G_Ether_Sndbuf[ETHER_SEND_BUF_MAX\/4];$/;"	v
@@ -1066,6 +1069,7 @@ IsNewLine	.\Software\initstart\softwareinit.c	/^SINT IsNewLine(CHAR c)$/;"	f
 IsRightBrach	.\Software\initstart\softwareinit.c	/^SINT IsRightBrach(CHAR c)$/;"	f
 Is_Empty	.\task\task_queue\task_que.c	/^static s32 Is_Empty(Que_type  Qtype)$/;"	f	file:
 Is_Group	.\Software\cmd_process\SingleOpt.c	/^static int Is_Group = -2;$/;"	v	file:
+Is_TCP	.\Software\initstart\loadfile.h	/^	u8 Is_TCP;$/;"	m	struct:__anon24
 Is_UpdateImageA	.\hardware\update\SingleOrCoordi.h	/^	s32 	Is_UpdateImageA;	\/\/升级A区？$/;"	m	struct:__anon13
 ItfWay	.\Software\initstart\loadfile.h	/^	u8 ItfWay;$/;"	m	struct:__anon24
 ItfWay	.\Software\initstart\softwareinit.h	/^	UCHAR ItfWay;$/;"	m	struct:GlobalCCparam
@@ -1105,10 +1109,10 @@ Logfile_t	.\Software\Log\log.h	/^}Logfile_t;$/;"	t	typeref:enum:__anon30
 MDFactory	.\Software\meter_crc\meter_cmdrdwr.h	/^		UCHAR MDFactory[15];$/;"	m	struct:TOPDeviceGPRSMDStatStruct
 MDType	.\Software\meter_crc\meter_cmdrdwr.h	/^		UCHAR MDType[10];$/;"	m	struct:TOPDeviceGPRSMDStatStruct
 METERD_WAIT_TIME_CONTROL	.\Software\meter_crc\meter_cmdrdwr.h	15;"	d
-METER_DEVICE_QUANTITY	.\Software\initstart\loadfile.h	38;"	d
+METER_DEVICE_QUANTITY	.\Software\initstart\loadfile.h	39;"	d
 METER_DEVICE_QUANTITY	.\Software\initstart\softwareinit.h	16;"	d
 METER_REALTIME_READ_ERR	.\Common\err_code.h	100;"	d
-METER_START_ADDR	.\Software\initstart\loadfile.h	37;"	d
+METER_START_ADDR	.\Software\initstart\loadfile.h	38;"	d
 METER_START_ADDR	.\Software\initstart\softwareinit.h	15;"	d
 METHOD	.\Software\initstart\loadfile.h	/^	METHOD,$/;"	e	enum:__anon25
 METTERCMD_LENMAX	.\Software\meter_crc\meter_cmdrdwr.h	11;"	d
@@ -1753,7 +1757,7 @@ ServerCommunTimerTaskStruct	.\task\timertask\timertask.h	/^}__attribute__((packe
 ServerIp	.\Software\initstart\loadfile.h	23;"	d
 ServerIpaddr	.\Software\initstart\loadfile.h	/^	s8 ServerIpaddr[32];$/;"	m	struct:__anon24
 ServerIpaddr	.\Software\initstart\softwareinit.h	/^	CHAR ServerIpaddr[32];$/;"	m	struct:GlobalCCparam
-ServerPort	.\Software\initstart\loadfile.h	/^	u16 ServerPort;	$/;"	m	struct:__anon24
+ServerPort	.\Software\initstart\loadfile.h	/^	u16 ServerPort;$/;"	m	struct:__anon24
 ServerPort	.\Software\initstart\softwareinit.h	/^	USHORT ServerPort;$/;"	m	struct:GlobalCCparam
 ServerPortGenerate	.\Software\cmd_process\cmd_process.c	/^USHORT ServerPortGenerate(UCHAR *ptr)$/;"	f
 Set485BurglarDevic	.\Software\burglar_alarm\burglar_alarm.c	/^SINT Set485BurglarDevic(CHAR deviceID)$/;"	f
@@ -2104,7 +2108,6 @@ UsedFlag	.\task\timertask\timertask.h	/^	UCHAR UsedFlag;$/;"	m	struct:TimerRelev
 UserQueProcThread	.\User\main.c	/^static void *UserQueProcThread(void *args)$/;"	f	file:
 VARLONG	.\Common\common\format_exchg.h	/^} VARLONG;$/;"	t	typeref:union:__anon1
 VCHAR	.\Common\common\base_type.h	19;"	d
-VERSION	.\version\version.h	3;"	d
 VINT	.\Common\common\base_type.h	25;"	d
 VLONG	.\Common\common\base_type.h	29;"	d
 VSHORT	.\Common\common\base_type.h	22;"	d
@@ -2126,7 +2129,6 @@ Write485BurglarDevic	.\Software\burglar_alarm\burglar_alarm.c	/^SINT Write485Bur
 WriteCarrierBurglarDevic	.\Software\burglar_alarm\burglar_alarm.c	/^SINT WriteCarrierBurglarDevic()	\/\/sendinfor$/;"	f
 Write_log	.\Software\Log\log.c	/^s32 Write_log(int cmd, ...)$/;"	f
 _FTS5_H	.\sqlite\include\sqlite3.h	8132;"	d
-_H_VWESION_H_	.\version\version.h	2;"	d
 _IIO_UTILS_H_	.\Software\emfuture\include\iio_utils.h	10;"	d
 _SQLITE3EXT_H_	.\sqlite\include\sqlite3ext.h	19;"	d
 _SQLITE3RTREE_H_	.\sqlite\include\sqlite3.h	8008;"	d
@@ -2358,9 +2360,9 @@ db_readonly	.\sqlite\include\sqlite3ext.h	/^  int (*db_readonly)(sqlite3*,const 
 db_release_memory	.\sqlite\include\sqlite3ext.h	/^  int (*db_release_memory)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 db_status	.\sqlite\include\sqlite3ext.h	/^  int (*db_status)(sqlite3*,int,int*,int*,int);$/;"	m	struct:sqlite3_api_routines
 dcd	.\Software\cc_param\cc_param.h	/^	UCHAR dcd;					\/\/GPRS自动检测掉线.1-检测\/0-不检测$/;"	m	struct:cc_connect_para
-debug	.\Common\debug.h	72;"	d
-debug	.\Common\debug.h	74;"	d
-debug	.\Common\debug.h	76;"	d
+debug	.\Common\debug.h	73;"	d
+debug	.\Common\debug.h	75;"	d
+debug	.\Common\debug.h	77;"	d
 debug_err_reccord	.\hardware\ethernet\ether.c	/^SINT debug_err_reccord(UINT value)$/;"	f
 debug_level	.\Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon3
 declare_vtab	.\sqlite\include\sqlite3ext.h	/^  int (*declare_vtab)(sqlite3*,const char*);$/;"	m	struct:sqlite3_api_routines
@@ -2379,8 +2381,8 @@ enter	.\task\task_queue\task_que.h	/^	struct list_head enter;		\/\/链接节点(
 entries	.\task\basetask\task_list.h	/^	LIST_ENTRY(task_node) entries;$/;"	m	struct:task_node
 entries	.\task\tasklist\tasklist.h	/^	struct list_head  entries;$/;"	m	struct:task_node	typeref:struct:task_node::list_head
 equipment	.\Software\cc_param\cc_param.h	/^	UCHAR equipment[20];$/;"	m	struct:cc_global_para
-err_Print	.\Common\debug.h	80;"	d
-err_Print	.\Common\debug.h	82;"	d
+err_Print	.\Common\debug.h	81;"	d
+err_Print	.\Common\debug.h	83;"	d
 err_msg	.\sqlite\database.h	/^	s8* err_msg;	\/\/错误信息$/;"	m	struct:__anon37
 errcode	.\sqlite\include\sqlite3ext.h	/^  int  (*errcode)(sqlite3*db);$/;"	m	struct:sqlite3_api_routines
 errmsg	.\sqlite\include\sqlite3ext.h	/^  const char * (*errmsg)(sqlite3*);$/;"	m	struct:sqlite3_api_routines

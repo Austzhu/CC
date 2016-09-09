@@ -69,34 +69,34 @@ len	Common\common\frame.h	/^	UCHAR len;		\/\/data length$/;"	m	struct:__anon2
 rtua	Common\common\frame.h	/^	UCHAR rtua[6];$/;"	m	struct:__anon2
 CRIT	Common\debug.h	/^	CRIT,$/;"	e	enum:__anon3
 DEBUG	Common\debug.h	/^	DEBUG$/;"	e	enum:__anon3
-DEBUG_Broadcast	Common\debug.h	35;"	d
+DEBUG_Broadcast	Common\debug.h	36;"	d
 DEBUG_CC_Config	Common\debug.h	22;"	d
-DEBUG_DIDO	Common\debug.h	34;"	d
+DEBUG_DIDO	Common\debug.h	35;"	d
 DEBUG_ERR	Common\debug.h	23;"	d
-DEBUG_ERR_RECD_ETHNET	Common\debug.h	55;"	d
-DEBUG_ERR_RECD_LINK	Common\debug.h	56;"	d
-DEBUG_ERR_RECD_SERIAL	Common\debug.h	57;"	d
-DEBUG_Ethnet	Common\debug.h	42;"	d
-DEBUG_LOCAL_BURGLAR	Common\debug.h	54;"	d
-DEBUG_LOCAL_CC2SERVER_HEARTBEAT	Common\debug.h	66;"	d
-DEBUG_LOCAL_CC2SERVER_RIGISTER	Common\debug.h	65;"	d
-DEBUG_LOCAL_CMD_RESET	Common\debug.h	68;"	d
-DEBUG_LOCAL_DATABASE	Common\debug.h	52;"	d
-DEBUG_LOCAL_DIDO	Common\debug.h	59;"	d
-DEBUG_LOCAL_ETHNET	Common\debug.h	47;"	d
-DEBUG_LOCAL_FILEPARAM_LOAD	Common\debug.h	53;"	d
-DEBUG_LOCAL_FORMAT_CH	Common\debug.h	49;"	d
-DEBUG_LOCAL_GLOBAL_INFOR	Common\debug.h	60;"	d
-DEBUG_LOCAL_GPRS_ATSEND	Common\debug.h	69;"	d
-DEBUG_LOCAL_HEAPMEM_INCREASE	Common\debug.h	67;"	d
-DEBUG_LOCAL_HEATBEAT	Common\debug.h	64;"	d
-DEBUG_LOCAL_LINK_METH	Common\debug.h	48;"	d
-DEBUG_LOCAL_METTER	Common\debug.h	58;"	d
-DEBUG_LOCAL_PARAFILE_SAVE	Common\debug.h	62;"	d
-DEBUG_LOCAL_PARA_RECIV	Common\debug.h	63;"	d
-DEBUG_LOCAL_TASK	Common\debug.h	50;"	d
-DEBUG_LOCAL_TASK_EXCUT	Common\debug.h	51;"	d
-DEBUG_LOCAL_TIME_TASK	Common\debug.h	61;"	d
+DEBUG_ERR_RECD_ETHNET	Common\debug.h	56;"	d
+DEBUG_ERR_RECD_LINK	Common\debug.h	57;"	d
+DEBUG_ERR_RECD_SERIAL	Common\debug.h	58;"	d
+DEBUG_Ethnet	Common\debug.h	43;"	d
+DEBUG_LOCAL_BURGLAR	Common\debug.h	55;"	d
+DEBUG_LOCAL_CC2SERVER_HEARTBEAT	Common\debug.h	67;"	d
+DEBUG_LOCAL_CC2SERVER_RIGISTER	Common\debug.h	66;"	d
+DEBUG_LOCAL_CMD_RESET	Common\debug.h	69;"	d
+DEBUG_LOCAL_DATABASE	Common\debug.h	53;"	d
+DEBUG_LOCAL_DIDO	Common\debug.h	60;"	d
+DEBUG_LOCAL_ETHNET	Common\debug.h	48;"	d
+DEBUG_LOCAL_FILEPARAM_LOAD	Common\debug.h	54;"	d
+DEBUG_LOCAL_FORMAT_CH	Common\debug.h	50;"	d
+DEBUG_LOCAL_GLOBAL_INFOR	Common\debug.h	61;"	d
+DEBUG_LOCAL_GPRS_ATSEND	Common\debug.h	70;"	d
+DEBUG_LOCAL_HEAPMEM_INCREASE	Common\debug.h	68;"	d
+DEBUG_LOCAL_HEATBEAT	Common\debug.h	65;"	d
+DEBUG_LOCAL_LINK_METH	Common\debug.h	49;"	d
+DEBUG_LOCAL_METTER	Common\debug.h	59;"	d
+DEBUG_LOCAL_PARAFILE_SAVE	Common\debug.h	63;"	d
+DEBUG_LOCAL_PARA_RECIV	Common\debug.h	64;"	d
+DEBUG_LOCAL_TASK	Common\debug.h	51;"	d
+DEBUG_LOCAL_TASK_EXCUT	Common\debug.h	52;"	d
+DEBUG_LOCAL_TIME_TASK	Common\debug.h	62;"	d
 DEBUG_Log	Common\debug.h	24;"	d
 DEBUG_Logon	Common\debug.h	20;"	d
 DEBUG_RECV	Common\debug.h	27;"	d
@@ -105,16 +105,17 @@ DEBUG_TaskAppend	Common\debug.h	26;"	d
 DEBUG_Timetask	Common\debug.h	21;"	d
 DEBUG_cc2server	Common\debug.h	29;"	d
 DEBUG_chktime	Common\debug.h	31;"	d
-DEBUG_coordinate	Common\debug.h	37;"	d
+DEBUG_coordinate	Common\debug.h	38;"	d
 DEBUG_inqTime	Common\debug.h	33;"	d
-DEBUG_list	Common\debug.h	40;"	d
-DEBUG_loadfile	Common\debug.h	39;"	d
+DEBUG_inqVersion	Common\debug.h	34;"	d
+DEBUG_list	Common\debug.h	41;"	d
+DEBUG_loadfile	Common\debug.h	40;"	d
 DEBUG_reboot	Common\debug.h	30;"	d
 DEBUG_reset	Common\debug.h	32;"	d
 DEBUG_server2cc	Common\debug.h	28;"	d
-DEBUG_single	Common\debug.h	38;"	d
-DEBUG_sqlite3	Common\debug.h	36;"	d
-DEBUG_update	Common\debug.h	41;"	d
+DEBUG_single	Common\debug.h	39;"	d
+DEBUG_sqlite3	Common\debug.h	37;"	d
+DEBUG_update	Common\debug.h	42;"	d
 ERROR	Common\debug.h	/^	ERROR,$/;"	e	enum:__anon3
 ERR_PRINT	Common\debug.h	4;"	d
 EthnetSend_Print	Common\debug.h	17;"	d
@@ -124,12 +125,12 @@ MY_DEBUG	Common\debug.h	5;"	d
 NOTICE	Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon3
 WARNING	Common\debug.h	/^	WARNING,$/;"	e	enum:__anon3
 __DEBUG_H__	Common\debug.h	2;"	d
-debug	Common\debug.h	72;"	d
-debug	Common\debug.h	74;"	d
-debug	Common\debug.h	76;"	d
+debug	Common\debug.h	73;"	d
+debug	Common\debug.h	75;"	d
+debug	Common\debug.h	77;"	d
 debug_level	Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon3
-err_Print	Common\debug.h	80;"	d
-err_Print	Common\debug.h	82;"	d
+err_Print	Common\debug.h	81;"	d
+err_Print	Common\debug.h	83;"	d
 BURGLALARMTABLE_ELEM_DEL_ERR	Common\err_code.h	84;"	d
 BURGLALARMTABLE_ELEM_INSERT_ERR	Common\err_code.h	85;"	d
 BURGLALARMTABLE_ELEM_UNION_ERR	Common\err_code.h	86;"	d
@@ -404,6 +405,7 @@ CCGlobalparamInforUpdate	Software\cmd_process\cmd_process.c	/^static s32 CCGloba
 CCLocateTimeUpLoad	Software\cmd_process\cmd_process.c	/^SINT CCLocateTimeUpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD)$/;"	f
 CCParaCheckAvailable	Software\cmd_process\cmd_process.c	/^CHAR CCParaCheckAvailable(void)$/;"	f
 CC_Coordi_group	Software\cmd_process\cmd_process.c	/^static s32 CC_Coordi_group(u8 *Pdata)$/;"	f	file:
+CC_Inquire_Version	Software\cmd_process\cmd_process.c	/^s32 CC_Inquire_Version(u8 *AckBuf,u8 Ctrl,u8 Cmd)$/;"	f
 CC_Single_group	Software\cmd_process\cmd_process.c	/^static s32 CC_Single_group(u8 *Pdata)$/;"	f	file:
 CC_Task_Config	Software\cmd_process\cmd_process.c	/^static s32 CC_Task_Config(u8 *Pdata)$/;"	f	file:
 CC_Tasklist_Config	Software\cmd_process\cmd_process.c	/^static s32 CC_Tasklist_Config(u8 *Pdata)$/;"	f	file:
@@ -1053,37 +1055,39 @@ CCUID	Software\initstart\loadfile.h	/^	u8 CCUID[6];$/;"	m	struct:__anon24
 CUID	Software\initstart\loadfile.h	/^	CUID,$/;"	e	enum:__anon25
 CYCLE	Software\initstart\loadfile.h	/^	CYCLE,$/;"	e	enum:__anon25
 ConType	Software\initstart\loadfile.h	22;"	d
-ControlMethod	Software\initstart\loadfile.h	/^	u8 ControlMethod;	\/\/手自		$/;"	m	struct:__anon24
-DIDI_START_ADDR	Software\initstart\loadfile.h	35;"	d
-DIDO_DEVICE_QUANTITY	Software\initstart\loadfile.h	36;"	d
+ControlMethod	Software\initstart\loadfile.h	/^	u8 ControlMethod;	\/\/手自$/;"	m	struct:__anon24
+DIDI_START_ADDR	Software\initstart\loadfile.h	36;"	d
+DIDO_DEVICE_QUANTITY	Software\initstart\loadfile.h	37;"	d
 DUGLEVEL	Software\initstart\loadfile.h	/^	DUGLEVEL,$/;"	e	enum:__anon25
-DebugLevel	Software\initstart\loadfile.h	/^	u8 DebugLevel;		$/;"	m	struct:__anon24
+DebugLevel	Software\initstart\loadfile.h	/^	u8 DebugLevel;$/;"	m	struct:__anon24
 Default_CCUID	Software\initstart\loadfile.h	29;"	d
 Default_HeartBCycle	Software\initstart\loadfile.h	33;"	d
 Default_ItfWay	Software\initstart\loadfile.h	32;"	d
 Default_Method	Software\initstart\loadfile.h	31;"	d
 Default_ServerIp	Software\initstart\loadfile.h	27;"	d
 Default_ServerPort	Software\initstart\loadfile.h	28;"	d
+Default_TCP	Software\initstart\loadfile.h	34;"	d
 Default_debuglevel	Software\initstart\loadfile.h	30;"	d
 Duglev	Software\initstart\loadfile.h	21;"	d
 FILE_PARAM	Software\initstart\loadfile.h	19;"	d
 FileSize	Software\initstart\loadfile.h	18;"	d
-GROUP_LED_QUANTITY	Software\initstart\loadfile.h	39;"	d
+GROUP_LED_QUANTITY	Software\initstart\loadfile.h	40;"	d
 GlobalCCparam	Software\initstart\loadfile.h	/^}GlobalCCparam;$/;"	t	typeref:struct:__anon24
 HeartBCycle	Software\initstart\loadfile.h	/^	u8 HeartBCycle;$/;"	m	struct:__anon24
 IP	Software\initstart\loadfile.h	/^	IP,$/;"	e	enum:__anon25
 ITWAY	Software\initstart\loadfile.h	/^	ITWAY,$/;"	e	enum:__anon25
+Is_TCP	Software\initstart\loadfile.h	/^	u8 Is_TCP;$/;"	m	struct:__anon24
 ItfWay	Software\initstart\loadfile.h	/^	u8 ItfWay;$/;"	m	struct:__anon24
 KwhReadInter	Software\initstart\loadfile.h	/^	u8 KwhReadInter;	\/\/电量的读取间隔$/;"	m	struct:__anon24
 KwhSaveDay	Software\initstart\loadfile.h	/^	u8 KwhSaveDay;	\/\/电路保存天数$/;"	m	struct:__anon24
-METER_DEVICE_QUANTITY	Software\initstart\loadfile.h	38;"	d
-METER_START_ADDR	Software\initstart\loadfile.h	37;"	d
+METER_DEVICE_QUANTITY	Software\initstart\loadfile.h	39;"	d
+METER_START_ADDR	Software\initstart\loadfile.h	38;"	d
 METHOD	Software\initstart\loadfile.h	/^	METHOD,$/;"	e	enum:__anon25
 PORT	Software\initstart\loadfile.h	/^	PORT$/;"	e	enum:__anon25
 SPort	Software\initstart\loadfile.h	24;"	d
 ServerIp	Software\initstart\loadfile.h	23;"	d
 ServerIpaddr	Software\initstart\loadfile.h	/^	s8 ServerIpaddr[32];$/;"	m	struct:__anon24
-ServerPort	Software\initstart\loadfile.h	/^	u16 ServerPort;	$/;"	m	struct:__anon24
+ServerPort	Software\initstart\loadfile.h	/^	u16 ServerPort;$/;"	m	struct:__anon24
 SignalDBM	Software\initstart\loadfile.h	/^	u8 SignalDBM;$/;"	m	struct:__anon24
 __loadfile_h__	Software\initstart\loadfile.h	8;"	d
 _u8_1	Software\initstart\loadfile.h	/^	_u8_1,$/;"	e	enum:__anon26
@@ -1523,7 +1527,7 @@ single_addrH	hardware\coordinate\coordinate.h	/^	u8 	single_addrH;$/;"	m	struct:
 single_addrL	hardware\coordinate\coordinate.h	/^	u8 	single_addrL;$/;"	m	struct:__anon4
 slave_addr	hardware\coordinate\coordinate.h	/^	u8 	slave_addr;$/;"	m	struct:__anon4
 CC	hardware\ethernet\ether.c	17;"	d	file:
-Ether_Connect	hardware\ethernet\ether.c	/^SINT Ether_Connect(void)$/;"	f
+Ether_Connect	hardware\ethernet\ether.c	/^int Ether_Connect(void){$/;"	f
 Ether_Disconnect	hardware\ethernet\ether.c	/^SINT Ether_Disconnect(void)$/;"	f
 Ether_Getchar	hardware\ethernet\ether.c	/^SINT Ether_Getchar(UCHAR *buf)$/;"	f
 Ether_HeartBeat	hardware\ethernet\ether.c	/^SINT Ether_HeartBeat(void)$/;"	f
@@ -3251,8 +3255,6 @@ WeekDay	task\timertask\timertask.h	/^	UCHAR WeekDay;$/;"	m	struct:ServerCommunTi
 WeekDay	task\timertask\timertask.h	/^	u8 	WeekDay;		\/\/星期(0-6依次代表周日,一~六)或日期$/;"	m	struct:TimerTaskToSaveFormatStruct
 __TIMERTASK_H__	task\timertask\timertask.h	13;"	d
 lock	task\timertask\timertask.h	/^	pthread_mutex_t lock;$/;"	m	struct:TOPTimerTaskListStruct
-VERSION	version\version.h	3;"	d
-_H_VWESION_H_	version\version.h	2;"	d
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_PROGRAM_VERSION	5.8	//

@@ -165,6 +165,7 @@ u32 CallBack_Close(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	}
 	return SUCCESS;
 }
+
 u32 CallBack_Light(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	u8 ACKSendBufLong[24];
@@ -198,6 +199,7 @@ u32 CallBack_Light(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	}
 	return SUCCESS;
 }
+
 u32 CallBack_Demand(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	switch(node->pakect[2]){
@@ -211,19 +213,18 @@ u32 CallBack_Demand(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	}
 	return SUCCESS;
 }
+
 u32 CallBack_RtData(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	printf("In %s test\n",__func__);
 	return 0;
 }
 
-
 UINT CallBackGPRSTest1(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	printf("in gprs  for test 0x31\n");
 	return SUCCESS;
 }
-
 
 UINT CallBackServerFeedback(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
@@ -262,25 +263,23 @@ UINT CallBackServerFeedback(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			break;
 		}
 	return NO_SUCH_SUBCMD;
-
 }
 
 
-//CMD 0xA1
 UINT CallBackLogon(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	printf("in function CallBackLogon for test 0xa1\n");
 	return SUCCESS;
 
 }
-//CMD 0XA2
+
 UINT CallBackReset(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	UCHAR ACKSendBuf[70];
 	UCHAR COMPULSORY_Telephone[12];
 	UCHAR LOCAL_Telephone_NUM[12];
 	PureCmdArry *CCRESETRPkt = (PureCmdArry *)node->pakect;
-
+	memset(ACKSendBuf,0,sizeof(ACKSendBuf));
 	switch(CCRESETRPkt->data[0]){	//0xA2
 		case 0x01:	//reset
 			debug(DEBUG_reset,"^^^^^GET CMD RESET\n");
@@ -308,29 +307,25 @@ UINT CallBackReset(UCHAR ctrl,UCHAR itf,struct task_node *node)
 				TOPGeneralShortAckToServer(ACKSendBuf,ctrl,node->pakect[2],FAIL);
 			}
 			return SUCCESS;
-		case 0x04:
+		case 0x04://查询时间
 			debug(DEBUG_inqTime,"^^^^^GET CMD inquire time\n");
 			CCLocateTimeUpLoad(ACKSendBuf,ctrl,node->pakect[2]);
 			return SUCCESS;
-		case 0x05:break;
-		case 0x07:break;break;
-		case 0x0B:break;
-		case 0x0D:break;
-		case 0x10:break;
-		case 0x20:SMS_MODULE_INFOR_MakeAND_UpLoad(ACKSendBuf,ctrl,node->pakect[2]);break;
+		case 0x05://查询版本号
+			debug(DEBUG_inqVersion,"#####Get CMD inquire Version!\n");
+			return CC_Inquire_Version(ACKSendBuf,ctrl,node->pakect[2]);
+		case 0x20:
+			return SMS_MODULE_INFOR_MakeAND_UpLoad(ACKSendBuf,ctrl,node->pakect[2]);
 		case 0x21:
 			memcpy(COMPULSORY_Telephone,&node->pakect[3],12);
 			COMPULSORY_Telephone[11] = '\0';
 			SMS_MODULE_DAIL_COMPULSORY(ACKSendBuf,ctrl,node->pakect[2],COMPULSORY_Telephone);
 			break;
-		case 0x22:break;
 		case 0x23:
 			memcpy(LOCAL_Telephone_NUM,&node->pakect[3],12);
 			LOCAL_Telephone_NUM[11] = '\0';
 			SMS_MODULE_INIT_SET_UpLoad(ACKSendBuf,ctrl,node->pakect[2],LOCAL_Telephone_NUM);
 			break;
-		case 0x30:break;
-		case 0x40:break;
 		case 0x70:{
 			debug(DEBUG,"\nsystem will poweroff after 5 seconds......\n\n");
 			sleep(1);
@@ -340,13 +335,11 @@ UINT CallBackReset(UCHAR ctrl,UCHAR itf,struct task_node *node)
 		}
 		default:break;
 	}//end of switch
-	return FAIL;
-}//end of UINT CallBackReset
+	return SUCCESS;
+}
 
-/**/
 UINT CallBackSMSModule_RLT(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
-
 	return SUCCESS;
 }
 
@@ -575,14 +568,17 @@ static s32 CC_Tasklist_Config(u8 *Pdata)
 	debug(DEBUG_CC_Config,"tkid=0x%02x,rank=0x%02x,waittime=%08x,Cmd=%s\n",tasklist.Tk_id,tasklist.Rank,(u32)tasklist.Wait_time,tasklist.Cmd);
 	return Insert_Table(Cmd_tasklist, &tasklist);
 }
+
+s32 Del_Sqlite(u8 *Pdata)
+{
+	return SUCCESS;
+}
+
 static s32 CC_Task_Config(u8 *Pdata)
 {
 	if(!Pdata){return FAIL;}
 	volatile s32 ii = 0;
 	TableTask_t task;
-	// while(ii<53){
-	// 	printf("%02x ",Pdata[ii++]);
-	// }printf("\n");
 	memset(&task,0,sizeof(task));
 	task.Priority = *Pdata++;
 	strcpy((char*)task.Name,(char*)Pdata);
@@ -597,38 +593,28 @@ static s32 CC_Task_Config(u8 *Pdata)
 		task.Priority,(u32)task.Start_Date,(u32)task.End_Date,(u32)task.Run_Time,(u32)task.Inter_Time,task.Type,task.State);
 	return Insert_Table(Cmd_task, &task);
 }
+
 UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	PureCmdArry *TimeTaskPkt = (PureCmdArry *)node->pakect;
 	UCHAR * P_reciv;
 	UCHAR AckShortbuf[20];
-
 	P_reciv = (UCHAR *)&TimeTaskPkt->data[1];
 	switch(TimeTaskPkt->data[0]){
-		/* 集中器参数设置下行命令 */
-		case 0x01:
+		case 0x01:/* 集中器参数设置下行命令 */
 			if( SUCCESS == CCGlobalparamInforUpdate(P_reciv)){
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],SUCCESS);
 			}else{
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
-			}
-			return SUCCESS;
-		/* 集中器参数查询下行命令 */
-		case 0x02:	break;
-		/* 集中器版本查询下行命令 */
-		case 0x03:	break;
-		/* 手控自控切换下行指令 */
-		case 0x04:	break;
-		/* 集中器参数单灯分组配置下行命令 */
-		case 0x05:
+			}return SUCCESS;
+		case 0x05:/* 集中器参数单灯分组配置下行命令 */
 			if(SUCCESS == CC_Single_group(P_reciv)){
 				debug(DEBUG_CC_Config,"Config Single group success!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],SUCCESS);
 			}else{
 				debug(DEBUG_CC_Config,"Config Single group fail!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
-			}
-			return SUCCESS;
+			}return SUCCESS;
 		/* 集中器参数协调器分组配置下行命令 */
 		case 0x06:
 			if(SUCCESS == CC_Coordi_group(P_reciv)){
@@ -637,8 +623,7 @@ UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}else{
 				debug(DEBUG_CC_Config,"Config Coordinate group fail!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
-			}
-			return SUCCESS;
+			}return SUCCESS;
 		/* 集中器参数配置任务下行命令 */
 		case 0x07:
 			if(SUCCESS == CC_Task_Config(P_reciv)){
@@ -647,8 +632,7 @@ UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}else{
 				debug(DEBUG_CC_Config,"Config Task group fail!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
-			}
-			return SUCCESS;
+			}return SUCCESS;
 		/* 集中器配置任务明细下行命令 */
 		case 0x08:
 			if(SUCCESS == CC_Tasklist_Config(P_reciv)){
@@ -657,16 +641,18 @@ UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}else{
 				debug(DEBUG_CC_Config,"Config Tasklist group fail!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
-			}
-			return SUCCESS;
+			}return SUCCESS;
+		case 0x09://删除数据库中的内容
+			if(SUCCESS ==Del_Sqlite(P_reciv)){
+				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],SUCCESS);
+			}else{
+				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
+			}return SUCCESS;
 		default :	break;
 	}
 
-
 	return FAIL;
-
 }
-
 
 UINT CallBackETHShotAck(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
@@ -725,7 +711,6 @@ UINT CallBackApplicUpDate(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	return SUCCESS;
 }
 
-//get from task queue
 UINT CallBackTimerControlTaskRLT(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	UCHAR ACKSendBuf[60];
@@ -739,20 +724,11 @@ UINT CallBackTimerControlTaskRLT(UCHAR ctrl,UCHAR itf,struct task_node *node)
 				TOPGeneralShortAckToServer(ACKSendBuf, ctrl, node->pakect[2], SUCCESS);
 			}else{
 				TOPGeneralShortAckToServer(ACKSendBuf, ctrl, node->pakect[2], FAIL);
-			}
-			break;
-		/* 验证定时任务下行命令 */
-		case TimerTaskVerificat:break;
-		/* 删除定时任务下行命令 */
-		case TimerTaskDelete:	break;
-		/* 查询定时任务数据下行命令 */
-		case TimerTaskQuery:	break;
+			}break;
 		default:		break;
-	}//end of switch
-
+	}
 	return SUCCESS;
 }
-
 
 UINT CallBackMetterInfoColletRD(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
@@ -801,15 +777,12 @@ UINT CallBackMetterInfoColletRD(UCHAR ctrl,UCHAR itf,struct task_node *node)
 
 
 	return SUCCESS;
-
 }
 
 UINT CallBackMetterInfoColletSet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
-
 	debug(DEBUG_LOCAL_METTER,"in function CallBackMetterInfoColletSet\n");
 	return SUCCESS;
-
 }
 
 u32 CallBackMetterInfoBroadcast(UCHAR ctrl,UCHAR itf,struct task_node *node)
@@ -821,25 +794,18 @@ u32 CallBackMetterInfoBroadcast(UCHAR ctrl,UCHAR itf,struct task_node *node)
 		debug(DEBUG_TaskAppend,"In %s Task Append fail !\n",__func__);
 	}
 	return SUCCESS;
-
 }
 
 UINT CallBackMetterInfoColletExtrSet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
-
 	debug(DEBUG_LOCAL_METTER,"in function CallBackMetterInfoColletSet\n");
-
 	return SUCCESS;
-
 }
 
 UINT CallBackMetterInfoColletExtrRD(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
-
 	debug(DEBUG_LOCAL_METTER,"in function CallBackMetterInfoColletSet\n");
-
 	return SUCCESS;
-
 }
 
 SINT TOPDIDOShortCallBackAck(UCHAR *buf,CHAR AppendType,CHAR AppendLen,CHAR AckCMD,CHAR AckLen,CHAR AckRequCMD,
@@ -849,7 +815,6 @@ SINT TOPDIDOShortCallBackAck(UCHAR *buf,CHAR AppendType,CHAR AppendLen,CHAR AckC
 		buf[3] = AckLen;buf[4] = AckRequCMD;buf[5] = AckRequSubCMD;
 		buf[6] = DeviceID;buf[7] = ChanleID;buf[8] = Stat;
 		buf[9] = Resault;
-
 		if(!TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,buf,NET_TASK,TASK_LEVEL_NET)){
 			return SUCCESS;
 
@@ -870,7 +835,6 @@ UINT CallBackMetterDIDO(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	}
 	return SUCCESS;
 }
-
 
 UINT MetterRealTimeRDOprate(CHAR DeviceId,CHAR contex, void *MetterElecInfor1)
 {
@@ -946,7 +910,6 @@ UINT MetterRealTimeRDOprate(CHAR DeviceId,CHAR contex, void *MetterElecInfor1)
 	#endif
 
 	return SUCCESS;
-
 }
 
 SINT TopElecInforPrintf(struct MetterElecInforStruc *MetterElecInfor)
@@ -965,14 +928,10 @@ SINT TopElecInforPrintf(struct MetterElecInforStruc *MetterElecInfor)
 
 UINT Reset2DoFunctions(void)
 {
-	/* 重新建立数据库 */
-	//system("./config/Create_Database.sh");//重新建数据库
-	/* 重新加载配置文件 */
 	loadParam();
 	/* 清空日志文件 */
 	return SUCCESS;
 }
-//head
 
 SINT SMS_MODULE_DAIL_COMPULSORY(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD,UCHAR *Telphone)
 {
@@ -1024,8 +983,6 @@ SINT SMS_MODULE_DAIL_COMPULSORY(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD,
 	return FAIL;
 }
 
-
-//sms module init
 SINT SMS_MODULE_INIT_SET_UpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD,UCHAR *Telphone)
 {
 	CHAR ATLID[30];
@@ -1051,13 +1008,7 @@ SINT SMS_MODULE_INIT_SET_UpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD,
 		printf("out of GPRS_ATCMD_INTER && in SMS_MODULE_INFOR_MakeAND_UpLoad");
 
 	}
-
-
-
-
-
 	//UPLOAD
-
 	Buf[0] = 0x51; Buf[1] = 0x23;Buf[2] = 0x80;Buf[3] = 0X21; Buf[4] = ActRequCMD;
 	Buf[5] = ActRequSubCMD;
 
@@ -1080,8 +1031,6 @@ SINT SMS_MODULE_INIT_SET_UpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD,
 
 	printf("after fill date\n");
 }
-
-
 
 SINT CCLocateTimeUpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD)
 {
@@ -1129,8 +1078,22 @@ SINT CCLocateTimeUpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD)
 		printf("TASK_QUEUE_APPEND_ERR :%d\n",TASK_QUEUE_APPEND_ERR);
 		return TASK_QUEUE_APPEND_ERR;
 	}//end of else
-}//end of funtion
+}
 
+s32 CC_Inquire_Version(u8 *AckBuf,u8 Ctrl,u8 Cmd)
+{
+	AckBuf[0] = 0x51; AckBuf[1] = 0x24;AckBuf[2] = 0x80;AckBuf[3] = 0x22; AckBuf[4] = Ctrl;
+	AckBuf[5] = Cmd;
+	sprintf((char*)&AckBuf[6],"%s",VERSION_NUMBER);
+
+	if(!TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,AckBuf,NET_TASK,TASK_LEVEL_NET)){
+		debug(DEBUG_inqVersion,"^^^^^inquire Version success\n");
+		return SUCCESS;
+	}else{
+		debug(DEBUG_inqVersion,"^^^^^inquire Version fail!\n");
+		return FAIL;
+	}
+}
 
 SINT RTCHardWareTimeGet(CHAR *FilePath,struct tm *TimeStruRTCPt)
 {
@@ -1154,19 +1117,15 @@ SINT RTCHardWareTimeGet(CHAR *FilePath,struct tm *TimeStruRTCPt)
 	}
 
 	close(Filept);
-
 	*TimeStruRTCPt = TimeRTC;
-
 	return SUCCESS;
 }
-
 
 SINT SMS_MODULE_INFOR_MakeAND_UpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSubCMD)
 {
 	char compn[15] = "MC52I";
 	char test[15] = "fand";
 	int i = 0;
-	//char *dnlim_t = "\r\n";
 
 	printf("SMS_MODULE_INFOR_MakeAND_UpLoad\n");
 
@@ -1205,7 +1164,6 @@ SINT SMS_MODULE_INFOR_MakeAND_UpLoad(UCHAR *Buf,UCHAR ActRequCMD,UCHAR ActRequSu
 
 	printf("after fill date\n");
 }
-
 
 #if 0
 SINT RTCHardWareTimeGet(char *dev,struct tm *t)
