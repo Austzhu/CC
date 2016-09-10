@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:		database.c
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年03月30日 星期三 10时38分53秒
  *******************************************************************/
 #include "database.h"
@@ -74,7 +74,7 @@ void ErrorMessage(int err)
 			if(ERRMessage[i].errnum == err){
 				printf("Error Message:%s\n",ERRMessage[i].Message);
 				break;
-			}++i;	
+			}++i;
 		}
 		if(i == sizeof(ERRMessage)/sizeof(ERRMessage[0]) ){
 			printf("Error Message:Unknown error Message!\n");
@@ -111,9 +111,9 @@ s32 Insert_Table(u32 cmd, ...)
 	switch(cmd){
 		case Cmd_light:
 			Arguments =  va_arg(arg_ptr, void*);
-			va_end(arg_ptr); 
+			va_end(arg_ptr);
 			/* 数据库中主键自动生成 */
-			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,%d,%d);",Table_Single,   Column_Single, 
+			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,%d,%d);",Table_Single,   Column_Single,
 			((TableSingle_t*)Arguments)->Wl_Addr,   ((TableSingle_t*)Arguments)->Base_Addr,   ((TableSingle_t*)Arguments)->lt_gid,
 								((TableSingle_t*)Arguments)->Coor_id,   ((TableSingle_t*)Arguments)->Map_Addr);
 			break;
@@ -122,7 +122,7 @@ s32 Insert_Table(u32 cmd, ...)
 			va_end(arg_ptr);
 			memset(strtemp,0,sizeof(strtemp));
 			HexToStr_v3(strtemp, (u8*)( ((TableCoordi_t*)Arguments)->CC_id ),6);
-			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,'%s',%d);",Table_Coordi,   Column_Coordi,  
+			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,'%s',%d);",Table_Coordi,   Column_Coordi,
 			((TableCoordi_t*)Arguments)->Wl_Addr,   ((TableCoordi_t*)Arguments)->Base_Addr,   ((TableCoordi_t*)Arguments)->Coor_gid,
 			 									strtemp,   ((TableCoordi_t*)Arguments)->Map_Addr);
 			break;
@@ -130,7 +130,7 @@ s32 Insert_Table(u32 cmd, ...)
 			Arguments = va_arg(arg_ptr, void*);
 			va_end(arg_ptr);
 			sprintf(sql,"insert into %s(%s)  values('%s',%d,%ld,%ld,%ld,%d,%d,%d);",Table_Task,   Column_Task,  ((TableTask_t*)Arguments)->Name,((TableTask_t*)Arguments)->Priority,
-					((TableTask_t*)Arguments)->Start_Date, ((TableTask_t*)Arguments)->End_Date, ((TableTask_t*)Arguments)->Run_Time, 
+					((TableTask_t*)Arguments)->Start_Date, ((TableTask_t*)Arguments)->End_Date, ((TableTask_t*)Arguments)->Run_Time,
 						((TableTask_t*)Arguments)->Inter_Time, ((TableTask_t*)Arguments)->Type,  ((TableTask_t*)Arguments)->State );
 			break;
 		case Cmd_tasklist:
@@ -142,7 +142,7 @@ s32 Insert_Table(u32 cmd, ...)
 		case Cmd_warn:
 			Arguments = va_arg(arg_ptr, void*);
 			va_end(arg_ptr);
-			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,%d,%s);",Table_Warn,   Column_Warn, 
+			sprintf(sql,"insert into %s(%s)  values(%d,%d,%d,%d,%s);",Table_Warn,   Column_Warn,
 			 ((Tablewarn_t*)Arguments)->Add_time,((Tablewarn_t*)Arguments)->Type,((Tablewarn_t*)Arguments)->Grade,
 			 					((Tablewarn_t*)Arguments)->State,((Tablewarn_t*)Arguments)->Remark);
 			break;
@@ -212,11 +212,11 @@ s32 Delete_Table(u32 cmd,const char *Condition)
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,&Errmsg);
 	memset(sql,0,sizeof(sql));
 	switch(cmd){
-		case Cmd_light:		sprintf(sql,"delete from %s %s;",Table_Single,Condition);break;
+		case Cmd_light:	sprintf(sql,"delete from %s %s;",Table_Single,Condition);break;
 		case Cmd_coordi:	sprintf(sql,"delete from %s %s;",Table_Coordi,Condition);break;
 		case Cmd_task:		sprintf(sql,"delete from %s %s;",Table_Task,Condition);break;
-		case Cmd_tasklist:	sprintf(sql,"delete from %s %s;",Table_Tasklist,Condition);break;	
-		case Cmd_warn:	sprintf(sql,"delete from %s %s;",Table_Warn,Condition);break;	
+		case Cmd_tasklist:	sprintf(sql,"delete from %s %s;",Table_Tasklist,Condition);break;
+		case Cmd_warn:	sprintf(sql,"delete from %s %s;",Table_Warn,Condition);break;
 		default:break;
 	}
 
@@ -244,7 +244,7 @@ s32 Delete_Table(u32 cmd,const char *Condition)
 	return SUCCESS;
  err:
 	sqlite3_close(db);
-	return FAIL;	
+	return FAIL;
 }
 
 /**
@@ -280,8 +280,8 @@ s32 Update_Table(u32 cmd,const char *Condition)
 		case Cmd_light:	sprintf(sql,"update %s %s;",Table_Single,Condition);break;
 		case Cmd_coordi:	sprintf(sql,"update %s %s;",Table_Coordi,Condition);break;
 		case Cmd_task:	sprintf(sql,"update %s %s;",Table_Task,Condition);break;
-		case Cmd_tasklist:	sprintf(sql,"update %s %s;",Table_Tasklist,Condition);break;	
-		case Cmd_warn:	sprintf(sql,"update %s %s;",Table_Warn,Condition);break;	
+		case Cmd_tasklist:	sprintf(sql,"update %s %s;",Table_Tasklist,Condition);break;
+		case Cmd_warn:	sprintf(sql,"update %s %s;",Table_Warn,Condition);break;
 		default:break;
 	}
 
@@ -309,7 +309,7 @@ s32 Update_Table(u32 cmd,const char *Condition)
 	return SUCCESS;
  err:
 	sqlite3_close(db);
-	return FAIL;	
+	return FAIL;
 }
 
 
@@ -344,14 +344,14 @@ s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
 		debug(DEBUG_sqlite3,"**%s %d:Open Sqlite fail!\n",__func__,__LINE__);
 		goto err;
 	}
-	
+
 	memset(sql,0,sizeof(sql));
 	switch(cmd){
 		case Cmd_light:	sprintf(sql,"select %s from %s %s;",Column,Table_Single,Condition);break;
 		case Cmd_coordi:	sprintf(sql,"select %s from %s %s;",Column,Table_Coordi,Condition);break;
 		case Cmd_task:	sprintf(sql,"select %s from %s %s;",Column,Table_Task,Condition);break;
-		case Cmd_tasklist:	sprintf(sql,"select %s from %s %s;",Column,Table_Tasklist,Condition);break;	
-		case Cmd_warn:	sprintf(sql,"select %s from %s %s;",Column,Table_Warn,Condition);break;	
+		case Cmd_tasklist:	sprintf(sql,"select %s from %s %s;",Column,Table_Tasklist,Condition);break;
+		case Cmd_warn:	sprintf(sql,"select %s from %s %s;",Column,Table_Warn,Condition);break;
 		default:break;
 	}
 
@@ -413,7 +413,7 @@ s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
 	return SUCCESS;
  err:
 	sqlite3_close(db);
-	return FAIL;	
+	return FAIL;
 }
 /**
  * 	查询表内容
@@ -529,12 +529,12 @@ static sqlite3 * DatabaseOpen(s8 *DB_PathName)
 {
 	int res=-1;
 	if(DB_PathName){
-		res = sqlite3_open(DB_PathName,&sql.db);	
+		res = sqlite3_open(DB_PathName,&sql.db);
 	}else{
 		res = sqlite3_open(DATABASE_PATH,&sql.db);
 	}
 	if(SQLITE_OK == res){
-		return sql.db;	
+		return sql.db;
 	}
 	debug(DEBUG_sqlite3,"open database fail!\terror number is %d\n",res);
 	return NULL;
@@ -575,7 +575,7 @@ s32 DatabaseRead(s8* sql_string,  void* result)
 		sqlite3_free_table(sql.result);
 		sql.result =NULL;
 	}
-	return res;	
+	return res;
 }
 
 

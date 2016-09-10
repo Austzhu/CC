@@ -72,31 +72,32 @@ DEBUG	Common\debug.h	/^	DEBUG$/;"	e	enum:__anon3
 DEBUG_Broadcast	Common\debug.h	36;"	d
 DEBUG_CC_Config	Common\debug.h	22;"	d
 DEBUG_DIDO	Common\debug.h	35;"	d
+DEBUG_DelSql	Common\debug.h	44;"	d
 DEBUG_ERR	Common\debug.h	23;"	d
-DEBUG_ERR_RECD_ETHNET	Common\debug.h	56;"	d
-DEBUG_ERR_RECD_LINK	Common\debug.h	57;"	d
-DEBUG_ERR_RECD_SERIAL	Common\debug.h	58;"	d
+DEBUG_ERR_RECD_ETHNET	Common\debug.h	57;"	d
+DEBUG_ERR_RECD_LINK	Common\debug.h	58;"	d
+DEBUG_ERR_RECD_SERIAL	Common\debug.h	59;"	d
 DEBUG_Ethnet	Common\debug.h	43;"	d
-DEBUG_LOCAL_BURGLAR	Common\debug.h	55;"	d
-DEBUG_LOCAL_CC2SERVER_HEARTBEAT	Common\debug.h	67;"	d
-DEBUG_LOCAL_CC2SERVER_RIGISTER	Common\debug.h	66;"	d
-DEBUG_LOCAL_CMD_RESET	Common\debug.h	69;"	d
-DEBUG_LOCAL_DATABASE	Common\debug.h	53;"	d
-DEBUG_LOCAL_DIDO	Common\debug.h	60;"	d
-DEBUG_LOCAL_ETHNET	Common\debug.h	48;"	d
-DEBUG_LOCAL_FILEPARAM_LOAD	Common\debug.h	54;"	d
-DEBUG_LOCAL_FORMAT_CH	Common\debug.h	50;"	d
-DEBUG_LOCAL_GLOBAL_INFOR	Common\debug.h	61;"	d
-DEBUG_LOCAL_GPRS_ATSEND	Common\debug.h	70;"	d
-DEBUG_LOCAL_HEAPMEM_INCREASE	Common\debug.h	68;"	d
-DEBUG_LOCAL_HEATBEAT	Common\debug.h	65;"	d
-DEBUG_LOCAL_LINK_METH	Common\debug.h	49;"	d
-DEBUG_LOCAL_METTER	Common\debug.h	59;"	d
-DEBUG_LOCAL_PARAFILE_SAVE	Common\debug.h	63;"	d
-DEBUG_LOCAL_PARA_RECIV	Common\debug.h	64;"	d
-DEBUG_LOCAL_TASK	Common\debug.h	51;"	d
-DEBUG_LOCAL_TASK_EXCUT	Common\debug.h	52;"	d
-DEBUG_LOCAL_TIME_TASK	Common\debug.h	62;"	d
+DEBUG_LOCAL_BURGLAR	Common\debug.h	56;"	d
+DEBUG_LOCAL_CC2SERVER_HEARTBEAT	Common\debug.h	68;"	d
+DEBUG_LOCAL_CC2SERVER_RIGISTER	Common\debug.h	67;"	d
+DEBUG_LOCAL_CMD_RESET	Common\debug.h	70;"	d
+DEBUG_LOCAL_DATABASE	Common\debug.h	54;"	d
+DEBUG_LOCAL_DIDO	Common\debug.h	61;"	d
+DEBUG_LOCAL_ETHNET	Common\debug.h	49;"	d
+DEBUG_LOCAL_FILEPARAM_LOAD	Common\debug.h	55;"	d
+DEBUG_LOCAL_FORMAT_CH	Common\debug.h	51;"	d
+DEBUG_LOCAL_GLOBAL_INFOR	Common\debug.h	62;"	d
+DEBUG_LOCAL_GPRS_ATSEND	Common\debug.h	71;"	d
+DEBUG_LOCAL_HEAPMEM_INCREASE	Common\debug.h	69;"	d
+DEBUG_LOCAL_HEATBEAT	Common\debug.h	66;"	d
+DEBUG_LOCAL_LINK_METH	Common\debug.h	50;"	d
+DEBUG_LOCAL_METTER	Common\debug.h	60;"	d
+DEBUG_LOCAL_PARAFILE_SAVE	Common\debug.h	64;"	d
+DEBUG_LOCAL_PARA_RECIV	Common\debug.h	65;"	d
+DEBUG_LOCAL_TASK	Common\debug.h	52;"	d
+DEBUG_LOCAL_TASK_EXCUT	Common\debug.h	53;"	d
+DEBUG_LOCAL_TIME_TASK	Common\debug.h	63;"	d
 DEBUG_Log	Common\debug.h	24;"	d
 DEBUG_Logon	Common\debug.h	20;"	d
 DEBUG_RECV	Common\debug.h	27;"	d
@@ -125,12 +126,12 @@ MY_DEBUG	Common\debug.h	5;"	d
 NOTICE	Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon3
 WARNING	Common\debug.h	/^	WARNING,$/;"	e	enum:__anon3
 __DEBUG_H__	Common\debug.h	2;"	d
-debug	Common\debug.h	73;"	d
-debug	Common\debug.h	75;"	d
-debug	Common\debug.h	77;"	d
+debug	Common\debug.h	74;"	d
+debug	Common\debug.h	76;"	d
+debug	Common\debug.h	78;"	d
 debug_level	Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon3
-err_Print	Common\debug.h	81;"	d
-err_Print	Common\debug.h	83;"	d
+err_Print	Common\debug.h	82;"	d
+err_Print	Common\debug.h	84;"	d
 BURGLALARMTABLE_ELEM_DEL_ERR	Common\err_code.h	84;"	d
 BURGLALARMTABLE_ELEM_INSERT_ERR	Common\err_code.h	85;"	d
 BURGLALARMTABLE_ELEM_UNION_ERR	Common\err_code.h	86;"	d
@@ -437,6 +438,7 @@ DIDO_OUTPUT_QUERY	Software\cmd_process\cmd_process.c	20;"	d	file:
 DIDO_PARAMCONFIG_QUERY	Software\cmd_process\cmd_process.c	22;"	d	file:
 DIDO_QUERY_INPUT	Software\cmd_process\cmd_process.c	24;"	d	file:
 DIDO_QUERY_OUTPUT	Software\cmd_process\cmd_process.c	25;"	d	file:
+Del_Sqlite	Software\cmd_process\cmd_process.c	/^s32 Del_Sqlite(u8 *Pdata)$/;"	f
 MetterRealTimeRDOprate	Software\cmd_process\cmd_process.c	/^UINT MetterRealTimeRDOprate(CHAR DeviceId,CHAR contex, void *MetterElecInfor1)$/;"	f
 RTCHardWareDEV_PATH	Software\cmd_process\cmd_process.c	18;"	d	file:
 RTCHardWareTimeGet	Software\cmd_process\cmd_process.c	/^SINT RTCHardWareTimeGet(CHAR *FilePath,struct tm *TimeStruRTCPt)$/;"	f

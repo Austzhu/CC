@@ -41,6 +41,7 @@ typedef enum{
 #define DEBUG_list 					1
 #define DEBUG_update 				1		//升级程序调试宏
 #define DEBUG_Ethnet 				1 		//网络调试宏
+#define DEBUG_DelSql					1
 
 
 

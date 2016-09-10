@@ -571,7 +571,77 @@ static s32 CC_Tasklist_Config(u8 *Pdata)
 
 s32 Del_Sqlite(u8 *Pdata)
 {
-	return SUCCESS;
+	char Sql[128];
+	time_t start = 0,end = 0;
+	struct tm tim;
+	memset(Sql,0,sizeof(Sql));
+	memset(&tim,0,sizeof(tim));
+	switch(*Pdata++){
+		case 0x00://协调器记录表
+			if(*Pdata++ == 0x00){
+				sprintf(Sql,"where Base_Addr=%d ",*Pdata);
+				return Delete_Table(Cmd_coordi,Sql);
+			}else{
+				debug(DEBUG_DelSql,"db_coordinator have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}break;
+		case 0x01://单灯记录表
+			if(*Pdata++ == 0x00){
+				sprintf(Sql,"where Base_Addr=%d ",*Pdata<<8 | *(Pdata+1));
+				return Delete_Table(Cmd_light,Sql);
+			}else{
+				debug(DEBUG_DelSql,"db_light have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}break;
+		case 0x02://任务表
+			if(*Pdata++ == 0x01){//名称
+				sprintf(Sql,"where Name='%s' ",Pdata);
+				return Delete_Table(Cmd_task,Sql);
+			}else if(*(Pdata-1) == 0x02){//时间范围
+				tim.tm_year	= 100+*Pdata++;
+				tim.tm_mon	= *Pdata++ - 1;
+				tim.tm_mday	= *Pdata++;
+				tim.tm_hour	= *Pdata++;
+				tim.tm_min	= *Pdata++;
+				tim.tm_sec	= *Pdata++;
+				start = mktime(&tim);
+				tim.tm_year	= 100+*Pdata++;
+				tim.tm_mon	= *Pdata++ - 1;
+				tim.tm_mday	= *Pdata++;
+				tim.tm_hour	= *Pdata++;
+				tim.tm_min	= *Pdata++;
+				tim.tm_sec	= *Pdata;
+				end = mktime(&tim);
+				sprintf(Sql,"where Start_Date < %ld AND Start_Date > %ld",end,start);
+				return Delete_Table(Cmd_task,Sql);
+			}else{
+				debug(DEBUG_DelSql,"db_task have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}break;
+		case 0x03://报警日志记录表
+			if(*Pdata++ == 0x02){//名称
+				tim.tm_year	= 100+*Pdata++;
+				tim.tm_mon	= *Pdata++ - 1;
+				tim.tm_mday	= *Pdata++;
+				tim.tm_hour	= *Pdata++;
+				tim.tm_min	= *Pdata++;
+				tim.tm_sec	= *Pdata++;
+				start = mktime(&tim);
+				tim.tm_year	= 100+*Pdata++;
+				tim.tm_mon	= *Pdata++ - 1;
+				tim.tm_mday	= *Pdata++;
+				tim.tm_hour	= *Pdata++;
+				tim.tm_min	= *Pdata++;
+				tim.tm_sec	= *Pdata;
+				end = mktime(&tim);
+				sprintf(Sql,"where Start_Date < %ld AND Start_Date > %ld",end,start);
+				return Delete_Table(Cmd_warn,Sql);
+			}else{
+				debug(DEBUG_DelSql,"db_warn have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}break;
+		default:break;
+	}return SUCCESS;
 }
 
 static s32 CC_Task_Config(u8 *Pdata)

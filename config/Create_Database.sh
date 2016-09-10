@@ -5,7 +5,7 @@
 # Created Time: 2016年05月17日 星期二 11时29分08秒
 #########################################################################
 #!/bin/sh
-dbname=cc_corl.db 
+dbname=cc_corl.db
 Table_Single=db_light
 Table_Coordi=db_coordinator
 Table_Task=db_task
@@ -24,7 +24,7 @@ sqlite3 $dbname \
 	Map_Addr 	integer NOT NULL,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
-	CHECK (Base_Addr < 0xff AND Base_Addr > 0x20) 
+	CHECK (Base_Addr < 0xff AND Base_Addr > 0x20)
 );"
 
 #开启外键支持
@@ -42,7 +42,7 @@ sqlite3 $dbname \
 	Map_Addr	integer NOT NULL,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
-	FOREIGN KEY(Coor_id) REFERENCES $Table_Coordi(Base_Addr) ON DELETE CASCADE ON UPDATE CASCADE 
+	FOREIGN KEY(Coor_id) REFERENCES $Table_Coordi(Base_Addr) ON DELETE CASCADE ON UPDATE CASCADE
 );"
 
 #建立任务表
@@ -51,7 +51,7 @@ sqlite3 $dbname \
 "create table $Table_Task(
 	id 		integer,
 	Name 		text NOT NULL,
-	Priority 		integer NOT NULL,
+	Priority 	integer NOT NULL,
 	Start_Date 	integer NOT NULL,
 	End_Date 	integer NOT NULL,
 	Run_Time	integer NOT NULL,
@@ -70,7 +70,7 @@ create table $Table_Tasklist(
 	Cmd	 	text 	NOT NULL,
 	Wait_time	integer NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY(Tk_id) REFERENCES $Table_Task(id) ON DELETE CASCADE ON UPDATE CASCADE 
+	FOREIGN KEY(Tk_id) REFERENCES $Table_Task(id) ON DELETE CASCADE ON UPDATE CASCADE
 );"
 
 #建立报警表
