@@ -13,7 +13,7 @@
 #define Config_NewProtocol
 #define Config_EC_6018
 
-#define Uart1_ttyO1_485 	2		//和协调器通讯的串口
+#define Uart1_ttyO1_485 	1		//和协调器通讯的串口
 #define Uart3_tty03_DIDO	3		//和扩展DIDO通讯的串口
 
 #define ResponseSubCmd 			//广播和组播操作时候第一次回复增加子命令字段

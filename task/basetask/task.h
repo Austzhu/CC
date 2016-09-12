@@ -20,7 +20,7 @@
 #define GPRS_TYPE_QUEUE			1
 #define CC_TYPE_QUEUE   			2
 #define DEVICE485_TYPE_QUEUE 		3
-#define ETH_NET_TYPE_QUEUE 			4
+#define ETH_NET_TYPE_QUEUE 		4
 #define QUEUE_TOTAL_QUANTITY		5
 
 typedef struct PureCmdArry{
