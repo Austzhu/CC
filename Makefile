@@ -32,12 +32,17 @@ include $(INCLUDE)
 
 DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
 
-all: Version test_App
+all: Version test_App Automountusb  Watchrsh
 
 test_App: compile
 	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS)
 Version:
 	@`./version/setlocalversion`
+
+Automountusb:
+	@$(CC) -o  ./Applications/$@  ./tools/AutoMountUsb.c
+Watchrsh:
+	@$(CC) -o ./Applications/$@ ./tools/Watch_ssh.c
 
 
 #编译子目录的c文件
@@ -46,11 +51,8 @@ compile:
 
 #将可程序拷贝到nfs目录下
 install:
-	@cp -frd ./Applications/test_App  $(PRJROOT)/rootfs/
-	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/config/
-	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/config/
-
-
+	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/
+	@cp -frd ./config/ $(PRJROOT)/rootfs/
 
 
 svnver:
