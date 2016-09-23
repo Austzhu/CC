@@ -18,11 +18,11 @@
 int main(int argc, char const *argv[])
 {
 	int fd = -1;
-	int status = 0;
+	int stat = 0;
 	char str[128];
-	int Port = 50119;
-	if(argc > 2){
-		if( !strcmp(argv[1],"-p") ){ Port = atoi(argv[2]); }
+	int Port = atoi(getenv("rshPort"));
+	if(Port <50000 || Port > 60000){
+		Port = 50119;
 	}
 	while(1){
 		system("ps | grep \"ssh\" | grep -v \"grep\"> temp");
@@ -34,18 +34,12 @@ int main(int argc, char const *argv[])
 		}else{
 			printf("reverse ssh is not start!\n");
 			memset(str,0,sizeof(str));
-			sprintf(str,"ssh -i /home/Austzhu/.ssh/id_rsa -N -f -T -R %d:localhost:22 cc_nick@114.55.54.166 -y",Port);
-			//printf("Cmd str:%s\n",str);
-			//system(str);
-			system("ssh -i /home/Austzhu/.ssh/id_rsa -N -f -T -R 50119:localhost:22 cc_nick@114.55.54.166 -y");
+			sprintf(str,"ssh -i /home/Austzhu/.ssh/id_rsa -N -f -T -R %d:localhost:22 %s",Port,getenv("rshServer"));
+			printf("Cmd str:%s\n",str);
+			if(!stat){  sleep(30); stat = 1; }
+			system(str);
 		}
-
 		system("rm temp");
-		if(status == 0){
-			sleep(30);
-			system("killall ssh");
-			status = 1;
-		}
 		sleep(10);
 	}
 	return 0;
