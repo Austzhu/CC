@@ -34,13 +34,13 @@ int main(int argc, char const *argv[])
 		}else{
 			printf("reverse ssh is not start!\n");
 			memset(str,0,sizeof(str));
-			sprintf(str,"ssh -i /home/Austzhu/.ssh/id_rsa -N -f -T -R %d:localhost:22 %s",Port,getenv("rshServer"));
+			sprintf(str,"ssh -i /home/Austzhu/.ssh/id_rsa -N -f -T -R %d:localhost:22 %s -y",Port,getenv("rshServer"));
 			printf("Cmd str:%s\n",str);
-			if(!stat){  sleep(30); stat = 1; }
 			system(str);
 		}
 		system("rm temp");
-		sleep(10);
+		sleep(30);
+		if(!stat){ system("killall ssh");stat = 1; }
 	}
 	return 0;
 }

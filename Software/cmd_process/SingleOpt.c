@@ -482,7 +482,7 @@ s32 SingleOpen(struct task_node *node)
 
 	UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
 	memset(&Single,0,sizeof(Single));
-	if( SUCCESS !=Recv_Package_v2(&Single,50) ){//等待单灯回复，超过5s则超时。
+	if( SUCCESS !=Recv_Package_v2(&Single,20) ){//等待单灯回复，超过5s则超时。
 		debug(DEBUG_single,"Wait Single Response Timeout!\n");
 		goto ERR;
 	}
@@ -1090,6 +1090,7 @@ static s32 QueryRes(u8 Ctrl,u8 Resault)
 			}
 			PAck = &AckShortbuf[5];
 		}
+		//sleep(1);
 	}
 	if(num >0){
 		*PAck = Resault;
@@ -1164,6 +1165,7 @@ s32 GroupQuery(struct task_node *node)
 	int Addrlen = 0;
 	int WaitTime = 0;
 	int Res = SUCCESS;
+	int repeat = 0;
 	Pag_Single *PRes = (Pag_Single*)ResSingle;
 
 	memset(ResSingle,0,sizeof(ResSingle));
@@ -1194,12 +1196,18 @@ s32 GroupQuery(struct task_node *node)
 		Single.Coordi_Addr 	= CoordiAddr[i];
 		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 		Display_package("Group Query Send data",&Single,sizeof(Pag_Single));
+Sendagina:
 		UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
 		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
 
 		if( SUCCESS !=Recv_Package_v2(PRes,30) ){//等待单灯回复，超过3s则超时。
 			debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			if(repeat++ < 3){
+				goto Sendagina;
+			}
 			goto ERR;
+		}else{
+			repeat = 0;
 		}
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
 		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
@@ -1214,6 +1222,7 @@ s32 GroupQuery(struct task_node *node)
 		if(Addrlen/4 < GetSingleCunt){//判断一个协调器下的数据是否全部取完
 			++i;
 		}
+		sleep(1);
 	}
 	/* 回复给上位机 */
 	return QueryRes(0x02,SUCCESS);
@@ -1231,7 +1240,7 @@ s32 BroadcastQuery(struct task_node *node)
 	int WaitTime = 0;
 	int Res = SUCCESS;
 	Pag_Single *PRes = (Pag_Single*)ResSingle;
-
+	int repeat =0;
 	memset(ResSingle,0,sizeof(ResSingle));
 	memset(CoordiAddr,0,sizeof(CoordiAddr));
 	memset(&Single,0,sizeof(Single));
@@ -1258,15 +1267,22 @@ s32 BroadcastQuery(struct task_node *node)
 	Single.Data[0]		= GetSingleCunt;
 	i = 0;
 	while(CoordiAddr[i] != 0 && i < sizeof(CoordiAddr)/sizeof(CoordiAddr[0]) ){
+
 		Single.Coordi_Addr 	= CoordiAddr[i];
 		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 		Display_package("Broadcast Query Send data",&Single,sizeof(Pag_Single));
+Sendagina:
 		UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
 		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
 
-		if( SUCCESS !=Recv_Package_v2(PRes,50) ){//等待单灯回复，超过10s则超时。
+		if( SUCCESS !=Recv_Package_v2(PRes,30) ){//等待单灯回复，超过10s则超时。
 			debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			if(repeat++ < 3){
+				goto Sendagina;
+			}
 			goto ERR;
+		}else{
+			repeat = 0;
 		}
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
 		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);

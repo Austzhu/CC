@@ -19,7 +19,7 @@
 #define ResponseSubCmd 			//广播和组播操作时候第一次回复增加子命令字段
 #define SingleNumber 	500 		//一个协调器下的最大单灯个数
 #define PWMmax 		0x1D		//PWM的峰值
-#define Config_PWM_ 				//pwm的正负，
+//#define Config_PWM_ 				//pwm的正负，
 //#define MC_ARM335X			//新开发板串口支持
 
 //#define SingleCheckThread 			//单灯状态查询是否启用一个线程
