@@ -11,6 +11,8 @@
 #include "database.h"
 #include "coordinate.h"
 
+#define SingleRecvTimeout 	50
+#define SingleSendTimeout 	5000000
 #define GetSingleCunt 	30 		//一次读取单灯回复的状态信息的单灯个数
 
 #define Single_Header 	0xFF		//单灯数据包头
@@ -41,7 +43,7 @@ typedef struct {//查询时单灯地址表结构
 	vu8 Single_Addr[2];
 	vu8 Single_State;
 	vu8 Single_Light;
-} SingleList_t;	
+} SingleList_t;
 
 extern s32 SingleShortAckToServer(int cmd,u8 ctrl, u8 Resault,...);
 extern s32 Single_Update(struct task_node *node);

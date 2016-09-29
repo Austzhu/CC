@@ -1,9 +1,9 @@
 #include "serial.h"
 #include "main.h"
- #ifndef  MC_ARM335X
+#ifndef  MC_ARM335X
 #include "../emfuture/include/libs_emfuture_odm.h"
 #endif
-
+#define DefaultCOM "9600,8,1,N"
 static s32 UartFd[TOTAL_UARTS_NUM] = {-1,-1,-1,-1,-1,-1};
 
 /**
@@ -15,40 +15,28 @@ s32 Uart_Open(u32  port)
 {
 	s8 dev[12];
 	memset(dev,0,sizeof(dev));
-
- #ifndef  MC_ARM335X
-	
-	sprintf(dev,"/dev/ttyS%d", port);
-
-	debug(DEBUG_ERR_RECD_SERIAL,"********%s\n",dev);
-	if( ERROR_OK == OpenCom(dev, &UartFd[port],"9600,8,1,N,0") ){
-		if(-1 != UartFd[port]){
-			debug(DEBUG_ERR_RECD_SERIAL,"fd is %d\n",UartFd[port]);
-			return SUCCESS;
-		}	
-	}else{
-		goto err;
-	}
- #else
+#ifdef  MC_ARM335X
 	sprintf(dev,"/dev/ttyO%d", port);
 	debug(DEBUG_Serial,"Serial: %s\n",dev);
-	/* 读写，不阻塞 */
-	if( (UartFd[port] = open( dev, O_RDWR|O_NOCTTY)) <0){
+	if( (UartFd[port] = open( dev, O_RDWR|O_NOCTTY)) <0){	//读写，不阻塞
 		debug(DEBUG_Serial,"Open %s Fail!\n",dev);
-		goto err;
+		return FAIL;
 	}
 	if( 0 == isatty(UartFd[port]) ){
 		debug(DEBUG_Serial,"Is not tty devices!\n");
 		close(UartFd[port]);
 		UartFd[port] =-1;
-		goto err;
-	}else{
-		debug(DEBUG_Serial,"open fd is %d\n",UartFd[port]);
-	}
- #endif
-	return SUCCESS;
- err:
-	return FAIL;
+		return FAIL;
+	}return SUCCESS;
+#else
+	sprintf(dev,"/dev/ttyS%d", port);
+	debug(DEBUG_ERR_RECD_SERIAL,"********%s\n",dev);
+	UartFd[port] = open(dev, O_RDWR | O_NONBLOCK);
+	if( UartFd[port] < 0){
+		debug(DEBUG_Serial,"Open %s fail!\n",dev);
+		return FAIL;
+	}return SUCCESS;
+#endif
 }
 /**
  * 关闭指定的串口
@@ -59,19 +47,21 @@ s32 Uart_Open(u32  port)
  */
 s32 Uart_Close(u32 port)
 {
- #ifndef  MC_ARM335X
-	return CloseCom(UartFd[port]);
- #else
+ #ifdef  MC_ARM335X
 	close(UartFd[port]);
-	return SUCCESS;
+ #else
+	CloseCom(UartFd[port]);
  #endif
+	UartFd[port] = -1;
+	return SUCCESS;
 }
 
+#if 0
 void set_speed(int fd, int speed)
 {
 	struct termios   Opt;
 	tcgetattr(fd, &Opt);
-	
+
 	tcflush(fd, TCIOFLUSH);
 	cfsetispeed(&Opt, speed);
 	cfsetospeed(&Opt, speed);
@@ -79,7 +69,7 @@ void set_speed(int fd, int speed)
 		perror("tcsetattr fd err!");
 		return;
 	}
-					
+
 	tcflush(fd,TCIOFLUSH);
 }
 
@@ -99,13 +89,13 @@ int set_Parity(int fd,int databits,int stopbits,int parity)
 	}
 	switch (parity){
 		case 'n':
-		case 'N':options.c_cflag &= ~PARENB;   
+		case 'N':options.c_cflag &= ~PARENB;
 			options.c_iflag &= ~INPCK;   break;
 		case 'o':
-		case 'O':options.c_cflag |= (PARODD | PARENB); 
+		case 'O':options.c_cflag |= (PARODD | PARENB);
 			options.c_iflag |= INPCK;break;
 		case 'e':
-		case 'E':options.c_cflag |= PARENB;     
+		case 'E':options.c_cflag |= PARENB;
 			options.c_cflag &= ~PARODD;
 			options.c_iflag |= INPCK;     break;
 		case 'S':
@@ -135,6 +125,7 @@ int set_Parity(int fd,int databits,int stopbits,int parity)
 	}
 	return SUCCESS;
 }
+#endif
 /**
  * 配置串口参数
  * 返回值:
@@ -144,21 +135,19 @@ int set_Parity(int fd,int databits,int stopbits,int parity)
 #if 1
 s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
 {
- #ifndef MC_ARM335X
+#ifndef MC_ARM335X
 	s8 cfg[24];
 	memset(cfg,0,sizeof(cfg));
 	sprintf(cfg,"%d,%d,%d,%c,0",speed,bits,stop,parity);
 	debug(DEBUG_ERR_RECD_SERIAL,"^^^^^configs:%s\n",cfg);
 	return SetComCfg(UartFd[port], cfg);
- #else
+#else
 	int fd = UartFd[port];
 	struct termios opt;
-	//struct termios temp_opt;
 	if( tcgetattr(fd, &opt) ){
 		perror("tcgetattr fail!\n");
 		goto err;
 	}
-
 	//tcflush(fd, TCIOFLUSH);
 	/* 是否要增加判断speed是否在枚举内？Austzhu2016.5.7 */
 
@@ -181,13 +170,13 @@ s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
 	/* 设置校验位 */
 	switch(parity){
 		case 'n':	//无校验
-		case 'N':opt.c_cflag &= ~PARENB;   
+		case 'N':opt.c_cflag &= ~PARENB;
 			 opt.c_iflag &= ~INPCK;	break;
 		case 'o':	//奇校验
-		case 'O':opt.c_cflag |= (PARODD | PARENB); 
+		case 'O':opt.c_cflag |= (PARODD | PARENB);
 			opt.c_iflag |= INPCK;	break;
 		case 'e':		//偶校验
-		case 'E':opt.c_cflag |= PARENB;     
+		case 'E':opt.c_cflag |= PARENB;
 			opt.c_cflag &= ~PARODD;
 			opt.c_iflag |= INPCK;	break;
 		case 'S':		//空格
@@ -219,20 +208,10 @@ s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
 		perror("tcsetattr error!\n");
 		goto err;
 	}
-
-	/* 把设置参数读回来校验 */
-	// if( tcgetattr(fd, &temp_opt) ){
-	// 	perror("Check tcgetattr fail!\n");
-	// 	goto err;
-	// }
-	// if( memcmp(&temp_opt, &opt, sizeof(opt)) ){
-	// 	perror("set teminal parameter fail!\n" );
-	// 	goto err;	
-	// }	
 	return SUCCESS;
  err:
  	return FAIL;
- #endif
+#endif
 }
 #else
 s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
@@ -249,7 +228,6 @@ s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
 	return set_Parity(fd,bits,stop,parity);
  #endif
 }
-
 #endif
 /**
  * 从串口中读取数据
@@ -263,40 +241,28 @@ s32 Uart_Config(u32 port, UartSpeed speed,  s32 bits,  s32 stop,s8 parity)
  */
 s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)
 {
-	int res = -1;
+	int fd = UartFd[port];
+	if((fd < 0) || (!buf) || (len <= 0) ){return FAIL;}
 	memset(buf,0,len);
- 	#ifdef SingleCheckThread
- 		pthread_mutex_lock(&mutex_serial) ;//获取锁
- 	#endif
- #ifndef MC_ARM335X
+#if 0
+ //#ifndef MC_ARM335X
+	int res = -1;
  	u32 WPtr = 0;
  	u32 ReadCnt = len;
  	int i = len/20 + 1;
  	int WiatTime = block/i;
  	while(WPtr < len ){
  		res = ReadCom(UartFd[port], buf+WPtr, &ReadCnt, WiatTime);
- 		//debug(1,"*****Recv len=%d\n",ReadCnt);
  		WPtr += ReadCnt;
  		ReadCnt = len-WPtr;
- 		if(i-- < 0){break;}	
- 	}
-	//res = ReadCom(UartFd[port], buf, &len, block);
-	//debug(1,"*****Recv len=%d\n",len);
-
-	#ifdef SingleCheckThread
- 		pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 	#endif
-		return res;
- #else
+ 		if(i-- < 0){break;}
+ 	}return res;
+#else
 	fd_set fdset;
 	struct timeval tv;
-	int fd = UartFd[port];
 	int Read_Cnt = 0;
 	int n = 0;
-	if(fd <=0){
-		err_Print(DEBUG_Serial,"fd < 0!\n");
-		return FAIL;
-	}
+	int CombufSize = 0;
 	tv.tv_sec   = block/1000000;
 	tv.tv_usec = block%1000000;
  R_continue:
@@ -306,31 +272,26 @@ s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)
 		case -1:
 			debug(DEBUG_Serial,"select err:%s\n",strerror(errno));
 			return FAIL;
-		case 0: //tcflush(fd,TCIFLUSH);
-			//debug(DEBUG_Serial,"Recv Timeout!\n");
+		case 0: 		//Recv Timeout
 			return FAIL;
 		default:
 			if(FD_ISSET(fd, &fdset)){
+				ioctl(fd,FIONREAD,&CombufSize);	//读出内核缓存中有多少字节的数据
+				//debug(1,"Kernel Buffer size:%d,read size:%d\n",CombufSize,len);
 				n = read( fd, buf+Read_Cnt, len-Read_Cnt);
 				Read_Cnt += n;
 				if(Read_Cnt < len){
-					debug(DEBUG_Serial,"Can't Recv enough long data!\n");
-					//tcflush(fd,TCIOFLUSH);
+					//debug(DEBUG_Serial,"Can't Recv enough long data!\n");
 					goto R_continue;
 				}
-				#ifdef SingleCheckThread
- 					pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 				#endif
-				return SUCCESS;
-			}break;		
-	}
-	#ifdef SingleCheckThread
- 		pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 	#endif
-	return FAIL;
- #endif
+				if(len > sizeof(Pag_Single)){
+					//debug(1,"COM read sleep %d S\n",len/40 <= 1 ? 2:len/40);
+					sleep(len/40 <= 1 ? 2:len/40);
+				}return SUCCESS;
+			}break;
+	}return FAIL;
+#endif
 }
-
 
 /**
  * 从串口中写数据
@@ -344,26 +305,22 @@ s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)
  */
 s32 Uart_Send(u32  port,  s8* buf,   u32 len,  s32  block)
 {
+	int fd = UartFd[port];
+	if((fd < 0) || (!buf) || (len <= 0) ){return FAIL;}
+
+#if 0
+ //#ifndef MC_ARM335X
 	int res =-1;
-	#ifdef SingleCheckThread
- 		pthread_mutex_lock(&mutex_serial) ;//获取锁
- 	#endif
- #ifndef MC_ARM335X
- 		res = WriteCom(UartFd[port], buf, &len, block);
-	#ifdef SingleCheckThread
- 		pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 	#endif
- 		return res;
+	int nLen = len;
+	res = WriteCom(UartFd[port], buf, &len, block);
+	debug(1,"WriteCom sleep (nLen-12)/20=%d\n",(nLen-12)/20);
+	sleep((nLen-12)/20);
+	return res;
  #else
 	fd_set fdset;
 	struct timeval tv;
-	int fd = UartFd[port];
 	int Read_Cnt = 0;
 	int n=0;
-	if(fd <=0){
-		debug(DEBUG_Serial,"fd < 0!\n");
-		return FAIL;
-	}
 	tv.tv_sec   = block/1000000;
 	tv.tv_usec = block%1000000;
  S_continue:
@@ -373,27 +330,32 @@ s32 Uart_Send(u32  port,  s8* buf,   u32 len,  s32  block)
 		case -1:
 			debug(DEBUG_Serial,"select err!\n");
 			return FAIL;
-		case 0:tcflush(fd,TCOFLUSH);
+		case 0:		//Send Time out
 			debug(DEBUG_Serial,"Recv Timeout!\n");
 			return FAIL;
-		default:if(FD_ISSET(fd, &fdset)){
+		default:
+		if(FD_ISSET(fd, &fdset)){
 			n = write( fd, buf+Read_Cnt, len-Read_Cnt);
 			Read_Cnt += n;
 			if(Read_Cnt < len){
-				debug(DEBUG_Serial,"Can't write enough long data!\n");
+				//debug(DEBUG_Serial,"Can't write enough long data!\n");
 				goto S_continue;
 			}
-			#ifdef SingleCheckThread
- 				pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 			#endif
-			return SUCCESS;
-		}break;		
-	}
-	#ifdef SingleCheckThread
- 		pthread_mutex_unlock(&mutex_serial) ;//释放锁
- 	#endif
-	return FAIL;
+			if(len > sizeof(Pag_Single)){
+				//debug(1,"COM Wite sleep %d S\n",len/25) ;
+				sleep(len/25 );
+			}return SUCCESS;
+		}break;
+	}return FAIL;
  #endif
+}
+
+s32 Uart_Send_v2(u32  port,  s8* buf,   u32 len,  s32  block,s32 s)
+{
+	int res = 0;
+	res =  WriteCom(UartFd[port], buf, &len, -1);
+	//sleep(s);
+	return res;
 }
 
 s32 UartForGprsInit(void)
@@ -419,10 +381,12 @@ s32 UartForPlcInit()
 
 }
 s32 UartFor485Init()
-{	
+{
 	Uart_Open(Uart2_ttyS3_485);
-	Uart_Config(Uart2_ttyS3_485, Bd9600, 8,1,'N');											//无校验   n
-	return SUCCESS;
+	if( SUCCESS != Uart_Config(Uart2_ttyS3_485, Bd9600, 8,1,'N')){
+		debug(DEBUG_Serial,"Config COM fail!\n");
+		return FAIL;
+	}return SUCCESS;
 }
 
 s32 UartForCoordi(void)
@@ -451,15 +415,9 @@ s32 UartForCoordi(void)
  */
 s32 Uart_GetFd(u32  port)
 {
-	if(UartFd[port] <0){
-		return -1;
-	}
+	if(UartFd[port] <0){ return -1; }
 	return UartFd[port];
 }
-
-/****************************************************************************/
-
-
 
 s32 UartBufClear(u32 port, Flush_IO IO)
 {

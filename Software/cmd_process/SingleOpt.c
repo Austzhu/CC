@@ -139,7 +139,6 @@ s32 Recv_Package_v2(Pag_Single *Pkg,int Timeout)
 	return SUCCESS;
 }
 
-
 /**
  *  发送查询指令
  *  Group 组播查询的时候的组号，<0则表示广播查询
@@ -180,7 +179,7 @@ s32 Query_Action(int Group)
 
 	int AddrLen = 0,i = 0;
 	u16 *PAddr = (u16*)((char*)P_single + sizeof(Pag_Single));
-
+	int Maxlen = 0,last_i = 0;
 	while(buf[i].CoordiAddr != 0){
 		SingleList[i].Coordi_Addr 	= 0xff&buf[i].CoordiAddr;
 		SingleList[i].Single_Addr[0] 	= (buf[i].SingleAddr >> 8) & 0xff;
@@ -191,6 +190,11 @@ s32 Query_Action(int Group)
 			++PAddr;
 			AddrLen 		+= sizeof(u16);
 		}else{
+			if((i -last_i) > Maxlen){
+				Maxlen = i -last_i+1 ;
+				//debug(1,"\n^^&$$#@@#$$#i=%d,Maxlen=%d,last_i=%d\n",i,Maxlen,last_i);
+			}last_i = i;
+
 			repeat = 0;
 			*PAddr 		= (buf[i].SingleAddr &0xff)<<8;
 			*PAddr 		|= buf[i].SingleAddr>>8&0xff;
@@ -203,15 +207,16 @@ s32 Query_Action(int Group)
 			Crc16(P_single->Crc16,(u8*)P_single, sizeof(Pag_Single)-2);
 			Crc16((u8*)PAddr, P_single->Crc16 + sizeof(P_single->Crc16), AddrLen);
 			debug(DEBUG_single,"AddrLen=%04x,Coordi_Addr=%02x\n",(P_single->Data[0]<<8)|P_single->Data[1],P_single->Coordi_Addr);
- sendagina:
 			Display_package("Query Send data",Single,sizeof(Pag_Single)+AddrLen+2);
-			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);//清楚串口输入输出缓存
+ sendagina:
+			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);		//清楚串口输入输出缓存
 
-			Uart_Send(Uart1_ttyO1_485, (s8*)P_single, sizeof(Pag_Single)+AddrLen+2, 2000000);
+			Uart_Send(Uart1_ttyO1_485, (s8*)P_single, sizeof(Pag_Single)+AddrLen+2, SingleSendTimeout);
+
 			memset(&SingleRes,0,sizeof(Pag_Single));
-			if( SUCCESS !=Recv_Package_v2(&SingleRes,30) ){//等待单灯回复，超过5s则超时。
+			if( SUCCESS != Recv_Package_v2(&SingleRes,SingleRecvTimeout) ){	//等待单灯回复，超过2s则超时。
 				err_Print(DEBUG_single,"Wait Single Response Timeout!\n");
-				if(repeat < 3){
+				if(repeat < 5){
 					++repeat ;
 					goto sendagina;
 				}
@@ -220,7 +225,7 @@ s32 Query_Action(int Group)
 			if((ResponseCtrl|CoordiCtrl_Query) != SingleRes.Ctrl || 0x00 != SingleRes.Data[0]){
 				err_Print(DEBUG_single,"Query fail!\n");
 				goto ERR;
-			}sleep(1);
+			}
 			repeat =0;
 			AddrLen = 0;
 			PAddr = (u16*)((char*)P_single + sizeof(Pag_Single));
@@ -230,6 +235,9 @@ s32 Query_Action(int Group)
 
 	Is_Group = Group;
 	free(Single);
+	debug(1,"Wait %d S\n",Maxlen/2);
+	sleep(Maxlen/2);
+
 	return SUCCESS;
  ERR:
  	Is_Group = -2;
@@ -474,7 +482,7 @@ s32 SingleOpen(struct task_node *node)
 
 	Display_package("Single Open Send data",&Single,sizeof(Pag_Single));
 
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
@@ -482,7 +490,7 @@ s32 SingleOpen(struct task_node *node)
 
 	UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
 	memset(&Single,0,sizeof(Single));
-	if( SUCCESS !=Recv_Package_v2(&Single,20) ){//等待单灯回复，超过5s则超时。
+	if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过1s则超时。
 		debug(DEBUG_single,"Wait Single Response Timeout!\n");
 		goto ERR;
 	}
@@ -491,6 +499,7 @@ s32 SingleOpen(struct task_node *node)
 		debug(DEBUG_single,"^^^^^single open fail!\n");
 		goto ERR;
 	}debug(DEBUG_single,"single open success!\n");
+	Is_Group = -2;		//组播或广播需要重新查询
 	return SUCCESS;
  ERR:
 	return FAIL;
@@ -516,7 +525,7 @@ s32 GroupOpen(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
 	ResponsePromptly(0x02,0x42 ,0,32);
 
@@ -549,9 +558,10 @@ s32 BroadcastOpen(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 	/* 回复广播命令发送成功 */
 	ResponsePromptly(0x03,0x42 ,0,32);
+
 	if(SUCCESS == Query_Action(-1)){
 		SingleShortAckToServer(1,  0x03,  0x42);
 		return SUCCESS;
@@ -581,7 +591,7 @@ s32 GroupLight(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
 	ResponsePromptly(0x02,0x47 ,0,32);
 
@@ -614,9 +624,10 @@ s32 BroadcastLight(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 	/* 回复广播命令发送成功 */
 	ResponsePromptly(0x03,0x47 ,0,32);
+
 	if(SUCCESS == Query_Action(-1)){
 		SingleShortAckToServer(2,  0x03,  0x47,node->pakect[3]);
 		return SUCCESS;
@@ -642,7 +653,7 @@ s32 SingleClose(struct task_node *node)
 
 	Display_package("Single Close Send data",&Single,sizeof(Pag_Single));
 
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
@@ -650,7 +661,7 @@ s32 SingleClose(struct task_node *node)
 	/* 冲洗输入缓存 */
 	UartBufClear(Uart1_ttyO1_485, Flush_Input);
 	memset(&Single,0,sizeof(Single));
-	if( SUCCESS !=Recv_Package_v2(&Single,50) ){//等待单灯回复，超过5s则超时。
+	if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过5s则超时。
 		debug(DEBUG_single,"Wait Single Response Timeout!\n");
 		goto ERR;
 	}
@@ -659,6 +670,7 @@ s32 SingleClose(struct task_node *node)
 		debug(DEBUG_single,"^^^^^single Close fail!\n");
 		goto ERR;
 	}debug(DEBUG_single,"single Close success!\n");
+	Is_Group = -2;		//组播或广播需要重新查询
 	return SUCCESS;
  ERR:
 	return FAIL;
@@ -679,7 +691,7 @@ s32 GroupClose(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 	ResponsePromptly(0x02,0x43 ,0,32);
 
 	if(SUCCESS == Query_Action(Single.Group_Addr)){
@@ -704,7 +716,7 @@ s32 BroadcastClose(struct task_node *node)
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
 	#endif
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 	/* 回复广播命令发送成功 */
 	ResponsePromptly(0x03,0x43 ,0,32);
 
@@ -734,7 +746,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 			Display_package("Single ConfigMapAddr Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
-			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
 		case Single_ConfigGroup:
 			Single.Header 		= Single_Header;
@@ -748,7 +760,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 			Display_package("Single ConfigGroup Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
-			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
 		case Coordi_ConfigMapAddr:
 			Single.Header 		= Single_Header;
@@ -760,7 +772,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 			Display_package("Coordinate ConfigMapAddr Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
-			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
 		case Coordi_ConfigGroup:
 		default:break;
@@ -798,7 +810,7 @@ s32 Coordinator_Update(struct task_node *node)
 	sig.Data[0]			=sig.Data[1] = !0;
 	Crc16(sig.Crc16,(u8*)&sig, sizeof(sig)-2);
 	Display_package("#####Send data",&sig,sizeof(sig));
-	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(sig), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(sig), SingleSendTimeout);
 	#ifdef Config_Log
 		Write_log(Coordinate, &sig);
 	#endif
@@ -836,7 +848,7 @@ s32 Coordinator_Update(struct task_node *node)
 	sig.light_level	= !0;
 	Crc16(&sig.crc16_l,(u8*)&sig, sizeof(sig)-2);
 	Display_package("#####Send data",&sig,sizeof(sig));
-	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(Frame_485), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(Frame_485), SingleSendTimeout);
 	#ifdef Config_Log
 		Write_log(Coordinate, &sig);
 	#endif
@@ -887,7 +899,7 @@ s32 Single_Update(struct task_node *node)
 	Crc16(sig.Crc16,(u8*)&sig, sizeof(sig)-2);
 	Display_package("#####Send data",&sig,sizeof(sig));
 	UartBufClear(Uart1_ttyO1_485, Flush_Input);
-	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(sig), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(sig), SingleSendTimeout);
 	#ifdef Config_Log
 		Write_log(Coordinate, &sig);
 	#endif
@@ -927,7 +939,7 @@ s32 Single_Update(struct task_node *node)
 	sig.light_level          = 0;
 	Crc16(&sig.crc16_l,(u8*)&sig, sizeof(sig)-2);
 	Display_package("#####Uart1 Send data",&sig,sizeof(sig));
-	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(Frame_485), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&sig, sizeof(Frame_485), SingleSendTimeout);
 	#ifdef Config_Log
 		Write_log(Coordinate, &sig);
 	#endif
@@ -978,7 +990,7 @@ s32 SingleQuery(struct task_node *node)
 	Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 	Display_package("Single Query Send data",&Single,sizeof(Pag_Single));
 	UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
 	#ifdef Config_Log
 		Write_log(Coordinate, &Single);
@@ -988,7 +1000,7 @@ s32 SingleQuery(struct task_node *node)
 	memset(ACKSendBufLong,0,sizeof(ACKSendBufLong));
 	ACKSendBufLong[11] = SUCCESS;
 
-	if( SUCCESS !=Recv_Package_v2(&Single,50) ){//等待单灯回复，超过5s则超时。
+	if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过5s则超时。
 		debug(DEBUG_single,"Wait Single Response Timeout!\n");
 		ACKSendBufLong[11] = FAIL;
 	}
@@ -1124,22 +1136,33 @@ void Display_Singlelist(void)
 
 void GetCoordiAddrList(void *Buffer,int len)
 {
-	u8 *CoordiAddr = Buffer;
-	int i = 0;
+	//u8 *CoordiAddr = Buffer;
+	typedef  struct{int Singlelen; u8 CoorAddr;} CoordiAddr_t;
+	CoordiAddr_t *CoordiAddr  = Buffer;
+	 int i = 0;
 	while(SingleList[i].Coordi_Addr != 0){
-		*CoordiAddr = SingleList[i++].Coordi_Addr;
-		if(*CoordiAddr != SingleList[i].Coordi_Addr){
+		CoordiAddr->CoorAddr = SingleList[i++].Coordi_Addr;
+		CoordiAddr->Singlelen = i;
+		if(CoordiAddr->CoorAddr != SingleList[i].Coordi_Addr){
 			++CoordiAddr;
-			if(CoordiAddr - (u8*)Buffer >= len){
+			if(CoordiAddr - ( CoordiAddr_t*)Buffer >= len){
 				break;
 			}
 		}
 	}
+	while(CoordiAddr != Buffer){
+		CoordiAddr->Singlelen -= (CoordiAddr-1)->Singlelen;
+		--CoordiAddr;
+	}
+
+
+
 	CoordiAddr = Buffer;
-	debug(DEBUG_single,"CoordiAddr List:");
-	while(*CoordiAddr != 0){
-		debug(DEBUG_single,"0x%02x ",*CoordiAddr++);
-	}debug(DEBUG_single,"\n");
+	 debug(DEBUG_single,"CoordiAddr List:");
+	 while(CoordiAddr->CoorAddr != 0){
+		debug(DEBUG_single,"Addr:0x%02x,len:%d\t",CoordiAddr->CoorAddr,CoordiAddr->Singlelen);
+		CoordiAddr++;
+	 }debug(DEBUG_single,"\n");
 }
 
 s32 CalcWaitTime(void)
@@ -1159,11 +1182,11 @@ s32 CalcWaitTime(void)
 s32 GroupQuery(struct task_node *node)
 {
 	Pag_Single Single;
-	u8 CoordiAddr[10];
+	struct{int Singlelen; u8 CoorAddr;} CoordiAddr[20];
 	u8 ResSingle[300];
 	int i = 0;
 	int Addrlen = 0;
-	int WaitTime = 0;
+	//int WaitTime = 0;
 	int Res = SUCCESS;
 	int repeat = 0;
 	Pag_Single *PRes = (Pag_Single*)ResSingle;
@@ -1172,18 +1195,18 @@ s32 GroupQuery(struct task_node *node)
 	memset(CoordiAddr,0,sizeof(CoordiAddr));
 	memset(&Single,0,sizeof(Single));
 
+	ResponsePromptly(0x02,0x45 ,Res,32);
 	debug(DEBUG_single,"Group=%d\n",node->pakect[3]);
 	if(Is_Group != node->pakect[3]){//判断之前查询的是否为现在要获取的组
 		Res = Query_Action(node->pakect[3]);
 		Display_Singlelist();
-		WaitTime = CalcWaitTime();
+		//WaitTime = CalcWaitTime();
 	}
-	ResponsePromptly(0x02,0x45 ,Res,32);
 	if(SUCCESS != Res ){
 		goto ERR;
 	}
-	debug(1,"wait %d S\n",WaitTime/2);
-	sleep(WaitTime/2);
+	//debug(1,"wait %d S\n",WaitTime/2);
+
 	GetCoordiAddrList(CoordiAddr,sizeof(CoordiAddr));
 
 	Single.Header 		= Single_Header;
@@ -1192,23 +1215,20 @@ s32 GroupQuery(struct task_node *node)
 	Single.Cmd[1]		= 0x01;
 	Single.Data[0]		= GetSingleCunt;
 	i = 0;
-	while(CoordiAddr[i] != 0 && i < sizeof(CoordiAddr)/sizeof(CoordiAddr[0]) ){
-		Single.Coordi_Addr 	= CoordiAddr[i];
+	while(CoordiAddr[i].CoorAddr != 0 && i < sizeof(CoordiAddr)/sizeof(CoordiAddr[0]) ){
+		Single.Coordi_Addr 	= CoordiAddr[i].CoorAddr;
 		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 		Display_package("Group Query Send data",&Single,sizeof(Pag_Single));
-Sendagina:
+ Sendagina:
 		UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
-		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
-		if( SUCCESS !=Recv_Package_v2(PRes,30) ){//等待单灯回复，超过3s则超时。
+		if( SUCCESS !=Recv_Package_v2(PRes,SingleRecvTimeout) ){//等待单灯回复，超过3s则超时。
 			debug(DEBUG_single,"Wait Single Response Timeout!\n");
-			if(repeat++ < 3){
-				goto Sendagina;
-			}
+			if(repeat++ < 5){    goto Sendagina;    }
 			goto ERR;
-		}else{
-			repeat = 0;
-		}
+		}else{    repeat = 0;    }
+
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
 		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 5000000) ){
@@ -1219,10 +1239,9 @@ Sendagina:
 		}
 		Display_package("Recv Single State",&ResSingle[sizeof(Pag_Single)] ,Addrlen);
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);	//把查询到的灯的状态拷贝到全局变量中
-		if(Addrlen/4 < GetSingleCunt){//判断一个协调器下的数据是否全部取完
+		if(Addrlen/4 >= CoordiAddr[i].Singlelen){//判断一个协调器下的数据是否全部取完
 			++i;
-		}
-		sleep(1);
+		}else{    CoordiAddr[i].Singlelen -= Addrlen/4 ;    }
 	}
 	/* 回复给上位机 */
 	return QueryRes(0x02,SUCCESS);
@@ -1233,11 +1252,11 @@ Sendagina:
 s32 BroadcastQuery(struct task_node *node)
 {
 	Pag_Single Single;
-	u8 CoordiAddr[10];
-	u8 ResSingle[200];
+	struct{int Singlelen; u8 CoorAddr;} CoordiAddr[20];
+	u8 ResSingle[300];
 	int i = 0;
 	int Addrlen = 0;
-	int WaitTime = 0;
+	//int WaitTime = 0;
 	int Res = SUCCESS;
 	Pag_Single *PRes = (Pag_Single*)ResSingle;
 	int repeat =0;
@@ -1245,19 +1264,16 @@ s32 BroadcastQuery(struct task_node *node)
 	memset(CoordiAddr,0,sizeof(CoordiAddr));
 	memset(&Single,0,sizeof(Single));
 
-
+	ResponsePromptly(0x03,0x45 ,Res,32);
 	if(Is_Group != -1){//判断之前查询的是否为现在要获取的组
 		debug(1,"Is_Group = %d\n",Is_Group);
 		Res = Query_Action(-1);
 		Display_Singlelist();
-		WaitTime = CalcWaitTime();
+		//WaitTime = CalcWaitTime();
 	}
-	ResponsePromptly(0x03,0x45 ,Res,32);
-	if(SUCCESS != Res ){
-		goto ERR;
-	}
-	debug(1,"wait %d S\n",WaitTime/2);
-	sleep(WaitTime/2);
+	if(SUCCESS != Res ){ goto ERR;}
+	//debug(1,"wait %d S\n",WaitTime/2);
+	//sleep(WaitTime/2);
 	GetCoordiAddrList(CoordiAddr,sizeof(CoordiAddr));
 
 	Single.Header 		= Single_Header;
@@ -1266,24 +1282,20 @@ s32 BroadcastQuery(struct task_node *node)
 	Single.Cmd[1]		= 0x01;
 	Single.Data[0]		= GetSingleCunt;
 	i = 0;
-	while(CoordiAddr[i] != 0 && i < sizeof(CoordiAddr)/sizeof(CoordiAddr[0]) ){
-
-		Single.Coordi_Addr 	= CoordiAddr[i];
+	while(CoordiAddr[i].CoorAddr != 0 && i < sizeof(CoordiAddr)/sizeof(CoordiAddr[0]) ){
+		Single.Coordi_Addr 	= CoordiAddr[i].CoorAddr;
 		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 		Display_package("Broadcast Query Send data",&Single,sizeof(Pag_Single));
-Sendagina:
+ Sendagina:
 		UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
-		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), 1000000);
+		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
-		if( SUCCESS !=Recv_Package_v2(PRes,30) ){//等待单灯回复，超过10s则超时。
+		if( SUCCESS !=Recv_Package_v2(PRes,SingleRecvTimeout) ){//等待单灯回复，超过10s则超时。
 			debug(DEBUG_single,"Wait Single Response Timeout!\n");
-			if(repeat++ < 3){
-				goto Sendagina;
-			}
+			if(repeat++ < 5){  goto Sendagina; }
 			goto ERR;
-		}else{
-			repeat = 0;
-		}
+		}else{ repeat = 0; }
+
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
 		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 3000000) ){
@@ -1296,10 +1308,11 @@ Sendagina:
 		Display_package("Recv Single State",&ResSingle[sizeof(Pag_Single)] ,Addrlen);
 		/* 把灯的状态拷贝到全局去 */
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);
-		if(Addrlen/4 < GetSingleCunt){//判断一个协调器下的数据是否全部取完
-			++i;	//获取下一个协调器的单灯状态
-		}
-	}	/* 回复给上位机 */
+		if(Addrlen/4 >= CoordiAddr[i].Singlelen){		//判断一个协调器下的数据是否全部取完
+			++i;						//获取下一个协调器的单灯状态
+		}else{    CoordiAddr[i].Singlelen -=  Addrlen/4;    }
+	}
+	/* 回复给上位机 */
 	return QueryRes(0x03,SUCCESS);
  ERR:
  	return QueryRes(0x03,FAIL);
