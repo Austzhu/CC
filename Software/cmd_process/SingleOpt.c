@@ -192,9 +192,7 @@ s32 Query_Action(int Group)
 		}else{
 			if((i -last_i) > Maxlen){
 				Maxlen = i -last_i+1 ;
-				//debug(1,"\n^^&$$#@@#$$#i=%d,Maxlen=%d,last_i=%d\n",i,Maxlen,last_i);
 			}last_i = i;
-
 			repeat = 0;
 			*PAddr 		= (buf[i].SingleAddr &0xff)<<8;
 			*PAddr 		|= buf[i].SingleAddr>>8&0xff;
@@ -235,8 +233,8 @@ s32 Query_Action(int Group)
 
 	Is_Group = Group;
 	free(Single);
-	debug(1,"Wait %d S\n",Maxlen/2);
-	sleep(Maxlen/2);
+	debug(1,"Wait %d S\n",Maxlen*2/5);
+	sleep(Maxlen*2/5);
 
 	return SUCCESS;
  ERR:
@@ -1230,13 +1228,14 @@ s32 GroupQuery(struct task_node *node)
 		}else{    repeat = 0;    }
 
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
-		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
+
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 5000000) ){
 			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){//单灯地址列表校验失败
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
 				goto ERR;
 			}
 		}
+		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		Display_package("Recv Single State",&ResSingle[sizeof(Pag_Single)] ,Addrlen);
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);	//把查询到的灯的状态拷贝到全局变量中
 		if(Addrlen/4 >= CoordiAddr[i].Singlelen){//判断一个协调器下的数据是否全部取完
@@ -1297,7 +1296,6 @@ s32 BroadcastQuery(struct task_node *node)
 		}else{ repeat = 0; }
 
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
-		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 3000000) ){
 			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){//单灯地址列表校验失败
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
@@ -1305,6 +1303,7 @@ s32 BroadcastQuery(struct task_node *node)
 				goto ERR;
 			}
 		}
+		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		Display_package("Recv Single State",&ResSingle[sizeof(Pag_Single)] ,Addrlen);
 		/* 把灯的状态拷贝到全局去 */
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);

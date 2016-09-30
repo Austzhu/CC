@@ -501,7 +501,7 @@ static s32 CC_Single_group(u8 *Pdata)
 		debug(DEBUG_CC_Config,"Single Config MapAddr Fail!\n");
 		return FAIL;
 	}
-	sleep(1);
+	//sleep(1);
 	if(SUCCESS != Single_Config(Single_ConfigGroup,&single)){
 		debug(DEBUG_CC_Config,"Single Config Group Fail!\n");
 		return FAIL;

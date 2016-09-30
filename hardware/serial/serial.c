@@ -283,10 +283,6 @@ s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)
 				if(Read_Cnt < len){
 					//debug(DEBUG_Serial,"Can't Recv enough long data!\n");
 					goto R_continue;
-				}
-				if(len > sizeof(Pag_Single)){
-					//debug(1,"COM read sleep %d S\n",len/40 <= 1 ? 2:len/40);
-					sleep(len/40 <= 1 ? 2:len/40);
 				}return SUCCESS;
 			}break;
 	}return FAIL;
@@ -340,10 +336,6 @@ s32 Uart_Send(u32  port,  s8* buf,   u32 len,  s32  block)
 			if(Read_Cnt < len){
 				//debug(DEBUG_Serial,"Can't write enough long data!\n");
 				goto S_continue;
-			}
-			if(len > sizeof(Pag_Single)){
-				//debug(1,"COM Wite sleep %d S\n",len/25) ;
-				sleep(len/25 );
 			}return SUCCESS;
 		}break;
 	}return FAIL;
