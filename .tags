@@ -651,7 +651,6 @@ ConfigM	.\Software\cmd_process\SingleOpt.h	/^enum ConfigM{$/;"	g
 Config_EC_6018	.\config\config.h	14;"	d
 Config_Log	.\config\config.h	12;"	d
 Config_NewProtocol	.\config\config.h	13;"	d
-Config_PWM_	.\config\config.h	22;"	d
 ControlMethod	.\Software\initstart\loadfile.h	/^	u8 ControlMethod;	\/\/手自$/;"	m	struct:__anon24
 ControlMethod	.\Software\initstart\softwareinit.h	/^	UCHAR ControlMethod;			\/\/手自$/;"	m	struct:GlobalCCparam
 ControlMode	.\task\timertask\timertask.h	/^	UCHAR ControlMode;		\/\/1-timecontrol$/;"	m	struct:ServerCommunTimerTaskStruct
@@ -659,9 +658,9 @@ ControlMode	.\task\timertask\timertask.h	/^	u8 	ControlMode;		\/\/控制方式ti
 Coor_Addr	.\hardware\update\SingleOrCoordi.h	/^	u8 	Coor_Addr;$/;"	m	struct:__anon14
 Coor_gid	.\sqlite\database.h	/^	u32 Coor_gid;		\/\/协调器组ID$/;"	m	struct:__anon32
 Coor_id	.\sqlite\database.h	/^	u32 Coor_id;		\/\/对应的协调器的地址$/;"	m	struct:__anon33
-CoordiCtrl_Config	.\Software\cmd_process\SingleOpt.h	20;"	d
-CoordiCtrl_GetData	.\Software\cmd_process\SingleOpt.h	22;"	d
-CoordiCtrl_Query	.\Software\cmd_process\SingleOpt.h	21;"	d
+CoordiCtrl_Config	.\Software\cmd_process\SingleOpt.h	22;"	d
+CoordiCtrl_GetData	.\Software\cmd_process\SingleOpt.h	24;"	d
+CoordiCtrl_Query	.\Software\cmd_process\SingleOpt.h	23;"	d
 Coordi_Addr	.\Software\cmd_process\SingleOpt.h	/^	vu8 Coordi_Addr;$/;"	m	struct:__anon18
 Coordi_Addr	.\hardware\coordinate\coordinate.h	/^	u8 	Coordi_Addr;$/;"	m	struct:__anon5
 Coordi_ConfigGroup	.\Software\cmd_process\SingleOpt.h	/^	Coordi_ConfigGroup,$/;"	e	enum:ConfigM
@@ -806,6 +805,7 @@ Database_Path	.\sqlite\database.c	12;"	d	file:
 DebugLevel	.\Software\initstart\loadfile.h	/^	u8 DebugLevel;$/;"	m	struct:__anon24
 DebugLevel	.\Software\initstart\softwareinit.h	/^	UCHAR DebugLevel;		$/;"	m	struct:GlobalCCparam
 DebugPrint	.\config\config.h	11;"	d
+DefaultCOM	.\hardware\serial\serial.c	6;"	d	file:
 Default_CCUID	.\Software\initstart\loadfile.h	29;"	d
 Default_HeartBCycle	.\Software\initstart\loadfile.h	33;"	d
 Default_ItfWay	.\Software\initstart\loadfile.h	32;"	d
@@ -992,7 +992,7 @@ G_Ether_Sndbuf	.\Software\link_method\link_method.c	/^ULONG 	G_Ether_Sndbuf[ETHE
 GetCoordiAddrList	.\Software\cmd_process\SingleOpt.c	/^void GetCoordiAddrList(void *Buffer,int len)$/;"	f
 GetHexParam	.\Software\initstart\loadfile.c	/^static s32 GetHexParam(s8 *filebuf, const s8 *Column, u8 *dest, s32 nL)$/;"	f	file:
 GetIntParam	.\Software\initstart\loadfile.c	/^static u32 GetIntParam(s8*filebuf,const char *Column)$/;"	f	file:
-GetSingleCunt	.\Software\cmd_process\SingleOpt.h	14;"	d
+GetSingleCunt	.\Software\cmd_process\SingleOpt.h	16;"	d
 GetSizeOfFile	.\Software\initstart\softwareinit.c	/^SINT GetSizeOfFile(FILE *FilePt)$/;"	f
 GetStringParam	.\Software\initstart\loadfile.c	/^static s32 GetStringParam(s8*filebuf,const char *Column,char *desk)$/;"	f	file:
 GetUpdateInfo	.\hardware\update\SingleOrCoordi.c	/^void  inline GetUpdateInfo(Package_Info *Info)$/;"	f
@@ -1333,7 +1333,7 @@ Respond_CheckDI	.\hardware\Zt_Meter\Zt_Meter.h	/^	Respond_CheckDI$/;"	e	enum:DID
 Respond_CheckDO	.\hardware\Zt_Meter\Zt_Meter.h	/^	Respond_CheckDO,$/;"	e	enum:DIDO_RespondCmd
 Respond_Close	.\hardware\Zt_Meter\Zt_Meter.h	/^	Respond_Close,$/;"	e	enum:DIDO_RespondCmd
 Respond_Open	.\hardware\Zt_Meter\Zt_Meter.h	/^	Respond_Open,$/;"	e	enum:DIDO_RespondCmd
-ResponseCtrl	.\Software\cmd_process\SingleOpt.h	23;"	d
+ResponseCtrl	.\Software\cmd_process\SingleOpt.h	25;"	d
 ResponsePromptly	.\Software\cmd_process\SingleOpt.c	/^s32 ResponsePromptly(u8 ctrl,u8 SubCMD ,u8 Resault,int Bufferlen)$/;"	f
 ResponseSubCmd	.\config\config.h	19;"	d
 RunTime	.\task\timertask\Timetask.h	/^	time_t 	RunTime;$/;"	m	struct:__anon53
@@ -1777,15 +1777,17 @@ Signal_Alarm	.\task\timertask\Timetask.c	/^void Signal_Alarm(int signo)$/;"	f
 Signal_User1	.\task\timertask\Timetask.c	/^void Signal_User1(int signo)$/;"	f
 SinOrCoordi	.\hardware\update\SingleOrCoordi.h	/^	u32 	SinOrCoordi;		\/\/升级单灯\/协调器标记$/;"	m	struct:__anon13
 SingleClose	.\Software\cmd_process\SingleOpt.c	/^s32 SingleClose(struct task_node *node)$/;"	f
-SingleCtrl_Broadcast	.\Software\cmd_process\SingleOpt.h	19;"	d
-SingleCtrl_Group	.\Software\cmd_process\SingleOpt.h	18;"	d
-SingleCtrl_Single	.\Software\cmd_process\SingleOpt.h	17;"	d
+SingleCtrl_Broadcast	.\Software\cmd_process\SingleOpt.h	21;"	d
+SingleCtrl_Group	.\Software\cmd_process\SingleOpt.h	20;"	d
+SingleCtrl_Single	.\Software\cmd_process\SingleOpt.h	19;"	d
 SingleList	.\Software\cmd_process\SingleOpt.c	/^SingleList_t SingleList[SingleNumber];$/;"	v
 SingleList_Index	.\Software\cmd_process\SingleOpt.c	/^int SingleList_Index(int SingleAddr)$/;"	f
-SingleList_t	.\Software\cmd_process\SingleOpt.h	/^} SingleList_t;	$/;"	t	typeref:struct:__anon18
+SingleList_t	.\Software\cmd_process\SingleOpt.h	/^} SingleList_t;$/;"	t	typeref:struct:__anon18
 SingleNumber	.\config\config.h	20;"	d
 SingleOpen	.\Software\cmd_process\SingleOpt.c	/^s32 SingleOpen(struct task_node *node)$/;"	f
 SingleQuery	.\Software\cmd_process\SingleOpt.c	/^s32 SingleQuery(struct task_node *node)$/;"	f
+SingleRecvTimeout	.\Software\cmd_process\SingleOpt.h	14;"	d
+SingleSendTimeout	.\Software\cmd_process\SingleOpt.h	15;"	d
 SingleShortAckToServer	.\Software\cmd_process\SingleOpt.c	/^s32 SingleShortAckToServer(int cmd,u8 ctrl, u8 Resault,...)$/;"	f
 Single_A	.\hardware\update\SingleOrCoordi.c	10;"	d	file:
 Single_Addr	.\Software\cmd_process\SingleOpt.h	/^	vu8 Single_Addr[2];$/;"	m	struct:__anon18
@@ -1796,7 +1798,7 @@ Single_B	.\hardware\update\SingleOrCoordi.c	11;"	d	file:
 Single_Config	.\Software\cmd_process\SingleOpt.c	/^s32 Single_Config(int cmd,void *PSingle)$/;"	f
 Single_ConfigGroup	.\Software\cmd_process\SingleOpt.h	/^	Single_ConfigGroup,$/;"	e	enum:ConfigM
 Single_ConfigMapAddr	.\Software\cmd_process\SingleOpt.h	/^	Single_ConfigMapAddr,$/;"	e	enum:ConfigM
-Single_Header	.\Software\cmd_process\SingleOpt.h	16;"	d
+Single_Header	.\Software\cmd_process\SingleOpt.h	18;"	d
 Single_Light	.\Software\cmd_process\SingleOpt.h	/^	vu8 Single_Light;$/;"	m	struct:__anon18
 Single_Query	.\hardware\coordinate\coordinate.h	/^	Single_Query 		= 0x0400,$/;"	e	enum:__anon6
 Single_State	.\Software\cmd_process\SingleOpt.h	/^	vu8 Single_State;$/;"	m	struct:__anon18
@@ -2048,6 +2050,7 @@ UART_RECIVE_SIZE	.\hardware\serial\serial.h	17;"	d
 UART_RECIVE_SIZE	.\hardware\serial\serial.h	23;"	d
 UCHAR	.\Common\common\base_type.h	17;"	d
 UDP	.\Software\link_method\link_method.h	73;"	d
+UEVENT_BUFFER_SIZE	.\tools\AutoMountUsb.c	16;"	d	file:
 UID	.\Software\burglar_alarm\burglar_alarm.c	/^	CHAR UID[6];$/;"	v
 UID	.\Software\burglar_alarm\burglar_alarm.h	/^	CHAR UID[6];$/;"	m	struct:__anon15
 UINT	.\Common\common\base_type.h	24;"	d
@@ -2083,6 +2086,7 @@ Uart_GetFd	.\hardware\serial\serial.c	/^s32 Uart_GetFd(u32  port)$/;"	f
 Uart_Open	.\hardware\serial\serial.c	/^s32 Uart_Open(u32  port)$/;"	f
 Uart_Recv	.\hardware\serial\serial.c	/^s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)$/;"	f
 Uart_Send	.\hardware\serial\serial.c	/^s32 Uart_Send(u32  port,  s8* buf,   u32 len,  s32  block)$/;"	f
+Uart_Send_v2	.\hardware\serial\serial.c	/^s32 Uart_Send_v2(u32  port,  s8* buf,   u32 len,  s32  block,s32 s)$/;"	f
 Ub	.\Software\meter_crc\meter_cmdrdwr.h	/^		FLOAT Ub;$/;"	m	struct:TOPDevicePowerStruct
 Ub	.\Software\meter_crc\meter_cmdrdwr.h	/^	FLOAT Ub;$/;"	m	struct:MetterElecInforStruc
 Ubc	.\Software\meter_crc\meter_cmdrdwr.h	/^	FLOAT Ubc;$/;"	m	struct:MetterElecInforStruc
@@ -2417,6 +2421,7 @@ fd	.\hardware\update\SingleOrCoordi.h	/^	s32 	fd;			\/\/升级文件描述符$/;
 file_control	.\sqlite\include\sqlite3ext.h	/^  int (*file_control)(sqlite3*,const char*,int,void*);$/;"	m	struct:sqlite3_api_routines
 filesize	.\hardware\update\SingleOrCoordi.h	/^	u32 	filesize;			\/\/升级文件大小$/;"	m	struct:__anon13
 finalize	.\sqlite\include\sqlite3ext.h	/^  int  (*finalize)(sqlite3_stmt*pStmt);$/;"	m	struct:sqlite3_api_routines
+find_block	.\tools\AutoMountUsb.c	/^static const char *find_block(const char *buffer,const char *coulmn)$/;"	f	file:
 flag	.\Software\burglar_alarm\burglar_alarm.c	/^	CHAR flag;$/;"	v
 flag	.\Software\burglar_alarm\burglar_alarm.h	/^	CHAR flag;$/;"	m	struct:__anon15
 flag	.\Software\link_method\link_method.h	/^	UINT flag;$/;"	m	struct:__anon28
@@ -2470,6 +2475,7 @@ idxNum	.\sqlite\include\sqlite3.h	/^  int idxNum;                \/* Number used
 idxStr	.\sqlite\include\sqlite3.h	/^  char *idxStr;              \/* String, possibly obtained from sqlite3_malloc *\/$/;"	m	struct:sqlite3_index_info
 iio_channel_info	.\Software\emfuture\include\iio_utils.h	/^struct iio_channel_info {$/;"	s
 index	.\Software\emfuture\include\iio_utils.h	/^	unsigned index;$/;"	m	struct:iio_channel_info
+init_hotplug_sock	.\tools\AutoMountUsb.c	/^static int init_hotplug_sock(void)$/;"	f	file:
 init_task_queue	.\task\basetask\task_list.c	/^UINT init_task_queue(struct task_queue *taskqueue)$/;"	f
 init_task_queue	.\task\tasklist\tasklist.c	/^s32 init_task_queue(struct task_queue *taskqueue)$/;"	f
 interruptx	.\sqlite\include\sqlite3ext.h	/^  void  (*interruptx)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
@@ -2589,6 +2595,8 @@ log	.\sqlite\include\sqlite3ext.h	/^  void (*log)(int,const char*,...);$/;"	m	st
 logon	.\Software\link_method\link_method.h	/^	SINT (*logon)(void);				\/\/登陆$/;"	m	struct:faalitf_t
 lt_gid	.\sqlite\database.h	/^	u32 lt_gid;		\/\/单灯组ID$/;"	m	struct:__anon33
 main	.\User\main.c	/^int main(int argc,char *argv[])$/;"	f
+main	.\tools\AutoMountUsb.c	/^int main(int argc, char* argv[])$/;"	f
+main	.\tools\Watch_ssh.c	/^int main(int argc, char const *argv[])$/;"	f
 make_logon_package	.\hardware\ethernet\ether.c	/^UINT make_logon_package(faalpkt_t *pkt)$/;"	f
 make_long	.\Common\common\format_exchg.c	/^ULONG make_long(UCHAR *str)$/;"	f
 malloc	.\sqlite\include\sqlite3ext.h	/^  void *(*malloc)(int);$/;"	m	struct:sqlite3_api_routines
@@ -2731,11 +2739,9 @@ s8	.\Common\common\base_type.h	/^typedef char				s8;$/;"	t
 scale	.\Software\emfuture\include\iio_utils.h	/^	float scale;$/;"	m	struct:iio_channel_info
 send_addr	.\hardware\coordinate\coordinate.h	/^	send_addr,$/;"	e	enum:__anon7
 server2cc	.\task\task_queue\task_que.h	/^	server2cc,	\/\/服务器下行$/;"	e	enum:__anon46
-set_Parity	.\hardware\serial\serial.c	/^int set_Parity(int fd,int databits,int stopbits,int parity)$/;"	f
 set_authorizer	.\sqlite\include\sqlite3ext.h	/^  int  (*set_authorizer)(sqlite3*,int(*)(void*,int,const char*,const char*,$/;"	m	struct:sqlite3_api_routines
 set_auxdata	.\sqlite\include\sqlite3ext.h	/^  void  (*set_auxdata)(sqlite3_context*,int,void*,void (*)(void*));$/;"	m	struct:sqlite3_api_routines
 set_faaltimer	.\Software\link_method\link_method.c	/^static void set_faaltimer(UCHAR itf, int max)$/;"	f	file:
-set_speed	.\hardware\serial\serial.c	/^void set_speed(int fd, int speed)$/;"	f
 shift	.\Software\emfuture\include\iio_utils.h	/^	unsigned shift;$/;"	m	struct:iio_channel_info
 signle_close	.\hardware\coordinate\coordinate.h	/^	signle_close 		= 0x0002,$/;"	e	enum:__anon6
 signle_ctl	.\hardware\coordinate\coordinate.h	/^} signle_ctl;$/;"	t	typeref:enum:__anon6

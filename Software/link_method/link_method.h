@@ -36,8 +36,8 @@ typedef struct faalitf_t{
 	SINT(*bak_4)(void);				//函数功能扩展4
 	SINT timeout;   					//接收超时
 	SINT rcvmax;    					//接收数据区最大长度
-	SINT sndmax;    				//发送数据区最大长度
-	SINT sndnor;     				//发送数据一般长度上限
+	SINT sndmax;    					//发送数据区最大长度
+	SINT sndnor;     					//发送数据一般长度上限
 	UCHAR attr;  					//通道属性
 } faalitf_t;
 

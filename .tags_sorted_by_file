@@ -379,22 +379,24 @@ Action_BroadcastOpen	Software\cmd_process\SingleOpt.h	/^	Action_BroadcastOpen,$/
 Action_GroupClose	Software\cmd_process\SingleOpt.h	/^	Action_GroupClose,$/;"	e	enum:Action
 Action_GroupOpen	Software\cmd_process\SingleOpt.h	/^	Action_GroupOpen,$/;"	e	enum:Action
 ConfigM	Software\cmd_process\SingleOpt.h	/^enum ConfigM{$/;"	g
-CoordiCtrl_Config	Software\cmd_process\SingleOpt.h	20;"	d
-CoordiCtrl_GetData	Software\cmd_process\SingleOpt.h	22;"	d
-CoordiCtrl_Query	Software\cmd_process\SingleOpt.h	21;"	d
+CoordiCtrl_Config	Software\cmd_process\SingleOpt.h	22;"	d
+CoordiCtrl_GetData	Software\cmd_process\SingleOpt.h	24;"	d
+CoordiCtrl_Query	Software\cmd_process\SingleOpt.h	23;"	d
 Coordi_Addr	Software\cmd_process\SingleOpt.h	/^	vu8 Coordi_Addr;$/;"	m	struct:__anon18
 Coordi_ConfigGroup	Software\cmd_process\SingleOpt.h	/^	Coordi_ConfigGroup,$/;"	e	enum:ConfigM
 Coordi_ConfigMapAddr	Software\cmd_process\SingleOpt.h	/^	Coordi_ConfigMapAddr,$/;"	e	enum:ConfigM
-GetSingleCunt	Software\cmd_process\SingleOpt.h	14;"	d
-ResponseCtrl	Software\cmd_process\SingleOpt.h	23;"	d
-SingleCtrl_Broadcast	Software\cmd_process\SingleOpt.h	19;"	d
-SingleCtrl_Group	Software\cmd_process\SingleOpt.h	18;"	d
-SingleCtrl_Single	Software\cmd_process\SingleOpt.h	17;"	d
-SingleList_t	Software\cmd_process\SingleOpt.h	/^} SingleList_t;	$/;"	t	typeref:struct:__anon18
+GetSingleCunt	Software\cmd_process\SingleOpt.h	16;"	d
+ResponseCtrl	Software\cmd_process\SingleOpt.h	25;"	d
+SingleCtrl_Broadcast	Software\cmd_process\SingleOpt.h	21;"	d
+SingleCtrl_Group	Software\cmd_process\SingleOpt.h	20;"	d
+SingleCtrl_Single	Software\cmd_process\SingleOpt.h	19;"	d
+SingleList_t	Software\cmd_process\SingleOpt.h	/^} SingleList_t;$/;"	t	typeref:struct:__anon18
+SingleRecvTimeout	Software\cmd_process\SingleOpt.h	14;"	d
+SingleSendTimeout	Software\cmd_process\SingleOpt.h	15;"	d
 Single_Addr	Software\cmd_process\SingleOpt.h	/^	vu8 Single_Addr[2];$/;"	m	struct:__anon18
 Single_ConfigGroup	Software\cmd_process\SingleOpt.h	/^	Single_ConfigGroup,$/;"	e	enum:ConfigM
 Single_ConfigMapAddr	Software\cmd_process\SingleOpt.h	/^	Single_ConfigMapAddr,$/;"	e	enum:ConfigM
-Single_Header	Software\cmd_process\SingleOpt.h	16;"	d
+Single_Header	Software\cmd_process\SingleOpt.h	18;"	d
 Single_Light	Software\cmd_process\SingleOpt.h	/^	vu8 Single_Light;$/;"	m	struct:__anon18
 Single_State	Software\cmd_process\SingleOpt.h	/^	vu8 Single_State;$/;"	m	struct:__anon18
 __SingleOpt_h__	Software\cmd_process\SingleOpt.h	8;"	d
@@ -1448,7 +1450,6 @@ __MAIN_H__	User\main.h	8;"	d
 Config_EC_6018	config\config.h	14;"	d
 Config_Log	config\config.h	12;"	d
 Config_NewProtocol	config\config.h	13;"	d
-Config_PWM_	config\config.h	22;"	d
 DebugPrint	config\config.h	11;"	d
 HeartBeatErrCnt	config\config.h	28;"	d
 Not_Use	config\config.h	10;"	d
@@ -1610,6 +1611,7 @@ SPLITE_LINE_RULES	hardware\gprs_ppp\gprs_ppp.h	35;"	d
 WTD_IN	hardware\gprs_ppp\gprs_ppp.h	27;"	d
 WTD_OE	hardware\gprs_ppp\gprs_ppp.h	26;"	d
 __GPRS_PPP_H__	hardware\gprs_ppp\gprs_ppp.h	15;"	d
+DefaultCOM	hardware\serial\serial.c	6;"	d	file:
 UartBufClear	hardware\serial\serial.c	/^s32 UartBufClear(u32 port, Flush_IO IO)$/;"	f
 UartFd	hardware\serial\serial.c	/^static s32 UartFd[TOTAL_UARTS_NUM] = {-1,-1,-1,-1,-1,-1};$/;"	v	file:
 UartFor485Init	hardware\serial\serial.c	/^s32 UartFor485Init()$/;"	f
@@ -1623,8 +1625,7 @@ Uart_GetFd	hardware\serial\serial.c	/^s32 Uart_GetFd(u32  port)$/;"	f
 Uart_Open	hardware\serial\serial.c	/^s32 Uart_Open(u32  port)$/;"	f
 Uart_Recv	hardware\serial\serial.c	/^s32 Uart_Recv(u32  port,  s8* buf,   u32 len,  s32  block)$/;"	f
 Uart_Send	hardware\serial\serial.c	/^s32 Uart_Send(u32  port,  s8* buf,   u32 len,  s32  block)$/;"	f
-set_Parity	hardware\serial\serial.c	/^int set_Parity(int fd,int databits,int stopbits,int parity)$/;"	f
-set_speed	hardware\serial\serial.c	/^void set_speed(int fd, int speed)$/;"	f
+Uart_Send_v2	hardware\serial\serial.c	/^s32 Uart_Send_v2(u32  port,  s8* buf,   u32 len,  s32  block,s32 s)$/;"	f
 Bd115200	hardware\serial\serial.h	/^	Bd115200 	= 115200$/;"	e	enum:__anon9
 Bd1200	hardware\serial\serial.h	/^	Bd1200 	= 1200,$/;"	e	enum:__anon9
 Bd19200	hardware\serial\serial.h	/^	Bd19200 	= 19200,$/;"	e	enum:__anon9
@@ -3257,6 +3258,11 @@ WeekDay	task\timertask\timertask.h	/^	UCHAR WeekDay;$/;"	m	struct:ServerCommunTi
 WeekDay	task\timertask\timertask.h	/^	u8 	WeekDay;		\/\/星期(0-6依次代表周日,一~六)或日期$/;"	m	struct:TimerTaskToSaveFormatStruct
 __TIMERTASK_H__	task\timertask\timertask.h	13;"	d
 lock	task\timertask\timertask.h	/^	pthread_mutex_t lock;$/;"	m	struct:TOPTimerTaskListStruct
+UEVENT_BUFFER_SIZE	tools\AutoMountUsb.c	16;"	d	file:
+find_block	tools\AutoMountUsb.c	/^static const char *find_block(const char *buffer,const char *coulmn)$/;"	f	file:
+init_hotplug_sock	tools\AutoMountUsb.c	/^static int init_hotplug_sock(void)$/;"	f	file:
+main	tools\AutoMountUsb.c	/^int main(int argc, char* argv[])$/;"	f
+main	tools\Watch_ssh.c	/^int main(int argc, char const *argv[])$/;"	f
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_PROGRAM_VERSION	5.8	//

@@ -6,7 +6,7 @@
 ** 修改人:
 ** 日　期:
 ** 描　述:	16  进制打印
-** ERROR_CODE:	
+** ERROR_CODE:
 **
 ** 版　本:	V1.0
 *******************************************************************/
@@ -26,13 +26,13 @@ vu8 	socket_comm_line_stat = 1;		//must
 vu8	 cc_register_stat;
 
 const faalitf_t 	g_faalitf[FAALITF_MAXNUM] = {
-	/* 2 ITF_WAY_ETHER */	
-	[2] = {(UCHAR *)G_Ether_Rcvbuf, (UCHAR *)G_Ether_Sndbuf, 
+	/* 2 ITF_WAY_ETHER */
+	[2] = {(UCHAR *)G_Ether_Rcvbuf, (UCHAR *)G_Ether_Sndbuf,
 		Ether_Connect,Ether_Disconnect,Ether_Logon,Ether_HeartBeat,
 		Ether_Linestat,Ether_RawSend,Ether_Getchar,Ether_Keepalive,
 		NULL,NULL,NULL,NULL,
 		ETH_TIMEOUT,ETHER_RECV_BUF_MAX,ETHER_SEND_BUF_MAX,ETHER_SNORMAL_BUF,0},
-	
+
 };
 /*****************************************************************
 ** 函数名:
@@ -212,7 +212,7 @@ UINT faal_linktest(UCHAR itf)
 	pkt->len = 1;
 	pkt->data[0]=0xee;
 
-	rtn = faal_act_send(itf, 0, pkt);	
+	rtn = faal_act_send(itf, 0, pkt);
 	if(DEBUG_LOCAL == 1){
 		printf("rtn in faal_linktest is %d\n",rtn);
 	}
@@ -223,17 +223,17 @@ UINT faal_linktest(UCHAR itf)
 		if(DEBUG_ERR_RECD == 1){
 				debug_err_reccord(LINK_TEST_FAIL_ERR);
 		}
-			/*	del by zpf--2012年2月11日9:55:47	
+			/*	del by zpf--2012年2月11日9:55:47
 					DAIL_ERROR_TIMES_ALL++;
-				
+
 					if(DAIL_ERROR_TIMES_ALL>20){
 				//rrrrrr
-							gprsline_pwroff; 
+							gprsline_pwroff;
 					//		gprsline_pwroff
 							Sleep(3000);
 							gprsline_pwron;
 							Sleep(3000);
-				
+
 					}
 			*/
 	}
@@ -265,11 +265,11 @@ UINT faal_logon(UCHAR itf)
 	char sndbuf[50];
 	faalpkt_t *pkt = (faalpkt_t *)sndbuf;
 
-	pkt->ctrl = 0xf0; 
+	pkt->ctrl = 0xf0;
 	pkt->len = 0;
 //	pkt->len = 1;
 //	pkt->data[0]=55;
-	
+
 	if(faal_act_send(itf, 0, pkt)) {
 
 		if(DEBUG_LOCAL == 1){
@@ -279,8 +279,8 @@ UINT faal_logon(UCHAR itf)
 	return 1;
 
 	}
-	
-	
+
+
 	socket_comm_line_stat = SOCKET_LINESTAT_OK;					//表示 正常链路
 		if(DEBUG_LOCAL == 1){
 			printf("logon ok.\n");
@@ -315,13 +315,13 @@ SINT faal_sendpkt(UCHAR itf, faalpkt_t *pkt)
 	//只有itf==FAALITF_SMSGPRS才有网络开关
 	len = basic_makepkt(itf, pkt);
 	debug(DEBUG_LOCAL_LINK_METH,"send itf=%d\n",itf);
-	
-	
+
+
 	if((*g_faalitf[itf].rawsend)((UCHAR *)pkt, len)) {
 		//debug(DEBUG_LOCAL_LINK_METH,"faal_sendpkt error : rawsend\n");
 		return 1;
 	}
-	
+
 	return SUCCESS;
 }
 
@@ -349,8 +349,8 @@ SINT faal_act_send(UCHAR itf, UCHAR wait, faalpkt_t *pkt)
 {
 	SINT rtn = FAALRTN_OK;
 	faalpkt_t *psend = pkt;
-	
-	
+
+
 	if((!wait)) {
 		rtn = faal_sendpkt(itf, psend);
 	} else {
@@ -407,7 +407,7 @@ SINT  basic_makepkt(UCHAR itf, faalpkt_t *pkt)
 		pkt->rtua[3] = CCparamGlobalInfor.CCUID[3];
 		pkt->rtua[4] = CCparamGlobalInfor.CCUID[4];
 		pkt->rtua[5] = CCparamGlobalInfor.CCUID[5];
- 
+
 	}
 
 	puc = (UCHAR *)&pkt->head;
@@ -451,7 +451,7 @@ SINT basic_checkpkt(UCHAR itf, faalpkt_t *pkt)
 	UCHAR chk;
 
 	len = pkt->len;
-	
+
 	if(len > g_faalitf[itf].rcvmax) {
 		debug(DEBUG,"recv data too long\n");
 		return 1;
@@ -460,7 +460,7 @@ SINT basic_checkpkt(UCHAR itf, faalpkt_t *pkt)
 	len += LEN_FAALHEAD;
 	puc = &pkt->head;
 	chk = 0;
-	
+
 	for(i=0; i<len; i++) chk += *puc++;
 
 	if(chk != *puc++) {
@@ -601,7 +601,7 @@ SINT faal_rcvpkt(UCHAR itf,UCHAR *recv)
 
 
 SINT faal_connect(UCHAR itf)
-{	
+{
 	if(g_faalitf[itf].connect()){  /*链接失败*/
 		debug(DEBUG_LOCAL_LINK_METH,"socket connect through %d fail :error code is %d\n",itf,SOCKET_CONNECT_ERR);
 		#if DEBUG_ERR_RECD_LINK
@@ -618,7 +618,7 @@ SINT faal_connect(UCHAR itf)
 
 
 SINT faal_disconnect(UCHAR itf)
-{	
+{
 	if(g_faalitf[itf].disconnect()){
 		debug(DEBUG_LOCAL_LINK_METH,"socket connect through %d fail :error code is %d\n",itf,SOCKET_CONNECT_ERR);
 		#if DEBUG_ERR_RECD_LINK
@@ -638,10 +638,10 @@ SINT faal_logon(UCHAR itf)
 		debug(DEBUG_LOCAL_LINK_METH,"CC logon  through %d fail :error code is %d\n",itf,CC_LOGON_ERR);
         		#if DEBUG_ERR_RECD_LINK
 			debug_err_reccord(CC_LOGON_ERR);
-		#endif	
+		#endif
 		TOPCCRegistr2ServerState = CC_REGISTER_ERR;
 		debug(DEBUG_LOCAL_ETHNET,"TOPCCRegistr2ServerState = CC_REGISTER_ERR 5\n");
-			
+
 		return FAIL;
 
 	}else{
@@ -660,7 +660,7 @@ SINT faal_linktest(UCHAR itf)
 		debug(DEBUG_LOCAL_ETHNET,"TOPCCRegistr2ServerState = CC_REGISTER_ERR 6\n");
 		return FAIL;
 	}else{
-		debug(DEBUG_LOCAL_LINK_METH,"CC linktest  through %d surccess \n",itf);	
+		debug(DEBUG_LOCAL_LINK_METH,"CC linktest  through %d surccess \n",itf);
 		return SUCCESS;
 	}
 }
@@ -683,9 +683,6 @@ SINT faal_linkstat(UCHAR itf)
 
 SINT TopUserKeepalive(UCHAR itf)
 {
-	#if DebugPrint
-		err_Print(1,"NO.1\n");
-	#endif
 	if(g_faalitf[itf].keepalive()){
 		return FAIL;
 	}else{

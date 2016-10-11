@@ -6,7 +6,7 @@
 ** 修改人:
 ** 日　期:
 ** 描　述:	16  进制打印
-** ERROR_CODE:	
+** ERROR_CODE:
 **
 ** 版　本:	V1.0
 *******************************************************************/
@@ -41,7 +41,7 @@ typedef struct {
 
 
 SINT basic_makepkt(UCHAR itf,faalpkt_t *pkt);
-SINT basic_checkpkt(UCHAR itf, faalpkt_t *pkt);	
+SINT basic_checkpkt(UCHAR itf, faalpkt_t *pkt);
 void basic_clrstat(UCHAR itf, UCHAR * recv);
 
 #define CC_LOGON_CTRL				0xA1
@@ -49,9 +49,6 @@ void basic_clrstat(UCHAR itf, UCHAR * recv);
 #define CC_LINE_HEATBEAT				0xA1
 #define CC_LINE_HEATBEAT_LEN			2
 #define CC_LINE_HEATBEAT_DATA			0x02
-
-
-
 
 
 

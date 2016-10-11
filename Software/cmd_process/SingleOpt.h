@@ -11,7 +11,7 @@
 #include "database.h"
 #include "coordinate.h"
 
-#define SingleRecvTimeout 	50
+#define SingleRecvTimeout 	30
 #define SingleSendTimeout 	5000000
 #define GetSingleCunt 	30 		//一次读取单灯回复的状态信息的单灯个数
 

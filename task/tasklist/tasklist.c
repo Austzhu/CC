@@ -24,7 +24,7 @@ extern volatile s8 	TOPDIDO_STATUS[DIDO_DEVICE_QUANTITY];
 extern volatile s8 	TOPMETER_STATUS[METER_DEVICE_QUANTITY];
 
 struct task_queue  taskQueue[QUEUE_TOTAL_QUANTITY];
-const ListCmdProcessFunc DetlCmdProcessFunc[][200] = {
+const ListCmdProcessFunc DetlCmdProcessFunc[][64] = {
 	//0 ---协调器485有关的控制命令
 	{	{0x42, CallBack_Open},
 		{0x43, CallBack_Close},
@@ -32,34 +32,30 @@ const ListCmdProcessFunc DetlCmdProcessFunc[][200] = {
 		{0x47, CallBack_Light},
 		{0x48, CallBack_RtData},
 		{ALL_SUPPT_CMD_END, NULL},
-	},
-	//1 ---GPRS与GPRS有关的控制命令
+	},	//1 ---GPRS与GPRS有关的控制命令
 	{	{GPRS_TEST1_CMD, CallBackGPRSTest1},
 		{ALL_SUPPT_CMD_END, NULL},
-	},
-	//2 ---CC与CC相关的控制指令
-	{	{CC_SERVER_ACK_CMD,CallBackServerFeedback},		//0X80,服务器回复
-		//{CC_LOGON_CMD,CallBackLogon},				//0xA1,
-		{CC_OPRATE_CMD,CallBackReset},				//0XA2,上位机控制集中器
-		{CC_PARA_SET_CMD,CallBackCCGlobalParaSetGet},		//0XA3,集中器参数设置
-		{CC_UPDATE_CMD,CallBackApplicUpDate},			//0XA4,集中器远程升级
-		{CC_TIME_CTRL_CMD,CallBackTimerControlTaskRLT},		//0XC1,定时器控制协议
- 		{ALL_SUPPT_CMD_END, NULL},					//0XFF结束
-	},
-	//3 ---485与外接485设备相关的控制指令
-	{	{CC_METER_READ_CMD,CallBackMetterInfoColletRD},		//0xD1,读取电表协议
-		{CC_METER_SET_CMD,CallBackMetterInfoColletSet},		//0xD2,设置电表参数
-		{CC_METER_RD_EXTR_CMD,CallBackMetterInfoColletExtrRD},	//0xD3,读外购电表
-		{CC_METER_SET_EXTR_CMD,CallBackMetterInfoColletExtrSet},//0xD4,ack OK 20120611 date
-		{0x01,CallBackMetterInfoBroadcast},				//0x01 test by Austzhu 2016.3.29
+	},	//2 ---CC与CC相关的控制指令
+	{	{CC_SERVER_ACK_CMD,CallBackServerFeedback},			//0X80,服务器回复
+		//{CC_LOGON_CMD,CallBackLogon},					//0xA1,
+		{CC_OPRATE_CMD,CallBackReset},					//0XA2,上位机控制集中器
+		{CC_PARA_SET_CMD,CallBackCCGlobalParaSetGet},			//0XA3,集中器参数设置
+		{CC_UPDATE_CMD,CallBackApplicUpDate},				//0XA4,集中器远程升级
+		{CC_TIME_CTRL_CMD,CallBackTimerControlTaskRLT},			//0XC1,定时器控制协议
+ 		{ALL_SUPPT_CMD_END, NULL},						//0XFF结束
+	},	//3 ---485与外接485设备相关的控制指令
+	{	{CC_METER_READ_CMD,CallBackMetterInfoColletRD},			//0xD1,读取电表协议
+		{CC_METER_SET_CMD,CallBackMetterInfoColletSet},			//0xD2,设置电表参数
+		{CC_METER_RD_EXTR_CMD,CallBackMetterInfoColletExtrRD},		//0xD3,读外购电表
+		{CC_METER_SET_EXTR_CMD,CallBackMetterInfoColletExtrSet},		//0xD4,ack OK 20120611 date
+		{0x01,CallBackMetterInfoBroadcast},					//0x01 test by Austzhu 2016.3.29
 		{0x02,CallBackMetterInfoBroadcast},
 		{0x03,CallBackMetterInfoBroadcast},
-		{CC_DIDO_SET_CMD,CallBackMetterDIDO},			//0XE1,	DIDO扩展继电器协议
+		{CC_DIDO_SET_CMD,CallBackMetterDIDO},				//0XE1,	DIDO扩展继电器协议
  		{ALL_SUPPT_CMD_END, NULL},
-	},
-	//4 ---ETH与硬件网口相关的应答
-	{	{CC_ETH_ShortACK_CMD,CallBackETHShotAck},		//0x51,
-		{CC_ETH_LongContex_CMD,CallBackETHLongContexBack},	//0x52,
+	},	//4 ---ETH与硬件网口相关的应答
+	{	{CC_ETH_ShortACK_CMD,CallBackETHShotAck},			//0x51,
+		{CC_ETH_LongContex_CMD,CallBackETHLongContexBack},		//0x52,
  		{ALL_SUPPT_CMD_END, NULL},
 	}
 };
@@ -70,10 +66,7 @@ s32 isEmpty(struct task_queue *queue)
 }
 s32 init_task_queue(struct task_queue *taskqueue)
 {
-	if(!taskqueue){
-		err_Print(DEBUG_list,"taskqueque is null!\n");
-		return FAIL;
-	}
+	assert_param(taskqueue,"taskqueque is null!",FAIL);
 	task_node *head = NULL;
 	if( (head = (task_node*)malloc(sizeof(task_node)) ) == NULL){
 		err_Print(DEBUG_list,"Creat head node err!\n");

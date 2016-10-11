@@ -1,17 +1,19 @@
 /********************************************************************
 	> File Name:	log.h
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年05月09日 星期一 20时50分21秒
  *******************************************************************/
 #ifndef __log_h__
 #define __log_h__
 #include "include.h"
-#define LogCount 2
+#define LogCount 	5
 typedef enum{
 	CC		= 0X01,
 	Coordinate	= 0X02,
-	Log_err 		= 0x100
+	err,
+	warring,
+	Log_err 	= 0x100
 }Logfile_t;
 
 /**

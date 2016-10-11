@@ -1,5 +1,5 @@
 
-COBJS :=format_exchg.o common.o
+COBJS :=Interface.o
 OBJS += $(COBJS)
 
 all:$(COBJS)

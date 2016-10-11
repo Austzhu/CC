@@ -6,7 +6,7 @@
 ** 修改人:
 ** 日　期:
 ** 描　述:	数据长度定义
-** ERROR_CODE:	
+** ERROR_CODE:
 **
 ** 版　本:	V1.0
 *******************************************************************/
@@ -35,11 +35,11 @@ typedef char				s8;
 typedef short 				s16;
 typedef int 				s32;
 typedef unsigned char 			u8;
-typedef unsigned short 			u16;
+typedef unsigned short 		u16;
 typedef unsigned int 			u32;
 typedef unsigned long			ul32;
 typedef volatile unsigned char 		vu8;
-typedef volatile unsigned short 		vu16;
+typedef volatile unsigned short 	vu16;
 typedef volatile unsigned int 		vu32;
 typedef volatile char 			vs8;
 typedef volatile short 			vs16;

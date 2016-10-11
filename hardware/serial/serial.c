@@ -383,19 +383,32 @@ s32 UartFor485Init()
 
 s32 UartForCoordi(void)
 {
+	int res = -1;
 	if(SUCCESS == Uart_Open(Uart1_ttyO1_485) ){
 		#ifndef MC_ARM335X
-			Uart_Config(Uart1_ttyO1_485, Bd9600, 8,1,'N');
+			res = Uart_Config(Uart1_ttyO1_485, Bd9600, 8,1,'N');
 		#else
-			Uart_Config(Uart1_ttyO1_485, B9600, 8,1,'N');
+			res = Uart_Config(Uart1_ttyO1_485, B9600, 8,1,'N');
 		#endif
+		if(SUCCESS != res){
+			Write_log(err, "Config Serial Uart1_ttyO1_485 err!\n");
+		}
+	}else{
+		Write_log(err, "Open Serial Uart1_ttyO1_485 err!\n");
+		return FAIL;
 	}
 	if(SUCCESS == Uart_Open(Uart3_tty03_DIDO)){
 		#ifndef MC_ARM335X
-			Uart_Config(Uart3_tty03_DIDO, Bd9600, 8,1,'N');
+			res = Uart_Config(Uart3_tty03_DIDO, Bd9600, 8,1,'N');
 		#else
-			Uart_Config(Uart3_tty03_DIDO, B9600, 8,1,'N');
+			res = Uart_Config(Uart3_tty03_DIDO, B9600, 8,1,'N');
 		#endif
+		if(SUCCESS != res){
+			Write_log(err, "Config Serial Uart3_tty03_DIDO err!\n");
+		}
+	}else{
+		Write_log(err, "Open Serial Uart3_tty03_DIDO err!\n");
+		return FAIL;
 	}
 	return SUCCESS;
 }

@@ -176,6 +176,7 @@ s32 Query_Action(int Group)
 		//Select_Table_V2("select Coor_id,Base_Addr from db_light order by Coor_id desc;",(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
 		Select_Table_V2("select Coor_id,Base_Addr from db_light order by Coor_id ;",(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
 	}
+	sleep(1);	//防止广播或组播操作后，立马发查询指令，前面几个灯的状态会判断有误
 
 	int AddrLen = 0,i = 0;
 	u16 *PAddr = (u16*)((char*)P_single + sizeof(Pag_Single));
@@ -461,37 +462,43 @@ s32 ResponsePromptly(u8 ctrl,u8 SubCMD ,u8 Resault,int Bufferlen)
 
 s32 SingleOpen(struct task_node *node)
 {
+	int Repeat = 3;
 	Pag_Single Single;
-	memset(&Single,0,sizeof(Single));
-	Single.Header 		= Single_Header;
-	Single.Ctrl 		= SingleCtrl_Single;
-	Single.Coordi_Addr 	= node->pakect[3];
-	Single.Single_Addr[0]	= node->pakect[4];
-	Single.Single_Addr[1]	= node->pakect[5];
-	Single.Cmd[0]		= (signle_open>>8) 	& 0xff;
-	Single.Cmd[1]		= signle_open 		& 0xff;
+	if(!node){ return FAIL; }		//判断指针是否可用
+	while(Repeat--){
+		memset(&Single,0,sizeof(Single));
+		Single.Header 		= Single_Header;
+		Single.Ctrl 		= SingleCtrl_Single;
+		Single.Coordi_Addr 	= node->pakect[3];
+		Single.Single_Addr[0]	= node->pakect[4];
+		Single.Single_Addr[1]	= node->pakect[5];
+		Single.Cmd[0]		= (signle_open>>8) 	& 0xff;
+		Single.Cmd[1]		= signle_open 		& 0xff;
 
-	#ifdef Config_PWM_
-		Single.Data[0]	= (node->pakect[6] < PWMmax) ? PWMmax- node->pakect[6] :0;
-	#else
-		Single.Data[0]	= (node->pakect[6] > PWMmax) ? PWMmax:node->pakect[6];
-	#endif
-	Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
+		#ifdef Config_PWM_
+			Single.Data[0]	= (node->pakect[6] < PWMmax) ? PWMmax- node->pakect[6] :0;
+		#else
+			Single.Data[0]	= (node->pakect[6] > PWMmax) ? PWMmax:node->pakect[6];
+		#endif
+		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 
-	Display_package("Single Open Send data",&Single,sizeof(Pag_Single));
+		Display_package("Single Open Send data",&Single,sizeof(Pag_Single));
 
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
+		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
-	#ifdef Config_Log
-		Write_log(Coordinate, &Single);
-	#endif
+		#ifdef Config_Log
+			Write_log(Coordinate, &Single);
+		#endif
 
-	UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
-	memset(&Single,0,sizeof(Single));
-	if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过1s则超时。
-		debug(DEBUG_single,"Wait Single Response Timeout!\n");
-		goto ERR;
-	}
+		UartBufClear(Uart1_ttyO1_485, Flush_Input);// 冲洗输入缓存
+		memset(&Single,0,sizeof(Single));
+		if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过1s则超时。
+			debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			continue;
+			//goto ERR;
+		}else{ break; }
+	}	//end of while(Repeat--){
+	if(Repeat <= 0){ return FAIL; }
 	/* 是否要校验回复回来的单灯或协调器地址??? */
 	if((ResponseCtrl|SingleCtrl_Single) != Single.Ctrl || 0x00 != Single.Data[0]){
 		debug(DEBUG_single,"^^^^^single open fail!\n");
@@ -637,32 +644,37 @@ s32 BroadcastLight(struct task_node *node)
 
 s32 SingleClose(struct task_node *node)
 {
+	int Repeat = 3;
 	Pag_Single Single;
+	if(!node){ return FAIL; }
 	memset(&Single,0,sizeof(Single));
+	while(Repeat--){
+		Single.Header 		= Single_Header;
+		Single.Ctrl 		= SingleCtrl_Single;
+		Single.Coordi_Addr 	= node->pakect[3];
+		Single.Single_Addr[0]	= node->pakect[4];
+		Single.Single_Addr[1]	= node->pakect[5];
+		Single.Cmd[0]		= (signle_close>>8) 	& 0xff;
+		Single.Cmd[1]		= signle_close 		& 0xff;
+		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 
-	Single.Header 		= Single_Header;
-	Single.Ctrl 		= SingleCtrl_Single;
-	Single.Coordi_Addr 	= node->pakect[3];
-	Single.Single_Addr[0]	= node->pakect[4];
-	Single.Single_Addr[1]	= node->pakect[5];
-	Single.Cmd[0]		= (signle_close>>8) 	& 0xff;
-	Single.Cmd[1]		= signle_close 		& 0xff;
-	Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
+		Display_package("Single Close Send data",&Single,sizeof(Pag_Single));
 
-	Display_package("Single Close Send data",&Single,sizeof(Pag_Single));
+		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 
-	Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
-
-	#ifdef Config_Log
-		Write_log(Coordinate, &Single);
-	#endif
-	/* 冲洗输入缓存 */
-	UartBufClear(Uart1_ttyO1_485, Flush_Input);
-	memset(&Single,0,sizeof(Single));
-	if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过5s则超时。
-		debug(DEBUG_single,"Wait Single Response Timeout!\n");
-		goto ERR;
-	}
+		#ifdef Config_Log
+			Write_log(Coordinate, &Single);
+		#endif
+		/* 冲洗输入缓存 */
+		UartBufClear(Uart1_ttyO1_485, Flush_Input);
+		memset(&Single,0,sizeof(Single));
+		if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){//等待单灯回复，超过5s则超时。
+			debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			//goto ERR;
+			continue;
+		}else{break;}
+	}	//end of while(Reapeat--)
+	if(Repeat <= 0){ return FAIL; }
 	/* 是否要校验回复回来的单灯或协调器地址??? */
 	if((ResponseCtrl|SingleCtrl_Single) != Single.Ctrl || 0x00 != Single.Data[0]){
 		debug(DEBUG_single,"^^^^^single Close fail!\n");

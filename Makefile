@@ -20,7 +20,7 @@ Rootdir=$(PWD)
 export output CFLAGS Rootdir
 
 #OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
-OBJS_PATH +=./Common/common ./Common/My_lib ./hardware/coordinate ./hardware/ethernet ./hardware/gprs_ppp 	\
+OBJS_PATH +=./Common/common ./Common ./Common/My_lib ./hardware/coordinate ./hardware/ethernet ./hardware/gprs_ppp 	\
 	./hardware/serial ./Software/analysis ./Software/burglar_alarm ./Software/cc_param ./Software/communication 	\
 	./Software/info_output ./Software/initstart ./Software/link_method ./Software/Log ./Software/meter_crc 		\
 	./Software/cmd_process ./sqlite ./task/tasklist ./User ./hardware/update ./task/timertask  ./hardware/Zt_Meter
@@ -32,9 +32,9 @@ include $(INCLUDE)
 
 DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
 
-all: Version test_App Automountusb  Watchrsh
+all: Version ztcc Automountusb  Watchrsh
 
-test_App: compile
+ztcc: compile
 	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS)
 Version:
 	@`./version/setlocalversion`

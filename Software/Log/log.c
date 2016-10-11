@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:	log.c
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年05月09日 星期一 20时49分59秒
  *******************************************************************/
 #include "log.h"
@@ -35,17 +35,24 @@ static s32 Open_log(Logfile_t logf)
 	}
 	switch(logf){
 		case CC:
-		if( (Log_fd[logf] = open("./Logfile/Server2CC.log", O_RDWR|O_CREAT|O_APPEND)) <0 ){
-			Log_fd[logf] = -1;
-			debug(DEBUG_Log,"Open Server2CC.log fail!\n");
-			return FAIL;
-		}break;
+			if( (Log_fd[logf] = open("./Logfile/Server2CC.log", O_RDWR|O_CREAT|O_APPEND)) <0 ){
+				Log_fd[logf] = -1;
+				debug(DEBUG_Log,"Open Server2CC.log fail!\n");
+				return FAIL;
+			}break;
 		case Coordinate:
-		if( (Log_fd[logf] = open("./Logfile/CC2Single.log", O_RDWR|O_CREAT|O_APPEND)) <0 ){
-			Log_fd[logf] = -1;
-			debug(DEBUG_Log,"Open CC2Single.log fail!\n");
-			return FAIL;
-		}break;
+			if( (Log_fd[logf] = open("./Logfile/CC2Single.log", O_RDWR|O_CREAT|O_APPEND)) <0 ){
+				Log_fd[logf] = -1;
+				debug(DEBUG_Log,"Open CC2Single.log fail!\n");
+				return FAIL;
+			}break;
+		case err:
+		case warring:
+			if( (Log_fd[logf] = open("./Logfile/err.log", O_RDWR|O_CREAT|O_APPEND)) <0 ){
+				Log_fd[logf] = -1;
+				debug(DEBUG_Log,"Open err.log fail!\n");
+				return FAIL;
+			}break;
 		default:break;
 	}
 	return SUCCESS;
@@ -100,7 +107,7 @@ static s32 MakeSingleLog(s8 *buf,  Pag_Single*pkg)
 		}
 		goto data;
 	}
-	/* 判断是否为广播或组播 */ 
+	/* 判断是否为广播或组播 */
 	if(0x00 != pkg->Coordi_Addr && 0 != (pkg->Single_Addr[0] <<8 |pkg->Single_Addr[1]) ){
 		Cmd = pkg->Cmd[0] <<8 | pkg->Cmd[1];
 		while((itpos=0x01<<i++) != 0x10000){	//循环检测cmd每个bit位
@@ -122,7 +129,7 @@ static s32 MakeSingleLog(s8 *buf,  Pag_Single*pkg)
 		}else{
 			sprintf(buf,"Cmd=%04X\nData:",Cmd);
 		}
-		
+
 	}else{
 		if(0x00 == pkg->Coordi_Addr){
 			sprintf(buf,"Broadcast\nData:");
@@ -134,7 +141,7 @@ data:
 	for(i=0;i<sizeof(Pag_Single);++i){
 		sprintf(buf+strlen(buf),"%02X ",((s8*)pkg)[i]);
 	}sprintf(buf+strlen(buf),"\n");
-	
+
 	return SUCCESS;
 }
 s32 Write_log(int cmd, ...)
@@ -144,18 +151,17 @@ s32 Write_log(int cmd, ...)
 	struct tm *tm;
 	time_t t;
 	faalpkt_t 	*pkg_CC    = NULL;
-	//Frame_485	*pkg_Coor = NULL;
 	Pag_Single 	*pkg_Coor = NULL;
 	va_list 	arg_ptr;
 	va_start(arg_ptr, cmd);
 	tm = localtime( (time(&t),&t) );
-	sprintf(logbuf,"\n%04d-%02d-%02d %02d:%02d:%02d>",tm->tm_year+1900,tm->tm_mon+1,
+	sprintf(logbuf,"\n%04d-%02d-%02d %02d:%02d:%02d> ",tm->tm_year+1900,tm->tm_mon+1,
 					tm->tm_mday,tm->tm_hour,tm->tm_min,tm->tm_sec);
 	switch(cmd&0xff){
 		case CC:
 			if(cmd&Log_err){	//写错误消息
 				sprintf(logbuf+strlen(logbuf),"Error\nError Message: %s\n",va_arg(arg_ptr, char*));
-				va_end(arg_ptr); 
+				va_end(arg_ptr);
 				/* 写入日志文件中 */
 				Open_log(CC);
 				write(Log_fd[CC],logbuf,strlen(logbuf));
@@ -164,7 +170,7 @@ s32 Write_log(int cmd, ...)
 			}
 			/* 获取参数 */
 			pkg_CC = va_arg(arg_ptr, faalpkt_t*);
-			va_end(arg_ptr); 
+			va_end(arg_ptr);
 			/* 准备日志 */
 			if(SUCCESS == MakeServerLog(logbuf+strlen(logbuf),  pkg_CC) ){
 				/* 写入日志文件中 */
@@ -173,9 +179,9 @@ s32 Write_log(int cmd, ...)
 				Close_log(CC);
 			}break;
 		case Coordinate:
-			if(cmd&Log_err){	
+			if(cmd&Log_err){
 				sprintf(logbuf+strlen(logbuf),"Error\nError Message: %s\n",va_arg(arg_ptr, char*));
-				va_end(arg_ptr); 
+				va_end(arg_ptr);
 				/* 写入日志文件中 */
 				Open_log(Coordinate);
 				write(Log_fd[Coordinate],logbuf,strlen(logbuf));
@@ -183,13 +189,26 @@ s32 Write_log(int cmd, ...)
 				break;
 			}
 			pkg_Coor = va_arg(arg_ptr, Pag_Single*);
-			va_end(arg_ptr); 
+			va_end(arg_ptr);
 			if(SUCCESS == MakeSingleLog(logbuf+strlen(logbuf),pkg_Coor) ){
 				Open_log(Coordinate);
 				write(Log_fd[Coordinate],logbuf,strlen(logbuf));
 				Close_log(Coordinate);
 			}break;
-			
+		case err:
+			sprintf(logbuf+strlen(logbuf),"Error Message: %s\n",va_arg(arg_ptr, char*));
+			va_end(arg_ptr);
+			Open_log(err);
+			write(Log_fd[err],logbuf,strlen(logbuf));
+			Close_log(err);
+			break;
+		case warring:
+			sprintf(logbuf+strlen(logbuf),"Warring Message: %s\n",va_arg(arg_ptr, char*));
+			va_end(arg_ptr);
+			Open_log(warring);
+			write(Log_fd[warring],logbuf,strlen(logbuf));
+			Close_log(warring);
+			break;
 		default:debug(DEBUG_Log,"In %s Can't  Identify Cmd!\n",__func__);
 	}
 	return SUCCESS;

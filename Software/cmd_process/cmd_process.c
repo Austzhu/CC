@@ -116,7 +116,7 @@ u32 CallBack_Open(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}else{
 				ACKSendBufLong[9] = FAIL;		//回复服务器，开灯失败
 				TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,ACKSendBufLong,NET_TASK,TASK_LEVEL_NET);
-				return FAIL;
+				//return FAIL;
 			}break;
 		case 0x02://组播
 			if( SUCCESS == GroupOpen(node)){
