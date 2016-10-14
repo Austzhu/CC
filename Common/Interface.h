@@ -17,6 +17,10 @@
 #define mcontainer_of(ptr, type, member) 	{  const typeof( ((type *)0)->member ) *__mptr = (ptr);\
 						(type *)( (char *)__mptr - moffsetof(type,member) );   }
 
+enum {
+	itf_ether = 2,
+};
+
 typedef struct {
 	int sock_ether;				//网络连接的socket
 	int ether_recvlen;			//缓存数据的长度
@@ -54,5 +58,8 @@ typedef struct{
 	Serial_t 	ttyS485;	//485通信操作的方法
 	Queue_t 	netque;		//队列操作方法
 } appitf_t;
+
+extern appitf_t g_appity;
+int appitf_init(appitf_t*);
 
 #endif

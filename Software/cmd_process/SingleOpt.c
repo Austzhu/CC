@@ -244,6 +244,82 @@ s32 Query_Action(int Group)
 	return FAIL;
 }
 
+s32 Query_electric(const void *Addr,int Addr_size)
+{
+	assert_param(Addr,NULL,FAIL);
+	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
+	const Sqlbuf_t *pAddr = Addr;
+	int Single_count = Addr_size/sizeof(Sqlbuf_t);
+	u8* const Sendbuf = (u8*)malloc(Single_count*2 + 16);
+	if(!Sendbuf) goto out;
+
+	Sendbuf[3] = pAddr-> Coor_Addr;	//协调器地址
+	int i =0,count = 0,single_count_max = 0,repeat = 3;
+	u8 *pbuf = Sendbuf+12;
+	while(i++ < Single_count){
+		if(pAddr->Coor_Addr != Sendbuf[3]){
+			Sendbuf[0] = Single_Header;
+			Sendbuf[1] = CoordiCtrl_Qelec;
+			Sendbuf[6] = 0x00;					//命令字
+			Sendbuf[7] = 0x01;					//命令字
+			Sendbuf[8] = 0xff&(count>>8);
+			Sendbuf[9] = 0xff&count;
+			Crc16(&Sendbuf[10],Sendbuf,10);
+			Crc16(Sendbuf+12+count,Sendbuf+12,count);
+			Display_package("^^^^^electric Query",Sendbuf,count+14);
+			repeat = 3;
+			while(repeat--){
+				/* send data */
+				UartBufClear(Uart1_ttyO1_485, Flush_Input);
+				Uart_Send(Uart1_ttyO1_485, (s8*)Sendbuf, count+14, SingleSendTimeout);
+				/* Recv response */
+				if( SUCCESS !=Recv_Package_v2((Pag_Single*)Sendbuf,SingleRecvTimeout) )
+					debug(DEBUG_single,"Wait Single Response Timeout!\n");
+				if(!Sendbuf[8] && !Sendbuf[9] ) break;
+				if(repeat <= 0) goto out;
+			}
+			/* update Coordinate */
+			Sendbuf[3] = pAddr->Coor_Addr;
+			pbuf = Sendbuf+12;
+			count = 0;
+		}
+		*pbuf++ = 0xff&(pAddr->Addr >> 8);
+		*pbuf++ = 0xff&pAddr->Addr;
+		count += 2;  ++pAddr;
+		if(single_count_max < count) single_count_max = count;
+
+		if(i == Single_count){
+			Sendbuf[0] = Single_Header;
+			Sendbuf[1] = CoordiCtrl_Qelec;
+			Sendbuf[6] = 0x00;					//命令字
+			Sendbuf[7] = 0x01;					//命令字
+			Sendbuf[8] = 0xff&(count>>8);
+			Sendbuf[9] = 0xff&count;
+			Crc16(&Sendbuf[10],Sendbuf,10);
+			Crc16(Sendbuf+12+count,Sendbuf+12,count);
+			Display_package("^^^^^electric Query",Sendbuf,count+14);
+			repeat = 3;
+			while(repeat--){
+				/* send data */
+				UartBufClear(Uart1_ttyO1_485, Flush_Input);
+				Uart_Send(Uart1_ttyO1_485, (s8*)Sendbuf, count+14, SingleSendTimeout);
+				/* Recv response */
+				if( SUCCESS !=Recv_Package_v2((Pag_Single*)Sendbuf,SingleRecvTimeout) )
+					debug(DEBUG_single,"Wait Single Response Timeout!\n");
+				if(!Sendbuf[8] && !Sendbuf[9] ) break;
+				if(repeat <= 0) goto out;
+			}
+		}
+	}
+	if(Sendbuf) free(Sendbuf);
+	printf("Wait %d S\n",single_count_max/2);
+	sleep(single_count_max/2);
+	return SUCCESS;
+out:
+	if(Sendbuf) free(Sendbuf);
+	return FAIL;
+}
+
 #if 0
 /**
  * 查询组播/广播动作是否都执行了
@@ -467,13 +543,13 @@ s32 SingleOpen(struct task_node *node)
 	if(!node){ return FAIL; }		//判断指针是否可用
 	while(Repeat--){
 		memset(&Single,0,sizeof(Single));
-		Single.Header 		= Single_Header;
-		Single.Ctrl 		= SingleCtrl_Single;
+		Single.Header 			= Single_Header;
+		Single.Ctrl 				= SingleCtrl_Single;
 		Single.Coordi_Addr 	= node->pakect[3];
 		Single.Single_Addr[0]	= node->pakect[4];
 		Single.Single_Addr[1]	= node->pakect[5];
-		Single.Cmd[0]		= (signle_open>>8) 	& 0xff;
-		Single.Cmd[1]		= signle_open 		& 0xff;
+		Single.Cmd[0]			= (signle_open>>8) & 0xff;
+		Single.Cmd[1]			= signle_open 		& 0xff;
 
 		#ifdef Config_PWM_
 			Single.Data[0]	= (node->pakect[6] < PWMmax) ? PWMmax- node->pakect[6] :0;
@@ -754,7 +830,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Single.Cmd[1] 		= single_MapAddr 				&0xff;
 			Single.Data[0]		= ((TableSingle_t*)PSingle)->Map_Addr;
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
-			Display_package("Single ConfigMapAddr Send data",&Single,sizeof(Pag_Single));
+			Display_package("Single Config MapAddr Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
 			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
@@ -768,7 +844,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Single.Cmd[1] 		= single_Group					&0xff;
 			Single.Data[0]		= ((TableSingle_t*)PSingle)->lt_gid;
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
-			Display_package("Single ConfigGroup Send data",&Single,sizeof(Pag_Single));
+			Display_package("Single Config Group Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
 			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
@@ -780,7 +856,7 @@ s32 Single_Config(int cmd,void *PSingle)
 			Single.Cmd[1] 		= single_MapAddr		&0xff;
 			Single.Data[0]		= ((TableCoordi_t*)PSingle)->Map_Addr;
 			Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
-			Display_package("Coordinate ConfigMapAddr Send data",&Single,sizeof(Pag_Single));
+			Display_package("Coordinate Config MapAddr Send data",&Single,sizeof(Pag_Single));
 			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
 			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
 			break;
@@ -1189,14 +1265,124 @@ s32 CalcWaitTime(void)
 	return SingleCnt;
 }
 
+s32 Instert_electric(void *dest,int dest_size,void *src,int src_size)
+{
+	assert_param(dest,NULL,FAIL);
+	assert_param(src,NULL,FAIL);
+	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
+	typedef struct {u16 Addr;u16 light_V;u16 light_E; } Recvbuf_t;
+
+	Recvbuf_t *const psrc = src;
+	Sqlbuf_t *pdest_start = dest;
+	Sqlbuf_t *pdest_end  = pdest_start + dest_size/sizeof(Sqlbuf_t) - 1;
+	int i = 0, src_count = src_size/sizeof(Recvbuf_t);
+	while(i < src_count){
+		u32 comp = bigend2littlend_2(psrc[i].Addr);
+		pdest_start = dest;
+		pdest_end  = pdest_start + dest_size/sizeof(Sqlbuf_t) - 1;
+		while(pdest_start <= pdest_end){
+			if(pdest_start->Addr == comp){
+				pdest_start->light_V = bigend2littlend_2(psrc[i].light_V);
+				pdest_start->light_E = bigend2littlend_2(psrc[i].light_E);
+				debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
+												comp,pdest_start->light_V,pdest_start->light_E);
+				/* set flags */
+				break;
+			}else if(pdest_end->Addr == comp){
+				pdest_end->light_V = bigend2littlend_2(psrc[i].light_V);
+				pdest_end->light_E = bigend2littlend_2(psrc[i].light_E);
+				debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
+												comp,pdest_end->light_V,pdest_end->light_E);
+				/* set flags */
+				break;
+			}
+			pdest_start++;
+			pdest_end--;
+		}
+		++i;
+	}
+	return SUCCESS;
+}
+
+
+
+s32 electric_response(void *dest,int dest_size,int Ctrl,int Is_Success)
+{
+	assert_param(dest,NULL,FAIL);
+	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
+
+	u8 AckShortbuf[300];
+	memset(AckShortbuf,0,sizeof(AckShortbuf));
+	AckShortbuf[0] = 0x52;
+	AckShortbuf[2] = Ctrl;
+	AckShortbuf[4] = 0x46;
+	if(Is_Success != SUCCESS){
+		AckShortbuf[0] = 0x51;
+		AckShortbuf[1] = 0x04;
+		AckShortbuf[3] = 0x02;
+		AckShortbuf[5] = Is_Success;
+		if(TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,AckShortbuf,NET_TASK,TASK_LEVEL_NET)){
+			err_Print(DEBUG_single,"Append to queue fail!\n");
+			return FAIL;
+		}
+		return SUCCESS;
+	}
+	u8 *pAckbuf = AckShortbuf + 5;
+	int i = 0,  single_count = dest_size/sizeof(Sqlbuf_t),num = 0;
+	Sqlbuf_t *psingle_info = dest;
+	while( i++ < single_count){
+		//printf("addr:%04x,vol:%04x,elec:%04x\n",psingle_info->Addr,psingle_info->light_V,psingle_info->light_E);
+		*pAckbuf++ = 0xff &(psingle_info->light_V>>8);
+		*pAckbuf++ = 0xff &psingle_info->light_V;
+		*pAckbuf++ = 0xff &(psingle_info->light_E>>8);
+		*pAckbuf++ = 0xff &psingle_info->light_E;
+		*pAckbuf++ = 0xff &(psingle_info->Addr>>8);
+		*pAckbuf++ = 0xff &psingle_info->Addr;
+		++psingle_info;
+		if(++num >= 50){
+			*pAckbuf = Is_Success;
+			AckShortbuf[3] = num*6 + 2;//数据的长度
+			AckShortbuf[1] = num*6 + 4;//数据的长度
+			num = 0;
+			if(TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,AckShortbuf,NET_TASK,TASK_LEVEL_NET)){
+				err_Print(DEBUG_single,"Append to queue fail!\n");
+			}
+			pAckbuf = AckShortbuf + 5;
+		}	//end of if(++num >= 50){
+	}	//end of while( i++ < single_count){
+	if(num > 0){
+		*pAckbuf = Is_Success;
+		AckShortbuf[3] = num*6 + 2;//数据的长度
+		AckShortbuf[1] = num*6 + 4;//数据的长度
+		if(TaskGenerateAndAppend(ETH_NET_TYPE_QUEUE,AckShortbuf,NET_TASK,TASK_LEVEL_NET)){
+			err_Print(DEBUG_single,"Append to queue fail!\n");
+			return FAIL;
+		}
+	}
+	/* insert data to sqlite */
+	psingle_info = dest;
+	single_count = dest_size/sizeof(Sqlbuf_t);
+	time_t tm ;
+	time(&tm);
+	printf("tm=%ld\n",tm);
+	u32 power = 0;
+	for(i=0;i<single_count;++i){
+		power = psingle_info[i].light_V * psingle_info[i].light_E/10000;
+		Update_Table(Cmd_Info,Asprintf("set Warn_flags=%d,light_V=%d,light_E=%d,light_P=%u,rtime=%ld where Base_Addr=0x%04x",\
+			psingle_info[i].Warn_flags,psingle_info[i].light_V,psingle_info[i].light_E,power,tm,psingle_info[i].Addr));
+	}
+	return SUCCESS;
+}
+
 s32 GroupQuery(struct task_node *node)
 {
+	assert_param(node,NULL,FAIL);
+
 	Pag_Single Single;
 	struct{int Singlelen; u8 CoorAddr;} CoordiAddr[20];
 	u8 ResSingle[300];
 	int i = 0;
 	int Addrlen = 0;
-	//int WaitTime = 0;
 	int Res = SUCCESS;
 	int repeat = 0;
 	Pag_Single *PRes = (Pag_Single*)ResSingle;
@@ -1210,17 +1396,12 @@ s32 GroupQuery(struct task_node *node)
 	if(Is_Group != node->pakect[3]){//判断之前查询的是否为现在要获取的组
 		Res = Query_Action(node->pakect[3]);
 		Display_Singlelist();
-		//WaitTime = CalcWaitTime();
-	}
-	if(SUCCESS != Res ){
-		goto ERR;
-	}
-	//debug(1,"wait %d S\n",WaitTime/2);
+	}	if(SUCCESS != Res ) goto ERR;
 
 	GetCoordiAddrList(CoordiAddr,sizeof(CoordiAddr));
 
 	Single.Header 		= Single_Header;
-	Single.Ctrl 		= CoordiCtrl_GetData;
+	Single.Ctrl 			= CoordiCtrl_GetData;
 	Single.Cmd[0]		= 0x00;
 	Single.Cmd[1]		= 0x01;
 	Single.Data[0]		= GetSingleCunt;
@@ -1240,17 +1421,17 @@ s32 GroupQuery(struct task_node *node)
 		}else{    repeat = 0;    }
 
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
-
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 5000000) ){
-			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){//单灯地址列表校验失败
+			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
 				goto ERR;
 			}
 		}
 		debug(DEBUG_single,"Addrlen=%d\n",Addrlen);
 		Display_package("Recv Single State",&ResSingle[sizeof(Pag_Single)] ,Addrlen);
+		//InsertState2Sql();		//把查询到的灯的状态写入数据库中去
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);	//把查询到的灯的状态拷贝到全局变量中
-		if(Addrlen/4 >= CoordiAddr[i].Singlelen){//判断一个协调器下的数据是否全部取完
+		if(Addrlen/4 >= CoordiAddr[i].Singlelen){		//判断一个协调器下的数据是否全部取完
 			++i;
 		}else{    CoordiAddr[i].Singlelen -= Addrlen/4 ;    }
 	}
@@ -1258,6 +1439,99 @@ s32 GroupQuery(struct task_node *node)
 	return QueryRes(0x02,SUCCESS);
  ERR:
  	return QueryRes(0x02,FAIL);
+}
+
+s32 Broadcas_electric(struct task_node *node)
+{
+	assert_param(node,NULL,FAIL);
+	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
+	typedef struct {u16 Addr;u16 light_V;u16 light_E; } Recvbuf_t;
+	typedef struct {u32 Coor_Addr;u32 single_Count;} CoordiAddr_t;
+
+	Pag_Single Single;
+	memset(&Single,0,sizeof(Pag_Single));
+	int lightinfo_size = Get_light_info_count("Base_Addr");
+	int Coordinate_count = Get_CountByColumn("db_light","distinct Coor_id");
+	int single_count_max = 0;
+	if(lightinfo_size <= 0 || Coordinate_count <= 0) goto out;
+
+	CoordiAddr_t* const CoordiAddr = malloc(Coordinate_count*sizeof(CoordiAddr_t));
+	if(!CoordiAddr) goto out;
+	/* get coordinator list */
+	if(SUCCESS != Select_Table_V2(Asprintf("select distinct Coor_id from db_light;"),(char*)CoordiAddr,sizeof(CoordiAddr_t),Coordinate_count,0)){
+		debug(DEBUG_single,"get coordinator Addr list fail!\n");
+		goto out;
+	}
+	/* get single count in the same coordinator */
+	int i = 0;
+	for(i = 0; i<Coordinate_count;++i){
+		char str[32];	memset(str,0,sizeof(str));
+		sprintf(str,"where Coor_id=%d",CoordiAddr[i].Coor_Addr);
+		CoordiAddr[i].single_Count = Get_CountByCondition("db_light","Base_Addr",str);
+		if(single_count_max < CoordiAddr[i].single_Count) single_count_max = CoordiAddr[i].single_Count;
+	}	//printf("single_count_max=%d\n",single_count_max);
+
+	Sqlbuf_t* const light_info = malloc(lightinfo_size*sizeof(Sqlbuf_t));
+	Recvbuf_t* const Recvbuf = malloc(single_count_max*sizeof(Recvbuf_t) + 2);
+	if(!light_info || !Recvbuf ) goto out;
+
+	/* get data from db_info_light */
+	if( SUCCESS != Select_Table_V2(Asprintf("select db_info_light.Base_Addr,db_info_light.Warn_flags,db_light.Coor_id from db_info_light,"\
+							"db_light where db_info_light.Base_Addr = db_light.Base_Addr;"),(char*)light_info,sizeof(Sqlbuf_t),lightinfo_size,0)){
+		debug(DEBUG_single,"get light info fail!\n");
+		goto out;
+	}
+	/* Send queries to current instructions */
+	ResponsePromptly(0x03,0x46 ,SUCCESS,32);
+	if( SUCCESS != Query_electric(light_info,lightinfo_size*sizeof(Sqlbuf_t))){
+		debug(DEBUG_single,"Query_electric error!\n");
+		goto out;
+	}
+	/* get the electric from single */
+	i = 0;
+	while(i < Coordinate_count){
+		Single.Header 		= Single_Header;
+		Single.Ctrl 			= CoordiCtrl_electric;
+		Single.Coordi_Addr= CoordiAddr[i].Coor_Addr;
+		Single.Cmd[0]		= 0x00;
+		Single.Cmd[1]		= 0x01;
+		Single.Data[0]		= GetSingleCunt;
+		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
+		Display_package("Get current send data",&Single,sizeof(Pag_Single));
+		/* send data */
+		UartBufClear(Uart1_ttyO1_485, Flush_Input);
+		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
+		/* Recv data */
+		if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){
+			debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			goto out;
+		}
+		int Responselen = Single.Data[0]<<8|Single.Data[1];
+		if( Responselen > 0 && SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)Recvbuf , Responselen + 2, 3000000) ){
+			if(CHK_Crc16((u8*)Recvbuf+Responselen,(u8*)Recvbuf ,Responselen) ){
+				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
+				goto out;
+			}Display_package("Recv state",Recvbuf,Responselen+2);
+			/* instert status to sql */
+			Instert_electric(light_info,lightinfo_size*sizeof(Sqlbuf_t),Recvbuf,Responselen);
+		}else debug(DEBUG_single,"Responselen <=0 or DeviceRecv485_v2 fail!\n");
+		/* is take out of coordinator */
+		if(Responselen/6 >= CoordiAddr[i].single_Count){
+			++i;
+		}else  CoordiAddr[i].single_Count -=  Responselen/6;
+	}
+	/* Response Wincc */
+	electric_response(light_info,lightinfo_size*sizeof(Sqlbuf_t),0x03,SUCCESS);
+	if(CoordiAddr) free(CoordiAddr);
+	if(light_info) free(light_info);
+	if(Recvbuf) free(Recvbuf);
+	return SUCCESS;
+out:
+	electric_response(light_info,lightinfo_size*sizeof(Sqlbuf_t),0x03,FAIL);
+	if(CoordiAddr) free(CoordiAddr);
+	if(light_info) free(light_info);
+	if(Recvbuf) free(Recvbuf);
+	return FAIL;
 }
 
 s32 BroadcastQuery(struct task_node *node)
@@ -1276,7 +1550,7 @@ s32 BroadcastQuery(struct task_node *node)
 	memset(&Single,0,sizeof(Single));
 
 	ResponsePromptly(0x03,0x45 ,Res,32);
-	if(Is_Group != -1){//判断之前查询的是否为现在要获取的组
+	if(Is_Group != -1){		//判断之前查询的是否为现在要获取的组
 		debug(1,"Is_Group = %d\n",Is_Group);
 		Res = Query_Action(-1);
 		Display_Singlelist();
@@ -1288,7 +1562,7 @@ s32 BroadcastQuery(struct task_node *node)
 	GetCoordiAddrList(CoordiAddr,sizeof(CoordiAddr));
 
 	Single.Header 		= Single_Header;
-	Single.Ctrl 		= CoordiCtrl_GetData;
+	Single.Ctrl 			= CoordiCtrl_GetData;
 	Single.Cmd[0]		= 0x00;
 	Single.Cmd[1]		= 0x01;
 	Single.Data[0]		= GetSingleCunt;
@@ -1309,7 +1583,7 @@ s32 BroadcastQuery(struct task_node *node)
 
 		Addrlen = PRes->Data[0] << 8 | PRes->Data[1];
 		if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&ResSingle[sizeof(Pag_Single)] , Addrlen + 2, 3000000) ){
-			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){//单灯地址列表校验失败
+			if(CHK_Crc16((u8*)&ResSingle[sizeof(Pag_Single)] + Addrlen,(u8*)&ResSingle[sizeof(Pag_Single)] ,Addrlen) ){
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
 				Display_package("Recv state",&ResSingle[sizeof(Pag_Single)],Addrlen+2);
 				goto ERR;
@@ -1320,7 +1594,7 @@ s32 BroadcastQuery(struct task_node *node)
 		/* 把灯的状态拷贝到全局去 */
 		InsertState2Table(&ResSingle[sizeof(Pag_Single)],Addrlen);
 		if(Addrlen/4 >= CoordiAddr[i].Singlelen){		//判断一个协调器下的数据是否全部取完
-			++i;						//获取下一个协调器的单灯状态
+			++i;											//获取下一个协调器的单灯状态
 		}else{    CoordiAddr[i].Singlelen -=  Addrlen/4;    }
 	}
 	/* 回复给上位机 */

@@ -35,6 +35,7 @@
 #include "version.h"
 #include "common.h"
 #include "Interface.h"
+#include "log.h"
 
 extern pthread_mutex_t mutex_ether;
 extern pthread_mutex_t mutex_task;

@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:	coordinate.h
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年04月11日 星期一 09时57分23秒
  *******************************************************************/
 #ifndef __coordinate_h__
@@ -34,7 +34,7 @@ typedef struct {
 	u8 	Single_Addr[2];	//高地址在前，低地址在后
 	u8 	Cmd[2];		//高字节在前，低字节在后
 	u8 	Data[2];
-	u8 	Crc16[2];	
+	u8 	Crc16[2];
 }Pag_Single;
 
 typedef enum{
@@ -43,7 +43,7 @@ typedef enum{
 	signle_run_stat 	= 0x0004,
 	signle_light_level	= 0x0008,
 	signle_volts 		= 0x0010,
-	signle_electric 	= 0x0020,
+	signle_electric 		= 0x0020,
 	signle_power 		= 0x0040,
 	signle_other 		= 0x0080,
 	single_Group 		= 0x0100,	//配置组号

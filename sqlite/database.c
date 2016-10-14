@@ -6,22 +6,9 @@
  *******************************************************************/
 #include "database.h"
 
+#define Database_Path 	"./cc_corl.db"
 
-#ifdef Sqlite3
 
-#define Database_Path 		"./cc_corl.db"
-
-#define Table_Single		"db_light"
-#define Table_Coordi 		"db_coordinator"
-#define Table_Task 		"db_task"
-#define Table_Tasklist		"db_tasklist"
-#define Table_Warn		"db_warn"
-
-#define Column_Single 		"Wl_Addr,Base_Addr,lt_gid,Coor_id,Map_Addr"
-#define Column_Coordi 	"Wl_Addr,Base_Addr,Coor_gid,CC_id,Map_Addr"
-#define Column_Task	 	"Name,Priority,Start_Date,End_Date,Run_Time,Inter_Time,Type,State"
-#define Column_Tasklist 	"Tk_id,Rank,Cmd,Wait_time"
-#define Column_Warn 		"Add_time,Type,Grade,State,Remark"
 
 
 struct Errmsg{
@@ -87,25 +74,31 @@ void ErrorMessage(int err)
  *  cmd：向数据库的哪张表插入，后面跟的是对应的那张表的结构体数据
  *  返回值：
  *  	成功 返回SUCCESS  失败  FAIL
+ *  eg:	Insert_Table(Cmd_coordi, &Coordi);
+ *  注意：除了主键id不用赋值，其他成员必须要赋值
  */
 s32 Insert_Table(u32 cmd, ...)
 {
-	char sql[200]={0};
+	char  sql[200]={0};
+	u8      strtemp[24] = {0};
+	char *Errmsg;
+	int     res = -1;
+	void*Arguments = NULL;
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
 	va_list 	arg_ptr;
 	va_start(arg_ptr, cmd);
-	u8 strtemp[24] = {0};
-	char *Errmsg;
-	int res = -1;
+
 	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
 		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Open Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"In %s %d:Open Sqlite fail!\n",__func__,__LINE__);
+		Write_log(err,Asprintf("In %s %d:Open Sqlite fail!",__func__,__LINE__)  );
+		goto out;
 	}
+
 	/* 开启外键约束 */
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,&Errmsg);
-	void *Arguments = NULL;
+
 
 	memset(sql,0,sizeof(sql));
 	switch(cmd){
@@ -159,7 +152,7 @@ s32 Insert_Table(u32 cmd, ...)
 		if (stmt){sqlite3_finalize(stmt);}
 		sqlite3_close(db);
 		debug(DEBUG_sqlite3,"**%s %d:Prepare Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		goto out;
 	}
 	/* 执行操作，向数据库里插入数据 */
 	if (SQLITE_DONE != (res=sqlite3_step(stmt)) ) {
@@ -167,7 +160,7 @@ s32 Insert_Table(u32 cmd, ...)
 		sqlite3_close(db);
 		debug(DEBUG_sqlite3,"**%s %d:Sqlite3_step fail,errno is %d\n",__func__,__LINE__,res);
 		ErrorMessage(res);
-		goto err;
+		goto out;
 	 }
 
 	sqlite3_finalize(stmt);
@@ -176,11 +169,56 @@ s32 Insert_Table(u32 cmd, ...)
 
 	sqlite3_close(db);
 	return SUCCESS;
- err:
+ out:
 	sqlite3_close(db);
 	return FAIL;
 }
 
+/**
+ * [ 往数据库里插入一条数据]
+ * @param  sql [sql语句]
+ * @return     [成功 返回SUCCESS  失败  FAIL]
+ * eg:  Insert_Table_v2( Asprintf("insert into db_info_light(l_id,Base_Addr) values(%d,%d); ",55,0x1234) );
+ */
+s32 Insert_Table_v2(const char *sql)
+{
+	assert_param(sql,NULL,FAIL);
+
+	sqlite3* db = NULL;
+	sqlite3_stmt* stmt = NULL;
+
+	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
+		debug(DEBUG_sqlite3,"[In %s %d] Open Sqlite fail!\n",__func__,__LINE__);
+		Write_log(err,Asprintf("[In %s %d] Open Sqlite fail!",__func__,__LINE__)  );
+		goto out;
+	}
+	/* 开启外键约束 */
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
+	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
+	/* 准备对象 */
+	int res = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
+	if( SQLITE_OK !=  res ){
+		debug(DEBUG_sqlite3,"[In %s %d] Prepare Sqlite fail,return values%d\n",__FILE__,__LINE__,res);
+		Write_log(err,Asprintf("[In %s %d] Prepare Sqlite fail,return values%d\n",__FILE__,__LINE__,res));
+		goto out;
+	}
+	/* 执行操作，向数据库里插入数据 */
+	res = sqlite3_step(stmt);
+	if (SQLITE_DONE != res ) {
+		debug(DEBUG_sqlite3,"[In %s %d] Sqlite3_step fail,errno is %d\n",__FILE__,__LINE__,res);
+		Write_log(err,Asprintf("[In %s %d] Sqlite3_step fail,errno is %d\n",__FILE__,__LINE__,res));
+		goto out;
+	 }
+
+	if(stmt)	sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	return SUCCESS;
+ out:
+	if(stmt)	sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Insert table fail!\n");
+	return FAIL;
+}
 
 /**
  *  删除表中的一条
@@ -192,58 +230,60 @@ s32 Insert_Table(u32 cmd, ...)
  */
 s32 Delete_Table(u32 cmd,const char *Condition)
 {
-	char sql[128]={0};
+	assert_param(Condition,NULL,FAIL);
+
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
-	char *Errmsg;
-	int res = -1;
-	/* 备用 */
-	// va_list 	arg_ptr;
-	// va_start(arg_ptr, Condition);
-	// va_end(arg_ptr);
-	// void *Arguments = NULL;
+
+	const int sqlsize = strlen(Condition) + 64;
+	char* const sql = (char*)malloc(sqlsize);
+	if(!sql){
+		debug(DEBUG_sqlite3,"[In %s %s %d] malloc for sql fail!\n",__FILE__,__func__,__LINE__);
+		return FAIL;
+	}
 
 	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Open Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"[In %s %s %d] Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		Write_log(err,Asprintf("[In %s %s %d] Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
 	}
 	/* 开启外键约束 */
-	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,&Errmsg);
-	memset(sql,0,sizeof(sql));
-	switch(cmd){
-		case Cmd_light:	sprintf(sql,"delete from %s %s;",Table_Single,Condition);break;
-		case Cmd_coordi:	sprintf(sql,"delete from %s %s;",Table_Coordi,Condition);break;
-		case Cmd_task:		sprintf(sql,"delete from %s %s;",Table_Task,Condition);break;
-		case Cmd_tasklist:	sprintf(sql,"delete from %s %s;",Table_Tasklist,Condition);break;
-		case Cmd_warn:	sprintf(sql,"delete from %s %s;",Table_Warn,Condition);break;
-		default:break;
-	}
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
 
-	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
+	memset(sql,0,sqlsize);
+	switch(cmd){
+		case Cmd_light:	snprintf(sql,sqlsize,"delete from %s %s;",Table_Single,Condition);break;
+		case Cmd_coordi:	snprintf(sql,sqlsize,"delete from %s %s;",Table_Coordi,Condition);break;
+		case Cmd_task:		snprintf(sql,sqlsize,"delete from %s %s;",Table_Task,Condition);break;
+		case Cmd_tasklist:	snprintf(sql,sqlsize,"delete from %s %s;",Table_Tasklist,Condition);break;
+		case Cmd_warn:	snprintf(sql,sqlsize,"delete from %s %s;",Table_Warn,Condition);break;
+		case Cmd_Info: 	snprintf(sql,sqlsize,"delete from %s %s;",Table_Info,Condition);break;
+		default:			debug(DEBUG_sqlite3,"[%s]Can not find the table!\n",__func__);
+			goto out;
+	} 		debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 	/* 准备对象 */
 	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
-		if (stmt){sqlite3_finalize(stmt);}
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Prepare Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"[In %s %s %d] Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		Write_log(err,Asprintf("[In %s %s %d] Prepare Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
 	}
 	/* 执行操作，向数据库里插入数据 */
-	if (SQLITE_DONE != (res = sqlite3_step(stmt)) ) {
-		sqlite3_finalize(stmt);
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Sqlite3_step fail,errno is %d\n",__func__,__LINE__,res);
-		ErrorMessage(res);
-		goto err;
-	 }
+	int res = sqlite3_step(stmt);
+	if (SQLITE_DONE != res ) {
+		debug(DEBUG_sqlite3,"[In %s %s %d] Sqlite3_step fail,errno is %d\n",__FILE__,__func__,__LINE__,res);
+		Write_log(err,Asprintf("[In %s %s %d] Sqlite3_step fail,errno is %d",__FILE__,__func__,__LINE__,res)  );
+		goto out;
+	}
 
-	sqlite3_finalize(stmt);
-	debug(DEBUG_sqlite3,"Delete_Table Success!\n");
-
-	sqlite3_close(db);
-	return SUCCESS;
- err:
-	sqlite3_close(db);
+	if(sql)	free(sql);
+ 	if (stmt)sqlite3_finalize(stmt);
+ 	if(db)	sqlite3_close(db);
+	return 	SUCCESS;
+ out:
+ 	if(sql)	free(sql);
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Delete_Table fail!\n");
 	return FAIL;
 }
 
@@ -251,77 +291,78 @@ s32 Delete_Table(u32 cmd,const char *Condition)
  *  更新表中的一个字段
  *  cmd    对应的表枚举
  *  Condition：更新的条件，字符串
-*  返回值：
+ *  返回值：
  *  	成功   SUCCESS   失败    FAIL
  *  eg： Update_Table(Cmd_coordi,"set Wl_Addr=0x88 where id=6");
  */
 s32 Update_Table(u32 cmd,const char *Condition)
 {
-	char sql[128]={0};
+	assert_param(Condition,NULL,FAIL);
+
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
-	char *Errmsg;
-	int res = 0;
-	/* 备用 */
-	// va_list 	arg_ptr;
-	// va_start(arg_ptr, Condition);
-	// va_end(arg_ptr);
-	// void *Arguments = NULL;
+
+	const int sqlsize = strlen(Condition) + 64;
+	char* const sql = (char*)malloc(sqlsize);
+	if(!sql){
+		debug(DEBUG_sqlite3,"[In %s %s %d] malloc for sql fail!\n",__FILE__,__func__,__LINE__);
+		return FAIL;
+	}
 
 	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Open Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		Write_log(err,Asprintf("In %s %s %d:Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
 	}
 	/* 开启外键约束 */
-	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,&Errmsg);
-	memset(sql,0,sizeof(sql));
-	switch(cmd){
-		case Cmd_light:	sprintf(sql,"update %s %s;",Table_Single,Condition);break;
-		case Cmd_coordi:	sprintf(sql,"update %s %s;",Table_Coordi,Condition);break;
-		case Cmd_task:	sprintf(sql,"update %s %s;",Table_Task,Condition);break;
-		case Cmd_tasklist:	sprintf(sql,"update %s %s;",Table_Tasklist,Condition);break;
-		case Cmd_warn:	sprintf(sql,"update %s %s;",Table_Warn,Condition);break;
-		default:break;
-	}
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
 
-	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
+	memset(sql,0,sqlsize);
+	switch(cmd){
+		case Cmd_light:	snprintf(sql,sqlsize,"update %s %s;",Table_Single,Condition);break;
+		case Cmd_coordi:	snprintf(sql,sqlsize,"update %s %s;",Table_Coordi,Condition);break;
+		case Cmd_task:		snprintf(sql,sqlsize,"update %s %s;",Table_Task,Condition);break;
+		case Cmd_tasklist:	snprintf(sql,sqlsize,"update %s %s;",Table_Tasklist,Condition);break;
+		case Cmd_warn:	snprintf(sql,sqlsize,"update %s %s;",Table_Warn,Condition);break;
+		case Cmd_Info: 	snprintf(sql,sqlsize,"update %s %s;",Table_Info,Condition);break;
+		default:			debug(DEBUG_sqlite3,"[%s]Can not find the table!\n",__func__);
+			goto out;
+	}		debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 	/* 准备对象 */
 	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
-		if (stmt){sqlite3_finalize(stmt);}
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Prepare Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;
+		Write_log(err,Asprintf("In %s %s %d:Prepare Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
 	}
 	/* 执行操作，向数据库里插入数据 */
-	if (SQLITE_DONE != (res = sqlite3_step(stmt)) ) {
-		sqlite3_finalize(stmt);
-		sqlite3_close(db);
-		debug(DEBUG_sqlite3,"**%s %d:Sqlite3_step fail,errno is %d\n",__func__,__LINE__,res);
-		ErrorMessage(res);
-		goto err;
+	int res = sqlite3_step(stmt);
+	if (SQLITE_DONE != res  ) {
+		debug(DEBUG_sqlite3,"In %s %s %d:Sqlite3_step fail,errno is %d\n",__FILE__,__func__,__LINE__,res);
+		Write_log(err,Asprintf("In %s %s %d:Sqlite3_step fail,errno is %d",__FILE__,__func__,__LINE__,res)  );
+		goto out;
 	 }
 
-	sqlite3_finalize(stmt);
-	debug(DEBUG_sqlite3,"Update_Table Success!\n");
-
-	sqlite3_close(db);
+	if(sql)	free(sql);
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Update_Table success!\n");
 	return SUCCESS;
- err:
-	sqlite3_close(db);
+ out:
+ 	if(sql)	free(sql);
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Update_Table fail!\n");
 	return FAIL;
 }
-
-
 
 /**
  *  查询表内容
  *  cmd    	对应的表枚举
  *  Column    	查询字段的内容
  *  Condition    	查询的条件
- *  后面跟的是查询内容的结构体，和结构体的大小,和成员数量
+ *  后面跟的是查询内容的结构体，和结构体的大小
  *  eg：		struct {u32 Wl_Addr;u32 Map_Addr;} Res[10];
- *		Select_Table(Cmd_light ,"Wl_Addr,Map_Addr","where id=1",Res,sizeof(Res[0]), sizeof(Res)/sizeof(Res[0]) );
+ *		Select_Table(Cmd_light ,"Wl_Addr,Map_Addr","where id=1",Res,sizeof(Res[0]));
  */
 s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
 {
@@ -349,7 +390,7 @@ s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
 	switch(cmd){
 		case Cmd_light:	sprintf(sql,"select %s from %s %s;",Column,Table_Single,Condition);break;
 		case Cmd_coordi:	sprintf(sql,"select %s from %s %s;",Column,Table_Coordi,Condition);break;
-		case Cmd_task:	sprintf(sql,"select %s from %s %s;",Column,Table_Task,Condition);break;
+		case Cmd_task: 	sprintf(sql,"select %s from %s %s;",Column,Table_Task,Condition);break;
 		case Cmd_tasklist:	sprintf(sql,"select %s from %s %s;",Column,Table_Tasklist,Condition);break;
 		case Cmd_warn:	sprintf(sql,"select %s from %s %s;",Column,Table_Warn,Condition);break;
 		default:break;
@@ -415,6 +456,7 @@ s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
 	sqlite3_close(db);
 	return FAIL;
 }
+
 /**
  * 	查询表内容
  * 	sql 对应的sql语句
@@ -428,164 +470,85 @@ s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...)
  * eg:	struct {int CoordiAddr;int SingleAddr;}buf[1000];
  * 	Select_Table_V2( sql,  (char*)buf,   sizeof(buf[0]),   sizeof(buf)/sizeof(buf[0]),  0);
  */
-s32 Select_Table_V2(const char *sql, char *buf,int RowSize,int ColSize,...)
+s32 Select_Table_V2(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)
 {
+	assert_param(sql,NULL,FAIL);
+	assert_param(buf,NULL,FAIL);
+
 	u32 i=0,j=0;
-	sqlite3* db = NULL;
-	sqlite3_stmt* stmt = NULL;
+	sqlite3 *db = NULL;
+	sqlite3_stmt *stmt = NULL;
 	u32 strsize[10] = {0};		//记入字符串的缓存空间大小
 	s8 *pResult = buf;
 	va_list 	arg_ptr;
-	va_start(arg_ptr, ColSize);
-	char *Errmsg;
-	strsize[0] = va_arg(arg_ptr,int);
-	if(strsize[0]>0 && strsize[0]<9){
-		for(i=0;i<strsize[0];++i)
-			strsize[i+1] = va_arg(arg_ptr,int);
-	}va_end(arg_ptr);
+
+	if(strcount > 0 && strcount < 9){
+		va_start(arg_ptr, strcount);
+		for(i=0;i< strcount;++i){
+			strsize[i] = va_arg(arg_ptr,int);
+		}va_end(arg_ptr);
+	}
 
 	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
-		debug(DEBUG_sqlite3,"**%s %d:Open Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+		debug(DEBUG_sqlite3,"[In %s-%s-%d] Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		Write_log(err,Asprintf("[In %s-%s-%d] Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
 	}
+
 	/* 开启外键约束 */
-	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,&Errmsg);
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
 	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 
 	/* 准备对象 */
-	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
-		if (stmt){sqlite3_finalize(stmt);}
-		debug(DEBUG_sqlite3,"**%s %d:Prepare Sqlite fail!\n",__func__,__LINE__);
-		goto err;
+	int res = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
+	if( SQLITE_OK !=  res){
+		debug(DEBUG_sqlite3,"[In %s-%s-%d] Prepare Sqlite fail,errno=%d\n",__FILE__,__func__,__LINE__,res);
+		Write_log(err,Asprintf("[In %s-%s-%d] Prepare Sqlite fail!",__FILE__,__func__,__LINE__)   );
+		goto out;
 	}
 
 	int Col_cnt = sqlite3_column_count(stmt);
-	while(1){
-		if(!ColSize--){	//如果超出元素的个数，表示buf满了
-			debug(DEBUG_sqlite3,"Result Buf Full!\n");
-			break;
-		}
-		char *pchar = NULL;
-		int res = sqlite3_step(stmt);
+	if(Col_cnt < 0) goto out;
 
+	while(1){
+		if(!ColSize--){  break;  }		//如果超出元素的个数，表示buf满了
+		//char *pchar = NULL;
+
+		res = sqlite3_step(stmt);
 		if(res == SQLITE_ROW ){
 			pResult = buf;
-			j=0;
-			for(i=0;i<Col_cnt;++i){
-
+			i = 0; j = 0;
+			while(i<Col_cnt){
 				switch(sqlite3_column_type(stmt,i)){
-					case SQLITE_INTEGER:
-						*((int*)pResult) = sqlite3_column_int(stmt,i);
-						//debug(DEBUG_sqlite3,"pResult = %d\n",*((int*)pResult));
+					case SQLITE_INTEGER:  *((int*)pResult) = sqlite3_column_int(stmt,i);
 						pResult += sizeof(int);break;
-					case SQLITE_FLOAT:
-						*((double*)pResult) = sqlite3_column_double(stmt,i);
+					case SQLITE_FLOAT:  *((double*)pResult) = sqlite3_column_double(stmt,i);
 						pResult += sizeof(double);break;
-					case SQLITE_TEXT:
-						pchar = (char*)sqlite3_column_text(stmt,i);
-						strcpy(pResult,pchar);
-						//*(pResult+strlen(pchar)) = '\0';
-						pResult += strsize[++j];
-						break;
-					case SQLITE_NULL:	//建表的时候把每个字段都设置为非空
-						debug(DEBUG_sqlite3,"The value is NULL.\n");
-						break;
+					case SQLITE_TEXT:  strcpy(pResult,(const char*)sqlite3_column_text(stmt,i) );
+						pResult += strsize[j++];  break;
+					case SQLITE_NULL:
+						debug(DEBUG_sqlite3,"Select value is NULL.\n");
+						Write_log(warring,Asprintf("[In %s-%s-%d] Select value is NULL.",__FILE__,__func__,__LINE__) );
+						goto out;
 					default:break;
-				}
+				} ++i;
 			}
 			buf += RowSize;	//指向数组的下一个元素
 		}else if(res == SQLITE_DONE){
-			debug(DEBUG_sqlite3,"**%s %d:Select Finished.\n",__func__,__LINE__);
 			break;
 		}else{
-			debug(DEBUG_sqlite3,"**%s %d:Select Failed,errno is %d\n",__func__,__LINE__,res);
-			ErrorMessage(res);
-			sqlite3_finalize(stmt);
-			goto err;
+			debug(DEBUG_sqlite3,"[In %s-%s-%d] Select Failed,errno is %d\n",__FILE__,__func__,__LINE__,res);
+			Write_log(err,Asprintf("[In %s-%s-%d] Select Failed,errno is %d",__FILE__,__func__,__LINE__,res)   );
+			goto out;
 		}
 	}
 
-	 debug(DEBUG_sqlite3,"Select Data Success!\n");
-
-	sqlite3_finalize(stmt);
-	sqlite3_close(db);
+	if(stmt)	sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
 	return SUCCESS;
-
- err:
- 	sqlite3_close(db);
- 	return FAIL;
+ out:
+ 	if(stmt)	sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Select Data fail!\n");
+	return FAIL;
 }
-
-
-#else
-
-Sql_Resource sql;
-/**
- * 	打开数据库
- * 	成功返回数据库的句柄，失败返回 NULL
- * 	参数：传入数据库的路径，没有指定使用默认
- */
-static sqlite3 * DatabaseOpen(s8 *DB_PathName)
-{
-	int res=-1;
-	if(DB_PathName){
-		res = sqlite3_open(DB_PathName,&sql.db);
-	}else{
-		res = sqlite3_open(DATABASE_PATH,&sql.db);
-	}
-	if(SQLITE_OK == res){
-		return sql.db;
-	}
-	debug(DEBUG_sqlite3,"open database fail!\terror number is %d\n",res);
-	return NULL;
-}
-/**
- * 	关闭数据库
- *  	成功返回0;
- */
-s32 DatabaseClose(void)
-{
-	sqlite3_close(sql.db);
-	return SUCCESS;
-}
-
-/**
- * 操作数据库，不需要返回数据库的内容
- * @param  sql [description]
- * @return     [description]
- */
-s32 DatabaseWrite(s8* sql_string)
-{
-	if(SQLITE_OK != sqlite3_exec(sql.db,  sql_string,  NULL,  NULL,  &sql.err_msg) ){
-		debug(DEBUG_sqlite3,"errmsg is %s\n",sql.err_msg);
-		return FAIL;
-	}
-	return SUCCESS;
-}
-s32 DatabaseRead(s8* sql_string,  void* result)
-{
-	s32 res=-1;
-	/* 判断是否需要释放 */
-	if(sql.result){
-		sqlite3_free_table(sql.result);
-	}
-	result  = &sql;
-	res = sqlite3_get_table(sql.db,  sql_string,  &sql.result,  &sql.col_row,  &sql.col_num,   &sql.err_msg );
-	if(  SQLITE_OK != res){
-		sqlite3_free_table(sql.result);
-		sql.result =NULL;
-	}
-	return res;
-}
-
-
-s32 DatabaseInit(s8 *DB_PathName)
-{
-	memset(&sql,0,sizeof(sql));
-	if(DatabaseOpen(DB_PathName)){
-		debug(DEBUG_sqlite3,"init sql error!\n");
-		return FAIL;
-	}
-	return SUCCESS;
-}
-#endif

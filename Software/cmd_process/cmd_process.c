@@ -214,6 +214,21 @@ u32 CallBack_Demand(UCHAR ctrl,UCHAR itf,struct task_node *node)
 	return SUCCESS;
 }
 
+u32 CallBack_electric(u8 ctrl,u8 itf,struct task_node *node)
+{
+	assert_param(node,NULL,FAIL);
+	switch(node->pakect[2]){
+		case 0x01://单灯，单播查询
+			//return SingleQuery(node);
+		case 0x02://组播查询
+			//return GroupQuery(node);
+		case 0x03: //广播查询
+			return Broadcas_electric(node);
+		default:break;
+	}
+	return SUCCESS;
+}
+
 u32 CallBack_RtData(UCHAR ctrl,UCHAR itf,struct task_node *node)
 {
 	printf("In %s test\n",__func__);
@@ -433,17 +448,13 @@ static s32 CCGlobalparamInforUpdate(u8 *P_reciv)
 
 s32  Column_IsExist(int cmd ,int Condition)
 {
-	char sql[200]={0};
 	int SelectBuf = 0;
-	memset(sql,0,sizeof(sql));
 	switch(cmd){
 		case Cmd_light:
-			sprintf(sql,"select Base_Addr from db_light where Base_Addr=%d ;",Condition);
-			Select_Table_V2(sql,(char*)&SelectBuf,sizeof(SelectBuf),1,0);
+			Select_Table_V2(Asprintf("select Base_Addr from db_light where Base_Addr=%d ;",Condition),(char*)&SelectBuf,sizeof(SelectBuf),1,0);
 			break;
 		case Cmd_coordi:
-			sprintf(sql,"select Base_Addr from db_coordinator where Base_Addr=%d ;",Condition);
-			Select_Table_V2(sql,(char*)&SelectBuf,sizeof(SelectBuf),1,0);
+			Select_Table_V2(Asprintf("select Base_Addr from db_coordinator where Base_Addr=%d ;",Condition),(char*)&SelectBuf,sizeof(SelectBuf),1,0);
 			break;
 		default:break;
 	}
@@ -483,9 +494,9 @@ s32 Update_ExistColumn(int cmd , void *buf)
 
 static s32 CC_Single_group(u8 *Pdata)
 {
-	if(!Pdata){return FAIL;}
-	TableSingle_t single;
+	assert_param(Pdata,NULL,FAIL);
 
+	TableSingle_t   single;
 	single.Wl_Addr 	= *Pdata++;
 	single.lt_gid		= *Pdata++;
 	single.Coor_id 		= *Pdata++;
@@ -501,38 +512,38 @@ static s32 CC_Single_group(u8 *Pdata)
 		debug(DEBUG_CC_Config,"Single Config MapAddr Fail!\n");
 		return FAIL;
 	}
-	//sleep(1);
 	if(SUCCESS != Single_Config(Single_ConfigGroup,&single)){
 		debug(DEBUG_CC_Config,"Single Config Group Fail!\n");
 		return FAIL;
 	}
-
-	if(Column_IsExist(Cmd_light,single.Base_Addr)){//表中已经存在该单灯，则更新表中的数据
-		return Update_ExistColumn(Cmd_light , &single);
-	}else{//表中没有该字段，则插入该字段
-		if(SUCCESS != Insert_Table(Cmd_light, &single)){
-			debug(DEBUG_CC_Config,"Insert Single Table into SQL Fail!\n");
-			return FAIL;
+	int res = -1;
+	if(Column_IsExist(Cmd_light,single.Base_Addr)){
+		res = Update_Table(Cmd_light,Asprintf("set Wl_Addr=%d,lt_gid=%d,Coor_id=%d,Map_Addr=%d where Base_Addr=%d",\
+					single.Wl_Addr,single.lt_gid,single.Coor_id,single.Map_Addr,single.Base_Addr));
+	}else{
+		res = Insert_Table_v2(Asprintf("insert into db_light(Wl_Addr,Base_Addr,lt_gid,Coor_id,Map_Addr)  values(%d,0x%04X,%d,%d,%d);",\
+			single.Wl_Addr,single.Base_Addr,single.lt_gid,single.Coor_id,single.Map_Addr));
+		if(SUCCESS == res){
+			res = Insert_Table_v2(Asprintf("insert into db_info_light(Base_Addr,Warn_flags) values(0x%04X,0);",single.Base_Addr));
+			if(SUCCESS != res) Delete_Table(Cmd_light,Asprintf("where Base_Addr=%d",single.Base_Addr));
 		}
 	}
-	return SUCCESS;
+	return res;
 }
 static s32 CC_Coordi_group(u8 *Pdata)
 {
-	if(!Pdata){return FAIL;}
-	u32 ii = 0;
+	assert_param(Pdata,NULL,FAIL);
+
+	//int res = -1;
 	TableCoordi_t coordi;
+
 	coordi.Wl_Addr 	= *Pdata++;
 	coordi.Coor_gid 	= *Pdata++;
-	debug(DEBUG_CC_Config,"CCUID: ");
-	while(ii<6){
-		coordi.CC_id[ii++] = *Pdata++;
-		debug(DEBUG_CC_Config,"%02x ",coordi.CC_id[ii-1]);
-	}debug(DEBUG_CC_Config,"\n");
-
+	HexToStr_v3((u8*)coordi.CC_id, (u8*)Pdata, 6); Pdata += 6 ;
 	coordi.Base_Addr 	= *Pdata++;
 	coordi.Map_Addr 	= *Pdata;
-	debug(DEBUG_CC_Config,"Wl_Addr=0x%02x,Coor_gid=0x%02x,Base_Addr=0x%02x,Map_Addr=0x%02x\n",coordi.Wl_Addr,coordi.Coor_gid,coordi.Base_Addr,coordi.Map_Addr);
+	debug(DEBUG_CC_Config,"CCUID: %s,Wl_Addr=0x%02x,Coor_gid=0x%02x,Base_Addr=0x%02x,Map_Addr=0x%02x\n",\
+						coordi.CC_id,coordi.Wl_Addr,coordi.Coor_gid,coordi.Base_Addr,coordi.Map_Addr);
 
 	/* 发送配置信息到单灯 */
 	if(SUCCESS != Single_Config(Coordi_ConfigMapAddr,&coordi)){
@@ -540,13 +551,12 @@ static s32 CC_Coordi_group(u8 *Pdata)
 		return FAIL;
 	}
 
-	if(Column_IsExist(Cmd_coordi,coordi.Base_Addr)){//表中已经存在该单灯，则更新表中的数据
-		return Update_ExistColumn(Cmd_coordi , &coordi);
-	}else{//表中没有该字段，则插入该字段
-		if(SUCCESS != Insert_Table(Cmd_coordi, &coordi)){
-			debug(DEBUG_CC_Config,"Insert Coordinate Table into SQL Fail!\n");
-			return FAIL;
-		}
+	if(Column_IsExist(Cmd_coordi,coordi.Base_Addr)){		//表中已经存在该单灯，则更新表中的数据
+		return Update_Table(Cmd_coordi,Asprintf("set Wl_Addr=%d,Coor_gid=%d,CC_id='%s',Map_Addr=%d where Base_Addr=%d",\
+			coordi.Wl_Addr,coordi.Coor_gid,coordi.CC_id,coordi.Map_Addr,coordi.Base_Addr));
+	}else{
+		return Insert_Table_v2( Asprintf("insert into db_coordinator(Wl_Addr,Base_Addr,Coor_gid,CC_id,Map_Addr) values(%d,%d,%d,'%s',%d);",\
+			coordi.Wl_Addr,coordi.Base_Addr,coordi.Coor_gid,coordi.CC_id,coordi.Map_Addr));
 	}
 	return SUCCESS;
 }
@@ -677,7 +687,7 @@ UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}else{
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
 			}return SUCCESS;
-		case 0x05:/* 集中器参数单灯分组配置下行命令 */
+		case 0x05:		// 集中器参数单灯分组配置下行命令
 			if(SUCCESS == CC_Single_group(P_reciv)){
 				debug(DEBUG_CC_Config,"Config Single group success!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],SUCCESS);
@@ -714,8 +724,10 @@ UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node)
 			}return SUCCESS;
 		case 0x09://删除数据库中的内容
 			if(SUCCESS ==Del_Sqlite(P_reciv)){
+				debug(DEBUG_CC_Config,"delete sql table success!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],SUCCESS);
 			}else{
+				debug(DEBUG_CC_Config,"delete sql table fail!\n");
 				TOPGeneralShortAckToServer(AckShortbuf, ctrl, node->pakect[2],FAIL);
 			}return SUCCESS;
 		default :	break;
@@ -998,7 +1010,7 @@ SINT TopElecInforPrintf(struct MetterElecInforStruc *MetterElecInfor)
 
 UINT Reset2DoFunctions(void)
 {
-	loadParam();
+	//loadParam();
 	/* 清空日志文件 */
 	return SUCCESS;
 }

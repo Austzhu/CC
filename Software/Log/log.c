@@ -9,20 +9,20 @@
 /* Title */
 #define Title_SINGLE_light 		"Unicast 0x01"			//单播命令
 #define Title_SINGLE_group		"Multicast 0x02"		//组播命令
-#define Title_SINGLE_broadcast		"Broadcast 0x03"		//广播命令
+#define Title_SINGLE_broadcast	"Broadcast 0x03"		//广播命令
 #define Title_SINGLE_config		"single_config 0x14"		//单灯配置
 #define Title_SINGLE_down		"single_down 0x96"		//下发终端分组
-#define Title_CC_LogonOrHeartbeat 	"logon/heartbeat 0xA1"		//心跳或登入
+#define Title_CC_LogonOrHeartbeat 	"logon/heartbeat 0xA1"	//心跳或登入
 #define Title_Server_ctrl_CC		"Server Control CC 0xA2"	//服务器控制集中器操作
-#define Title_CC_Param			"CC Parameter Setting 0xA3"	//集中器参数设置
-#define Title_CC_Update 			"CC Update 0XA4"		//集中器升级
-#define Title_Timed_ctrl 			"Timed Control 0XC1"		//定时任务
-#define Title_Latitude_ctrl		"Latitude Control 0XC2"		//经纬度控制
-#define Title_Light_ctrl 			"Light Control 0XC3"		//光控
+#define Title_CC_Param		"CC Parameter Setting 0xA3"	//集中器参数设置
+#define Title_CC_Update 		"CC Update 0XA4"		//集中器升级
+#define Title_Timed_ctrl 		"Timed Control 0XC1"		//定时任务
+#define Title_Latitude_ctrl		"Latitude Control 0XC2"	//经纬度控制
+#define Title_Light_ctrl 		"Light Control 0XC3"		//光控
 #define Title_DIDO 			"DIDO 0XE1"			//DIDO
 #define Title_Alarm			"Alarm 0XF0"			//报警
-#define Title_Acquisition			"Acquisition Unit 0xF6"		//采集单元
-#define Title_Security			"Security Modules 0XF9"		//防盗模块
+#define Title_Acquisition		"Acquisition Unit 0xF6"	//采集单元
+#define Title_Security			"Security Modules 0XF9"	//防盗模块
 #define Title_Reply			"Response "			//应答
 
 
@@ -110,13 +110,13 @@ static s32 MakeSingleLog(s8 *buf,  Pag_Single*pkg)
 	/* 判断是否为广播或组播 */
 	if(0x00 != pkg->Coordi_Addr && 0 != (pkg->Single_Addr[0] <<8 |pkg->Single_Addr[1]) ){
 		Cmd = pkg->Cmd[0] <<8 | pkg->Cmd[1];
-		while((itpos=0x01<<i++) != 0x10000){	//循环检测cmd每个bit位
+		while((itpos=0x01<<i++) != 0x10000){		//循环检测cmd每个bit位
 			switch(Cmd & itpos){
 				case 0x00:break;
-				case 0x01:sprintf(buf,"Open Light || ");		break;
-				case 0x02:sprintf(buf,"Close Light || ");		break;
+				case 0x01:sprintf(buf,"Open Light || ");	break;
+				case 0x02:sprintf(buf,"Close Light || ");	break;
 				case 0x04:sprintf(buf,"Run stat || ");		break;
-				case 0x08:sprintf(buf,"Light Level || ");		break;
+				case 0x08:sprintf(buf,"Light Level || ");	break;
 				case 0x10:sprintf(buf,"Get Voltage || ");	break;
 				case 0x20:sprintf(buf,"Get Electricity || ");	break;
 				case 0x40:sprintf(buf,"Get Power || ");		break;

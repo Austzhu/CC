@@ -42,6 +42,7 @@ extern u32 CallBack_Light(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern u32 CallBack_Demand(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern u32 CallBack_RtData(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern s32 CC_Inquire_Version(u8 *AckBuf,u8 Ctrl,u8 Cmd);
+extern u32 CallBack_electric(u8 ctrl,u8 itf,struct task_node *node);
 
 extern UINT CallBackGPRSTest1(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern UINT CallBackServerFeedback(UCHAR ctrl,UCHAR itf,struct task_node *node);
@@ -58,6 +59,7 @@ extern UINT CallBackApplicUpDate(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern UINT CallBackTimerControlTaskRLT(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern UINT CallBackCCGlobalParaSetGet(UCHAR ctrl,UCHAR itf,struct task_node *node);
 extern UINT CallBackReset(UCHAR ctrl,UCHAR itf,struct task_node *node);
+
 
 
 extern s32 TOPDIDOShortCallBackAck(UCHAR *buf,CHAR AppendType,CHAR AppendLen,CHAR AckCMD,CHAR AckLen,CHAR AckRequCMD,CHAR AckRequSubCMD,CHAR DeviceID,CHAR ChanleID,CHAR Stat,CHAR Resault);

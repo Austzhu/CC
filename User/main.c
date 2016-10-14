@@ -45,9 +45,6 @@ struct MetterElecInforStruc 		TOPMetterElecInformation;
 TOPDeviceGPRSMDStatStruct 	TOPDeviceGPRSModuleInfor;
 
 #ifdef UsePthread
-static pthread_t thread_Keepalive;
-static pthread_t thread_RecvInsert;
-static pthread_t thread_UserProc;
 pthread_mutex_t mutex_ether;
 pthread_mutex_t mutex_task;
 #ifdef SingleCheckThread
@@ -58,12 +55,13 @@ pthread_mutex_t mutex_task;
 
  void CC_Init(void)
 {
-	loadParam();		//加载配置文件
+	 appitf_init(&g_appity);
+	 if( access("cc_corl.db",F_OK)){
+		system("./config/Create_Database.sh &");	//重新建数据库
+		sleep(1);
+	}
 	InitTaskQueue();	//初始化队列
 	UartForCoordi();	//串口的配置
-	if( access("cc_corl.db",F_OK)){
-		system("./config/Create_Database.sh &");//重新建数据库
-	}
 	InitTimeTASK();		//定时任务的初始化
  #	ifdef UsePthread
 	pthread_mutex_init(&mutex_ether,NULL);
@@ -107,19 +105,21 @@ static void *UserQueProcThread(void *args)
 
 int main(int argc,char *argv[])
 {
-	void *ExitState;
+	pthread_t thread_Keepalive = -1;
+	pthread_t thread_RecvInsert = -1;
+	pthread_t thread_UserProc = -1;
 	CC_Init();
-	pthread_create(&thread_Keepalive,NULL,KeepaliveThread,NULL);
-	sleep(1);
+	pthread_create(&thread_Keepalive,NULL,KeepaliveThread,NULL);sleep(1);
 	pthread_create(&thread_RecvInsert,NULL,RecvInsertQueueThread,NULL);
-	sleep(1);
 	pthread_create(&thread_UserProc,NULL,UserQueProcThread,NULL);
-	pthread_join(thread_Keepalive,&ExitState);
-	debug(1,"thread_Keepalive exit status:%d\n",*(int*)ExitState);
-	pthread_join(thread_RecvInsert,&ExitState);
-	debug(1,"RecvInsertQueueThread exit status:%d\n",*(int*)ExitState);
-	pthread_join(thread_UserProc,&ExitState);
-	debug(1,"UserQueProcThread exit status:%d\n",*(int*)ExitState);
+	if(thread_Keepalive < 0 || thread_RecvInsert < 0 || thread_UserProc < 0 ){
+		debug(1,"one of pthread_create error!\n");
+		exit(-1);
+	}
+	pthread_join(thread_Keepalive,NULL);
+	pthread_join(thread_RecvInsert,NULL);
+	pthread_join(thread_UserProc,NULL);
+
 	return 0;
 }
 

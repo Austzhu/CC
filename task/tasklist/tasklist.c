@@ -29,6 +29,7 @@ const ListCmdProcessFunc DetlCmdProcessFunc[][64] = {
 	{	{0x42, CallBack_Open},
 		{0x43, CallBack_Close},
 		{0x45, CallBack_Demand},
+		{0x46,CallBack_electric },
 		{0x47, CallBack_Light},
 		{0x48, CallBack_RtData},
 		{ALL_SUPPT_CMD_END, NULL},
@@ -36,26 +37,26 @@ const ListCmdProcessFunc DetlCmdProcessFunc[][64] = {
 	{	{GPRS_TEST1_CMD, CallBackGPRSTest1},
 		{ALL_SUPPT_CMD_END, NULL},
 	},	//2 ---CC与CC相关的控制指令
-	{	{CC_SERVER_ACK_CMD,CallBackServerFeedback},			//0X80,服务器回复
+	{	{CC_SERVER_ACK_CMD,CallBackServerFeedback},		//0X80,服务器回复
 		//{CC_LOGON_CMD,CallBackLogon},					//0xA1,
 		{CC_OPRATE_CMD,CallBackReset},					//0XA2,上位机控制集中器
-		{CC_PARA_SET_CMD,CallBackCCGlobalParaSetGet},			//0XA3,集中器参数设置
-		{CC_UPDATE_CMD,CallBackApplicUpDate},				//0XA4,集中器远程升级
-		{CC_TIME_CTRL_CMD,CallBackTimerControlTaskRLT},			//0XC1,定时器控制协议
+		{CC_PARA_SET_CMD,CallBackCCGlobalParaSetGet},	//0XA3,集中器参数设置
+		{CC_UPDATE_CMD,CallBackApplicUpDate},			//0XA4,集中器远程升级
+		{CC_TIME_CTRL_CMD,CallBackTimerControlTaskRLT},	//0XC1,定时器控制协议
  		{ALL_SUPPT_CMD_END, NULL},						//0XFF结束
 	},	//3 ---485与外接485设备相关的控制指令
-	{	{CC_METER_READ_CMD,CallBackMetterInfoColletRD},			//0xD1,读取电表协议
-		{CC_METER_SET_CMD,CallBackMetterInfoColletSet},			//0xD2,设置电表参数
-		{CC_METER_RD_EXTR_CMD,CallBackMetterInfoColletExtrRD},		//0xD3,读外购电表
-		{CC_METER_SET_EXTR_CMD,CallBackMetterInfoColletExtrSet},		//0xD4,ack OK 20120611 date
-		{0x01,CallBackMetterInfoBroadcast},					//0x01 test by Austzhu 2016.3.29
+	{	{CC_METER_READ_CMD,CallBackMetterInfoColletRD},	//0xD1,读取电表协议
+		{CC_METER_SET_CMD,CallBackMetterInfoColletSet},		//0xD2,设置电表参数
+		{CC_METER_RD_EXTR_CMD,CallBackMetterInfoColletExtrRD},	//0xD3,读外购电表
+		{CC_METER_SET_EXTR_CMD,CallBackMetterInfoColletExtrSet},	//0xD4,ack OK 20120611 date
+		{0x01,CallBackMetterInfoBroadcast},						//0x01 test by Austzhu 2016.3.29
 		{0x02,CallBackMetterInfoBroadcast},
 		{0x03,CallBackMetterInfoBroadcast},
 		{CC_DIDO_SET_CMD,CallBackMetterDIDO},				//0XE1,	DIDO扩展继电器协议
  		{ALL_SUPPT_CMD_END, NULL},
 	},	//4 ---ETH与硬件网口相关的应答
-	{	{CC_ETH_ShortACK_CMD,CallBackETHShotAck},			//0x51,
-		{CC_ETH_LongContex_CMD,CallBackETHLongContexBack},		//0x52,
+	{	{CC_ETH_ShortACK_CMD,CallBackETHShotAck},				//0x51,
+		{CC_ETH_LongContex_CMD,CallBackETHLongContexBack},	//0x52,
  		{ALL_SUPPT_CMD_END, NULL},
 	}
 };
@@ -67,6 +68,7 @@ s32 isEmpty(struct task_queue *queue)
 s32 init_task_queue(struct task_queue *taskqueue)
 {
 	assert_param(taskqueue,"taskqueque is null!",FAIL);
+
 	task_node *head = NULL;
 	if( (head = (task_node*)malloc(sizeof(task_node)) ) == NULL){
 		err_Print(DEBUG_list,"Creat head node err!\n");
@@ -326,21 +328,12 @@ s32 SelctExcuteOrAppend(u8 queuetype,  u32 mode,  u8 tasktype,  u8 tasklevel,  u
 		err_Print(DEBUG_list, "Queue Type error!\n");
 		return FAIL;
 	}
-	#if DebugPrint
-		err_Print(1,"NO.3.1\n");
-	#endif
-	//pthread_mutex_lock(&mutex_task);	//获取task锁
+
 	res=SelectTask(&taskQueue[queuetype],mode,&node,queuetype);
-	//pthread_mutex_unlock(&mutex_task);	//解task锁
+
 	if( res == TASK_QUEUE_EMPTY){ return SUCCESS;}
 
-	#if DebugPrint
-		err_Print(1,"NO.3.2\n");
-	#endif
 	if(!res)  {
-		#if DebugPrint
-			err_Print(1,"NO.3.3\n");
-		#endif
 		prcv = (PureCmdArry *)(node.pakect);
 		ListCmdProcessFunc *plist = (ListCmdProcessFunc *)DetlCmdProcessFunc[queuetype];
 		while(0xff != plist->ctrl) {
@@ -395,9 +388,6 @@ s32 SelctExcuteOrAppend(u8 queuetype,  u32 mode,  u8 tasktype,  u8 tasklevel,  u
 
 s32 TopUserQueProc(u8 itf)
 {
-	#if DebugPrint
-		err_Print(1,"NO.3\n");
-	#endif
 	SelctExcuteOrAppend(Coordinate_Queue,3,Coordinate_Task,Task_Level_Coor,itf);
 	SelctExcuteOrAppend(GPRS_TYPE_QUEUE,3,NET_TASK,TASK_LEVEL_GPRS,itf);
 	SelctExcuteOrAppend(CC_TYPE_QUEUE,3,NET_TASK,TASK_LEVEL_CC,itf);

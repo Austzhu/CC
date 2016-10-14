@@ -174,7 +174,7 @@ SINT Ether_Getchar(UCHAR *buf)
 {
 	if (sock_ether < 0) {
 		TOPSocketConnectState 	= SOCKET_LINESTAT_ERR;
-		TOPCCRegistr2ServerState	= CC_REGISTER_ERR;		//add 20120710
+		TOPCCRegistr2ServerState= CC_REGISTER_ERR;		//add 20120710
 		err_Print(DEBUG_LOCAL_ETHNET, "sock_ether < 0\n");
 		return FAIL;
 	}

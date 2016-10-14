@@ -18,15 +18,15 @@
 
 #define SUCCESS 				0X00
 #define FAIL	 				0X01
+#define VALUE_NULL 			0x02
 #define ERRORS 				0XFF
-#define Open_FAIL 				0XFE
-#define TIME_OUT 				0XFD
-#define Update_Pend				0XFC
-#define Pointer_Err				0xFB
-#define Pointer_NULL				0xFA
-#define NO_SUCH_SUBCMD 			0xFFF0
+#define Open_FAIL 			0XFE
+#define TIME_OUT 			0XFD
+#define Update_Pend			0XFC
+#define Pointer_Err			0xFB
+#define Pointer_NULL			0xFA
 
-
+#define NO_SUCH_SUBCMD 	0xFFF0
 #define ETHER_LINE_DISCNT_ERR 		0xE001
 #define SOCKET_CREAT_FAIL_ERR 		0xE002
 #define LINK_TEST_FAIL_ERR	    		0xE003

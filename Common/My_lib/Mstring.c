@@ -24,11 +24,11 @@ BYTE* StrToHex(BYTE *pbDest, BYTE *pbSrc, int nLen)
 		h1 = pbSrc[2*i];
 		h2 = pbSrc[2*i+1];
 		s1 = Mtoupper(&h1) - 0x30;
-		if (s1 > 9) 
+		if (s1 > 9)
 			s1 -= 7;
 
 		s2 = Mtoupper(&h2) - 0x30;
-		if (s2 > 9) 
+		if (s2 > 9)
 			s2 -= 7;
 
 		pbDest[i] = s1*16 + s2;
@@ -44,15 +44,15 @@ int *StrToHex_v2(int *pbDest, BYTE *pbSrc)
 	*pbDest = 0;
 
 	while(pbSrc[i]){
-		
+
 		if( (temp = Mtoupper((char*)&pbSrc[i++]) - '0') >9){temp -= 7;}
-		*pbDest = *pbDest*16 + temp;	
+		*pbDest = *pbDest*16 + temp;
 		if(i%8 == 0){
 			*++pbDest = 0;
 		}
 	}
 	return dest;
-	
+
 }
 
 /**********************************************************
@@ -62,7 +62,7 @@ int *StrToHex_v2(int *pbDest, BYTE *pbSrc)
  * 	return :	 	返回字符串的头指针
  * 	remarks : 	将16进制数转化为字符串
 ***********************************************************/
- #if 1
+
 BYTE* HexToStr_v3(BYTE *pbDest, BYTE *pbSrc, int nLen)
 {
 	char	dl,dh;
@@ -79,7 +79,7 @@ BYTE* HexToStr_v3(BYTE *pbDest, BYTE *pbSrc, int nLen)
 	pbDest[nLen*2] = '\0';
 	return pbDest;
 }
-#endif
+
 
 char *HexTostr(unsigned int Hex,char *dest)
 {
@@ -168,7 +168,7 @@ char *IntToStr(int n,char*s)
 	if(sig<0){*s++ = '-';}
 	*s = '\0';
 	reverse(ps);
-	return ps;	
+	return ps;
 }
 
 char *Mstrcpy(char*dest,const char *src,const char EOB)
@@ -200,4 +200,9 @@ void Mmemset(char *dest,char c,int len)
 	while(len--){
 		*dest++ = c;
 	}
+}
+
+int Mprintf(const char *fmt,...)
+{
+	return 0;
 }

@@ -69,6 +69,6 @@ enum {
 	_u8_s,
 };
 extern GlobalCCparam CCparamGlobalInfor;
-extern s32 loadParam(void);
+extern s32 loadParam(void*);
 extern s32 SaveParam(void);
 #endif

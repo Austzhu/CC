@@ -9,6 +9,12 @@
 **
 ** 版　本:	V1.0
 *******************************************************************/
-#include "Interface.h"
+#include "include.h"
 appitf_t g_appity;
 
+int appitf_init(appitf_t *app)
+{
+	memset(app,0,sizeof(appitf_t));
+	loadParam(app);
+	return 0;
+}
