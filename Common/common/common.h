@@ -22,8 +22,8 @@
 
 /* 快速适应sprintf返回拼接好的字符串 */
 extern char MessageBuffer[];
-#define Asprintf(fmt,args...)  (  memset(MessageBuffer,0,MessageBuffersize),   snprintf(MessageBuffer,MessageBuffersize,fmt,##args),    MessageBuffer  )
-
+#define Asprintf(fmt,args...)  (  memset(MessageBuffer,0,MessageBuffersize),   snprintf(MessageBuffer,MessageBuffersize,fmt,##args),MessageBuffer  )
+#define Asprintf_Strlen   (strlen(MessageBuffer))
 /* 大小端转化 */
 #define bigend2littlend_2(dd)  (  ((0xff&(dd))<<8)  |  (((dd)>>8)&0xff)  )
 #endif		//#ifndef __COMMON_H__

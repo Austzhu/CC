@@ -6,6 +6,7 @@ CFLAGS += -Wno-implicit-function-declaration
 CFLAGS += -Wno-strict-aliasing
 #关闭数据包data数组越界的"警告"提示
 CFLAGS += -Wno-array-bounds
+CFLAGS += -std=gnu99
 
 LDFLAGS = -L$(PWD)/sqlite/lib -L$(PWD)/Software/emfuture/lib  -lsqlite3 -lEM_Middleware_Lib
 #LDFLAGS = -L$(PWD)/sqlite/lib   -lsqlite3
@@ -23,7 +24,7 @@ export output CFLAGS Rootdir
 OBJS_PATH +=./Common/common ./Common ./Common/My_lib ./hardware/coordinate ./hardware/ethernet ./hardware/gprs_ppp 	\
 	./hardware/serial ./Software/analysis ./Software/burglar_alarm ./Software/cc_param ./Software/communication 	\
 	./Software/info_output ./Software/initstart ./Software/link_method ./Software/Log ./Software/meter_crc 		\
-	./Software/cmd_process ./sqlite ./task/tasklist ./User ./hardware/update ./task/timertask  ./hardware/Zt_Meter
+	./Software/cmd_process ./sqlite ./task/tasklist ./task/taskque  ./User ./hardware/update ./task/timertask  ./hardware/Zt_Meter
 
 
 #包含子目录的工程文件

@@ -23,6 +23,7 @@ sqlite3 $dbname \
 	Coor_gid 	integer NOT NULL,
 	CC_id		text NOT NULL,
 	Map_Addr 	integer NOT NULL,
+	Warn_flags integer,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
 	CHECK (Base_Addr < 0xff AND Base_Addr > 0x20)
@@ -50,7 +51,6 @@ sqlite3 $dbname  "drop table if exists $Table_info ;"
 sqlite3 $dbname \
 "create table $Table_info(
 	id 				integer,
-	l_id 			integer,
 	Base_Addr 		integer ,
 	Warn_flags 	integer,
 	Rate_v 			integer,
@@ -115,6 +115,7 @@ sqlite3 $dbname \
 #建立唯一性约束索引(升序)
 sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_Coordi}_index_id ON $Table_Coordi(id ASC);"
 sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_Single}_index_id ON $Table_Single(id ASC);"
+sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_info}_index_id ON $Table_info(Base_Addr ASC);"
 sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_Task}_index_id ON $Table_Task(id ASC);"
 sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_Tasklist}_index_id ON $Table_Tasklist(id ASC);"
 sqlite3 $dbname "CREATE UNIQUE INDEX ${Table_Warn}_index_id ON $Table_Warn(id ASC);"

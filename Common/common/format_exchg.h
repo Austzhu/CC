@@ -6,7 +6,7 @@
 ** 修改人:
 ** 日　期:
 ** 描　述:	16  进制打印
-** ERROR_CODE:	
+** ERROR_CODE:
 **
 ** 版　本:	V1.0
 *******************************************************************/
@@ -51,23 +51,23 @@ typedef union {
 
 //fuction
 
-// 可打印字符串转换为字节数据    
+// 可打印字符串转换为字节数据
 // 如："C8329BFD0E01" --> {0xC8, 0x32, 0x9B, 0xFD, 0x0E, 0x01}
-// 输入: pSrc - 源字符串指针    
-//       nSrcLength - 源字符串长度  
-// 输出: pDst - 目标数据指针    
+// 输入: pSrc - 源字符串指针
+//       nSrcLength - 源字符串长度
+// 输出: pDst - 目标数据指针
 // 返回: 目标数据长度
 //测试过
-//int String2Bytes(const char* pSrc, unsigned char* pDst, int nSrcLength);   
-int String2Bytes(const char* pSrc, char* pDst, int nSrcLength);   
+//int String2Bytes(const char* pSrc, unsigned char* pDst, int nSrcLength);
+int String2Bytes(const char* pSrc, char* pDst, int nSrcLength);
 
 
-// 字节数据转换为可打印字符串    
+// 字节数据转换为可打印字符串
 // 如：{0xC8, 0x32, 0x9B, 0xFD, 0x0E, 0x01} --> "C8329BFD0E01"
-// 输入: pSrc - 源数据指针    
-//       nSrcLength - 源数据长度    
-// 输出: pDst - 目标字符串指针    
-// 返回: 目标字符串长度    
+// 输入: pSrc - 源数据指针
+//       nSrcLength - 源数据长度
+// 输出: pDst - 目标字符串指针
+// 返回: 目标字符串长度
 //测试过
 int Bytes2String(const unsigned char* pSrc, char* pDst, int nSrcLength);
 

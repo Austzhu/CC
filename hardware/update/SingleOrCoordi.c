@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:	SingleOrCoordi.c
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年06月02日 星期四 16时46分36秒
  *******************************************************************/
 #include "SingleOrCoordi.h"
@@ -67,7 +67,7 @@ static s32 Update_Init(char Image)
 	UpdateInfo.Repeat 	= Repeat_Num;			//重发次数
 	UpdateInfo.CheckType 	= Crc_16;
 	UpdateInfo.pend	= 0;
-	UpdateInfo.Timeout	= TimeoutNum;	
+	UpdateInfo.Timeout	= TimeoutNum;
 	debug(DEBUG_update,"Start Update Coordinate 0r Single...\n");
 	return SUCCESS;
 }
@@ -79,9 +79,9 @@ static s32 Send_Package(void)
 	UpdatePackage.F_Num 	= UpdateInfo.CntDataNum;
 	UpdatePackage.__Num 	= ~UpdateInfo.CntDataNum;
 
-	if(IsEOT){	
+	if(IsEOT){
 		UpdatePackage.Header = EOT;
-	}else{	
+	}else{
 		UpdatePackage.Header = SOH;
 	}
 
@@ -141,7 +141,7 @@ void *Update_Single_Coordi(void)
 					debug(DEBUG_update,"Timeout Send package agin!\n");
 					Send_Package();
 					--UpdateInfo.Timeout;
-		
+
 				}
 				break;
 			default:break;
@@ -152,12 +152,12 @@ void *Update_Single_Coordi(void)
 	}
 }
 
-void  inline GetUpdateInfo(Package_Info *Info)
+void   GetUpdateInfo(Package_Info *Info)
 {
 	memcpy(Info,&UpdateInfo,sizeof(Package_Info));
 
 }
-void inline SetUpdateInfo(Package_Info *Info)
+void  SetUpdateInfo(Package_Info *Info)
 {
 	memcpy(&UpdateInfo,Info,sizeof(Package_Info));
 }
@@ -203,7 +203,7 @@ void * Updatethread(void *arg)
 	char temp = 0;
 	pthread_detach(pthread_self());
 
-	
+
 
 	memset(&UpdateInfo,0,sizeof(Package_Info));
 	#ifdef Config_NewProtocol
@@ -224,7 +224,7 @@ void * Updatethread(void *arg)
 	RetuenValue = Update_Init(temp) == SUCCESS ? (int)Update_Single_Coordi():-1;
 	#else
 	Frame_485  *pkg = (Frame_485 *)arg;
-	
+
 	if(pkg->single_addrH == 0 && pkg->single_addrL == 0){
 		UpdateInfo.SinOrCoordi 	=  !0;
 	}else{
@@ -287,7 +287,7 @@ s32 UpdateThread(void * arg)
 		RetuenValue = Update_Init(temp) == SUCCESS ? (int)Update_Single_Coordi():-1;
 	#else
 		Frame_485  *pkg = (Frame_485 *)arg;
-		
+
 		if(pkg->single_addrH == 0 && pkg->single_addrL == 0){
 			UpdateInfo.SinOrCoordi 	=  !0;
 		}else{

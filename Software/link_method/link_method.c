@@ -508,11 +508,8 @@ SINT faal_rcvpkt(UCHAR itf,UCHAR *recv)
 	UCHAR reportBuf[128];
 	/*主动上报*/
 	len1 = sizeof(reportBuf);
-	#if DebugPrint
-		err_Print(1,"NO.2.0.0\n");
-	#endif
+
 	while(!(*pitf->getchar)(&uc)) {
-		//debug(1,"%02x ",uc);
 		debug(DEBUG_LOCAL_LINK_METH,"%02x ",uc);
 		switch(fsm->stat) {
 			case 0:

@@ -34,7 +34,9 @@
 #include "Mstring.h"
 #include "version.h"
 #include "common.h"
+#ifndef __TASKQUE_H__
 #include "Interface.h"
+#endif
 #include "log.h"
 
 extern pthread_mutex_t mutex_ether;

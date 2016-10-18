@@ -275,7 +275,8 @@ s32 Query_electric(const void *Addr,int Addr_size)
 				/* Recv response */
 				if( SUCCESS !=Recv_Package_v2((Pag_Single*)Sendbuf,SingleRecvTimeout) )
 					debug(DEBUG_single,"Wait Single Response Timeout!\n");
-				if(!Sendbuf[8] && !Sendbuf[9] ) break;
+				else if(!Sendbuf[8] && !Sendbuf[9] ) break;
+				else goto out;
 				if(repeat <= 0) goto out;
 			}
 			/* update Coordinate */
@@ -312,163 +313,14 @@ s32 Query_electric(const void *Addr,int Addr_size)
 		}
 	}
 	if(Sendbuf) free(Sendbuf);
-	printf("Wait %d S\n",single_count_max/2);
-	sleep(single_count_max/2);
+	printf("Wait %d S\n",single_count_max/3);
+	sleep(single_count_max/3);
 	return SUCCESS;
 out:
 	if(Sendbuf) free(Sendbuf);
 	return FAIL;
 }
 
-#if 0
-/**
- * 查询组播/广播动作是否都执行了
- */
-s32 Check_Action(int cmd,...)
-{
-	va_list 	arg_ptr;
-	int 	group = 0;
-	char 	sql[128];
-	u8 	Single[2048];
-	int 	i = 0;
-
-	task_node 	node;
-	Pag_Single 	*P_single = (Pag_Single*)Single;
-	struct {int CoordiAddr;int SingleAddr;}buf[1000];
-	struct {int CoordiAddr;int SingleAddr;}  errSingle[500], *P_errSingle;
-	P_errSingle = errSingle;
-
-	int j=0;
-	u16 *Paddrlist = NULL;
-
-	memset(sql,0,sizeof(sql));
-	memset(Single,0,sizeof(Single));
-	memset(buf,0,sizeof(buf));
-	memset(errSingle,0,sizeof(errSingle));
-	memset(&node,0,sizeof(node));
-	va_start(arg_ptr, cmd);
-	//LightLevel = va_arg(arg_ptr, int);
-	switch(cmd){
-		case Action_GroupOpen:
-			P_single->Cmd[0] = (signle_open>>8) 	& 0xff;
-			P_single->Cmd[1] = signle_open 	& 0xff;
-			group = va_arg(arg_ptr, int);
-			sprintf(sql,"select Coor_id,Base_Addr from db_light where lt_gid=%d order by Coor_id;",group);
-			Select_Table_V2(sql,(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
-			break;
-		case Action_GroupClose:
-			P_single->Cmd[0] = (signle_close>>8) 	& 0xff;
-			P_single->Cmd[1] = signle_close 	& 0xff;
-			group = va_arg(arg_ptr, int);
-
-			sprintf(sql,"select Coor_id,Base_Addr from db_light where lt_gid=%d order by Coor_id;",group);
-			Select_Table_V2(sql,(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
-			break;
-		case Action_BroadcastOpen:
-			P_single->Cmd[0] = (signle_open>>8) 	& 0xff;
-			P_single->Cmd[1] = signle_open 	& 0xff;
-			Select_Table_V2("select Coor_id,Base_Addr from db_light order by Coor_id;",(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
-			break;
-		case Action_BroadcastClose:
-			P_single->Cmd[0] = (signle_close>>8) 	& 0xff;
-			P_single->Cmd[1] = signle_close 	& 0xff;
-			Select_Table_V2("select Coor_id,Base_Addr from db_light order by Coor_id;",(char*)buf,sizeof(buf[0]),sizeof(buf)/sizeof(buf[0]),0);
-			break;
-		default:break;
-	}va_end(arg_ptr);
-
-
-	int AddrLen = 0;
-	u16 *PAddr = (u16*)((char*)P_single + sizeof(Pag_Single));
-	i=0;while(buf[i].CoordiAddr != 0){
-		if(buf[i].CoordiAddr == buf[i+1].CoordiAddr){
-			*PAddr++ = buf[i].SingleAddr;
-			AddrLen += sizeof(u16);
-		}else{
-			AddrLen += sizeof(u16);
-			*PAddr++ = buf[i].SingleAddr;
-			/* 加上数据包头和功能码 */
-			P_single->Header 	= 0xFF;
-			P_single->Ctrl		= CtrlCode_Check;
-			/* 对应的协调器 */
-			P_single->Coordi_Addr 	= buf[i].CoordiAddr;
-			/* 单灯地址表的长度，按字节计算 */
-			P_single->Data[0]	= (AddrLen>>8) & 0xff;
-			P_single->Data[1]	= AddrLen 	& 0xff;
-			/* 计算基本数据包的校验码和计算单灯地址表的校验码 */
-			Crc16(P_single->Crc16,(u8*)P_single, sizeof(Pag_Single)-2);
-			Crc16((u8*)PAddr, P_single->Crc16 + sizeof(P_single->Crc16), AddrLen);
-			/* 打印发送的数据 */
-			debug(DEBUG_single,"\n##########Send data##########\n");
-			debug(DEBUG_single,"AddrLen=%04x,Coordi_Addr=%02x\n",(P_single->Data[0]<<8)|P_single->Data[1],P_single->Coordi_Addr);
-			j=0;while(j < sizeof(Pag_Single)){
-				debug(DEBUG_single,"%02x ",Single[j++]);
-			}debug(DEBUG_single,"\n");
-			debug(DEBUG_single,"Single Addr List:");
-			Paddrlist = (u16*)&Single[j];
-			while(*Paddrlist != 0){
-				debug(DEBUG_single,"%04x ",*Paddrlist++);
-			}debug(DEBUG_single,"\n");
-
-			UartBufClear(Uart1_ttyO1_485, Flush_Input|Flush_Output);
-			/* 发送数据 */
-			Uart_Send(Uart1_ttyO1_485, (s8*)P_single, sizeof(Pag_Single)+AddrLen+2, 2000000);
-
-			//sleep(10);	//等待5秒协调器处理
-
-			memset(Single,0,sizeof(Single));
-			/* 接受数据 */
-			if(SUCCESS == Recv_Package((Pag_Single*)Single)){
-				AddrLen = ((Pag_Single*)Single)->Data[0] <<8 | ((Pag_Single*)Single)->Data[1];
-				debug(DEBUG_single,"Addrlen:%d\n",AddrLen);
-				if(AddrLen){//收到有执行失败的单灯
-					if( SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)&Single[sizeof(Pag_Single)] , AddrLen + 2, 3000000) ){
-						/* CRC校验收到的操作失败的单灯地址表 */
-						if(CHK_Crc16((u8*)&Single[sizeof(Pag_Single)] + AddrLen,(u8*)&Single[sizeof(Pag_Single)] ,AddrLen) ){//单灯地址列表校验失败
-							debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
-							/* 返回失败？ */
-						}
-
-						debug(DEBUG_single,"***Addr List:");
-						Paddrlist = (u16*)&Single[sizeof(Pag_Single)];
-						while((char*)Paddrlist  < (char*)&Single[sizeof(Pag_Single)]  + AddrLen){
-							debug(DEBUG_single,"%04x ",*Paddrlist);
-							if((char*)P_errSingle < (char*)errSingle + sizeof(errSingle) ){
-								P_errSingle->CoordiAddr = ((Pag_Single*)Single)->Coordi_Addr;
-								P_errSingle->SingleAddr  = *Paddrlist++;
-								++P_errSingle;
-							}else{
-								debug(DEBUG_single,"Error Single Addr list buffer was full!\n");
-								goto deal_errSingle;
-							}
-						}debug(DEBUG_single,"\n\n");
-
-					}else{//没有收到单灯地址表的数据
-						debug(DEBUG_single,"Recv Single Addr list Fail\n");
-						/* 返回失败？ */
-					}
-				}//if(!AddrLen)
-			}else{//没有收到协调器的回应
-				debug(DEBUG_single,"Can not Recv Single Response\n");
-				return FAIL;
-			}
-			AddrLen = 0;
-			PAddr = (u16*)((char*)P_single + sizeof(Pag_Single));
-			sleep(1);
-		}
-		++i;
-	}
-
- deal_errSingle://处理那些操作失败的单灯,操作失败的单灯进行单播操作
-	P_errSingle = errSingle;
-	/* 把错误单灯写入数据库中 */
-	while(P_errSingle->CoordiAddr != 0){
-		debug(DEBUG_single,"CoordiAddr:%04X,SingleAddr:%04X\n",P_errSingle->CoordiAddr,P_errSingle->SingleAddr);
-		++P_errSingle;
-	}
-	return SUCCESS;
-}
-#endif
 
 s32 SingleShortAckToServer(int cmd,u8 ctrl, u8 Resault,...)
 {
@@ -1284,15 +1136,15 @@ s32 Instert_electric(void *dest,int dest_size,void *src,int src_size)
 			if(pdest_start->Addr == comp){
 				pdest_start->light_V = bigend2littlend_2(psrc[i].light_V);
 				pdest_start->light_E = bigend2littlend_2(psrc[i].light_E);
-				debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
-												comp,pdest_start->light_V,pdest_start->light_E);
+				//debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
+				//								comp,pdest_start->light_V,pdest_start->light_E);
 				/* set flags */
 				break;
 			}else if(pdest_end->Addr == comp){
 				pdest_end->light_V = bigend2littlend_2(psrc[i].light_V);
 				pdest_end->light_E = bigend2littlend_2(psrc[i].light_E);
-				debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
-												comp,pdest_end->light_V,pdest_end->light_E);
+				//debug(DEBUG_single,"SingleAddr:0x%04x,Voltage:%04x, electric:%04x\n",
+				//								comp,pdest_end->light_V,pdest_end->light_E);
 				/* set flags */
 				break;
 			}
@@ -1308,7 +1160,8 @@ s32 Instert_electric(void *dest,int dest_size,void *src,int src_size)
 
 s32 electric_response(void *dest,int dest_size,int Ctrl,int Is_Success)
 {
-	assert_param(dest,NULL,FAIL);
+	if(NULL == dest) Is_Success =FAIL;
+
 	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
 
 	u8 AckShortbuf[300];
@@ -1316,7 +1169,7 @@ s32 electric_response(void *dest,int dest_size,int Ctrl,int Is_Success)
 	AckShortbuf[0] = 0x52;
 	AckShortbuf[2] = Ctrl;
 	AckShortbuf[4] = 0x46;
-	if(Is_Success != SUCCESS){
+	if(Is_Success != SUCCESS ){
 		AckShortbuf[0] = 0x51;
 		AckShortbuf[1] = 0x04;
 		AckShortbuf[3] = 0x02;
@@ -1362,14 +1215,13 @@ s32 electric_response(void *dest,int dest_size,int Ctrl,int Is_Success)
 	/* insert data to sqlite */
 	psingle_info = dest;
 	single_count = dest_size/sizeof(Sqlbuf_t);
-	time_t tm ;
-	time(&tm);
-	printf("tm=%ld\n",tm);
+	time_t tm = 0;
+	time(&tm);		//get current time
 	u32 power = 0;
 	for(i=0;i<single_count;++i){
 		power = psingle_info[i].light_V * psingle_info[i].light_E/10000;
-		Update_Table(Cmd_Info,Asprintf("set Warn_flags=%d,light_V=%d,light_E=%d,light_P=%u,rtime=%ld where Base_Addr=0x%04x",\
-			psingle_info[i].Warn_flags,psingle_info[i].light_V,psingle_info[i].light_E,power,tm,psingle_info[i].Addr));
+		Update_Table_v2("db_info_light",Asprintf("set Warn_flags=%d,light_V=%d,light_E=%d,light_P=%u,rtime=%ld where Base_Addr"\
+				"=0x%04x",psingle_info[i].Warn_flags,psingle_info[i].light_V,psingle_info[i].light_E,power,tm,psingle_info[i].Addr));
 	}
 	return SUCCESS;
 }
@@ -1441,55 +1293,59 @@ s32 GroupQuery(struct task_node *node)
  	return QueryRes(0x02,FAIL);
 }
 
-s32 Broadcas_electric(struct task_node *node)
+s32 Broadcas_electric(u32 flags)
 {
-	assert_param(node,NULL,FAIL);
 	typedef struct {u32 Addr;u32 Warn_flags;u32 Coor_Addr;u32 light_V;u32 light_E; } Sqlbuf_t;
 	typedef struct {u16 Addr;u16 light_V;u16 light_E; } Recvbuf_t;
 	typedef struct {u32 Coor_Addr;u32 single_Count;} CoordiAddr_t;
 
 	Pag_Single Single;
 	memset(&Single,0,sizeof(Pag_Single));
+
+	Sqlbuf_t *light_info = NULL;
+	Recvbuf_t *Recvbuf = NULL;
+	CoordiAddr_t *CoordiAddr = NULL;
+	int single_count_max = 0;
 	int lightinfo_size = Get_light_info_count("Base_Addr");
 	int Coordinate_count = Get_CountByColumn("db_light","distinct Coor_id");
-	int single_count_max = 0;
 	if(lightinfo_size <= 0 || Coordinate_count <= 0) goto out;
-
-	CoordiAddr_t* const CoordiAddr = malloc(Coordinate_count*sizeof(CoordiAddr_t));
+	/* malloc for Coordinator list */
+	CoordiAddr = malloc(Coordinate_count*sizeof(CoordiAddr_t));
 	if(!CoordiAddr) goto out;
 	/* get coordinator list */
-	if(SUCCESS != Select_Table_V2(Asprintf("select distinct Coor_id from db_light;"),(char*)CoordiAddr,sizeof(CoordiAddr_t),Coordinate_count,0)){
+	if(SUCCESS != Select_Table_V2( Asprintf("select distinct Coor_id from db_light;"),
+							(char*)CoordiAddr,sizeof(CoordiAddr_t),Coordinate_count,0)){
 		debug(DEBUG_single,"get coordinator Addr list fail!\n");
 		goto out;
 	}
 	/* get single count in the same coordinator */
 	int i = 0;
-	for(i = 0; i<Coordinate_count;++i){
+	while(i < Coordinate_count){
 		char str[32];	memset(str,0,sizeof(str));
 		sprintf(str,"where Coor_id=%d",CoordiAddr[i].Coor_Addr);
 		CoordiAddr[i].single_Count = Get_CountByCondition("db_light","Base_Addr",str);
 		if(single_count_max < CoordiAddr[i].single_Count) single_count_max = CoordiAddr[i].single_Count;
-	}	//printf("single_count_max=%d\n",single_count_max);
-
-	Sqlbuf_t* const light_info = malloc(lightinfo_size*sizeof(Sqlbuf_t));
-	Recvbuf_t* const Recvbuf = malloc(single_count_max*sizeof(Recvbuf_t) + 2);
+		++i;
+	}
+	light_info = malloc(lightinfo_size*sizeof(Sqlbuf_t));
+	Recvbuf = malloc(single_count_max*sizeof(Recvbuf_t) + 2);
 	if(!light_info || !Recvbuf ) goto out;
 
 	/* get data from db_info_light */
-	if( SUCCESS != Select_Table_V2(Asprintf("select db_info_light.Base_Addr,db_info_light.Warn_flags,db_light.Coor_id from db_info_light,"\
-							"db_light where db_info_light.Base_Addr = db_light.Base_Addr;"),(char*)light_info,sizeof(Sqlbuf_t),lightinfo_size,0)){
+	if( SUCCESS != Select_Table_V2( Asprintf("select db_info_light.Base_Addr,db_info_light.Warn_flags,"\
+							"db_light.Coor_id from db_info_light,db_light where db_info_light.Base_Addr = "\
+										"db_light.Base_Addr;"),(char*)light_info,sizeof(Sqlbuf_t),lightinfo_size,0)){
 		debug(DEBUG_single,"get light info fail!\n");
 		goto out;
 	}
-	/* Send queries to current instructions */
+	/* first response */
 	ResponsePromptly(0x03,0x46 ,SUCCESS,32);
 	if( SUCCESS != Query_electric(light_info,lightinfo_size*sizeof(Sqlbuf_t))){
 		debug(DEBUG_single,"Query_electric error!\n");
 		goto out;
 	}
 	/* get the electric from single */
-	i = 0;
-	while(i < Coordinate_count){
+	for(i=0;i<Coordinate_count;){
 		Single.Header 		= Single_Header;
 		Single.Ctrl 			= CoordiCtrl_electric;
 		Single.Coordi_Addr= CoordiAddr[i].Coor_Addr;
@@ -1498,13 +1354,15 @@ s32 Broadcas_electric(struct task_node *node)
 		Single.Data[0]		= GetSingleCunt;
 		Crc16(Single.Crc16,(u8*)&Single, sizeof(Single)-2);
 		Display_package("Get current send data",&Single,sizeof(Pag_Single));
-		/* send data */
-		UartBufClear(Uart1_ttyO1_485, Flush_Input);
-		Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
-		/* Recv data */
-		if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){
-			debug(DEBUG_single,"Wait Single Response Timeout!\n");
-			goto out;
+		for(int repeat=3;repeat-- > 0;){
+			/* send data */
+			UartBufClear(Uart1_ttyO1_485, Flush_Input);
+			Uart_Send(Uart1_ttyO1_485, (s8*)&Single, sizeof(Single), SingleSendTimeout);
+			/* Recv data */
+			if( SUCCESS !=Recv_Package_v2(&Single,SingleRecvTimeout) ){
+				debug(DEBUG_single,"Wait Single Response Timeout!\n");
+			}else break;
+			if(repeat <= 0) goto out;
 		}
 		int Responselen = Single.Data[0]<<8|Single.Data[1];
 		if( Responselen > 0 && SUCCESS == DeviceRecv485_v2(Uart1_ttyO1_485,  (s8*)Recvbuf , Responselen + 2, 3000000) ){
@@ -1527,7 +1385,7 @@ s32 Broadcas_electric(struct task_node *node)
 	if(Recvbuf) free(Recvbuf);
 	return SUCCESS;
 out:
-	electric_response(light_info,lightinfo_size*sizeof(Sqlbuf_t),0x03,FAIL);
+	electric_response(NULL,0,0x03,FAIL);
 	if(CoordiAddr) free(CoordiAddr);
 	if(light_info) free(light_info);
 	if(Recvbuf) free(Recvbuf);

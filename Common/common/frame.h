@@ -46,9 +46,9 @@ void basic_clrstat(UCHAR itf, UCHAR * recv);
 
 #define CC_LOGON_CTRL				0xA1
 #define CC_LOGON_LEN				1
-#define CC_LINE_HEATBEAT				0xA1
-#define CC_LINE_HEATBEAT_LEN			2
-#define CC_LINE_HEATBEAT_DATA			0x02
+#define CC_LINE_HEATBEAT			0xA1
+#define CC_LINE_HEATBEAT_LEN		2
+#define CC_LINE_HEATBEAT_DATA	0x02
 
 
 

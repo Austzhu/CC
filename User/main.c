@@ -55,7 +55,8 @@ pthread_mutex_t mutex_task;
 
  void CC_Init(void)
 {
-	 appitf_init(&g_appity);
+	g_appity.app_Init(&g_appity);
+	//appitf_init(&g_appity);
 	 if( access("cc_corl.db",F_OK)){
 		system("./config/Create_Database.sh &");	//重新建数据库
 		sleep(1);
@@ -86,7 +87,7 @@ static void *RecvInsertQueueThread(void *args)
 {
 	while(1){
 		pthread_mutex_lock(&mutex_task);	//获取task锁
-		RecInsertQueue(CCparamGlobalInfor.ItfWay);
+		g_appity.TopUserInsertQue(&g_appity);
 		pthread_mutex_unlock(&mutex_task);	//解task锁
 		usleep(500000);
 	}
@@ -96,7 +97,7 @@ static void *UserQueProcThread(void *args)
 {
 	while(1){
 		pthread_mutex_lock(&mutex_task);	//获取task锁
-		TopUserQueProc(CCparamGlobalInfor.ItfWay);
+		g_appity.TopUserProcQue(&g_appity);
 		pthread_mutex_unlock(&mutex_task);	//解task锁
 		usleep(250000);
 	}
@@ -108,7 +109,8 @@ int main(int argc,char *argv[])
 	pthread_t thread_Keepalive = -1;
 	pthread_t thread_RecvInsert = -1;
 	pthread_t thread_UserProc = -1;
-	CC_Init();
+
+	g_appity.app_Init(&g_appity);
 	pthread_create(&thread_Keepalive,NULL,KeepaliveThread,NULL);sleep(1);
 	pthread_create(&thread_RecvInsert,NULL,RecvInsertQueueThread,NULL);
 	pthread_create(&thread_UserProc,NULL,UserQueProcThread,NULL);

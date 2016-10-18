@@ -327,7 +327,7 @@ s32 Update_Table(u32 cmd,const char *Condition)
 		case Cmd_Info: 	snprintf(sql,sqlsize,"update %s %s;",Table_Info,Condition);break;
 		default:			debug(DEBUG_sqlite3,"[%s]Can not find the table!\n",__func__);
 			goto out;
-	}		debug(DEBUG_sqlite3,"Sql: %s\n",sql);
+	}		//debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 	/* 准备对象 */
 	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;
@@ -345,7 +345,7 @@ s32 Update_Table(u32 cmd,const char *Condition)
 	if(sql)	free(sql);
 	if (stmt)sqlite3_finalize(stmt);
 	if(db)	sqlite3_close(db);
-	debug(DEBUG_sqlite3,"Update_Table success!\n");
+	//debug(DEBUG_sqlite3,"Update_Table success!\n");
 	return SUCCESS;
  out:
  	if(sql)	free(sql);
@@ -355,6 +355,49 @@ s32 Update_Table(u32 cmd,const char *Condition)
 	return FAIL;
 }
 
+s32 Update_Table_v2(const char *table,const char *Condition)
+{
+	assert_param(Condition,"Update_Table_v2 param 1 err!",FAIL);
+	assert_param(table,"Update_Table_v2 param 2 err!",FAIL);
+
+	sqlite3* db = NULL;
+	sqlite3_stmt* stmt = NULL;
+	char* const sql = calloc(strlen(table) + strlen(Condition) + 12 , sizeof(char));
+	if(!sql) goto out;
+	if( SQLITE_OK != sqlite3_open(Database_Path,&db) ){
+		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		Write_log(err,Asprintf("In %s %s %d:Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
+	}
+	/* 开启外键约束 */
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
+	sprintf(sql,"update %s %s;",table,Condition);
+	printf("SQL:%s\n",sql);
+	/* 准备对象 */
+	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
+		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;
+		Write_log(err,Asprintf("In %s %s %d:Prepare Sqlite fail!",__FILE__,__func__,__LINE__)  );
+		goto out;
+	}
+	/* 执行操作，向数据库里插入数据 */
+	int res = sqlite3_step(stmt);
+	if (SQLITE_DONE != res  ) {
+		debug(DEBUG_sqlite3,"In %s %s %d:Sqlite3_step fail,errno is %d\n",__FILE__,__func__,__LINE__,res);
+		Write_log(err,Asprintf("In %s %s %d:Sqlite3_step fail,errno is %d",__FILE__,__func__,__LINE__,res)  );
+		goto out;
+	 }
+
+	if(sql) free(sql);
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	return SUCCESS;
+ out:
+ 	if(sql) free(sql);
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	debug(DEBUG_sqlite3,"Update_Table fail!\n");
+	return FAIL;
+}
 /**
  *  查询表内容
  *  cmd    	对应的表枚举

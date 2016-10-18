@@ -68,7 +68,6 @@ typedef struct{
 /* 单灯信息记录表（db_info_light） */
 typedef struct {
 	s32 id;				//主键
-	s32 l_id;			//单灯记录表主键
 	s32 Base_Addr;	//单灯地址
 	u32 Warn_flags;	//报警的标志
 	u32 Rate_v;			//额定电压
@@ -119,6 +118,7 @@ extern s32 Insert_Table(u32 cmd, ...);
 extern s32 Insert_Table_v2(const char *sql);
 extern s32 Delete_Table(u32 cmd,const char *Condition);
 extern s32 Update_Table(u32 cmd,const char *Condition);
+extern s32 Update_Table_v2(const char *table,const char *Condition);
 extern s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...);
 extern s32 Select_Table_V2(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...);
 

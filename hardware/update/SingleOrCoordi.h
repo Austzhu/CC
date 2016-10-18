@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:	SingleOrCoordi.h
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年06月02日 星期四 16时46分47秒
  *******************************************************************/
 #ifndef __SingleOrCoordi_h__
@@ -46,7 +46,7 @@ typedef struct{
 	u8 	Single_Addr_H;
 	u8 	Single_Addr_L;
 	u8 	F_Num;		//第几帧数据
-	u8 	__Num;		
+	u8 	__Num;
 	u8 	Data[UPACKSIZE];
 	u8 	CRC16[2];	//低在前，高位在后
 }Package_Data;
@@ -54,7 +54,7 @@ typedef struct{
 extern s32 UpdateThread(void * arg);
 extern void * Updatethread(void *arg);
 extern void *Update_Single_Coordi(void);
-extern void inline GetUpdateInfo(Package_Info *Info);
-extern void inline SetUpdateInfo(Package_Info *Info);
+extern void  GetUpdateInfo(Package_Info *Info);
+extern void  SetUpdateInfo(Package_Info *Info);
 extern void Close_Update(void);
 #endif

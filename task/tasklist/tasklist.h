@@ -1,7 +1,7 @@
 /********************************************************************
 	> File Name:	tasklist.h
 	> Author:		Austzhu
-	> Mail:			153462902@qq.com.com 
+	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年05月30日 星期一 14时15分26秒
  *******************************************************************/
 #ifndef __Tasklist_h__
@@ -9,13 +9,13 @@
 #include "include.h"
 #include "list.h"
 
-#define DATASIZE 				300
+#define DATASIZE 						300
 #define Coordinate_Queue 			0 	//协调器队列，Austzhu 2016.4.13
 #define GPRS_TYPE_QUEUE			1
 #define CC_TYPE_QUEUE   			2
 #define DEVICE485_TYPE_QUEUE 		3
-#define ETH_NET_TYPE_QUEUE 			4
-#define QUEUE_TOTAL_QUANTITY		5
+#define ETH_NET_TYPE_QUEUE 		4
+#define QUEUE_TOTAL_QUANTITY	5
 
 typedef struct task_node {
 	struct list_head  entries;
@@ -66,7 +66,7 @@ enum{
 
 extern s32 TopUserQueProc(u8 itf);
 extern s32 SelctExcuteOrAppend(u8 queuetype,  u32 mode,  u8 tasktype,  u8 tasklevel,  u8 itf);
-extern s32 RecInsertQueue(u8 itf);
+extern s32 RecInsertQueue(void);
 extern s32 TaskGenerateAndAppend(u8 queuetype, u8 *data,u8 tasksource,u8 tasklevel);
 extern s32 SelectNode(struct task_queue *queue,struct task_node *recv,u8 queuetype);
 extern s32 DelTask(struct task_queue *queue,  struct task_node *node,  u8 queuetype);

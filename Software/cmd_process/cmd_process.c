@@ -217,13 +217,17 @@ u32 CallBack_Demand(UCHAR ctrl,UCHAR itf,struct task_node *node)
 u32 CallBack_electric(u8 ctrl,u8 itf,struct task_node *node)
 {
 	assert_param(node,NULL,FAIL);
+
 	switch(node->pakect[2]){
 		case 0x01://单灯，单播查询
 			//return SingleQuery(node);
 		case 0x02://组播查询
 			//return GroupQuery(node);
 		case 0x03: //广播查询
-			return Broadcas_electric(node);
+			if(SUCCESS != Broadcas_electric(~0)){
+				debug(1,"Broadcas_electric error");
+				/* write logs */
+			}
 		default:break;
 	}
 	return SUCCESS;
