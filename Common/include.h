@@ -28,7 +28,6 @@
 #include "debug.h"
 #include "base_type.h"
 #include "frame.h"
-#include "format_exchg.h"
 #include "err_code.h"
 #include "config.h"
 #include "Mstring.h"

@@ -4,13 +4,10 @@
 	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年03月30日 星期三 10时38分34秒
  *******************************************************************/
-
 #ifndef __database_h__
 #define __database_h__
 #include "include.h"
 #include "./include/sqlite3.h"
-
-#define StringSize 	32
 
 #define Table_Single		"db_light"
 #define Table_Coordi 		"db_coordinator"
@@ -19,31 +16,12 @@
 #define Table_Warn		"db_warn"
 #define Table_Info 		"db_info_light"
 
-
-#define Column_Single 	"Wl_Addr,Base_Addr,lt_gid,Coor_id,Map_Addr"
-#define Column_Coordi 	"Wl_Addr,Base_Addr,Coor_gid,CC_id,Map_Addr"
-#define Column_Task	 	"Name,Priority,Start_Date,End_Date,Run_Time,Inter_Time,Type,State"
-#define Column_Tasklist 	"Tk_id,Rank,Cmd,Wait_time"
-#define Column_Warn 	"Add_time,Type,Grade,State,Remark"
-
-#define Get_light_info_count(Column)  Get_CountByColumn(Table_Info,Column)
-#define Get_CountByColumn(table,Column)  Get_CountByCondition(table,Column," ")
-// #define Get_CountByColumn(table,Column)  ({int count;
-// 	Select_Table_V2(Asprintf("select count(%s) from %s;",Column,table), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
 #define Get_CountByCondition(table,Column,Condition) ({ int count;\
-	Select_Table_V2(Asprintf("select count(%s) from %s  %s;",Column,table,Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
-/**
- *  增删改查的命令字段
- */
-typedef enum{
-	Cmd_light		= 0x01,
-	Cmd_coordi	= 0x02,
-	Cmd_task 		= 0x04,
-	Cmd_tasklist	= 0x08,
-	Cmd_warn		= 0x10,
-	Cmd_String	= 0x20,                  //查询的整条语句用字符串传入
-	Cmd_Info,
-} CmdTable_t;
+		g_sqlite.sql_select(Asprintf("select count(%s) from %s  %s;",Column,\
+		table,Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
+
+#define Get_CountByColumn(table,Column)  Get_CountByCondition(table,Column," ")
+#define Get_light_info_count(Column)  Get_CountByColumn(Table_Info,Column)
 
 /* 协调器记录表（db_coordinator） */
 typedef struct{
@@ -85,7 +63,7 @@ typedef struct {
 /* 任务表(db_task) */
 typedef struct{
 	u32 	id;
-	u8	Name[StringSize];	//任务名称
+	u8		Name[32];		//任务名称
 	u32  	Priority; 		//优先级
 	time_t 	Start_Date;		//开始日期
 	time_t	End_Date;		//结束日期
@@ -114,12 +92,16 @@ typedef struct{
 	u8	Remark[48];	//备注
 } Tablewarn_t;
 
-extern s32 Insert_Table(u32 cmd, ...);
-extern s32 Insert_Table_v2(const char *sql);
-extern s32 Delete_Table(u32 cmd,const char *Condition);
-extern s32 Update_Table(u32 cmd,const char *Condition);
-extern s32 Update_Table_v2(const char *table,const char *Condition);
-extern s32 Select_Table(u32 cmd,const char *Column,const char*Condition,...);
-extern s32 Select_Table_V2(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...);
+
+typedef struct sql_t{
+	int (*sql_insert)(const char*);
+	int (*sql_delete)(const char*);
+	int (*sql_update)(const char *table,const char *Condition);
+	int (*sql_select)(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...);
+	int (*sql_init)(struct sql_t*);
+	void (*sql_errmsg)(int);
+} sql_t;
+
+extern sql_t g_sqlite;
 
 #endif

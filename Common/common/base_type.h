@@ -13,38 +13,27 @@
 #ifndef __BASE_TYPE_H__
 #define __BASE_TYPE_H__
 
-#define SCHAR 		char
-#define UCHAR 	unsigned char
-#define CHAR 		char
-#define VCHAR 	volatile unsigned char
-#define SSHORT 	short
-#define USHORT 	unsigned short
-#define VSHORT 	volatile unsigned short
-#define SINT 		int
-#define UINT 		unsigned int
-#define VINT 		volatile unsigned int
-#define VSINT 		volatile signed int
-#define SLONG 	long
-#define ULONG 	unsigned long
-#define VLONG 	volatile unsigned long
-#define INT64 		long long
-#define FLOAT 		float
-#define DOUBALE 	double
+#define _un unsigned
+#define _vol volatile
+#define _con const
 
-typedef char				s8;
-typedef short 				s16;
-typedef int 				s32;
-typedef double 			s64;
-typedef unsigned char 		u8;
-typedef unsigned short 		u16;
-typedef unsigned int 			u32;
-typedef unsigned long			ul32;
-typedef volatile unsigned char 	vu8;
-typedef volatile unsigned short 	vu16;
-typedef volatile unsigned int 		vu32;
-typedef volatile char 			vs8;
-typedef volatile short 			vs16;
-typedef volatile int 			vs32;
+#define s8   char
+#define s16 short
+#define s32 int
+#define s64 double
 
+#define u8    _un char
+#define u16  _un short
+#define u32  _un int
+#define ul32 _un long
+
+#define v8    _vol char
+#define v16  _vol short
+#define v32  _vol int
+#define v64  _vol double
+
+#define vu8    _vol _un char
+#define vu16  _vol _un short
+#define vu32  _vol _un int
 
 #endif

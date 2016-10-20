@@ -14,6 +14,7 @@
 #include "taskque.h"
 #include "ether.h"
 #include "serial.h"
+#include "database.h"
 
 #define Connect_ok		 	 0
 #define Connect_error			-1
@@ -43,6 +44,7 @@ typedef struct appitf_t{
 	Queue_t *Queue;
 	ethernet_t *ethernet;
 	serial_t *Serial;
+	sql_t *sqlite;
 
 	int (*UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*TopUserInsertQue)(struct appitf_t *this);

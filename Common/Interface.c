@@ -228,6 +228,13 @@ static int appitf_init(appitf_t *this)
 		debug(DEBUG_app,"Serial init error! \n");
 		return FAIL;
 	}
+	/* init for sqlite */
+	if(this->sqlite && this->sqlite->sql_init &&\
+		SUCCESS == this->sqlite->sql_init(this->sqlite)){
+	}else{
+		debug(DEBUG_app,"Sqlite init error! \n");
+		return FAIL;
+	}
 
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");
@@ -239,6 +246,7 @@ appitf_t g_appity = {
 	.Queue = &Que,
 	.ethernet = &ethernet,
 	.Serial = &g_serial,
+	.sqlite = &g_sqlite,
 
 	.app_Init = appitf_init,
 	.UID_Check = UID_Check,
