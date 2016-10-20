@@ -52,19 +52,19 @@ typedef struct {
 /* the struct for call back function */
 typedef struct {
 	u8 ctrl;
-	s32 (*pf)(Node_t*node);
+	s32 (*pf)(Node_t*node,void *parent);
 } Proclist_t;
 
 
 /* the class for Queue */
 typedef struct Queue_t{
 	Taskque_t *Que_header;
-	Proclist_t (*process_function)[];
+	void *parent;
 
 	s32 (*Task_Exec)(struct Queue_t*);
 	s32 (*Task_Append)(struct Queue_t*,u32 Que_type,u32 Task_level,void *pakect,int size);
-	s32 (*get_Quetype)(struct Queue_t*,void*package);
-	void (*Que_init) (struct Queue_t*);
+	s32 (*get_Quetype)(struct Queue_t*,u8 ctrl);
+	int (*Que_init) (struct Queue_t*,void *parent);
 	void (*Que_release)(struct Queue_t*);
 } Queue_t;
 

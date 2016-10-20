@@ -19,9 +19,10 @@
 #define SUCCESS 				0X00
 #define FAIL	 				0X01
 #define VALUE_NULL 			0x02
+#define RECV_NULL 			0x04
 #define ERRORS 				0XFF
 #define Open_FAIL 			0XFE
-#define TIME_OUT 			0XFD
+#define TIME_OUT 				0XFD
 #define Update_Pend			0XFC
 #define Pointer_Err			0xFB
 #define Pointer_NULL			0xFA

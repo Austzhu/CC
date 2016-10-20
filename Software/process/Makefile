@@ -1,5 +1,5 @@
 
-COBJS :=cmd_process.o SingleOpt.o Callback_function.o
+COBJS := Callback_function.o process.o
 OBJS += $(COBJS)
 
 all:$(COBJS)

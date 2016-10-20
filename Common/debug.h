@@ -29,7 +29,7 @@ typedef enum{
 #define DEBUG_cc2server 				0 		//cc对服务器应答
 #define DEBUG_reboot 				1 		//重启调试
 #define DEBUG_chktime 				1 		//对时调试
-#define DEBUG_reset 					1 		//复位调试
+
 #define DEBUG_inqTime 				1 		//查询时间命令调试
 #define DEBUG_inqVersion				1		//查询版本号
 #define DEBUG_DIDO 					1 		//DIDO调试
@@ -40,36 +40,16 @@ typedef enum{
 #define DEBUG_loadfile 				1		//加载配置文件调试宏
 #define DEBUG_list 					1
 #define DEBUG_update 				1		//升级程序调试宏
-#define DEBUG_Ethnet 				1 		//网络调试宏
+
 #define DEBUG_DelSql					1
+
+
+
+#define DEBUG_Ethnet 				1 		//网络调试宏
 #define DEBUG_Queue 				1
+#define DEBUG_app 					1
+#define DEBUG_reset 					1
 
-
-
-
-#define DEBUG_LOCAL_ETHNET			0		//网络调试
-#define DEBUG_LOCAL_LINK_METH 			0
-#define DEBUG_LOCAL_FORMAT_CH 			0
-#define DEBUG_LOCAL_TASK 				0
-#define DEBUG_LOCAL_TASK_EXCUT 			0
-#define DEBUG_LOCAL_DATABASE 			0
-#define DEBUG_LOCAL_FILEPARAM_LOAD 		0
-#define DEBUG_LOCAL_BURGLAR 			0
-#define DEBUG_ERR_RECD_ETHNET 			0
-#define DEBUG_ERR_RECD_LINK 			0
-#define DEBUG_ERR_RECD_SERIAL 			1
-#define DEBUG_LOCAL_METTER 			0
-#define DEBUG_LOCAL_DIDO 				0
-#define DEBUG_LOCAL_GLOBAL_INFOR 		1
-#define DEBUG_LOCAL_TIME_TASK 			0
-#define DEBUG_LOCAL_PARAFILE_SAVE 		0
-#define DEBUG_LOCAL_PARA_RECIV 			0
-#define DEBUG_LOCAL_HEATBEAT 			0
-#define DEBUG_LOCAL_CC2SERVER_RIGISTER 		0
-#define DEBUG_LOCAL_CC2SERVER_HEARTBEAT 	0
-#define DEBUG_LOCAL_HEAPMEM_INCREASE 		0
-#define DEBUG_LOCAL_CMD_RESET 			0
-#define DEBUG_LOCAL_GPRS_ATSEND 		0
 
 #if 	MY_DEBUG == 1
 	#define debug(level,fmt,args...)  do{ if(level<=LEVEL) printf(fmt,##args); }while(0)

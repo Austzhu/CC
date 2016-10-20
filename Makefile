@@ -1,5 +1,5 @@
-CC = arm-linux-emfure-gcc
-#CC = arm-linux-gcc
+#CC = arm-linux-emfure-gcc
+CC = arm-linux-gcc
 CFLAGS =  -Wall
 CFLAGS += -Wno-implicit-function-declaration
 #关闭由-O2优化选项带来的"警告"提示
@@ -21,10 +21,8 @@ Rootdir=$(PWD)
 export output CFLAGS Rootdir
 
 #OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
-OBJS_PATH +=./Common/common ./Common ./Common/My_lib ./hardware/coordinate ./hardware/ethernet ./hardware/gprs_ppp 	\
-	./hardware/serial ./Software/analysis ./Software/burglar_alarm ./Software/cc_param ./Software/communication 	\
-	./Software/info_output ./Software/initstart ./Software/link_method ./Software/Log ./Software/meter_crc 		\
-	./Software/cmd_process ./sqlite ./task/tasklist ./task/taskque  ./User ./hardware/update ./task/timertask  ./hardware/Zt_Meter
+OBJS_PATH +=./Common/common ./Common ./Common/My_lib  ./hardware/ethernet  \
+./Software/initstart  ./task/taskque  ./User  ./Software/process ./hardware/serial
 
 
 #包含子目录的工程文件

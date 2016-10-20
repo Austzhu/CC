@@ -5,8 +5,8 @@
 	> Created Time:	2016年05月20日 星期五 12时45分10秒
  *******************************************************************/
 #include "loadfile.h"
-#include "link_method.h"
-GlobalCCparam CCparamGlobalInfor;
+#include "Interface.h"
+//GlobalCCparam CCparamGlobalInfor;
 
 /**
  * 从文件中获取字符串形式的参数
@@ -81,77 +81,68 @@ static s32 AssignmentParam(s8 *filebuf ,void *app)
 	assert_param(filebuf,NULL,FAIL);
 	assert_param(app,NULL,FAIL);
 	appitf_t *pa = app;
-	memset( &CCparamGlobalInfor, 0, sizeof(CCparamGlobalInfor) );
 	/* CCUID */
 	if( SUCCESS != GetHexParam(filebuf,"CCUID",pa->CCUID, sizeof(pa->CCUID)) ){
 		StrToHex(pa->CCUID,(u8*)Default_CCUID, sizeof(pa->CCUID));
 		debug(DEBUG_loadfile,"Get CCUID Failed, Use Default CCUID!\n");
-		Write_log(warring,"Load CCUID error!");
+		//Write_log(warring,"Load CCUID error!");
 	} debug(DEBUG_loadfile,"CCUID:%02X %02X %02X %02X %02X %02X\n",pa->CCUID[0],pa->CCUID[1],pa->CCUID[2],pa->CCUID[3],pa->CCUID[4],pa->CCUID[5]);
 
 	/* ServerIp */
 	if( SUCCESS != GetStringParam(filebuf,"ServerIpaddr",pa->ServerIpaddr)){
 		strcpy(pa->ServerIpaddr,Default_ServerIp);
 		debug(DEBUG_loadfile,"Get ServerIpaddr Failed, Use Default Ip...\n");
-		Write_log(warring,"Load ServerIpaddr error, Use Default Ip...");
+		//Write_log(warring,"Load ServerIpaddr error, Use Default Ip...");
 	}
 	/* Port */
 	if( (pa->ServerPort =  (short)GetIntParam(filebuf,"ServerPort")) == ERRORS){
 		pa->ServerPort = Default_ServerPort;
 		debug(DEBUG_loadfile,"Get ServerPort Failed, Use Default Port...\n");
-		Write_log(warring,"Load ServerPort error, Use Default Port...");
+		//Write_log(warring,"Load ServerPort error, Use Default Port...");
 	}	debug(DEBUG_loadfile,"IP  %s:%d\n",pa->ServerIpaddr,pa->ServerPort);
 
 	/* DebugLevel */
 	if( (pa->DebugLevel = GetIntParam(filebuf,"DebugLevel")) == ERRORS){
 		pa->DebugLevel = Default_debuglevel;
 		debug(DEBUG_loadfile,"Get DebugLevel Failed, Use Default debug level...\n");
-		Write_log(warring,"Load DebugLevel Failed, Use Default debug level...");
+		//Write_log(warring,"Load DebugLevel Failed, Use Default debug level...");
 	}
 
 	/* ControlMethod */
 	if( ERRORS == (pa->ControlMethod = GetIntParam(filebuf,"ControlMethod")) ){
 		pa->ControlMethod = Default_Method;
 		debug(DEBUG_loadfile,"Get ControlMethod Failed, Use Default control Method...\n");
-		Write_log(warring,"Load ControlMethod Failed, Use Default control Method...");
+		//Write_log(warring,"Load ControlMethod Failed, Use Default control Method...");
 	}
 
 	/* ItfWay */
 	if( (pa->ItfWay = GetIntParam(filebuf,"ConnectType")) == ERRORS){
 		pa->ItfWay = Default_ItfWay;
 		debug(DEBUG_loadfile,"Get ItfWay Failed, Use Default itfway...\n");
-		Write_log(warring,"Load ItfWay Failed, Use Default itfway...");
+		//Write_log(warring,"Load ItfWay Failed, Use Default itfway...");
 	}
 
 	/* HeartBCycle */
 	if( (pa->HeartBCycle = GetIntParam(filebuf,"HeartBeatcycle")) == ERRORS){
 		pa->HeartBCycle = Default_HeartBCycle;
 		debug(DEBUG_loadfile,"Get HeartBeatcycle Failed, Use Default HeartBeatcycle...\n");
-		Write_log(warring,"Load HeartBeatcycle Failed, Use Default HeartBeatcycle...");
+		//Write_log(warring,"Load HeartBeatcycle Failed, Use Default HeartBeatcycle...");
 	}
 
 	/* tcp/udp */
 	if((pa->Is_TCP = GetIntParam(filebuf,"Connection")) == ERRORS ){
 		pa->Is_TCP = Default_TCP;
 		debug(DEBUG_loadfile,"Get Connection TCP or UDP Failed, Use TCP...\n");
-		Write_log(warring,"Load Connection TCP or UDP Failed, Use TCP...");
+		//Write_log(warring,"Load Connection TCP or UDP Failed, Use TCP...");
 	}
-
-	memcpy(CCparamGlobalInfor.CCUID,pa->CCUID,sizeof(pa->CCUID));
-	strcpy(CCparamGlobalInfor.ServerIpaddr,pa->ServerIpaddr);
-	CCparamGlobalInfor.ServerPort           = pa->ServerPort;
-	CCparamGlobalInfor.DebugLevel         = pa->DebugLevel;
-	CCparamGlobalInfor.ControlMethod  = pa->ControlMethod;
-	CCparamGlobalInfor.ItfWay                   = pa->ItfWay;
-	CCparamGlobalInfor.HeartBCycle        = pa->HeartBCycle;
-	CCparamGlobalInfor.Is_TCP                   = pa->Is_TCP;
 
 	debug(DEBUG_loadfile,"DebugLevel=%d,ControlMethod=%d,ItfWay=%d,HeartBeatcycle=%d,Connection:%s\n",\
 								pa->DebugLevel,pa->ControlMethod,pa->ItfWay,pa->HeartBCycle,pa->Is_TCP?"TCP":"UDP");
 	return SUCCESS;
 
 }
-#if 1
+
+
 s32 loadParam(void *app)
 {
 	FILE *fp = NULL;
@@ -163,7 +154,7 @@ s32 loadParam(void *app)
 
 	if(fp = fopen("./temp","r") , !fp){
 		debug(DEBUG_loadfile,"%s,%d:open file fail!\n",__func__,__LINE__);
-		Write_log(err,"Open Config file error!");
+		//Write_log(err,"Open Config file error!");
 		return FAIL;
 	}
 	/* 准备好文件大小的缓存区 */
@@ -171,7 +162,7 @@ s32 loadParam(void *app)
 	debug(DEBUG_loadfile,"File size: %d\n",i=ftell(fp));
 	if( filebuf = malloc(i+1), !filebuf){
 		debug(DEBUG_loadfile,"%s,%d:malloc err!\n",__func__,__LINE__);
-		Write_log(err,"malloc for config file buffer fial!");
+		//Write_log(err,"malloc for config file buffer fial!");
 		 return FAIL;
 	}
 	memset(filebuf,0,i+1);
@@ -182,47 +173,11 @@ s32 loadParam(void *app)
  	system("rm -f ./temp");
  	if(SUCCESS != AssignmentParam(filebuf,app)){
  		free(filebuf);
- 		Write_log(err,"get Config error!");
+ 		//Write_log(err,"get Config error!");
  		return FAIL;
  	} free(filebuf);
  	return SUCCESS;
 }
-#else
-s32 loadParam(void *app)
-{
-	FILE *fp = NULL;
-	s8 *filebuf = NULL;
-	u32 i = 0;
-	/* 去除空行和带#号的行 且删除字段里的的空格 */
-	system("grep -v '^$' " FILE_PARAM " | grep -v '^#'  | sed 's/[[:space:]]//g' > temp");
-
-	if(fp = fopen("./temp","r") , !fp){
-		debug(DEBUG_loadfile,"%s,%d:open file fail!\n",__func__,__LINE__);
-		return FAIL;
-	}
-	/* 准备好文件大小的缓存区 */
-	fseek(fp,0,SEEK_END);
-	debug(DEBUG_loadfile,"File size: %d\n",i=ftell(fp));
-	if( filebuf = malloc(i+1), !filebuf){
-		debug(DEBUG_loadfile,"%s,%d:malloc err!\n",__func__,__LINE__);
-		 return FAIL;
-	}
-	memset(filebuf,0,i+1);
- 	fseek(fp,0,SEEK_SET);
- 	i=0;
- 	/* 把文件加载到filebuf中 */
- 	while( !feof(fp) ){filebuf[i++] = fgetc(fp);}
- 	fclose(fp);
- 	system("rm -f ./temp");
-
- 	if(SUCCESS != AssignmentParam(filebuf)){
- 		free(filebuf);
- 		return FAIL;
- 	}
- 	free(filebuf);
- 	return SUCCESS;
-}
-#endif
 
 s32 Replace_char(char*buf, char c,char rc)
 {
@@ -234,6 +189,7 @@ s32 Replace_char(char*buf, char c,char rc)
 }
 
 
+#if 0
 s32 SaveFile(int cmd, const char *Column, const void *Content)
 {
 	char cmdline[128] = {0};
@@ -261,3 +217,4 @@ s32 SaveParam(void)
 	SaveFile(_u8_s,"ServerIpaddr",CCparamGlobalInfor.ServerIpaddr);
 	return SUCCESS;
 }
+#endif

@@ -11,38 +11,23 @@
 *******************************************************************/
 #ifndef   __Interface_h__
 #define  __Interface_h__
-#include "base_type.h"
 #include "taskque.h"
+#include "ether.h"
+#include "serial.h"
 
-#define moffsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-
-#define mcontainer_of(ptr, type, member) 	{  const typeof( ((type *)0)->member ) *__mptr = (ptr);\
-						(type *)( (char *)__mptr - moffsetof(type,member) );   }
-
-
-typedef struct {
-	int sock_ether;				//网络连接的socket
-	int ether_recvlen;			//缓存数据的长度
-	int ether_recvhead;			//缓存数据中的读指针偏移量
-	u8 ether_recvbuf[2048];		//数据的缓存区
-	int (*connect)(void);			//链接建立
-	int (*disconnect)(void);			//断开链接
-	int (*logon)(void);			//登陆
-	int (*linestat)(void);			//链路状态
-	int (*rawsend)(UCHAR *buf, int len);   	//发送函数
-	int (*getchar)(UCHAR *buf);    		//接收函数
-	int (*keepalive)(void);			//心跳
-} ethernet_t;
-
-typedef struct {
-
-} Serial_t;
-
-
+#define Connect_ok		 	 0
+#define Connect_error			-1
+#define HeartBeat_ok		 	 0
+#define HeartBeat_error		-1
+typedef enum {
+	ether_net = 1,
+	gprs,
+	zigbee,
+}ItfWay_t;
 
 typedef struct appitf_t{
 	u8 CCUID[6];				//集中控制器的UID
-	u8 DebugLevel;			//调试等级
+	u8 DebugLevel;				//调试等级
 	u8 ControlMethod;			//控制模式
 	s8 ServerIpaddr[32];		//服务器IP
 	u16 ServerPort;			//服务器的端口
@@ -52,15 +37,26 @@ typedef struct appitf_t{
 	u8 KwhReadInter;			//电量的读取间隔
 	u8 Is_TCP;					//与服务器的连接方式
 
+	int Connect_status;			//网络连接状态
+	int HeartBeat_status;		//心跳状态
+
 	Queue_t *Queue;
+	ethernet_t *ethernet;
+	serial_t *Serial;
+
 	int (*UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*TopUserInsertQue)(struct appitf_t *this);
 	int (*TopUserProcQue)(struct appitf_t *this);
+	int (*TopUserKeepalive)(struct appitf_t *this);
+	int (*TopUserRecvPackage)(struct appitf_t *this,u8*,int);
 	int (*app_Init)(struct appitf_t *this);
 	int (*app_relese)(struct appitf_t*);
+	int (*packagecheck)(void*);
+	void (*msleep)(u32);
+	void (*usleep)(u32);
 } appitf_t;
 
 extern appitf_t g_appity;
-extern int appitf_init(appitf_t *this);
+
 
 #endif

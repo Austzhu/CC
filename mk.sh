@@ -12,11 +12,9 @@ DirHard=$Topdir/hardware
 DirSoft=$Topdir/Software
 
 #增加c语言的头文件搜索路径
-CPATH=$Topdir/Common:$Topdir/Common/My_lib:$Topdir/Common/common:$Topdir/config:$DirHard/coordinate:\
-$DirHard/ethernet:$DirHard/gprs_ppp:$DirHard/serial:$DirSoft/analysis:$DirSoft/burglar_alarm:$DirSoft/cc_param:\
-$DirSoft/cmd_process:$DirSoft/communication:$DirSoft/info_output:$DirSoft/initstart:$DirSoft/link_method:$DirHard/Zt_Meter:\
-$DirSoft/Log:$DirSoft/meter_crc:$Topdir/sqlite:$Topdir/task/tasklist:$Topdir/task/taskque:$Topdir/task/timertask:$DirHard/update:\
-$Topdir/User:$Topdir/version:$CPATH
+CPATH=$Topdir/Common:$Topdir/Common/My_lib:$Topdir/Common/common:\
+$Topdir/config:$DirHard/ethernet:$DirSoft/process:$DirSoft/initstart:$DirSoft/Log:\
+$Topdir/sqlite:$Topdir/task/taskque:$Topdir/User:$Topdir/version:$DirHard/serial:$CPATH
 
 export CPATH
 
