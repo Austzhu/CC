@@ -16,12 +16,16 @@
 #define Table_Warn		"db_warn"
 #define Table_Info 		"db_info_light"
 
-#define Get_CountByCondition(table,Column,Condition) ({ int count;\
-		g_sqlite.sql_select(Asprintf("select count(%s) from %s  %s;",Column,\
+#define Get_CountByCondition(ptr,table,Column,Condition) ({ int count;\
+		ptr->sql_select(Asprintf("select count(%s) from %s  %s;",Column,\
 		table,Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
 
-#define Get_CountByColumn(table,Column)  Get_CountByCondition(table,Column," ")
+#define Get_CountByColumn(table,Column)  Get_CountByCondition(&g_sqlite,table,Column," ")
 #define Get_light_info_count(Column)  Get_CountByColumn(Table_Info,Column)
+
+#define sql_isexist(ptr,table,Condition)  ( {int Addr = 0;\
+	ptr->sql_select(Asprintf("select Base_Addr from %s where Base_Addr=%d;",\
+		table,Condition), (char*)&Addr,sizeof(int),1,0) == SUCCESS ? Addr : 0;})
 
 /* 协调器记录表（db_coordinator） */
 typedef struct{
@@ -96,8 +100,8 @@ typedef struct{
 typedef struct sql_t{
 	int (*sql_insert)(const char*);
 	int (*sql_delete)(const char*);
-	int (*sql_update)(const char *table,const char *Condition);
-	int (*sql_select)(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...);
+	int (*sql_update)(const char*,const char*);
+	int (*sql_select)(const char*, char*,int,int,int,...);
 	int (*sql_init)(struct sql_t*);
 	void (*sql_errmsg)(int);
 } sql_t;

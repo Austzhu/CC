@@ -14,23 +14,19 @@
 
  static void *KeepaliveThread(void *args)
  {
- 	while(1){
- 		g_appity.TopUserKeepalive(&g_appity);
- 	}
+ 	while(1) g_appity.TopUserKeepalive(&g_appity);
  	return NULL;
  }
+
 static void *RecvInsertQueueThread(void *args)
 {
-	while(1){
-		g_appity.TopUserInsertQue(&g_appity);
-	}
+	while(1) g_appity.TopUserInsertQue(&g_appity);
 	return NULL;
 }
+
 static void *UserQueProcThread(void *args)
 {
-	while(1){
-		g_appity.TopUserProcQue(&g_appity);
-	}
+	while(1) g_appity.TopUserProcQue(&g_appity);
 	return NULL;
 }
 

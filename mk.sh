@@ -14,7 +14,8 @@ DirSoft=$Topdir/Software
 #增加c语言的头文件搜索路径
 CPATH=$Topdir/Common:$Topdir/Common/My_lib:$Topdir/Common/common:\
 $Topdir/config:$DirHard/ethernet:$DirSoft/process:$DirSoft/initstart:$DirSoft/Log:\
-$Topdir/sqlite:$Topdir/task/taskque:$Topdir/User:$Topdir/version:$DirHard/serial:$CPATH
+$Topdir/sqlite:$Topdir/task/taskque:$Topdir/User:$Topdir/version:$DirHard/serial:\
+$DirHard/single:$CPATH
 
 export CPATH
 

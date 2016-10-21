@@ -1,4 +1,5 @@
 #include "Callback_function.h"
+#include "Interface.h"
 
 #define MakeShortResponse(pbuf,len,cmd,subcmd,result) do{\
 	pbuf[0] = 0x52;pbuf[1] = len+2;pbuf[2] = 0x80;pbuf[3] = len;\
@@ -98,10 +99,39 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 	}
 	return SUCCESS;
 }
+
 s32 CallBack_Config(Node_t *node,void *parent)
 {
 	assert_param(node,NULL,FAIL);
 	assert_param(parent,NULL,FAIL);
+	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
+	appitf_t *_parent = (appitf_t*)parent;
+	u8 AckBuffer[64] = {0};
+	int res = -1;
+
+	switch(package->data[0]){
+		case 0x01:break;
+		case 0x05:
+			res = SingleConfig(package->data +1,_parent);
+			MakeShortResponse(AckBuffer,03,0xA3,0x05,res);
+			Append2Queue(AckBuffer,_parent->Queue);
+			if(SUCCESS == res){
+				debug(DEBUG_reset,"Single config success!\n");
+			}else debug(DEBUG_reset,"Single config error!\n");
+			break;
+		case 0x06:
+			res = CoordiConfig(package->data +1,_parent);
+			MakeShortResponse(AckBuffer,03,0xA3,0x05,res);
+			Append2Queue(AckBuffer,_parent->Queue);
+			if(SUCCESS == res){
+				debug(DEBUG_reset,"Coordinate config success!\n");
+			}else debug(DEBUG_reset,"Coordinate config error!\n");
+			break;
+		case 0x07:break;
+		case 0x08:break;
+		case 0x09:break;
+		default:break;
+	}
 	return SUCCESS;
 }
 
@@ -132,10 +162,8 @@ s32 CallBack_answer(Node_t *node,void*parent)
 			return SUCCESS;
 		default:break;
 	}
-
-	int size = package->len + 2;
 	printf("node data:");
-	for(int i=0;i< size;++i){
+	for(int i=0,size=package->len + 2;i< size;++i){
 		printf("%02x ",node->package[i]);
 	}printf("\n");
 	return SUCCESS;

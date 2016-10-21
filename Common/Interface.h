@@ -15,6 +15,8 @@
 #include "ether.h"
 #include "serial.h"
 #include "database.h"
+#include "single.h"
+
 
 #define Connect_ok		 	 0
 #define Connect_error			-1
@@ -25,6 +27,8 @@ typedef enum {
 	gprs,
 	zigbee,
 }ItfWay_t;
+
+enum {crc_get,crc_check,};
 
 typedef struct appitf_t{
 	u8 CCUID[6];				//集中控制器的UID
@@ -45,6 +49,7 @@ typedef struct appitf_t{
 	ethernet_t *ethernet;
 	serial_t *Serial;
 	sql_t *sqlite;
+	Single_t *single;
 
 	int (*UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*TopUserInsertQue)(struct appitf_t *this);
@@ -54,6 +59,8 @@ typedef struct appitf_t{
 	int (*app_Init)(struct appitf_t *this);
 	int (*app_relese)(struct appitf_t*);
 	int (*packagecheck)(void*);
+	int (*Crc16)(int,u8*,u8*,int);
+	char* (*hex2str)(char*dest,const u8 *src,int size);
 	void (*msleep)(u32);
 	void (*usleep)(u32);
 } appitf_t;

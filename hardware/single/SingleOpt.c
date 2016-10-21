@@ -388,7 +388,7 @@ s32 ResponsePromptly(u8 ctrl,u8 SubCMD ,u8 Resault,int Bufferlen)
 	return i;
 }
 
-s32 SingleOpen(struct task_node *1)
+s32 SingleOpen(struct task_node *node)
 {
 	int Repeat = 3;
 	Pag_Single Single;

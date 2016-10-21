@@ -172,7 +172,6 @@ static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 
 	int fd = this->serialfd[port];
 	if( fd < 0 )  return FAIL;
-
 	fd_set fdset;
 	struct timeval tv;
 	int Read_Cnt = 0;
@@ -207,15 +206,14 @@ static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 static int serial_Init(serial_t *this,u32 port,...)
 {
 	assert_param(this,NULL,FAIL);
-
 	int speed = 0;
 	va_list 	arg_ptr;
 	va_start(arg_ptr,port);
 	memset(this->serialfd,-1,sizeof(this->serialfd));
-	for(int i=0; i<SerialMax; ++i){
+	for(int i=0; i<SerialMax; ++i,port >>= 1){
 		if(!(port&0x01)) continue;
 		if(this->serial_open && this->serial_config && \
-			SUCCESS ==this->serial_open(this,i) ){
+			SUCCESS == this->serial_open(this,i) ){
 			speed = va_arg(arg_ptr, int);
 			if(SUCCESS != this->serial_config(this,i,speed,8,1,'N')) goto out;
 		}else
@@ -233,7 +231,11 @@ static void serial_Relese(serial_t *this)
 	for(int i=0;i<SerialMax;++i)
 		this->serial_close(this,i);
 }
-
+static void serial_flush(serial_t *this,int port)
+{
+	if(port < 0 || port >SerialMax) return;
+	tcflush(this->serialfd[port],TCIFLUSH|TCOFLUSH);
+}
 serial_t g_serial = {
 	.serial_init = serial_Init,
 	.serial_open = serial_Open,
@@ -242,6 +244,7 @@ serial_t g_serial = {
 	.serial_recv = serial_Recv,
 	.serial_send = serial_Send,
 	.serial_relese = serial_Relese,
+	.serial_flush = serial_flush,
 };
 
 
