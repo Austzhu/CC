@@ -21,9 +21,8 @@ Rootdir=$(PWD)
 export output CFLAGS Rootdir
 
 #OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
-OBJS_PATH +=./Common/common ./Common ./Common/My_lib  ./hardware/ethernet  \
-./Software/initstart  ./task/taskque  ./User  ./Software/process ./hardware/serial ./sqlite \
-./hardware/single
+OBJS_PATH +=./Common/common ./Common  ./hardware/ethernet ./Software/initstart \
+./task/taskque  ./User  ./Software/process ./hardware/serial ./sqlite ./hardware/single ./hardware/Meter
 
 
 #包含子目录的工程文件

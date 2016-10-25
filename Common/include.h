@@ -30,7 +30,6 @@
 #include "frame.h"
 #include "err_code.h"
 #include "config.h"
-#include "Mstring.h"
 #include "version.h"
 #include "common.h"
 #include "log.h"

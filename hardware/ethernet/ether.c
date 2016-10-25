@@ -41,7 +41,7 @@ static int ether_Connect(ethernet_t *this)
 	struct timeval timeo;
 	this->ether_close(this);
 	appitf_t *parent = (appitf_t *)this->parent;
-	if(parent->Is_TCP){
+	if(parent->param.Is_TCP){
 		debug(DEBUG_Ethnet,"Connect for TCP!\n");
 		this->ether_sock = socket(AF_INET, SOCK_STREAM, 0);
 	}else{
@@ -54,8 +54,8 @@ static int ether_Connect(ethernet_t *this)
 	memset(&addr, 0, sizeof(addr));
 	memset(&timeo,0,sizeof(timeo));
 	addr.sin_family = AF_INET;
-	addr.sin_port 	 = htons(parent->ServerPort);
-	addr.sin_addr.s_addr = inet_addr(parent->ServerIpaddr);
+	addr.sin_port 	 = htons(parent->param.ServerPort);
+	addr.sin_addr.s_addr = inet_addr(parent->param.ServerIpaddr);
 
 	timeo.tv_sec = ether_SocketTimeout; 	 // 30 seconds 超时
 	setsockopt(this->ether_sock, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
@@ -100,7 +100,7 @@ static int ether_HeartBeat(ethernet_t *this)
 	u8 *heart = heartbuf;
 
 	*heart++ = 0x68;
-	memcpy(heart,((appitf_t*)this->parent)->CCUID,6);
+	memcpy(heart,((appitf_t*)this->parent)->param.CCUID,6);
 	heart += 6;
 	*heart++ = 0x68;
 	*heart++ = 0xA1;
@@ -119,7 +119,7 @@ static int ether_logon(ethernet_t *this)
 	u8 *logon = logonBuf;
 
 	*logon++ = 0x68;
-	memcpy(logon,((appitf_t*)this->parent)->CCUID,6);
+	memcpy(logon,((appitf_t*)this->parent)->param.CCUID,6);
 	logon += 6;
 	*logon++ = 0x68;
 	*logon++ = 0xA1;

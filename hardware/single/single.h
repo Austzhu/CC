@@ -14,7 +14,9 @@
 #include "include.h"
 #include "taskque.h"
 
-#define SingleHeader  0xFF
+#define GetSingleCunt 30
+#define Query_res 0x80
+#define Query_nores 0
 
 typedef struct {
 	u8	Header;
@@ -27,20 +29,19 @@ typedef struct {
 	u8 	Crc16[2];
 }light_t;
 
-typedef enum {
-	cfg_sinMap,
-	cfg_sinGroup,
-	cfg_coorMap,
-}sin_cfg_t;
+typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;
+typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;
+typedef enum {Query_elec,Query_stat } Query_t;
 
 
 typedef struct Single_t{
 	void *parent;
-	int (*sin_open)(struct Single_t*,Node_t*);
-	int (*sin_close)(struct Single_t*,Node_t*);
+	int (*sin_open)(struct Single_t*,int,u32,u32);
+	int (*sin_close)(struct Single_t*,int,u32);
+	int (*sin_reply)(struct Single_t*,int,int,int);
 	int (*sin_config)(struct Single_t*,sin_cfg_t,void*);
-	int (*sin_Query)(struct Single_t*,Node_t*);
-	int (*sin_Inquire)(struct Single_t*);
+	int (*sin_Queryelectric)(struct Single_t*,int,u32);
+	int (*sin_Querystatus)(struct Single_t*,int,u32);
 	int (*sin_RecvPackage)(struct Single_t*,void*,int,int);
 	int (*sin_init)(struct Single_t*,void*);
 	void (*Display)(const char*,void*,int);

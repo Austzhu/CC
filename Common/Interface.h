@@ -16,7 +16,9 @@
 #include "serial.h"
 #include "database.h"
 #include "single.h"
-
+#ifdef Config_Meter
+#include "Meter.h"
+#endif
 
 #define Connect_ok		 	 0
 #define Connect_error			-1
@@ -30,7 +32,7 @@ typedef enum {
 
 enum {crc_get,crc_check,};
 
-typedef struct appitf_t{
+typedef struct{
 	u8 CCUID[6];				//集中控制器的UID
 	u8 DebugLevel;				//调试等级
 	u8 ControlMethod;			//控制模式
@@ -41,7 +43,10 @@ typedef struct appitf_t{
 	u8 KwhSaveDay;			//电路保存天数
 	u8 KwhReadInter;			//电量的读取间隔
 	u8 Is_TCP;					//与服务器的连接方式
+} param_t;
 
+typedef struct appitf_t{
+	param_t param;
 	int Connect_status;			//网络连接状态
 	int HeartBeat_status;		//心跳状态
 
@@ -50,6 +55,9 @@ typedef struct appitf_t{
 	serial_t *Serial;
 	sql_t *sqlite;
 	Single_t *single;
+	#ifdef Config_Meter
+	Meter_t *meter;
+	#endif
 
 	int (*UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*TopUserInsertQue)(struct appitf_t *this);
@@ -60,6 +68,8 @@ typedef struct appitf_t{
 	int (*app_relese)(struct appitf_t*);
 	int (*packagecheck)(void*);
 	int (*Crc16)(int,u8*,u8*,int);
+	int (*Crc16_HL)(int,u8*,u8*,int);
+	u8* (*str2hex)(u8*,const char*);
 	char* (*hex2str)(char*dest,const u8 *src,int size);
 	void (*msleep)(u32);
 	void (*usleep)(u32);

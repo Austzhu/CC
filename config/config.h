@@ -10,11 +10,12 @@
 #define Config_Log
 #define Config_NewProtocol
 #define Config_EC_6018
+#define Config_Meter
 
 #define COM_485 		1		//和协调器通讯的串口
 #define COM_DIDO	3		//和扩展DIDO通讯的串口
 
-#define PWMmax 		0x1D	//PWM的峰值
+#define PeakPwm 		0x1D	//PWM的峰值
 //#define Config_PWM_ 		//pwm的正负，
 //#define MC_ARM335X		//新开发板串口支持
 

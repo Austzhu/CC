@@ -20,12 +20,13 @@
 		ptr->sql_select(Asprintf("select count(%s) from %s  %s;",Column,\
 		table,Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
 
-#define Get_CountByColumn(table,Column)  Get_CountByCondition(&g_sqlite,table,Column," ")
-#define Get_light_info_count(Column)  Get_CountByColumn(Table_Info,Column)
+#define Get_CountByColumn(ptr,table,Column)  Get_CountByCondition(ptr,table,Column," ")
+#define Get_light_info_count(ptr,Column)  Get_CountByColumn(ptr,Table_Info,Column)
 
 #define sql_isexist(ptr,table,Condition)  ( {int Addr = 0;\
 	ptr->sql_select(Asprintf("select Base_Addr from %s where Base_Addr=%d;",\
 		table,Condition), (char*)&Addr,sizeof(int),1,0) == SUCCESS ? Addr : 0;})
+
 
 /* 协调器记录表（db_coordinator） */
 typedef struct{

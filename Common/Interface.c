@@ -26,15 +26,8 @@ static s32 UID_Check(appitf_t *this,void *r_uid)
 	assert_param(this,NULL,FAIL);
 	assert_param(r_uid,NULL,FAIL);
 	u8 *pr_uid = r_uid;
-	for(int i=0;i<6;++i){
-		if( pr_uid[i]   != this->CCUID[i] ){
-			debug(DEBUG_TaskAppend,"Global UID:\t%02x %02x %02x %02x %02x %02x\n",
-				this->CCUID[0],this->CCUID[1],this->CCUID[2],this->CCUID[3],this->CCUID[4],this->CCUID[5]);
-			debug(DEBUG_TaskAppend,"Recv UID:\t%02x %02x %02x %02x %02x %02x\n",
-											pr_uid[0],pr_uid[1],pr_uid[2],pr_uid[3],pr_uid[4],pr_uid[5]);
-			return FAIL;
-		}
-	}
+	for(int i=0;i<6;++i)
+		if( pr_uid[i] != this->param.CCUID[i])  return FAIL;
 	return SUCCESS;
 }
 
@@ -90,11 +83,11 @@ static int TopUser_Keepalive(appitf_t *this)
 		if(this->ethernet && this->ethernet->ether_heartbeat && \
 			SUCCESS != this->ethernet->ether_heartbeat(this->ethernet))
 			return FAIL;
-		this->msleep(1000*this->HeartBCycle);
+		this->msleep(1000*this->param.HeartBCycle);
 	}else{
 		this->Connect_status = Connect_error;
 		/* 判断是否使用网络方式 */
-		if(this->ItfWay == ether_net){
+		if(this->param.ItfWay == ether_net){
 			/* connect to server */
 			if(this->ethernet && this->ethernet->ether_connect)
 				this->Connect_status = this->ethernet->ether_connect(this->ethernet) == \
@@ -105,7 +98,7 @@ static int TopUser_Keepalive(appitf_t *this)
 				this->ethernet->ether_heartbeat /* function HeartBeat is not null */ && \
 				SUCCESS == this->ethernet->ether_logon(this->ethernet) /* log on success? */&&\
 				SUCCESS == this->ethernet->ether_heartbeat(this->ethernet) ){
-				this->msleep(1000*this->HeartBCycle);
+				this->msleep(1000*this->param.HeartBCycle);
 				return SUCCESS;
 			}else{
 				err_Print(1,"ethernet logon or heartbeat error!\n");
@@ -211,13 +204,13 @@ static int appitf_init(appitf_t *this)
 
 	/* init for Queue */
 	TopUser_Init(this,Queue,Que_init,"Queue init error!",this);
-	switch(this->ItfWay){
+	switch(this->param.ItfWay){
 		case ether_net: 	/* init for ethernet */
 			TopUser_Init(this,ethernet,ether_init,"ethernet init error!",this);
 			break;
 		case gprs:break;
 		case zigbee:break;
-		default:debug(DEBUG_app,"Unknow communication %d.\n",this->ItfWay); return FAIL;
+		default:debug(DEBUG_app,"Unknow communication %d.\n",this->param.ItfWay); return FAIL;
 	}
 	/* init for serial */
 	TopUser_Init(this,Serial,serial_init,"Serial init error!",(0x01<<COM_485) | (0x01<<COM_DIDO),9600,9600);
@@ -225,6 +218,10 @@ static int appitf_init(appitf_t *this)
 	TopUser_Init(this,sqlite,sql_init,"Sqlite init error!");
 	/* init for single */
 	TopUser_Init(this,single,sin_init,"Single init error!",this);
+	/* init for dido */
+	#ifdef Config_Meter
+	TopUser_Init(this,meter,meter_init,"meter init error!",this);
+	#endif
 
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");
@@ -246,6 +243,30 @@ static char* Hex2Str(char*dest,const u8 *src,int size)
 	return dest;
 }
 
+static u8 *Str2Hex(u8 *dest,const char *src)
+{
+	assert_param(dest,NULL,NULL);
+	assert_param(src,NULL,NULL);
+
+	int size = strlen(src);
+	u8 s1 = 0,s2 = 0;
+	u8 *pdest = dest;
+	for(int i=0,len=size/2;i<len;++i){
+		s1 = toupper(src[2*i]) - '0';
+		s2 = toupper(src[2*i+1])-'0';
+		s1 -= s1 > 9 ? 7 : 0;
+		s2 -= s2 > 9 ? 7 : 0;
+		*pdest++ =  (s1<<4) | s2;
+	}
+	if(size%2){
+		s1 = toupper(*(src+size-1)) - '0';
+		s1 -= s1 > 9 ? 7 : 0;
+		*pdest = s1;
+	}
+	return dest;
+}
+
+
 extern int crc16_checkout(u8*,u8*,int);
 extern int Crc16(u8*,u8*,int);
 
@@ -257,12 +278,28 @@ static int get_check(int cmd,u8*crc,u8 *pMessage,int len)
 	Crc16(crc,pMessage,len) : crc16_checkout(crc,pMessage,len);
 }
 
+static int get_checkhl(int cmd,u8 *crc, u8 *message, int nLen)
+{
+	u8 _crc[2] = {0};
+	Crc16(_crc,message,nLen);
+
+	if(cmd == crc_get){
+		crc[0] = _crc[1];crc[1] = _crc[0];
+		return SUCCESS;
+	}
+	/* compare crc */
+	return (_crc[0] == crc[1] && _crc[1] == crc[0] ) ? SUCCESS : FAIL;
+}
+
 appitf_t g_appity = {
 	.Queue = &Que,
 	.ethernet = &ethernet,
 	.Serial = &g_serial,
 	.sqlite = &g_sqlite,
 	.single = &g_single,
+	#ifdef Config_Meter
+	.meter = &g_meter,
+	#endif
 
 	.app_Init = appitf_init,
 	.UID_Check = UID_Check,
@@ -274,7 +311,9 @@ appitf_t g_appity = {
 	.usleep = TopUser_usleep,
 	.msleep = TopUser_msleep,
 	.hex2str = Hex2Str,
+	.str2hex = Str2Hex,
 	.Crc16 = get_check,
+	.Crc16_HL = get_checkhl,
 };
 
 

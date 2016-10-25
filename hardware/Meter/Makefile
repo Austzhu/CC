@@ -1,8 +1,8 @@
-COBJS :=Zt_Meter.o
+COBJS :=Meter.o
 OBJS += $(COBJS)
 
 all:$(COBJS)
 
 %.o:%.c
-	@$(CC) -c $<  $(CFLAGS) $(DFLAGS) -o $(Rootdir)/$(output)/$@ 
+	@$(CC) -c $<  $(CFLAGS) $(DFLAGS) -o $(Rootdir)/$(output)/$@
 $(COBJS):

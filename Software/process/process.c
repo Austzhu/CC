@@ -115,8 +115,8 @@ int SingleConfig(u8 *package,appitf_t *app)
 			"Coor_id,Map_Addr)  values(%d,0x%04X,%d,%d,%d);",tab_single.Wl_Addr,\
 			tab_single.Base_Addr,tab_single.lt_gid,tab_single.Coor_id,tab_single.Map_Addr));
 		if(SUCCESS == res)
-			res = app->sqlite->sql_insert(Asprintf("insert into db_info_light(Base_Addr,Warn_flags) "\
-				"values(0x%04X,0);",tab_single.Base_Addr));
+			res = app->sqlite->sql_insert(Asprintf("insert into db_info_light(Base_Addr) "\
+				"values(0x%04X);",tab_single.Base_Addr));
 		if(SUCCESS != res)
 			app->sqlite->sql_delete(Asprintf("delete from db_light where Base_Addr=%d;",tab_single.Base_Addr));
 	}

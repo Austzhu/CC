@@ -172,6 +172,7 @@ static int sql_update(const char *table,const char *Condition)
 	/* 开启外键约束 */
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
 	sprintf(sql,"update %s %s;",table,Condition);
+	//debug(1,"Sql:%s\n",sql);
 	/* 准备对象 */
 	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;

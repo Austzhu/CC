@@ -12,7 +12,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#define MessageBuffersize 256
+#define MessageBuffersize 512
 /* 检查参数指针是否为NULL,为NULL则退出函数 */
 #define assert_param(expr,Message,t)	do{ \
 	if(!expr) {  if(Message){  printf("%s,%d:%s\n",__FILE__,__LINE__,Message? Message:"NULL" ); }  return t; } \

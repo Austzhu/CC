@@ -6,7 +6,29 @@
  *******************************************************************/
 #include "loadfile.h"
 #include "Interface.h"
-//GlobalCCparam CCparamGlobalInfor;
+
+static char *Mstrcpy(char*dest,const char *src,const char EOB)
+{
+	if(!dest || !src ) return NULL;
+	char *Pdest = dest;
+	while((*dest++ = *src++) != EOB);
+	*--dest = '\0';
+	return Pdest;
+}
+
+static u8* StrToHex(u8 *pbDest, u8 *pbSrc, int nLen)
+{
+	u8 s1,s2;
+	for (int i=0; i<nLen; i++){
+		s1 = toupper(pbSrc[2*i]) - '0';
+		s2 = toupper(pbSrc[2*i+1])-'0';
+		s1 -= s1>9 ? 7:0;
+		s2 -= s2>9 ? 7:0;
+		pbDest[i] = (s1<<4) | s2;
+	}
+	return pbDest;
+}
+
 
 /**
  * 从文件中获取字符串形式的参数
@@ -82,64 +104,38 @@ static s32 AssignmentParam(s8 *filebuf ,void *app)
 	assert_param(app,NULL,FAIL);
 	appitf_t *pa = app;
 	/* CCUID */
-	if( SUCCESS != GetHexParam(filebuf,"CCUID",pa->CCUID, sizeof(pa->CCUID)) ){
-		StrToHex(pa->CCUID,(u8*)Default_CCUID, sizeof(pa->CCUID));
-		debug(DEBUG_loadfile,"Get CCUID Failed, Use Default CCUID!\n");
-		//Write_log(warring,"Load CCUID error!");
-	} debug(DEBUG_loadfile,"CCUID:%02X %02X %02X %02X %02X %02X\n",pa->CCUID[0],pa->CCUID[1],pa->CCUID[2],pa->CCUID[3],pa->CCUID[4],pa->CCUID[5]);
-
+	if( SUCCESS != GetHexParam(filebuf,"CCUID",pa->param.CCUID, sizeof(pa->param.CCUID)) )
+		StrToHex(pa->param.CCUID,(u8*)Default_CCUID, sizeof(pa->param.CCUID));
 	/* ServerIp */
-	if( SUCCESS != GetStringParam(filebuf,"ServerIpaddr",pa->ServerIpaddr)){
-		strcpy(pa->ServerIpaddr,Default_ServerIp);
-		debug(DEBUG_loadfile,"Get ServerIpaddr Failed, Use Default Ip...\n");
-		//Write_log(warring,"Load ServerIpaddr error, Use Default Ip...");
-	}
+	if( SUCCESS != GetStringParam(filebuf,"ServerIpaddr",pa->param.ServerIpaddr))
+		strcpy(pa->param.ServerIpaddr,Default_ServerIp);
 	/* Port */
-	if( (pa->ServerPort =  (short)GetIntParam(filebuf,"ServerPort")) == ERRORS){
-		pa->ServerPort = Default_ServerPort;
-		debug(DEBUG_loadfile,"Get ServerPort Failed, Use Default Port...\n");
-		//Write_log(warring,"Load ServerPort error, Use Default Port...");
-	}	debug(DEBUG_loadfile,"IP  %s:%d\n",pa->ServerIpaddr,pa->ServerPort);
-
+	if( (pa->param.ServerPort =  (short)GetIntParam(filebuf,"ServerPort")) == ERRORS)
+		pa->param.ServerPort = Default_ServerPort;
 	/* DebugLevel */
-	if( (pa->DebugLevel = GetIntParam(filebuf,"DebugLevel")) == ERRORS){
-		pa->DebugLevel = Default_debuglevel;
-		debug(DEBUG_loadfile,"Get DebugLevel Failed, Use Default debug level...\n");
-		//Write_log(warring,"Load DebugLevel Failed, Use Default debug level...");
-	}
-
+	if( (pa->param.DebugLevel = GetIntParam(filebuf,"DebugLevel")) == ERRORS)
+		pa->param.DebugLevel = Default_debuglevel;
 	/* ControlMethod */
-	if( ERRORS == (pa->ControlMethod = GetIntParam(filebuf,"ControlMethod")) ){
-		pa->ControlMethod = Default_Method;
-		debug(DEBUG_loadfile,"Get ControlMethod Failed, Use Default control Method...\n");
-		//Write_log(warring,"Load ControlMethod Failed, Use Default control Method...");
-	}
-
+	if( ERRORS == (pa->param.ControlMethod = GetIntParam(filebuf,"ControlMethod")) )
+		pa->param.ControlMethod = Default_Method;
 	/* ItfWay */
-	if( (pa->ItfWay = GetIntParam(filebuf,"ConnectType")) == ERRORS){
-		pa->ItfWay = Default_ItfWay;
-		debug(DEBUG_loadfile,"Get ItfWay Failed, Use Default itfway...\n");
-		//Write_log(warring,"Load ItfWay Failed, Use Default itfway...");
-	}
-
+	if( (pa->param.ItfWay = GetIntParam(filebuf,"ConnectType")) == ERRORS)
+		pa->param.ItfWay = Default_ItfWay;
 	/* HeartBCycle */
-	if( (pa->HeartBCycle = GetIntParam(filebuf,"HeartBeatcycle")) == ERRORS){
-		pa->HeartBCycle = Default_HeartBCycle;
-		debug(DEBUG_loadfile,"Get HeartBeatcycle Failed, Use Default HeartBeatcycle...\n");
-		//Write_log(warring,"Load HeartBeatcycle Failed, Use Default HeartBeatcycle...");
-	}
-
+	if( (pa->param.HeartBCycle = GetIntParam(filebuf,"HeartBeatcycle")) == ERRORS)
+		pa->param.HeartBCycle = Default_HeartBCycle;
 	/* tcp/udp */
-	if((pa->Is_TCP = GetIntParam(filebuf,"Connection")) == ERRORS ){
-		pa->Is_TCP = Default_TCP;
-		debug(DEBUG_loadfile,"Get Connection TCP or UDP Failed, Use TCP...\n");
-		//Write_log(warring,"Load Connection TCP or UDP Failed, Use TCP...");
-	}
+	if((pa->param.Is_TCP = GetIntParam(filebuf,"Connection")) == ERRORS )
+		pa->param.Is_TCP = Default_TCP;
 
-	debug(DEBUG_loadfile,"DebugLevel=%d,ControlMethod=%d,ItfWay=%d,HeartBeatcycle=%d,Connection:%s\n",\
-								pa->DebugLevel,pa->ControlMethod,pa->ItfWay,pa->HeartBCycle,pa->Is_TCP?"TCP":"UDP");
+	debug(DEBUG_loadfile,"CCUID:");
+	for(int i=0;i<6;++i) debug(DEBUG_loadfile,"%02X ",pa->param.CCUID[i]);
+	debug(DEBUG_loadfile,"\n");
+	debug(DEBUG_loadfile,"IP:%s:%d\n",pa->param.ServerIpaddr,pa->param.ServerPort);
+	debug(DEBUG_loadfile,"DebugLevel=%d,ControlMethod=%d,ItfWay=%d,"\
+		"HeartBeatcycle=%d,Connection:%s\n",pa->param.DebugLevel,pa->param.ControlMethod,\
+		pa->param.ItfWay,pa->param.HeartBCycle,pa->param.Is_TCP?"TCP":"UDP");
 	return SUCCESS;
-
 }
 
 
