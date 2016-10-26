@@ -601,8 +601,8 @@ MakeSingleLog	.\Software\Log\log.c	/^static s32 MakeSingleLog(s8 *buf,  Pag_Sing
 MakeSinglePack	.\hardware\single\single.c	32;"	d	file:
 MakeSingleQueryRes	.\hardware\single\single.c	50;"	d	file:
 MakeSingleResponse	.\Software\process\Callback_function.c	16;"	d	file:
-MakeSlave	.\hardware\Meter\Meter.c	25;"	d	file:
-MakeSlaveOpenAll	.\hardware\Meter\Meter.c	30;"	d	file:
+MakeSlave	.\hardware\Meter\Meter.c	18;"	d	file:
+MakeSlaveOpenAll	.\hardware\Meter\Meter.c	23;"	d	file:
 Makelectric_tag	.\hardware\single\single.c	39;"	d	file:
 Makestatus_tag	.\hardware\single\single.c	45;"	d	file:
 Map_Addr	.\sqlite\database.h	/^	u32 Map_Addr;	         \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon23
@@ -677,6 +677,7 @@ Rate_PF	.\sqlite\database.h	/^	u32 Rate_PF;		\/\/功率因数$/;"	m	struct:__ano
 Rate_p	.\sqlite\database.h	/^	u32 Rate_p;		\/\/额定功率$/;"	m	struct:__anon25
 Rate_v	.\sqlite\database.h	/^	u32 Rate_v;			\/\/额定电压$/;"	m	struct:__anon25
 RecvInsertQueueThread	.\User\main.c	/^static void *RecvInsertQueueThread(void *args)$/;"	f	file:
+RecvTimeout	.\hardware\Meter\Meter.c	16;"	d	file:
 RecvTimeout	.\hardware\single\single.c	23;"	d	file:
 Remark	.\sqlite\database.h	/^	u8	Remark[48];	\/\/备注$/;"	m	struct:__anon28
 Replace_char	.\Software\initstart\loadfile.c	/^s32 Replace_char(char*buf, char c,char rc)$/;"	f
@@ -1048,6 +1049,7 @@ SQLITE_WARNING	.\sqlite\include\sqlite3.h	433;"	d
 SQLITE_WARNING_AUTOINDEX	.\sqlite\include\sqlite3.h	507;"	d
 SUCCESS	.\Common\err_code.h	17;"	d
 Select_Task	.\task\taskque\taskque.c	/^static s32 Select_Task(Queue_t *this,Node_t **node)$/;"	f	file:
+SendTimeout	.\hardware\Meter\Meter.c	15;"	d	file:
 SendTimeout	.\hardware\single\single.c	22;"	d	file:
 Serial	.\Common\Interface.h	/^	serial_t *Serial;$/;"	m	struct:appitf_t
 SerialMax	.\hardware\serial\serial.h	16;"	d
@@ -1090,7 +1092,7 @@ Task_level	.\task\taskque\taskque.h	/^enum Task_level{$/;"	g
 Task_level_cc	.\task\taskque\taskque.h	/^	Task_level_cc = 1,$/;"	e	enum:Task_level
 Task_level_device485	.\task\taskque\taskque.h	/^	Task_level_device485,$/;"	e	enum:Task_level
 Task_level_ethernet	.\task\taskque\taskque.h	/^	Task_level_ethernet,$/;"	e	enum:Task_level
-Task_merter	.\hardware\Meter\Meter.c	36;"	d	file:
+Task_merter	.\hardware\Meter\Meter.c	29;"	d	file:
 Task_type	.\task\taskque\taskque.h	/^enum Task_type{$/;"	g
 Task_type_cc	.\task\taskque\taskque.h	/^	Task_type_cc = 1,$/;"	e	enum:Task_type
 Task_type_device485	.\task\taskque\taskque.h	/^	Task_type_device485,$/;"	e	enum:Task_type
@@ -1507,14 +1509,15 @@ memory_used	.\sqlite\include\sqlite3ext.h	/^  sqlite3_int64 (*memory_used)(void)
 meter	.\Common\Interface.h	/^	Meter_t *meter;$/;"	m	struct:appitf_t
 meter_close	.\hardware\Meter\Meter.c	/^static int meter_close(Meter_t *this,u8 slavr_addr, u8 ndo)$/;"	f	file:
 meter_close	.\hardware\Meter\Meter.h	/^	int (*meter_close)(struct Meter_t*,u8 slave_addr, u8 ndo);$/;"	m	struct:Meter_t
+meter_flashopen	.\hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,u8 slave_addr,u8 ndo,int ms);$/;"	m	struct:Meter_t
 meter_init	.\hardware\Meter\Meter.c	/^static int meter_init(Meter_t *this,void *parent)$/;"	f	file:
 meter_init	.\hardware\Meter\Meter.h	/^	int (*meter_init)(struct Meter_t*,void*);$/;"	m	struct:Meter_t
 meter_open	.\hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,u8 slavr_addr, u8 ndo)$/;"	f	file:
 meter_open	.\hardware\Meter\Meter.h	/^	int (*meter_open)(struct Meter_t*,u8 slave_addr, u8 ndo);$/;"	m	struct:Meter_t
-meter_readi	.\hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,u8 slavr_addr)$/;"	f	file:
-meter_readi	.\hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,u8 slave_addr);$/;"	m	struct:Meter_t
-meter_reado	.\hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,u8 slavr_addr,ndo)$/;"	f	file:
-meter_reado	.\hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,u8 slave_addr);$/;"	m	struct:Meter_t
+meter_readi	.\hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,u8 slavr_addr,u8 ndo,subcmd_t subcmd)$/;"	f	file:
+meter_readi	.\hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);$/;"	m	struct:Meter_t
+meter_reado	.\hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,u8 slavr_addr,u8 ndo,subcmd_t subcmd)$/;"	f	file:
+meter_reado	.\hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);$/;"	m	struct:Meter_t
 meter_response	.\hardware\Meter\Meter.c	/^static int meter_response(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 res,int reslut)$/;"	f	file:
 mprintf	.\sqlite\include\sqlite3ext.h	/^  char * (*mprintf)(const char*,...);$/;"	m	struct:sqlite3_api_routines
 msize	.\sqlite\include\sqlite3ext.h	/^  sqlite3_uint64 (*msize)(void*);$/;"	m	struct:sqlite3_api_routines

@@ -739,15 +739,17 @@ Config_NewProtocol	config\config.h	11;"	d
 HeartBeatErrCnt	config\config.h	22;"	d
 PeakPwm	config\config.h	18;"	d
 __config_h__	config\config.h	8;"	d
-MakeSlave	hardware\Meter\Meter.c	25;"	d	file:
-MakeSlaveOpenAll	hardware\Meter\Meter.c	30;"	d	file:
-Task_merter	hardware\Meter\Meter.c	36;"	d	file:
+MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
+MakeSlaveOpenAll	hardware\Meter\Meter.c	23;"	d	file:
+RecvTimeout	hardware\Meter\Meter.c	16;"	d	file:
+SendTimeout	hardware\Meter\Meter.c	15;"	d	file:
+Task_merter	hardware\Meter\Meter.c	29;"	d	file:
 g_meter	hardware\Meter\Meter.c	/^Meter_t g_meter ={$/;"	v
 meter_close	hardware\Meter\Meter.c	/^static int meter_close(Meter_t *this,u8 slavr_addr, u8 ndo)$/;"	f	file:
 meter_init	hardware\Meter\Meter.c	/^static int meter_init(Meter_t *this,void *parent)$/;"	f	file:
 meter_open	hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,u8 slavr_addr, u8 ndo)$/;"	f	file:
-meter_readi	hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,u8 slavr_addr)$/;"	f	file:
-meter_reado	hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,u8 slavr_addr,ndo)$/;"	f	file:
+meter_readi	hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,u8 slavr_addr,u8 ndo,subcmd_t subcmd)$/;"	f	file:
+meter_reado	hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,u8 slavr_addr,u8 ndo,subcmd_t subcmd)$/;"	f	file:
 meter_response	hardware\Meter\Meter.c	/^static int meter_response(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 res,int reslut)$/;"	f	file:
 Io_addr	hardware\Meter\Meter.h	/^	u16   Io_addr;$/;"	m	struct:__anon7
 Meter_t	hardware\Meter\Meter.h	/^typedef struct Meter_t{$/;"	s
@@ -759,10 +761,11 @@ cmd	hardware\Meter\Meter.h	/^	u16   cmd;$/;"	m	struct:__anon7
 crc	hardware\Meter\Meter.h	/^	u16   crc;$/;"	m	struct:__anon7
 ctrl	hardware\Meter\Meter.h	/^	u8     ctrl;$/;"	m	struct:__anon7
 meter_close	hardware\Meter\Meter.h	/^	int (*meter_close)(struct Meter_t*,u8 slave_addr, u8 ndo);$/;"	m	struct:Meter_t
+meter_flashopen	hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,u8 slave_addr,u8 ndo,int ms);$/;"	m	struct:Meter_t
 meter_init	hardware\Meter\Meter.h	/^	int (*meter_init)(struct Meter_t*,void*);$/;"	m	struct:Meter_t
 meter_open	hardware\Meter\Meter.h	/^	int (*meter_open)(struct Meter_t*,u8 slave_addr, u8 ndo);$/;"	m	struct:Meter_t
-meter_readi	hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,u8 slave_addr);$/;"	m	struct:Meter_t
-meter_reado	hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,u8 slave_addr);$/;"	m	struct:Meter_t
+meter_readi	hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);$/;"	m	struct:Meter_t
+meter_reado	hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);$/;"	m	struct:Meter_t
 parent	hardware\Meter\Meter.h	/^	void *parent;$/;"	m	struct:Meter_t
 slave_t	hardware\Meter\Meter.h	/^} slave_t;$/;"	t	typeref:struct:__anon7
 sub_close	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi } subcmd_t;$/;"	e	enum:__anon6

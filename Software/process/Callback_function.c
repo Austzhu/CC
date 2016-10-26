@@ -367,11 +367,15 @@ s32 CallBack_meter(Node_t *node,void*parent)
 			debug(DEBUG_reset,"meter close %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x03:
-			res = _parent->meter->meter_reado(_parent->meter,package->data[1],package->data[2]);
+			res = _parent->meter->meter_reado(_parent->meter,package->data[1],package->data[2],sub_reado);
 			debug(DEBUG_reset,"meter read do %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x04:
-			res = _parent->meter->meter_readi(_parent->meter,package->data[1],package->data[2]);
+			res = _parent->meter->meter_readi(_parent->meter,package->data[1],package->data[2],sub_readi);
+			debug(DEBUG_reset,"meter read di %s!\n",SUCCESS == res ? "ok":"error");
+			break;
+		case 0x05:
+			res = _parent->meter->meter_flashopen(_parent->meter,package->data[1],package->data[2],package->data[3]);
 			debug(DEBUG_reset,"meter read di %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		default:break;
