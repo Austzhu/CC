@@ -36,6 +36,7 @@ typedef struct{
 	u32 Coor_gid;             //协调器组ID
 	s8 CC_id[16];               //集中器ID
 	u32 Map_Addr;	         //被映射到Base_Addr的实际地址
+	u32 Warn_flags;
 } TableCoordi_t;
 
 /* 单灯记录表（db_light） */
@@ -52,6 +53,7 @@ typedef struct{
 typedef struct {
 	s32 id;				//主键
 	s32 Base_Addr;	//单灯地址
+	u32 operate_flags; //操作设备状态
 	u32 Warn_flags;	//报警的标志
 	u32 Rate_v;			//额定电压
 	u32 Rate_p;		//额定功率

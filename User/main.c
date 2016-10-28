@@ -50,7 +50,6 @@ int main(int argc,char *argv[])
 	pthread_join(thread_Keepalive,NULL);
 	pthread_join(thread_RecvInsert,NULL);
 	pthread_join(thread_UserProc,NULL);
-
 	return 0;
 }
 

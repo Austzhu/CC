@@ -26,8 +26,7 @@ static Que_classify_t  Que_classify[][255] = {
 	},
 	{	//1 ----CC-08集中器本身相关	协议定义
 		{0x80,0x04},{0xA2,0x01},{0xA3,0x01},{0xA4,0x01},{0xA7,0x02},
-		{0xC0,0x02},{0xC1,0x02},{0xC2,0x02},{0xC3,0x02},
-		{0xF1,0x03},{0xF2,0x03},{0xF3,0x03},{0xFE,0x03},{0xFF,0xff},
+		{0xC0,0x02},{0xC1,0x02},{0xC2,0x02},{0xC3,0x02},{0xFF,0xff},
 	},
 	{	//2 ----CC-08集中器本身相关	协议定义
 		{0x51,0x01},{0x52,0x02},{0xff,0xff},
@@ -39,29 +38,22 @@ static Que_classify_t  Que_classify[][255] = {
 };
 
 Proclist_t  ProcessFunc[][64]={
-	{
-		{0xff, NULL},
-	},
+	/* not use */
+	{  {0xff, NULL},  },
 	/* 1 Task_type_cc */
 	{
-		{0x80,CallBack_answer},
-		{0xA2,CallBack_Reset},
-		{0xA3,CallBack_Config},
+		{0x80,CallBack_answer},{0xA2,CallBack_Reset},{0xA3,CallBack_Config},
 		{0xff, NULL},
 	},
 	/* 2 Task_type_ethernet */
 	{
-		{0x51,CallBack_Response},
-		{0x52,CallBack_Response},
+		{0x51,CallBack_Response},{0x52,CallBack_Response},
  		{0xff, NULL},
 	},
 	/* 3 Task_type_device485 */
 	{
-		{0x01,CallBack_single},
-		{0x02,CallBack_group},
-		{0x03,CallBack_broadcast},
-		{0xE1,CallBack_meter},
-		{0xff, NULL},
+		{0x01,CallBack_single},{0x02,CallBack_group},{0x03,CallBack_broadcast},
+		{0xE1,CallBack_meter},{0xff, NULL},
 
 	}
 };
@@ -70,7 +62,8 @@ static s32 get_Quetype(struct Queue_t *this,u8 ctrl)
 {
 	for(int i=0;i<sizeof(Que_classify)/sizeof(Que_classify[0]);++i){
 		for(int j=0;Que_classify[i][j].cmdname != 0xff;++j){
-			if(ctrl == Que_classify[i][j].cmdname)  return i | (Que_classify[i][j].level <<8);
+			if(ctrl == Que_classify[i][j].cmdname)
+				return i | (Que_classify[i][j].level <<8);
 		}
 	}
 	return -1;

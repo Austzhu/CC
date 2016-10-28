@@ -222,6 +222,8 @@ static int appitf_init(appitf_t *this)
 	#ifdef Config_Meter
 	TopUser_Init(this,meter,meter_init,"meter init error!",this);
 	#endif
+	/* init for warn */
+	if(NULL == (this->warn = warn_init(this))) return FAIL;
 
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");

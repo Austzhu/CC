@@ -335,7 +335,50 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 	return SUCCESS;
 }
 
+static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)
+{
+	assert_param(this,NULL,FAIL);
+	assert_param(light_info,NULL,FAIL);
 
+	Sqlbuf_t *p_info = light_info;
+	int sin_count = info_size/sizeof(Sqlbuf_t);
+	sqlite3* db = NULL;
+	sqlite3_stmt* stmt = NULL;
+	char *sql = "update db_info_light set Warn_flags=?1,light_V=?2,light_E=?3,"\
+			"light_p=?4,rtime=?5,light_status=?6,light_val=?7 where Base_Addr=?8 ;";
+	if( SQLITE_OK != sqlite3_open("./cc_corl.db",&db) ){
+		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
+		goto out;
+	}
+	/* 开启外键约束 */
+	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
+	/* 准备对象 */
+	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
+		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;
+		goto out;
+	}
+	for(int i=0;i<sin_count;++i){
+		sqlite3_bind_int(stmt, 1, p_info[i].Warn_flags);
+		sqlite3_bind_int(stmt, 2, p_info[i].light_V);
+		sqlite3_bind_int(stmt, 3, p_info[i].light_E);
+		sqlite3_bind_int(stmt, 4, p_info[i].light_V * p_info[i].light_E/10000);
+		sqlite3_bind_int(stmt, 5, time(NULL));
+		sqlite3_bind_int(stmt, 6, p_info[i].status);
+		sqlite3_bind_int(stmt, 7, p_info[i].light);
+		sqlite3_bind_int(stmt, 8, p_info[i].SingleAddr);
+		if(SQLITE_DONE != sqlite3_step(stmt))
+			debug(DEBUG_sqlite3,"In %s %s %d:Sqlite3_step fail\n",__FILE__,__func__,__LINE__);
+		sqlite3_reset(stmt);
+	}
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+	return SUCCESS;
+ out:
+
+	if (stmt)sqlite3_finalize(stmt);
+	if(db)	sqlite3_close(db);
+ 	return FAIL;
+}
 static int Response_PC(Single_t *this,  Sqlbuf_t *light_info,\
 							int info_size,   int cmd,   int reslut,   int flags)
 {
@@ -353,7 +396,6 @@ static int Response_PC(Single_t *this,  Sqlbuf_t *light_info,\
 	}
 
 	int num = 0;
-	u32 power = 0;
 	u8 *p_buf = AckShortbuf + 5;
 	Sqlbuf_t *p_info = light_info;
 	int sin_count = info_size/sizeof(Sqlbuf_t);
@@ -374,16 +416,7 @@ static int Response_PC(Single_t *this,  Sqlbuf_t *light_info,\
 		}
 	}
 out:
-	/* insert data to sqlite */
-	p_info = light_info;
-	for(int i=0;i<sin_count;++i){
-		power = p_info[i].light_V * p_info[i].light_E/10000;
-		topuser->sqlite->sql_update("db_info_light",Asprintf(\
-			"set Warn_flags=%d,light_V=%d,light_E=%d,light_p=%u,rtime=%ld,light_status=%d,"\
-					"light_val=%d where Base_Addr=0x%04x",p_info[i].Warn_flags,p_info[i].light_V,\
-					p_info[i].light_E,power,time(NULL),p_info[i].status,p_info[i].light,p_info[i].SingleAddr));
-	}
-	return SUCCESS;
+	return update_status(this, light_info, info_size);
 }
 
 
@@ -432,8 +465,8 @@ static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int siz
 		if(single_count_max < count) single_count_max = count;
 	}	//end of for(int i=0;i<size;++i)
 	free(Sendbuf);
-	debug(1,"Wait Query %d S.\n",single_count_max/5);
-	sleep(single_count_max/5);
+	//debug(1,"Wait Query %d S.\n",single_count_max/4);
+	//sleep(single_count_max/4);
 	return SUCCESS;
 out:
 	free(Sendbuf);
@@ -538,17 +571,22 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 	}
 	/*  get electric from coordinator */
 	int getcnt = GetSingleCunt<<8;
-	int Addr = 0;
+	int Addr = 0 ,Waittime = 0;
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
+		Waittime = CoordiAddr[j].single_Count*5;
+		printf("\nWait time =%d\n",Waittime);
 		MakeSinglePack(&single,0x50,0x0001,Addr,getcnt);
+		topuser->Serial->serial_flush(topuser->Serial,COM_485);
+		topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
+		this->Display("Query electric Send data:",&single,sizeof(single));
+		topuser->Serial->serial_send(topuser->Serial,COM_485,\
+							(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
-			topuser->Serial->serial_flush(topuser->Serial,COM_485);
-			topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
-			this->Display("Query electric Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
-			if(SUCCESS == this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout) ) break;
+			if(SUCCESS == this->sin_RecvPackage(this,&single,\
+				sizeof(light_t),RecvTimeout+Waittime) )  break;
+			Waittime = 0;
 			if(repeat <= 0) goto out;
 		}
 		int reslen = (single.Data[0]<<8) | single.Data[1];
@@ -735,9 +773,9 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 	int Addr = 0;
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
-		MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
+			MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
 			topuser->Serial->serial_flush(topuser->Serial,COM_485);
 			topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Query electric Send data:",&single,sizeof(single));

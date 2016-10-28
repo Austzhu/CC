@@ -71,7 +71,7 @@ static int reado(Meter_t *this,u8 slave_addr)
 	u8 *pslave = (u8*)slave;
 	appitf_t *topuser = this->parent;
 
-	memset(&slave,0,sizeof(slave_t));
+	memset(slave,0,sizeof(slave));
 	MakeSlave(pslave,slave_addr,0x01,0x08);
 	topuser->Crc16_HL(crc_get,pslave+6,pslave,6);
 	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
@@ -88,27 +88,45 @@ static int reado(Meter_t *this,u8 slave_addr)
 	return pslave[3];
 }
 
+
+static int meter_sendpackage(Meter_t *this,u8 slave_addr,void *Message,u8 setval)
+{
+	assert_param(this,NULL,FAIL);
+	assert_param(Message,NULL,FAIL);
+
+	/**
+	 *  package format:
+	 *  slave addr(1byte),ctrl(1byte),start addr(2byte),number of relay(2byte),
+	 *  size of next control(1byte),the value for relay the bit is 1 open else close,CRC16(2byte)
+	 */
+	u8 *pf = (u8*)Message;
+	appitf_t *topuser = this->parent;
+
+	*pf = slave_addr;		//slave addr
+	*(pf+1) = 0x0f;			//CTRL
+	*(pf+2) = *(pf+3) = 0;	//start of relay addr
+	*(pf+4) = 0; *(pf+5) = 8;	//the number f relay
+	*(pf+6) = 1;				//size of next value
+	*(pf+7) = setval;
+	topuser->Crc16_HL(crc_get,pf+8,pf,8);
+	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
+	topuser->single->Display("meter open all Send data:",pf,10);
+	topuser->Serial->serial_send(topuser->Serial,COM_DIDO,(s8*)pf,10,SendTimeout);
+	return topuser->Serial->serial_recv(topuser->Serial,COM_DIDO,(s8*)pf,8,2*SendTimeout);
+
+}
+
 static int meter_open(Meter_t *this,u8 slave_addr, u8 ndo)
 {
 	assert_param(this,NULL,FAIL);
 
 	char slave[16] ={0};
-	char recvbuf[12] = {0};
-	u8 *pslave = (u8*)slave;
-	appitf_t *topuser = this->parent;
-
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
-		meter_res_atonce(topuser,sub_open,slave_addr,ndo,0,FAIL);
+		meter_res_atonce(this->parent,sub_open,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
-
-	MakeSlaveOpenAll(slave,slave_addr,(res|ndo));
-	topuser->Crc16_HL(crc_get,pslave+8,pslave,8);
-	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
-	topuser->single->Display("meter open all Send data:",slave,10);
-	topuser->Serial->serial_send(topuser->Serial,COM_DIDO,slave,10,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,COM_DIDO,recvbuf,8,2*SendTimeout);
+	meter_sendpackage(this,slave_addr,slave, res|ndo);
 
 	return  this->meter_reado(this,slave_addr,ndo,sub_open);
 }
@@ -118,21 +136,12 @@ static int meter_close(Meter_t *this,u8 slave_addr, u8 ndo)
 	assert_param(this,NULL,FAIL);
 
 	char slave[16] = {0};
-	char recvbuf[12] = {0};
-	u8 *pslave = (u8*)slave;
-	appitf_t *topuser = this->parent;
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
-		meter_res_atonce(topuser,sub_close,slave_addr,ndo,0,FAIL);
+		meter_res_atonce(this->parent,sub_close,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
-	MakeSlaveOpenAll(slave,slave_addr,(~ndo&res));
-	topuser->Crc16_HL(crc_get,pslave+8,pslave,8);
-	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
-	topuser->single->Display("meter close all Send data:",slave,10);
-	topuser->Serial->serial_send(topuser->Serial,COM_DIDO,slave,10,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,COM_DIDO,recvbuf,8,2*SendTimeout);
-
+	meter_sendpackage(this,slave_addr,slave, ~ndo&res);
 	return this->meter_reado(this,slave_addr,ndo,sub_close);
 }
 
@@ -145,7 +154,7 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 	u8 *pslave = (u8*)slave;
 	appitf_t *topuser = this->parent;
 
-	memset(slave,0,sizeof(slave_t));
+	memset(slave,0,sizeof(slave));
 	MakeSlave(pslave,slave_addr,0x02,0x08);
 	topuser->Crc16_HL(crc_get,pslave+6,pslave,6);
 	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
@@ -163,7 +172,6 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 	return meter_response(topuser,subcmd,slave_addr,ndo,pslave[3],SUCCESS);
 }
 
-
 static int meter_reado(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 {
 	assert_param(this,NULL,FAIL);
@@ -177,34 +185,21 @@ static int meter_reado(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 static int meter_flashopen(struct Meter_t *this,u8 slave_addr,u8 ndo,int ms)
 {
 	assert_param(this,NULL,FAIL);
-	char slave[16] ={0};
-	char recvbuf[12] = {0};
-	u8 *pslave = (u8*)slave;
-	appitf_t *topuser = this->parent;
 
+	char slave[16] ={0};
+	appitf_t *topuser = this->parent;
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
 		meter_res_atonce(topuser,sub_flash,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
 	/*  open the relay */
-	MakeSlaveOpenAll(slave,slave_addr,(res|ndo));
-	topuser->Crc16_HL(crc_get,pslave+8,pslave,8);
-	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
-	topuser->single->Display("meter open all Send data:",slave,10);
-	topuser->Serial->serial_send(topuser->Serial,COM_DIDO,slave,10,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,COM_DIDO,recvbuf,8,2*SendTimeout);
+	meter_sendpackage(this,slave_addr,slave, res|ndo);
 	/* response to pc */
-	meter_res_atonce(topuser,sub_flash,slave_addr,ndo,res|ndo,FAIL);
+	meter_res_atonce(topuser,sub_flash,slave_addr,ndo,res|ndo,SUCCESS);
 	topuser->msleep(ms*100);
 	/* close the relay */
-	MakeSlaveOpenAll(slave,slave_addr,(res&~ndo));
-	topuser->Crc16_HL(crc_get,pslave+8,pslave,8);
-	topuser->Serial->serial_flush(topuser->Serial,COM_DIDO);
-	topuser->single->Display("meter open all Send data:",slave,10);
-	topuser->Serial->serial_send(topuser->Serial,COM_DIDO,slave,10,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,COM_DIDO,recvbuf,8,2*SendTimeout);
-	return SUCCESS;
+	return meter_sendpackage(this,slave_addr,slave, res&~ndo);
 }
 
 static int meter_init(Meter_t *this,void *parent)
@@ -215,7 +210,7 @@ static int meter_init(Meter_t *this,void *parent)
 	return SUCCESS;
 }
 
-
+#ifdef Config_Meter
 Meter_t g_meter ={
 	.meter_open = meter_open,
 	.meter_close = meter_close,
@@ -224,3 +219,4 @@ Meter_t g_meter ={
 	.meter_init = meter_init,
 	.meter_flashopen = meter_flashopen,
 };
+#endif
