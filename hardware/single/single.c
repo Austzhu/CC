@@ -67,7 +67,7 @@ static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)
 	light_t single;
 	TableSingle_t   *sp = package;
 	TableCoordi_t *cp = package;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	u32 Addr = 0;
 	topuser->Serial->serial_flush(topuser->Serial,COM_485);
 	switch(cmd){
@@ -120,7 +120,7 @@ static int sin_RecvPackage(Single_t *this,void *buffer,int size,int timeout)
 {
 	assert_param(this,NULL,FAIL);
 	assert_param(buffer,NULL,FAIL);
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	u8 *Pbuf = buffer;
 	memset(buffer,0,size);
 	do{ topuser->Serial->serial_recv(topuser->Serial,COM_485,(char*)buffer,1,100000);
@@ -150,7 +150,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 	assert_param(this,NULL,FAIL);
 
 	light_t single;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	int res = FAIL;
 	int repcnt = 3;
 	topuser->Serial->serial_flush(topuser->Serial,COM_485);
@@ -166,9 +166,13 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 				0 != single.Data[0] ){
 				if(repcnt--) goto repeat;	//send package again until repcnt == 0
 				/* set warn_flags error! */
+				topuser->warn->warn_setflags(topuser->warn,Warn_Single_open,sw_single,Addr&0xffff);
 				return FAIL;
 			}
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,1,so_single,Addr&0xffff);
 			/* set warn_flags ok! */
+			topuser->warn->warn_cleanflags(topuser->warn,Warn_Single_open,sw_single,Addr&0xffff);
 			return SUCCESS;
 		case cmd_group:
 			MakeSinglePack(&single,0x02,0x0001,Addr,light);
@@ -177,6 +181,8 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x42,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,1,so_group,0xff&(Addr>>16));
 			break;
 		case cmd_broadcast:
 			MakeSinglePack(&single,0x04,0x0001,Addr,light);
@@ -185,6 +191,8 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x42,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,1,so_brocast,0);
 			break;
 		case cmd_grouplight:
 			MakeSinglePack(&single,0x02,0x0001,Addr,light);
@@ -193,6 +201,8 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x47,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,1,so_group,0xff&(Addr>>16));
 			break;
 		case cmd_broadlight:
 			MakeSinglePack(&single,0x04,0x0001,Addr,light);
@@ -201,6 +211,8 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x47,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,1,so_brocast,0);
 			break;
 		default:
 			debug(DEBUG_single,"Unknow sin_close cmd:%d\n",cmd);
@@ -215,7 +227,7 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 	assert_param(this,NULL,FAIL);
 
 	light_t single;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	int res = FAIL;
 	int repcnt = 3;
 	topuser->Serial->serial_flush(topuser->Serial,COM_485);
@@ -231,9 +243,13 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 				0 != single.Data[0] ){
 				if(repcnt--)  goto repeat;
 				/* set warn_flags error! */
+				topuser->warn->warn_setflags(topuser->warn,Warn_Single_close,sw_single,Addr&0xffff);
 				return FAIL;
 			}
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,0,so_single,Addr&0xffff);
 			/* set warn_flags ok! */
+			topuser->warn->warn_cleanflags(topuser->warn,Warn_Single_close,sw_single,Addr&0xffff);
 			return SUCCESS;
 		case cmd_group:
 			MakeSinglePack(&single,0x02,0x0002,Addr,0);
@@ -242,6 +258,8 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x43,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,0,so_group,0xff&(Addr>>16));
 			break;
 		case cmd_broadcast:
 			MakeSinglePack(&single,0x04,0x0002,Addr,0);
@@ -250,6 +268,8 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			res = topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x43,res);
+			/*  set operate_flags */
+			topuser->warn->warn_setflags(topuser->warn,0,so_brocast,0);
 			break;
 		default:
 			debug(DEBUG_single,"Unknow sin_close cmd:%d\n",cmd);
@@ -263,15 +283,14 @@ static int sin_reply(Single_t *this,int cmd,int subcmd,int res)
 {
 	assert_param(this,NULL,FAIL);
 
-	appitf_t *parent = this->parent;
 	u8 Ackbuf[24] = {0};
 	Ackbuf[0] = Ackbuf[7] = 0x68;
-	memcpy(Ackbuf+1,parent->param.CCUID,6);
+	memcpy(Ackbuf+1,this->topuser->param.CCUID,6);
 	Ackbuf[8] = 0x80; Ackbuf[9] = 0x03;
 	Ackbuf[10] = cmd; Ackbuf[11] = subcmd;
 	Ackbuf[12] = res;
-	parent->ethernet->ether_packagecheck(Ackbuf,13);
-	return parent->ethernet->ether_send(parent->ethernet,Ackbuf,15);
+	this->topuser->ethernet->ether_packagecheck(Ackbuf,13);
+	return this->topuser->ethernet->ether_send(this->topuser->ethernet,Ackbuf,15);
 }
 
 static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
@@ -300,6 +319,8 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 						info_start->light_V = bigend2littlend_2(p_elec[i].light_V);
 						info_start->light_E = bigend2littlend_2(p_elec[i].light_E);
 						/* set electric flags */
+						if(0xfefe == info_start->light_V  ||  0xfefe == info_start->light_E)
+							info_start->Warn_flags |= Warn_Single_electric;
 						break;
 					case Query_stat:
 						info_start->status = p_stat[i].stat;
@@ -308,6 +329,8 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 							info_end->light = (p_stat[i].light<PeakPwm)?PeakPwm-p_stat[i].light:0xfe;
 						#endif
 						/* set flags about status */
+						if(0xfe == info_start->status  || 0xfe == info_start->light)
+							info_start->Warn_flags |= Warn_Single_status;
 						break;
 					default:break;
 				}break;
@@ -317,6 +340,8 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 						info_end->light_V = bigend2littlend_2(p_elec[i].light_V);
 						info_end->light_E = bigend2littlend_2(p_elec[i].light_E);
 						/* set electric flags */
+						if(0xfefe == info_end->light_V  ||  0xfefe == info_end->light_E)
+							info_end->Warn_flags |= Warn_Single_electric;
 						break;
 					case Query_stat:
 						info_end->status = p_stat[i].stat;
@@ -325,6 +350,8 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 							info_end->light = (p_stat[i].light<PeakPwm)?PeakPwm-p_stat[i].light:0xfe;
 						#endif
 						/* set flags about status */
+						if(0xfe == info_end->status  || 0xfe == info_end->light)
+							info_end->Warn_flags |= Warn_Single_status;
 						break;
 					default:break;
 				}break;
@@ -344,7 +371,7 @@ static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)
 	int sin_count = info_size/sizeof(Sqlbuf_t);
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
-	char *sql = "update db_info_light set Warn_flags=?1,light_V=?2,light_E=?3,"\
+	const char *sql = "update db_info_light set Warn_flags=?1,light_V=?2,light_E=?3,"\
 			"light_p=?4,rtime=?5,light_status=?6,light_val=?7 where Base_Addr=?8 ;";
 	if( SQLITE_OK != sqlite3_open("./cc_corl.db",&db) ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
@@ -352,6 +379,8 @@ static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)
 	}
 	/* 开启外键约束 */
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
+	/* 显式的开启一个事物处理,大幅度提高插入效率 */
+	sqlite3_exec(db,"BEGIN TRANSACTION", NULL, NULL,NULL);
 	/* 准备对象 */
 	if( SQLITE_OK != sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL) ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Prepare Sqlite fail!\n",__FILE__,__func__,__LINE__) ;
@@ -370,11 +399,13 @@ static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)
 			debug(DEBUG_sqlite3,"In %s %s %d:Sqlite3_step fail\n",__FILE__,__func__,__LINE__);
 		sqlite3_reset(stmt);
 	}
+	/* 必须执行提交,否则数据在内存中没有写入数据库 */
+	sqlite3_exec(db,"COMMIT", NULL, NULL,NULL);
+
 	if (stmt)sqlite3_finalize(stmt);
 	if(db)	sqlite3_close(db);
 	return SUCCESS;
  out:
-
 	if (stmt)sqlite3_finalize(stmt);
 	if(db)	sqlite3_close(db);
  	return FAIL;
@@ -385,7 +416,7 @@ static int Response_PC(Single_t *this,  Sqlbuf_t *light_info,\
 	assert_param(this,NULL,FAIL);
 
 	int  _flag = flags&0x0f;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	u8 AckShortbuf[300] = {0} ,*pf = AckShortbuf;
 
 	*pf++ = 0x52;*pf++ = 0x04;*pf++ = cmd;*pf++ = 0x02;
@@ -425,7 +456,7 @@ static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int siz
 	assert_param(this,NULL,FAIL);
 	assert_param(light_info,NULL,FAIL);
 
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	const Sqlbuf_t *p_info = light_info;
 	u8* const Sendbuf = (u8*)calloc(1,size*2+16);
 	if(!Sendbuf) goto out;
@@ -477,7 +508,7 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 {
 	assert_param(this,NULL,FAIL);
 
-	appitf_t *topuser = (appitf_t*)this->parent;
+	appitf_t *topuser = (appitf_t*)this->topuser;
 	sql_t *sqlite = topuser->sqlite;
 	light_t single;
 	Sqlbuf_t *light_info = NULL;
@@ -574,7 +605,7 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 	int Addr = 0 ,Waittime = 0;
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
-		Waittime = CoordiAddr[j].single_Count*5;
+		Waittime = CoordiAddr[j].single_Count*10;
 		printf("\nWait time =%d\n",Waittime);
 		MakeSinglePack(&single,0x50,0x0001,Addr,getcnt);
 		topuser->Serial->serial_flush(topuser->Serial,COM_485);
@@ -627,12 +658,11 @@ out:
 	return FAIL;
 }
 
-
 static int sin_Queryelectric(Single_t *this,int cmd, u32 Addr)
 {
 	assert_param(this,NULL,FAIL);
 	light_t single;
-	appitf_t *topuser = (appitf_t*)this->parent;
+	appitf_t *topuser = (appitf_t*)this->topuser;
 	u32 status = 0;
 	u8 Ackbuf[32] ={0};
 	u8 *pbuf = Ackbuf;
@@ -677,7 +707,7 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 {
 	assert_param(this,NULL,FAIL);
 
-	appitf_t *topuser = (appitf_t*)this->parent;
+	appitf_t *topuser = (appitf_t*)this->topuser;
 	sql_t *sqlite = topuser->sqlite;
 	light_t single;
 	Sqlbuf_t *light_info = NULL;
@@ -770,17 +800,22 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 	}
 	/*  get electric from coordinator */
 	int getcnt = GetSingleCunt<<8;
-	int Addr = 0;
+	int Addr = 0, Waitime = 0;
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
+		Waitime = CoordiAddr[j].single_Count * 10;
+		printf("\nWait time =%d\n",Waitime);
+
+		MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
+		topuser->Serial->serial_flush(topuser->Serial,COM_485);
+		topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
+		this->Display("Query electric Send data:",&single,sizeof(single));
+		topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
-			MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
-			topuser->Serial->serial_flush(topuser->Serial,COM_485);
-			topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
-			this->Display("Query electric Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
-			if(SUCCESS == this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout) ) break;
+			if(SUCCESS == this->sin_RecvPackage(this,&single,\
+					sizeof(light_t),RecvTimeout+Waitime) ) break;
+			Waitime = 0;
 			if(repeat <= 0) goto out;
 		}
 		int reslen = (single.Data[0]<<8) | single.Data[1];
@@ -825,7 +860,7 @@ static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)
 {
 	assert_param(this,NULL,FAIL);
 	light_t single;
-	appitf_t *topuser = (appitf_t*)this->parent;
+	appitf_t *topuser = (appitf_t*)this->topuser;
 	u32 status = 0;
 	u8 Ackbuf[32] ={0};
 	u8 *pbuf = Ackbuf;
@@ -859,26 +894,35 @@ static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)
 	return SUCCESS;
 }
 
-static int sin_Init(Single_t *this,void *parent)
+static void sin_release(struct Single_t **this)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
-
-	this->parent = parent;
-	this->sin_config = sin_Config;
-	if(this->sin_config)
-		return SUCCESS;
-	return FAIL;
+	memset(*this,0,sizeof(Single_t));
+	free(*this);
+	*this = NULL;
 }
 
-Single_t g_single = {
-	.sin_init = sin_Init,
-	.Display = Display_package,
-	.sin_RecvPackage = sin_RecvPackage,
-	.sin_open = sin_open,
-	.sin_close = sin_close,
-	.sin_reply = sin_reply,
-	.sin_Queryelectric = sin_Queryelectric,
-	.sin_Querystatus = sin_Querystatus,
-};
+Single_t *single_Init(struct appitf_t *topuser)
+{
+	Single_t *single = (Single_t*)malloc(sizeof(Single_t));
+	if(!single) return NULL;
 
+	single->topuser = topuser;
+	single->Display = Display_package;
+	single->sin_RecvPackage = sin_RecvPackage;
+	single->sin_open = sin_open;
+	single->sin_close = sin_close;
+	single->sin_reply = sin_reply;
+	single->sin_Queryelectric = sin_Queryelectric;
+	single->sin_Querystatus = sin_Querystatus;
+	single->sin_config = sin_Config;
+	single->sin_release = sin_release;
+
+
+	if(!single->topuser || !single->sin_open || !single->sin_close || !single->sin_release ||\
+		!single->sin_reply || !single->sin_config || !single->sin_Queryelectric ||\
+		!single->sin_Querystatus || !single->sin_RecvPackage || !single->Display){
+		free(single);
+		return NULL;
+	}
+	return single;
+}

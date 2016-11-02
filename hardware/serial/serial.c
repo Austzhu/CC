@@ -203,48 +203,56 @@ static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 	return FAIL;
 }
 
-static int serial_Init(serial_t *this,u32 port,...)
-{
-	assert_param(this,NULL,FAIL);
-	int speed = 0;
-	va_list 	arg_ptr;
-	va_start(arg_ptr,port);
-	memset(this->serialfd,-1,sizeof(this->serialfd));
-	for(int i=0; i<SerialMax; ++i,port >>= 1){
-		if(!(port&0x01)) continue;
-		if(this->serial_open && this->serial_config && \
-			SUCCESS == this->serial_open(this,i) ){
-			speed = va_arg(arg_ptr, int);
-			if(SUCCESS != this->serial_config(this,i,speed,8,1,'N')) goto out;
-		}else
-			goto out;
-	}
-	va_end(arg_ptr);
-	return SUCCESS;
- out:
-	va_end(arg_ptr);
-	return FAIL;
-}
-static void serial_Relese(serial_t *this)
-{
-	assert_param(this,NULL,;);
-	for(int i=0;i<SerialMax;++i)
-		this->serial_close(this,i);
-}
 static void serial_flush(serial_t *this,int port)
 {
+	assert_param(this,NULL,;);
 	if(port < 0 || port >SerialMax) return;
 	tcflush(this->serialfd[port],TCIFLUSH|TCOFLUSH);
 }
-serial_t g_serial = {
-	.serial_init = serial_Init,
-	.serial_open = serial_Open,
-	.serial_config = serial_Config,
-	.serial_close = serial_Close,
-	.serial_recv = serial_Recv,
-	.serial_send = serial_Send,
-	.serial_relese = serial_Relese,
-	.serial_flush = serial_flush,
-};
 
+static void serial_Relese(serial_t **this)
+{
+	for(int i=0;i<SerialMax;++i)
+		if( (*this)->serialfd[i] > 0 ) close( (*this)->serialfd[i] );
+	memset(*this,0,sizeof(serial_t));
+	free(*this);
+	*this = NULL;
+}
 
+serial_t *serial_Init(u32 port,...)
+{
+	int speed = 0;
+	va_list 	arg_ptr;
+	serial_t *temp = malloc(sizeof(serial_t));
+	if(!temp) return NULL;
+	memset(temp,0,sizeof(serial_t));
+	memset(temp->serialfd,-1,sizeof(temp->serialfd));
+
+	temp->serial_open = serial_Open;
+	temp->serial_close = serial_Close;
+	temp->serial_config = serial_Config;
+	temp->serial_recv = serial_Recv;
+	temp->serial_send = serial_Send;
+	temp->serial_flush = serial_flush;
+	temp->serial_relese = serial_Relese;
+	if( !temp->serial_open  ||  !temp->serial_close  || !temp->serial_config ||\
+		 !temp->serial_recv  || !temp->serial_send  || !temp->serial_flush  || !temp->serial_relese)
+		goto out1;
+
+	va_start(arg_ptr,port);
+	for(int i=0; i<SerialMax; ++i,port >>= 1){
+		if(!(port&0x01)) continue;
+		if( SUCCESS == temp->serial_open(temp,i) ){
+			speed = va_arg(arg_ptr, int);
+			if(SUCCESS != temp->serial_config(temp,i,speed,8,1,'N')) goto out;
+		}else  goto out;
+	}
+
+	va_end(arg_ptr);
+	return temp;
+out:
+	va_end(arg_ptr);
+out1:
+	free(temp);
+	return NULL;
+}

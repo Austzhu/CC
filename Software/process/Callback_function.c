@@ -326,10 +326,12 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 		case 0x45:
 			res = _parent->single->sin_Querystatus(_parent->single,cmd_broadcast,0);
 			debug(DEBUG_reset,"Broadcast Query status %s!\n",SUCCESS == res ? "ok":"error");
+			_parent->warn->warn_verdict(_parent->warn);
 			break;
 		case 0x46:
 			res = _parent->single->sin_Queryelectric(_parent->single,cmd_broadcast,0);
 			debug(DEBUG_reset,"Broadcast Query electric %s!\n",SUCCESS == res ? "ok":"error");
+			_parent->warn->warn_verdict(_parent->warn);
 			break;
 		case 0x47:
 			light = node->package[3];
@@ -353,7 +355,6 @@ s32 CallBack_meter(Node_t *node,void*parent)
 {
 	assert_param(node,NULL,FAIL);
 	assert_param(parent,NULL,FAIL);
-
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
 	 int res = -1;

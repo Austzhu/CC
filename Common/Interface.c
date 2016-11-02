@@ -12,7 +12,7 @@
 #include "Interface.h"
 #include "single.h"
 
-#define TopUser_Init(TopUser,class,func,Message,args...) do{\
+#define Top_Relese(TopUser,class,func,Message,args...) do{\
 	if(TopUser->class && TopUser->class->func && \
 		SUCCESS == TopUser->class->func(TopUser->class,##args)){\
 	}else{\
@@ -20,6 +20,9 @@
 		return FAIL;\
 	}\
 }while(0)
+
+extern int Crc16(u8*,u8*,int);
+extern int crc16_checkout(u8*,u8*,int);
 
 static s32 UID_Check(appitf_t *this,void *r_uid)
 {
@@ -128,6 +131,7 @@ static int package_check(void *package)
 	}
 	return SUCCESS;
 }
+
 static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 {
 	assert_param(this,NULL,FAIL);
@@ -195,41 +199,6 @@ void TopUser_msleep(u32 ms)
 	select(0, NULL,NULL,NULL,&tv);
 }
 
-static int appitf_init(appitf_t *this)
-{
-	assert_param(this,NULL,FAIL);
-	loadParam(&g_appity);
-	this->Connect_status = Connect_error;
-	this->HeartBeat_status = HeartBeat_error;
-
-	/* init for Queue */
-	TopUser_Init(this,Queue,Que_init,"Queue init error!",this);
-	switch(this->param.ItfWay){
-		case ether_net: 	/* init for ethernet */
-			TopUser_Init(this,ethernet,ether_init,"ethernet init error!",this);
-			break;
-		case gprs:break;
-		case zigbee:break;
-		default:debug(DEBUG_app,"Unknow communication %d.\n",this->param.ItfWay); return FAIL;
-	}
-	/* init for serial */
-	TopUser_Init(this,Serial,serial_init,"Serial init error!",(0x01<<COM_485) | (0x01<<COM_DIDO),9600,9600);
-	/* init for sqlite */
-	TopUser_Init(this,sqlite,sql_init,"Sqlite init error!");
-	/* init for single */
-	TopUser_Init(this,single,sin_init,"Single init error!",this);
-	/* init for dido */
-	#ifdef Config_Meter
-	TopUser_Init(this,meter,meter_init,"meter init error!",this);
-	#endif
-	/* init for warn */
-	if(NULL == (this->warn = warn_init(this))) return FAIL;
-
-	if( access("cc_corl.db",F_OK))
-		system("./config/Create_Database.sh &");
-	this->msleep(1000);
-	return SUCCESS;
-}
 static char* Hex2Str(char*dest,const u8 *src,int size)
 {
 	assert_param(dest,NULL,NULL);
@@ -268,10 +237,6 @@ static u8 *Str2Hex(u8 *dest,const char *src)
 	return dest;
 }
 
-
-extern int crc16_checkout(u8*,u8*,int);
-extern int Crc16(u8*,u8*,int);
-
 static int get_check(int cmd,u8*crc,u8 *pMessage,int len)
 {
 	assert_param(crc,NULL,FAIL);
@@ -293,17 +258,61 @@ static int get_checkhl(int cmd,u8 *crc, u8 *message, int nLen)
 	return (_crc[0] == crc[1] && _crc[1] == crc[0] ) ? SUCCESS : FAIL;
 }
 
-appitf_t g_appity = {
-	.Queue = &Que,
-	.ethernet = &ethernet,
-	.Serial = &g_serial,
-	.sqlite = &g_sqlite,
-	.single = &g_single,
+static int TopUser_Relese(appitf_t *this)
+{
+	this->Queue->Que_release(&this->Queue);
+	this->ethernet->ether_relese(&this->ethernet);
+	this->Serial->serial_relese(&this->Serial);
+	this->sqlite->sql_release(&this->sqlite);
+	this->single->sin_release(&this->single);
+	this->warn->warn_relese(&this->warn);
 	#ifdef Config_Meter
-	.meter = &g_meter,
+	this->meter->meter_release(&this->meter);
 	#endif
+	exit(0);
+}
 
+static int appitf_init(appitf_t *this)
+{
+	assert_param(this,NULL,FAIL);
+
+	loadParam(&g_appity);
+	this->Connect_status = Connect_error;
+	this->HeartBeat_status = HeartBeat_error;
+
+	/* init for Queue */
+	if(NULL == (this->Queue = Queue_Init(this))) return FAIL;
+	//TopUser_Init(this,Queue,Que_init,"Queue init error!",this);
+	switch(this->param.ItfWay){
+		case ether_net: 	/* init for ethernet */
+			if(NULL == (this->ethernet = ether_Init(this))) return FAIL;
+			break;
+		case gprs:break;
+		case zigbee:break;
+		default:debug(DEBUG_app,"Unknow communication %d.\n",this->param.ItfWay); return FAIL;
+	}
+	/* init for serial */
+	if(NULL == (this->Serial = serial_Init((0x01<<COM_485) | (0x01<<COM_DIDO),9600,9600) )) return FAIL;
+	/* init for sqlite */
+	if((this->sqlite = sql_Init()) == NULL) return FAIL;
+	/* init for single */
+	if(NULL == (this->single = single_Init(this))) return FAIL;
+	/* init for dido */
+	#ifdef Config_Meter
+	if(NULL == (this->meter = meter_init(this)) ) return FAIL;
+	#endif
+	/* init for warn */
+	if(NULL == (this->warn = warn_init(this))) return FAIL;
+
+	if( access("cc_corl.db",F_OK))
+		system("./config/Create_Database.sh &");
+	//this->msleep(1000);
+	return SUCCESS;
+}
+
+appitf_t g_appity = {
 	.app_Init = appitf_init,
+	.app_relese = TopUser_Relese,
 	.UID_Check = UID_Check,
 	.TopUserProcQue = TopUser_ProcQue,
 	.TopUserInsertQue = TopUser_InsertQue,

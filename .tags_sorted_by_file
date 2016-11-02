@@ -187,45 +187,70 @@ Logfile_t	Software\Log\log.h	/^}Logfile_t;$/;"	t	typeref:enum:__anon20
 __log_h__	Software\Log\log.h	8;"	d
 err	Software\Log\log.h	/^	err,$/;"	e	enum:__anon20
 warring	Software\Log\log.h	/^	warring,$/;"	e	enum:__anon20
-Judge_fault	Software\Warn\Warn.c	/^static fault_t  Judge_fault(int judge, void *table)$/;"	f	file:
-warn_clean_flags	Software\Warn\Warn.c	/^static int warn_clean_flags(Warn_t *this,int addr,int flags,const char *table)$/;"	f	file:
+Judge_fault	Software\Warn\Warn.c	/^static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)$/;"	f	file:
+JudgeforSingle	Software\Warn\Warn.c	/^static int JudgeforSingle(struct sin_warn_t *info,int infosize)$/;"	f	file:
+clean_flags	Software\Warn\Warn.c	/^static int clean_flags(Warn_t *this,int flags,int set_enu,int condition)$/;"	f	file:
+set_flags	Software\Warn\Warn.c	/^static int set_flags(Warn_t *this,int flags,int set_enu,int condition)$/;"	f	file:
 warn_init	Software\Warn\Warn.c	/^Warn_t *warn_init(void *topuser)$/;"	f
 warn_relese	Software\Warn\Warn.c	/^static void warn_relese(Warn_t *this)$/;"	f	file:
-warn_set_flags	Software\Warn\Warn.c	/^static int warn_set_flags(Warn_t *this,int addr,int flags,const char *table)$/;"	f	file:
 warn_verdict	Software\Warn\Warn.c	/^static int warn_verdict(struct Warn_t *this)$/;"	f	file:
-Warn_Coordi_close	Software\Warn\Warn.h	27;"	d
-Warn_Coordi_electric	Software\Warn\Warn.h	29;"	d
-Warn_Coordi_light	Software\Warn\Warn.h	31;"	d
-Warn_Coordi_ok	Software\Warn\Warn.h	17;"	d
-Warn_Coordi_open	Software\Warn\Warn.h	26;"	d
-Warn_Coordi_status	Software\Warn\Warn.h	28;"	d
-Warn_Coordi_voltage	Software\Warn\Warn.h	30;"	d
-Warn_Single_close	Software\Warn\Warn.h	20;"	d
-Warn_Single_electric	Software\Warn\Warn.h	22;"	d
-Warn_Single_light	Software\Warn\Warn.h	24;"	d
-Warn_Single_ok	Software\Warn\Warn.h	16;"	d
-Warn_Single_open	Software\Warn\Warn.h	19;"	d
-Warn_Single_status	Software\Warn\Warn.h	21;"	d
-Warn_Single_voltage	Software\Warn\Warn.h	23;"	d
+warnstr	Software\Warn\Warn.c	/^const char *warnstr[] = {$/;"	v
+Coor_Addr	Software\Warn\Warn.h	/^	int Coor_Addr;$/;"	m	struct:Warn_info_t
+Rpf	Software\Warn\Warn.h	/^	int Rpow;  int Rvol;  int Rpf; 	\/\/额定功率, 电压, 电流$/;"	m	struct:sin_warn_t
+Rpow	Software\Warn\Warn.h	/^	int Rpow;  int Rvol;  int Rpf; 	\/\/额定功率, 电压, 电流$/;"	m	struct:sin_warn_t
+Rvol	Software\Warn\Warn.h	/^	int Rpow;  int Rvol;  int Rpf; 	\/\/额定功率, 电压, 电流$/;"	m	struct:sin_warn_t
+Single_count	Software\Warn\Warn.h	/^	int Single_count;		\/\/单灯有错误标记的个数$/;"	m	struct:Warn_info_t
+Warn_Coordi_All	Software\Warn\Warn.h	29;"	d
+Warn_Coordi_close	Software\Warn\Warn.h	25;"	d
+Warn_Coordi_electric	Software\Warn\Warn.h	27;"	d
+Warn_Coordi_ok	Software\Warn\Warn.h	28;"	d
+Warn_Coordi_open	Software\Warn\Warn.h	24;"	d
+Warn_Coordi_status	Software\Warn\Warn.h	26;"	d
+Warn_Single_All	Software\Warn\Warn.h	22;"	d
+Warn_Single_close	Software\Warn\Warn.h	17;"	d
+Warn_Single_electric	Software\Warn\Warn.h	19;"	d
+Warn_Single_ok	Software\Warn\Warn.h	20;"	d
+Warn_Single_open	Software\Warn\Warn.h	16;"	d
+Warn_Single_status	Software\Warn\Warn.h	18;"	d
+Warn_flags	Software\Warn\Warn.h	/^	int Warn_flags;$/;"	m	struct:Warn_info_t
+Warn_flags	Software\Warn\Warn.h	/^	int Warn_flags;$/;"	m	struct:sin_warn_t
+Warn_info_t	Software\Warn\Warn.h	/^struct Warn_info_t{$/;"	s
+Warn_stat_elec	Software\Warn\Warn.h	21;"	d
 Warn_t	Software\Warn\Warn.h	/^typedef struct Warn_t{$/;"	s
 Warn_t	Software\Warn\Warn.h	/^} Warn_t;$/;"	t	typeref:struct:Warn_t
 __WARN_H__	Software\Warn\Warn.h	13;"	d
+addr	Software\Warn\Warn.h	/^	int addr;$/;"	m	struct:sin_warn_t
+elec	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;		\/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
 fault_communication	Software\Warn\Warn.h	/^	fault_communication,	\/\/通讯故障$/;"	e	enum:__anon22
 fault_coordi	Software\Warn\Warn.h	/^	fault_coordi,			\/\/协调器设备故障$/;"	e	enum:__anon22
+fault_flags	Software\Warn\Warn.h	/^	fault_t fault_flags;				\/\/故障内容$/;"	m	struct:sin_warn_t
+fault_flags	Software\Warn\Warn.h	/^	int fault_flags;$/;"	m	struct:Warn_info_t
 fault_light	Software\Warn\Warn.h	/^	fault_light,				\/\/灯具故障$/;"	e	enum:__anon22
 fault_none	Software\Warn\Warn.h	/^	fault_none,			\/\/没有故障$/;"	e	enum:__anon22
 fault_single	Software\Warn\Warn.h	/^	fault_single,			\/\/单灯设备故障$/;"	e	enum:__anon22
 fault_t	Software\Warn\Warn.h	/^}  fault_t;$/;"	t	typeref:enum:__anon22
 fault_valtage	Software\Warn\Warn.h	/^	fault_valtage			\/\/供电电压故障$/;"	e	enum:__anon22
-judge_coordi	Software\Warn\Warn.h	/^enum { judge_single,judge_coordi };$/;"	e	enum:__anon21
-judge_single	Software\Warn\Warn.h	/^enum { judge_single,judge_coordi };$/;"	e	enum:__anon21
+flags_enum	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	t	typeref:enum:__anon21
+light	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;		\/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
+opt_flags	Software\Warn\Warn.h	/^	int opt_flags;$/;"	m	struct:sin_warn_t
+sin_warn_t	Software\Warn\Warn.h	/^typedef struct sin_warn_t{$/;"	s
+sin_warn_t	Software\Warn\Warn.h	/^} sin_warn_t;$/;"	t	typeref:struct:sin_warn_t
+single_info	Software\Warn\Warn.h	/^	sin_warn_t *single_info;$/;"	m	struct:Warn_info_t
+so_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+so_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+so_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+sw_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+sw_coordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+sw_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+sw_inCoordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
+sw_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon21
 topuser	Software\Warn\Warn.h	/^	void *topuser;$/;"	m	struct:Warn_t
+vol	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;		\/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
 warn_Insert	Software\Warn\Warn.h	/^	int (*warn_Insert)(struct Warn_t*,int addr,int type);$/;"	m	struct:Warn_t
-warn_cleanflags	Software\Warn\Warn.h	/^	int (*warn_cleanflags)(struct Warn_t*,int,int,const char*);$/;"	m	struct:Warn_t
+warn_cleanflags	Software\Warn\Warn.h	/^	int (*warn_cleanflags)(struct Warn_t*,int,int,int);$/;"	m	struct:Warn_t
 warn_delete	Software\Warn\Warn.h	/^	int (*warn_delete)(struct Warn_t*,int addr);$/;"	m	struct:Warn_t
-warn_mark	Software\Warn\Warn.h	/^	char warn_mark[48];$/;"	m	struct:Warn_t
 warn_relese	Software\Warn\Warn.h	/^	void(*warn_relese)(struct Warn_t*);$/;"	m	struct:Warn_t
-warn_setflags	Software\Warn\Warn.h	/^	int (*warn_setflags)(struct Warn_t*,int,int,const char*);$/;"	m	struct:Warn_t
+warn_setflags	Software\Warn\Warn.h	/^	int (*warn_setflags)(struct Warn_t*,int,int,int);$/;"	m	struct:Warn_t
 warn_verdict	Software\Warn\Warn.h	/^	int (*warn_verdict)(struct Warn_t*);$/;"	m	struct:Warn_t
 FORMAT_SCAN_ELEMENTS_DIR	Software\emfuture\include\iio_utils.h	23;"	d
 FORMAT_TYPE_FILE	Software\emfuture\include\iio_utils.h	24;"	d

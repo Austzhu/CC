@@ -21,9 +21,9 @@ sqlite3 $dbname \
 	Wl_Addr 	integer NOT NULL,
 	Base_Addr 	integer NOT NULL,
 	Coor_gid 	integer NOT NULL,
-	CC_id		text NOT NULL,
+	CC_id		text 	NOT NULL,
 	Map_Addr 	integer NOT NULL,
-	Warn_flags integer,
+	Warn_flags integer default 0,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
 	CHECK (Base_Addr < 0xff AND Base_Addr > 0x20)
@@ -109,6 +109,7 @@ sqlite3 $dbname \
 	Type 		integer NOT NULL,
 	Grade	 	integer NOT NULL,
 	State		integer NOT NULL,
+	Addr 		integer NOT NULL,
 	Remark 	text NOT NULL,
 	PRIMARY KEY (id)
 );"

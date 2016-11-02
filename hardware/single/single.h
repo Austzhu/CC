@@ -34,8 +34,9 @@ typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broad
 typedef enum {Query_elec,Query_stat } Query_t;
 
 
+struct appitf_t;
 typedef struct Single_t{
-	void *parent;
+	struct appitf_t *topuser;
 	int (*sin_open)(struct Single_t*,int,u32,u32);
 	int (*sin_close)(struct Single_t*,int,u32);
 	int (*sin_reply)(struct Single_t*,int,int,int);
@@ -43,9 +44,10 @@ typedef struct Single_t{
 	int (*sin_Queryelectric)(struct Single_t*,int,u32);
 	int (*sin_Querystatus)(struct Single_t*,int,u32);
 	int (*sin_RecvPackage)(struct Single_t*,void*,int,int);
-	int (*sin_init)(struct Single_t*,void*);
+	void (*sin_release)(struct Single_t**);
 	void (*Display)(const char*,void*,int);
 } Single_t;
 
-extern Single_t g_single;
+extern Single_t *single_Init(struct appitf_t *topuser);
+
 #endif

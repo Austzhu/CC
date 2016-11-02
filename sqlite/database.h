@@ -92,10 +92,11 @@ typedef struct{
 /* 报警日志记录表（db_warn） */
 typedef struct{
 	u32 	id;
-	u32	Add_time;	//报警时间
-	u32	Type;		//报警类型
-	u32	Grade;		//报警等级
-	u32	State;		//状态
+	u32		Add_time;	//报警时间
+	u32		Type;		//报警类型
+	u32		Grade;		//报警等级
+	u32		State;		//状态
+	u32 	addr;		//单灯/协调器地址
 	u8	Remark[48];	//备注
 } Tablewarn_t;
 
@@ -105,10 +106,9 @@ typedef struct sql_t{
 	int (*sql_delete)(const char*);
 	int (*sql_update)(const char*,const char*);
 	int (*sql_select)(const char*, char*,int,int,int,...);
-	int (*sql_init)(struct sql_t*);
-	void (*sql_errmsg)(int);
+	void (*sql_release)(struct sql_t**);
 } sql_t;
 
-extern sql_t g_sqlite;
+extern sql_t *sql_Init(void);
 
 #endif

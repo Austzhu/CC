@@ -43,21 +43,20 @@ typedef struct{
 	u8 Is_TCP;					//与服务器的连接方式
 } param_t;
 
-typedef struct appitf_t{
+typedef struct appitf_t {
+	Queue_t 	*Queue;
+	ethernet_t *ethernet;
+	serial_t 	*Serial;
+	sql_t 		*sqlite;
+	Single_t 	*single;
+	Warn_t 	*warn;
+	#ifdef Config_Meter
+	Meter_t 	*meter;
+	#endif
+
 	int Connect_status;		//网络连接状态
 	int HeartBeat_status;		//心跳状态
 	param_t param;
-
-	Queue_t *Queue;
-	ethernet_t *ethernet;
-	serial_t *Serial;
-	sql_t *sqlite;
-	Single_t *single;
-	#ifdef Config_Meter
-	Meter_t *meter;
-	#endif
-	Warn_t *warn;
-
 	int (*const UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*const TopUserInsertQue)(struct appitf_t *this);
 	int (*const TopUserProcQue)(struct appitf_t *this);

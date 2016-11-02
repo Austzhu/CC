@@ -7,6 +7,7 @@
 #include "database.h"
 #define Database_Path 	"./cc_corl.db"
 
+#if 0
 typedef struct {int errnum;char *Message;} errmsg_t;
 static errmsg_t ERRMessage[] = {
 	[0]   = {0,"Successful result"},
@@ -43,7 +44,7 @@ static errmsg_t ERRMessage[] = {
 };
 
 
-static void sql_errmsg(int err)
+void sql_errmsg(int err)
 {
 	if(err > 28){
 		for(int i=29,size=sizeof(ERRMessage)/sizeof(ERRMessage[0]);i<=size;++i){
@@ -58,7 +59,7 @@ static void sql_errmsg(int err)
 	}else
 		printf("Error Message:%s\n",ERRMessage[err].Message);
 }
-
+#endif
 
 /**
  * [ 往数据库里插入一条数据]
@@ -105,7 +106,6 @@ static int sql_Insert(const char *sql)
 	debug(DEBUG_sqlite3,"Insert table fail!\n");
 	return FAIL;
 }
-
 
 static int sql_delete(const char *sql)
 {
@@ -293,23 +293,30 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 	return FAIL;
 }
 
-static int sql_Init(struct sql_t *this)
+static void sql_release(struct sql_t**this)
 {
-	assert_param(this,NULL,FAIL);
-
-	this->sql_insert = sql_Insert;
-	this->sql_delete = sql_delete;
-	this->sql_update = sql_update;
-	this->sql_select = sql_select;
-	this->sql_errmsg = sql_errmsg;
-
-	if( this->sql_select && this->sql_update &&\
-		this->sql_delete && this->sql_insert && this->sql_errmsg)
-		return SUCCESS;
-	return FAIL;
+	memset(*this,0,sizeof(sql_t));
+	free(*this);
+	*this = NULL;
 }
-sql_t g_sqlite = {
-	.sql_init = sql_Init,
-};
 
+sql_t *sql_Init(void)
+{
+	sql_t *sql = malloc(sizeof(sql_t));
+	if(!sql) return NULL;
+	memset(sql,0,sizeof(sql_t));
 
+	sql->sql_insert = sql_Insert;
+	sql->sql_delete = sql_delete;
+	sql->sql_update = sql_update;
+	sql->sql_select = sql_select;
+	sql->sql_release = sql_release;
+
+	if( !sql->sql_insert  ||  !sql->sql_delete  ||\
+	!sql->sql_update  ||  !sql->sql_select  ||  !sql->sql_release){
+		free(sql);
+		return NULL;
+	}
+	return sql;
+
+}

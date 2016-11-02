@@ -69,7 +69,7 @@ static int reado(Meter_t *this,u8 slave_addr)
 	int res = -1;
 	char slave[16] = {0};
 	u8 *pslave = (u8*)slave;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 
 	memset(slave,0,sizeof(slave));
 	MakeSlave(pslave,slave_addr,0x01,0x08);
@@ -100,7 +100,7 @@ static int meter_sendpackage(Meter_t *this,u8 slave_addr,void *Message,u8 setval
 	 *  size of next control(1byte),the value for relay the bit is 1 open else close,CRC16(2byte)
 	 */
 	u8 *pf = (u8*)Message;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 
 	*pf = slave_addr;		//slave addr
 	*(pf+1) = 0x0f;			//CTRL
@@ -123,7 +123,7 @@ static int meter_open(Meter_t *this,u8 slave_addr, u8 ndo)
 	char slave[16] ={0};
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
-		meter_res_atonce(this->parent,sub_open,slave_addr,ndo,0,FAIL);
+		meter_res_atonce(this->topuser,sub_open,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
 	meter_sendpackage(this,slave_addr,slave, res|ndo);
@@ -138,7 +138,7 @@ static int meter_close(Meter_t *this,u8 slave_addr, u8 ndo)
 	char slave[16] = {0};
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
-		meter_res_atonce(this->parent,sub_close,slave_addr,ndo,0,FAIL);
+		meter_res_atonce(this->topuser,sub_close,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
 	meter_sendpackage(this,slave_addr,slave, ~ndo&res);
@@ -152,7 +152,7 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 	int res = -1;
 	char slave[16] = {0};
 	u8 *pslave = (u8*)slave;
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 
 	memset(slave,0,sizeof(slave));
 	MakeSlave(pslave,slave_addr,0x02,0x08);
@@ -175,7 +175,7 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 static int meter_reado(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 {
 	assert_param(this,NULL,FAIL);
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	int res = reado(this,slave_addr);
 	if(-1 == res)
 		return meter_res_atonce(topuser,subcmd,slave_addr,ndo,res,FAIL);
@@ -187,7 +187,7 @@ static int meter_flashopen(struct Meter_t *this,u8 slave_addr,u8 ndo,int ms)
 	assert_param(this,NULL,FAIL);
 
 	char slave[16] ={0};
-	appitf_t *topuser = this->parent;
+	appitf_t *topuser = this->topuser;
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
 		meter_res_atonce(topuser,sub_flash,slave_addr,ndo,0,FAIL);
@@ -202,21 +202,33 @@ static int meter_flashopen(struct Meter_t *this,u8 slave_addr,u8 ndo,int ms)
 	return meter_sendpackage(this,slave_addr,slave, res&~ndo);
 }
 
-static int meter_init(Meter_t *this,void *parent)
+static void meter_release(struct Meter_t **this)
 {
-	assert_param(this,NULL,FAIL);
-
-	this->parent = parent;
-	return SUCCESS;
+	memset(*this,0,sizeof(Meter_t));
+	free(*this);
+	*this = NULL;
 }
 
-#ifdef Config_Meter
-Meter_t g_meter ={
-	.meter_open = meter_open,
-	.meter_close = meter_close,
-	.meter_readi = meter_readi,
-	.meter_reado = meter_reado,
-	.meter_init = meter_init,
-	.meter_flashopen = meter_flashopen,
-};
-#endif
+Meter_t *meter_init(struct appitf_t *topuser)
+{
+	Meter_t *this = malloc(sizeof(Meter_t));
+	if(!this) return NULL;
+	memset(this,0,sizeof(Meter_t));
+
+	this->topuser = topuser;
+	this->meter_open = meter_open;
+	this->meter_close = meter_close;
+	this->meter_readi = meter_readi;
+	this->meter_reado = meter_reado;
+	this->meter_flashopen = meter_flashopen;
+	this->meter_release = meter_release;
+
+
+	if( !this->topuser || !this->meter_open || !this->meter_close ||\
+		!this->meter_readi || !this->meter_reado || \
+		!this->meter_flashopen || !this->meter_release ){
+		free(this);
+		return NULL;
+	}
+	return this;
+}

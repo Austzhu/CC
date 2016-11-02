@@ -15,6 +15,7 @@ enum Task_type{
 	Task_type_cc = 1,
 	Task_type_ethernet,
 	Task_type_device485,
+	Task_count,
 };
 
 /* define  the level for task */
@@ -55,21 +56,17 @@ typedef struct {
 	s32 (*pf)(Node_t*node,void *parent);
 } Proclist_t;
 
-
+struct appitf_t;
 /* the class for Queue */
 typedef struct Queue_t{
 	Taskque_t *Que_header;
-	void *parent;
-
+	struct appitf_t *parent;
 	s32 (*Task_Exec)(struct Queue_t*);
 	s32 (*Task_Append)(struct Queue_t*,u32 Que_type,u32 Task_level,void *pakect,int size);
 	s32 (*get_Quetype)(struct Queue_t*,u8 ctrl);
-	int (*Que_init) (struct Queue_t*,void *parent);
-	void (*Que_release)(struct Queue_t*);
+	void (*Que_release)(struct Queue_t**);
 } Queue_t;
 
-extern Queue_t Que;
-
-
+extern Queue_t *Queue_Init(struct appitf_t *topuser);
 
 #endif

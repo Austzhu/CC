@@ -72,7 +72,7 @@ static s32 get_Quetype(struct Queue_t *this,u8 ctrl)
 static void Clean_Que(Queue_t *Que)
 {
 	assert_param(Que,NULL,;);
-	#if 0
+	#if 1
 	Taskque_t *_pos = Que->Que_header;
 	do{
 		printf("bdvjsvjsj\n");
@@ -82,46 +82,6 @@ static void Clean_Que(Queue_t *Que)
 	}while(_pos != Que->Que_header);
 	#endif
 	Clean_list(&Que->Que_header,Taskque_t,entries);
-}
-static int Queue_Init(Queue_t *this,void *parent)
-{
-	assert_param(this,"Queue init this pointer is NULL!",FAIL);
-	Taskque_t *temp = NULL;
-	this->parent = parent;
-	/* create Queue list */
-	for(int i=0; i <= Task_type_device485;++i){
-		/* calloc for Queue header */
-		temp = calloc(1,sizeof(Taskque_t));
-		if(!temp){
-			debug(DEBUG_Queue,"calloc for task queue error!\n");
-			return FAIL;
-		}
-		INIT_LIST_HEAD(&temp->entries);
-		temp->queue_type = i;
-		pthread_mutex_init(&temp->task_queue_lock,NULL);
-		/* calloc for task node header */
-		temp->Node_header = calloc(1,sizeof(Node_t));
-		if( !temp->Node_header)  return FAIL;
-		INIT_LIST_HEAD(&temp->Node_header->entries);
-		temp->Node_header->task_type = 0;
-		temp->Node_header->task_level = 0;
-		temp->Node_header->package_len = 0;
-		temp->Node_header->tm = time(NULL);
-
-		if(this->Que_header == NULL){
-			this->Que_header = temp;
-			temp = NULL;
-		}else{
-			list_add_tail(&temp->entries, &this->Que_header->entries);
-		}
-	}
-	return SUCCESS;
-}
-
-
-static void Queue_Relese(Queue_t *this)
-{
-	Clean_Que(this);
 }
 
 static s32 Task_Append(Queue_t *this,u32 Que_type,u32 task_level,void *pakect,int size)
@@ -187,6 +147,112 @@ out:
 	return FAIL;
 }
 
+static void Queue_Relese(Queue_t **this)
+{
+	Clean_Que(*this);
+	memset(*this,0,sizeof(Queue_t));
+	free(*this);
+	*this = NULL;
+}
+
+static int Create_QueueHeader(Queue_t *this)
+{
+	assert_param(this,NULL,FAIL);
+
+	Taskque_t *temp = NULL;
+	/* create Queue list */
+	for(int i=0; i <Task_count; ++i){
+		/* calloc for Queue header */
+		temp = calloc(1,sizeof(Taskque_t));
+		if(!temp){
+			debug(DEBUG_Queue,"calloc for task queue error!\n");
+			return FAIL;
+		}
+		INIT_LIST_HEAD(&temp->entries);
+		temp->queue_type = i;
+		pthread_mutex_init(&temp->task_queue_lock,NULL);
+		/* calloc for task node header */
+		temp->Node_header = calloc(1,sizeof(Node_t));
+		if( !temp->Node_header)  return FAIL;
+		INIT_LIST_HEAD(&temp->Node_header->entries);
+		temp->Node_header->task_type = 0;
+		temp->Node_header->task_level = 0;
+		temp->Node_header->package_len = 0;
+		temp->Node_header->tm = time(NULL);
+
+		if(this->Que_header == NULL){
+			this->Que_header = temp;
+			temp = NULL;
+		}else{
+			list_add_tail(&temp->entries, &this->Que_header->entries);
+		}
+	}
+	return SUCCESS;
+}
+
+Queue_t *Queue_Init(struct appitf_t *topuser)
+{
+	Queue_t *this = malloc(sizeof(Queue_t));
+	if(!this) return NULL;
+	memset(this,0,sizeof(Queue_t));
+
+	if(SUCCESS != Create_QueueHeader(this)){
+		err_Print(DEBUG_Queue," Create Queue Header error!\n");
+		goto out;
+	}
+
+	this->parent = topuser;
+	this->Task_Exec = Task_Exec;
+	this->Task_Append = Task_Append;
+	this->get_Quetype = get_Quetype;
+	this->Que_release = Queue_Relese;
+
+	if( !this->parent || !this->Task_Exec || !this->Task_Append ||\
+		!this->get_Quetype || !this->Que_release){
+		err_Print(DEBUG_Queue," Queue Init here some api is NULL!\n");
+		goto out;
+	}
+	return this;
+out:
+	free(this);
+	return NULL;
+}
+
+#if 0
+static int Queue_Init(Queue_t *this,void *parent)
+{
+	assert_param(this,"Queue init this pointer is NULL!",FAIL);
+	Taskque_t *temp = NULL;
+	this->parent = parent;
+	/* create Queue list */
+	for(int i=0; i <= Task_type_device485;++i){
+		/* calloc for Queue header */
+		temp = calloc(1,sizeof(Taskque_t));
+		if(!temp){
+			debug(DEBUG_Queue,"calloc for task queue error!\n");
+			return FAIL;
+		}
+		INIT_LIST_HEAD(&temp->entries);
+		temp->queue_type = i;
+		pthread_mutex_init(&temp->task_queue_lock,NULL);
+		/* calloc for task node header */
+		temp->Node_header = calloc(1,sizeof(Node_t));
+		if( !temp->Node_header)  return FAIL;
+		INIT_LIST_HEAD(&temp->Node_header->entries);
+		temp->Node_header->task_type = 0;
+		temp->Node_header->task_level = 0;
+		temp->Node_header->package_len = 0;
+		temp->Node_header->tm = time(NULL);
+
+		if(this->Que_header == NULL){
+			this->Que_header = temp;
+			temp = NULL;
+		}else{
+			list_add_tail(&temp->entries, &this->Que_header->entries);
+		}
+	}
+	return SUCCESS;
+}
 
 Queue_t  Que = {
 	.Que_header = NULL,
@@ -196,3 +262,4 @@ Queue_t  Que = {
 	.Que_release = Queue_Relese,
 	.get_Quetype = get_Quetype,
 };
+#endif

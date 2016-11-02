@@ -37,7 +37,7 @@ int main(int argc,char *argv[])
 	pthread_t thread_UserProc = -1;
 	if(SUCCESS != g_appity.app_Init(&g_appity)){
 		debug(DEBUG_app,"system init error!\n");
-		exit(-1);
+		g_appity.app_relese(&g_appity);
 	}
 	pthread_create(&thread_Keepalive,NULL,KeepaliveThread,NULL);sleep(1);
 	pthread_create(&thread_RecvInsert,NULL,RecvInsertQueueThread,NULL);

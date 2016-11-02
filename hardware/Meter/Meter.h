@@ -14,19 +14,17 @@
 #include "include.h"
 
 typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;
-
+struct appitf_t;
 typedef struct Meter_t{
-	void *parent;
-	int (*const meter_open)(struct Meter_t*,u8 slave_addr, u8 ndo);
-	int (*const meter_close)(struct Meter_t*,u8 slave_addr, u8 ndo);
-	int (*const meter_readi)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
-	int (*const meter_reado)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
-	int (*const meter_flashopen)(struct Meter_t*,u8 slave_addr,u8 ndo,int ms);
-	int (*const meter_init)(struct Meter_t*,void*);
+	struct appitf_t *topuser;
+	int (*meter_open)(struct Meter_t*,u8 slave_addr, u8 ndo);
+	int (*meter_close)(struct Meter_t*,u8 slave_addr, u8 ndo);
+	int (*meter_readi)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
+	int (*meter_reado)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
+	int (*meter_flashopen)(struct Meter_t*,u8 slave_addr,u8 ndo,int ms);
+	void (*meter_release)(struct Meter_t**);
 } Meter_t;
 
-#ifdef Config_Meter
-extern Meter_t g_meter;
-#endif	//end of #ifdef Config_Meter
+extern Meter_t *meter_init(struct appitf_t *);
 
 #endif

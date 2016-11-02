@@ -15,15 +15,15 @@
 #define __ETHER_H__
 #include "include.h"
 
+struct appitf_t;
 typedef struct ethernet_t{
 	int ether_sock;					//网络连接的socket
 	int ether_recvlen;				//缓存数据的长度
-	int ether_recvhead;			//缓存数据中的读指针偏移量
+	int ether_recvhead;				//缓存数据中的读指针偏移量
 	u8 *ether_recvbuf;				//数据的缓存区
 	pthread_mutex_t ether_lock;
-	void *parent;
+	struct appitf_t *parent;
 
-	int (*ether_init)(struct ethernet_t*, void *parent);
 	int (*ether_connect)(struct ethernet_t*);
 	int (*ether_logon)(struct ethernet_t*);
 	int (*ether_packagecheck)(void *package,int size);
@@ -31,48 +31,10 @@ typedef struct ethernet_t{
 	int (*ether_heartbeat)(struct ethernet_t*);
 	int (*ether_getchar)(struct ethernet_t*,u8*);
 	int (*ether_recv)(struct ethernet_t*,u8*,int);
-	void (*ether_relese)(struct ethernet_t*);
+	void (*ether_relese)(struct ethernet_t**);
 	void (*ether_close)(struct ethernet_t*);
 } ethernet_t;
 
-extern ethernet_t ethernet;
-
-
-
-
-
-
-
-
-#if 0
-
-#include "link_method.h"
-#include "infor_out.h"
-#include "cc_param.h"
-#include "loadfile.h"
-#include "gprs_ppp.h"
-
-
-extern int sock_ether;
-
-SINT Ether_Disconnect(void);				//ok-20120316	socket_comm_line_stat MODIFY OK
-SINT Ether_Connect(void);				//ok-20120316  socket_comm_line_stat MODIFY OK
-SINT Ether_Logon(void);				//OK-20120317	 cc_register_stat
-SINT Ether_HeartBeat(void);				//OK-20120317	 cc_register_stat
-SINT Ether_Linestat(void);				//socket_comm_line_stat MODIFY OK
-SINT Ether_RawSend(UCHAR *buf, int len);		//ok-20120316 socket_comm_line_stat
-SINT Ether_Getchar(UCHAR *buf);			//ok-20120316  socket_comm_line_stat
-SINT Ether_Keepalive(void);
-
-
-
-#define CLOSE_SOCKET(sock)   do{ if((sock) >= 0) { close(sock); sock = -1; }}while(0)
-
-#define CONNECT_WAIT_SECOND 	5
-#define SEND_BUF_EMPTY_TIMES 	20
-#define SEND_WHEN_EMPTY_TIME 	10
-#define SOCKET_SET_OPT_TIMEOUT 	30
-
-#endif
+extern ethernet_t *ether_Init(struct appitf_t *topuser);
 
 #endif
