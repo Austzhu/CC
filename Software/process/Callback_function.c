@@ -24,25 +24,32 @@
 	pbuf[3] = 0x01;pbuf[4] = (subcmd);\
 }while(0)
 
+#define MakeUpdateResponse(pf,_cmd,_addr,_len,_res)  do{\
+	pf[0] = 0x52;  pf[1] = _len+2;  pf[2] = 0x80;  pf[3] = _len;  \
+	pf[4] = 0xff&((_cmd)>>8);  pf[5] = 0xff&(_cmd);  pf[6] = 0xff&((_addr)>>16);\
+	if(_len > 4){pf[7] = 0xff&((_addr)>>8);  pf[8] = 0xff&(_addr);pf[9] = _res;}\
+	else pf[7] = _res;\
+}while(0)
 
 
-s32 CallBack_Response(Node_t *node,void *parent)
+
+s32 CallBack_Response(Node_t *node,void *top)
 {
 	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(top,NULL,FAIL);
 
-	appitf_t *_parent = (appitf_t*)parent;
+	appitf_t *topuser = (appitf_t*)top;
 	u8 *Sendbuf = malloc(node->package[1] + 12);
 	if(!Sendbuf) return FAIL;
 
 	Sendbuf[0] = Sendbuf[7] = 0x68;
-	memcpy(Sendbuf+1,_parent->param.CCUID,6);
+	memcpy(Sendbuf+1,topuser->param.CCUID,6);
 	memcpy(Sendbuf+8,node->package + 2,node->package[1]);
-	if(_parent->param.ItfWay == ether_net /* 使用网络连接才能调用这接口 */ &&\
-		_parent->ethernet 		/* 是否定义了网络连接的类 */ &&\
-		_parent->ethernet->ether_packagecheck != NULL){
-		_parent->ethernet->ether_packagecheck(Sendbuf,node->package[1]+8);
-		_parent->ethernet->ether_send(_parent->ethernet,Sendbuf,node->package[1]+10);
+	if(topuser->param.ItfWay == ether_net  /* 使用网络连接才能调用这接口 */ &&\
+		topuser->ethernet  /* 是否定义了网络连接的类 */  &&\
+		topuser->ethernet->ether_packagecheck != NULL){
+		topuser->ethernet->ether_packagecheck(Sendbuf,node->package[1]+8);
+		topuser->ethernet->ether_send(topuser->ethernet,Sendbuf,node->package[1]+10);
 	}
 	#ifdef DisplayResPackage
 		printf("Response package:");
@@ -180,8 +187,6 @@ s32 CallBack_answer(Node_t *node,void*parent)
 	return SUCCESS;
 }
 
-
-
 s32 CallBack_single(Node_t *node,void*parent)
 {
 	assert_param(node,NULL,FAIL);
@@ -236,6 +241,7 @@ s32 CallBack_single(Node_t *node,void*parent)
 	}
 	return SUCCESS;
 }
+
 s32 CallBack_group(Node_t *node,void*parent)
 {
 	assert_param(node,NULL,FAIL);
@@ -292,6 +298,7 @@ s32 CallBack_group(Node_t *node,void*parent)
 	}
 	return SUCCESS;
 }
+
 s32 CallBack_broadcast(Node_t *node,void*parent)
 {
 	assert_param(node,NULL,FAIL);
@@ -381,5 +388,32 @@ s32 CallBack_meter(Node_t *node,void*parent)
 			break;
 		default:break;
 	}
+	return SUCCESS;
+}
+
+s32 CallBack_Update(Node_t *node,void *top)
+{
+	assert_param(node,NULL,FAIL);
+	assert_param(top,NULL,FAIL);
+	u8 AckBuffer[64] = {0};
+	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
+	appitf_t *topuser = (appitf_t*)top;
+	int addr = package->data[1] << 16,  res = -1;
+	 switch(package->data[0]){
+	 	case 0x06:
+	 		addr |= (package->data[2]<<8) | (package->data[3]);
+	 		res = topuser->single->sin_update(topuser->single,addr);
+	 		MakeUpdateResponse(AckBuffer,((0xA4<<8)|0x06),addr,6,res);
+	 		Append2Queue(AckBuffer,topuser->Queue);
+	 		debug(DEBUG_reset,"update %04x %s!\n",0xffff&addr,SUCCESS == res ? "ok":"error");
+	 		break;
+	 	case 0x05:
+	 		res = topuser->single->sin_update(topuser->single,addr);
+	 		MakeUpdateResponse(AckBuffer,((0xA4<<8)|0x05),addr,4,res);
+	 		Append2Queue(AckBuffer,topuser->Queue);
+	 		debug(DEBUG_reset,"update %02x %s!\n",0xff&(addr>>16),SUCCESS == res ? "ok":"error");
+	 		break;
+	 	default:break;
+	 }
 	return SUCCESS;
 }

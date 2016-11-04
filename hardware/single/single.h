@@ -13,30 +13,31 @@
 #define __single_h__
 #include "include.h"
 #include "taskque.h"
+#include "update.h"
 
-#define GetSingleCunt 30
-#define Query_res 0x80
-#define Query_nores 0
+#define GetSingleCunt    30
+#define Query_res             0x80
+#define Query_nores        0
+
+typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;
+typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;
+typedef enum {Query_elec,Query_stat } Query_t;
 
 typedef struct {
 	u8	Header;
 	u8 	Ctrl;
 	u8 	Group_Addr;
 	u8 	Coordi_Addr;
-	u8 	Single_Addr[2];	//高地址在前，低地址在后
-	u8 	Cmd[2];		//高字节在前，低字节在后
+	u8 	Single_Addr[2];   //高地址在前，低地址在后
+	u8 	Cmd[2];                  //高字节在前，低字节在后
 	u8 	Data[2];
 	u8 	Crc16[2];
 }light_t;
 
-typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;
-typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;
-typedef enum {Query_elec,Query_stat } Query_t;
-
-
 struct appitf_t;
 typedef struct Single_t{
 	struct appitf_t *topuser;
+	struct update_t *update;
 	int (*sin_open)(struct Single_t*,int,u32,u32);
 	int (*sin_close)(struct Single_t*,int,u32);
 	int (*sin_reply)(struct Single_t*,int,int,int);
@@ -44,6 +45,7 @@ typedef struct Single_t{
 	int (*sin_Queryelectric)(struct Single_t*,int,u32);
 	int (*sin_Querystatus)(struct Single_t*,int,u32);
 	int (*sin_RecvPackage)(struct Single_t*,void*,int,int);
+	int (*sin_update)(struct Single_t*,int);
 	void (*sin_release)(struct Single_t**);
 	void (*Display)(const char*,void*,int);
 } Single_t;

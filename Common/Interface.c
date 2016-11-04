@@ -12,12 +12,11 @@
 #include "Interface.h"
 #include "single.h"
 
-#define Top_Relese(TopUser,class,func,Message,args...) do{\
-	if(TopUser->class && TopUser->class->func && \
-		SUCCESS == TopUser->class->func(TopUser->class,##args)){\
-	}else{\
-		printf(Message"\n");\
-		return FAIL;\
+#define module_release(class,func,args...) do{\
+	if(class && class->func)\
+		class->func(&class,##args);\
+	else{\
+		free(class);class = NULL;\
 	}\
 }while(0)
 
@@ -83,7 +82,7 @@ static int TopUser_Keepalive(appitf_t *this)
 	if(this->HeartBeat_status == HeartBeat_ok){
 		this->HeartBeat_status = HeartBeat_error;
 		/* HeartBeat */
-		if(this->ethernet && this->ethernet->ether_heartbeat && \
+		if(this->ethernet && this->ethernet->ether_heartbeat &&\
 			SUCCESS != this->ethernet->ether_heartbeat(this->ethernet))
 			return FAIL;
 		this->msleep(1000*this->param.HeartBCycle);
@@ -172,6 +171,7 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 			err_Print(1,"Recv package check error!\n");
 			return FAIL;
 		}
+		/* 收到完整数据包，则标志心跳为ok */
 		this->Connect_status = Connect_ok;
 		this->HeartBeat_status = HeartBeat_ok;
 		return SUCCESS;
@@ -260,26 +260,32 @@ static int get_checkhl(int cmd,u8 *crc, u8 *message, int nLen)
 
 static int TopUser_Relese(appitf_t *this)
 {
-	this->Queue->Que_release(&this->Queue);
-	this->ethernet->ether_relese(&this->ethernet);
-	this->Serial->serial_relese(&this->Serial);
-	this->sqlite->sql_release(&this->sqlite);
-	this->single->sin_release(&this->single);
-	this->warn->warn_relese(&this->warn);
+	assert_param(this,NULL,FAIL);
+	module_release(this->Queue,Que_release);
+	module_release(this->ethernet,ether_relese);
+	module_release(this->Serial,serial_relese);
+	module_release(this->sqlite,sql_release);
+	module_release(this->single,sin_release);
+	module_release(this->warn,warn_relese);
 	#ifdef Config_Meter
-	this->meter->meter_release(&this->meter);
+	module_release(this->meter,meter_release);
 	#endif
 	exit(0);
+}
+
+static void app_exit(int signal)
+{
+	TopUser_Relese(&g_appity);
 }
 
 static int appitf_init(appitf_t *this)
 {
 	assert_param(this,NULL,FAIL);
-
 	loadParam(&g_appity);
 	this->Connect_status = Connect_error;
 	this->HeartBeat_status = HeartBeat_error;
-
+	/* catch signal "ctrl+c" to exit application */
+	signal(SIGINT,app_exit);
 	/* init for Queue */
 	if(NULL == (this->Queue = Queue_Init(this))) return FAIL;
 	//TopUser_Init(this,Queue,Que_init,"Queue init error!",this);

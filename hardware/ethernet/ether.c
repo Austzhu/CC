@@ -13,8 +13,8 @@
 #include "ether.h"
 #include "Interface.h"
 
-#define ether_RecvBufSize  2048
-#define ether_SocketTimeout  30
+#define ether_RecvBufSize        2048
+#define ether_SocketTimeout   30
 
 static int ether_Connect(ethernet_t *this)
 {
@@ -74,6 +74,7 @@ static int get_packageCheck(void *package,int size)
 	*pchar = 0x16;
 	return SUCCESS;
 }
+
 static int ether_HeartBeat(ethernet_t *this)
 {
 	#define HeartSize 14
@@ -85,14 +86,13 @@ static int ether_HeartBeat(ethernet_t *this)
 	*heart++ = 0x68;
 	memcpy(heart,((appitf_t*)this->parent)->param.CCUID,6);
 	heart += 6;
-	*heart++ = 0x68;
-	*heart++ = 0xA1;
-	*heart++ = 0x02;
-	*heart++ = 0x02;
+	*heart++ = 0x68;  *heart++ = 0xA1;
+	*heart++ = 0x02;  *heart++ = 0x02;
 	*heart++ = 0x00;
 	this->ether_packagecheck(heartbuf,HeartSize-2);
 	return this->ether_send(this,heartbuf,HeartSize);
 }
+
 static int ether_logon(ethernet_t *this)
 {
 	#define LogonSize 13
@@ -104,38 +104,35 @@ static int ether_logon(ethernet_t *this)
 	*logon++ = 0x68;
 	memcpy(logon,((appitf_t*)this->parent)->param.CCUID,6);
 	logon += 6;
-	*logon++ = 0x68;
-	*logon++ = 0xA1;
-	*logon++ = 0x01;
-	*logon++ = 0x01;
+	*logon++ = 0x68;  *logon++ = 0xA1;
+	*logon++ = 0x01;  *logon++ = 0x01;
 	this->ether_packagecheck(logonBuf,LogonSize-2);
 	return this->ether_send(this,logonBuf,LogonSize);
 }
 
 static int ether_Send(ethernet_t *this,u8 *buffer,int size)
 {
-	#define Wait_SendEmpty  20
+	#define Wait_SendEmpty  30
 	assert_param(this,NULL,FAIL);
 	assert_param(buffer,NULL,FAIL);
-
-	int buflen = -1;
 	if(this->ether_sock < 0) goto out;
 
-	pthread_mutex_lock(&this->ether_lock); 	//get the ether lock
+	int buflen = -1;
+	pthread_mutex_lock(&this->ether_lock);                      //get the ether lock
 	if( send(this->ether_sock,buffer,size,MSG_NOSIGNAL) < 0){
-		pthread_mutex_unlock(&this->ether_lock);	//relese the ether lock
+		pthread_mutex_unlock(&this->ether_lock);          //relese the ether lock
 		err_Print(DEBUG_Ethnet, "ethernet send data error!\n");
 		goto out;
 	}
-	pthread_mutex_unlock(&this->ether_lock);	//relese the ether lock
-
-	for(int i=0;i < Wait_SendEmpty; ++i){
+	pthread_mutex_unlock(&this->ether_lock);                 //relese the ether lock
+	/* make sure send success! */
+	for(int i=0; i < Wait_SendEmpty; ++i){
 		if (ioctl(this->ether_sock, SIOCOUTQ, &buflen)) {
 			err_Print(DEBUG_Ethnet, "The data is not sent out!\n");
 			goto out;
 		}
 		if (0 == buflen) return SUCCESS;
-		usleep(100000);			//100ms
+		usleep(50000);               //50ms
 	}
  out:
  	return FAIL;
@@ -145,13 +142,14 @@ static int ether_Getchar(ethernet_t *this,u8 *buf)
 {
 	assert_param(this,NULL,FAIL);
 	assert_param(buf,NULL,FAIL);
-
 	if(this->ether_sock < 0) goto out;
 
 	if(this->ether_recvlen <= 0){
-		this->ether_recvlen = recv(this->ether_sock, this->ether_recvbuf, ether_RecvBufSize, MSG_DONTWAIT);
-
+		this->ether_recvlen = recv(this->ether_sock,\
+			this->ether_recvbuf, ether_RecvBufSize, MSG_DONTWAIT);
+		/* recv error or the peer has performed an orderly shutdown */
 		if( this->ether_recvlen <= 0  ){
+			/* have no data */
 			if(errno == EWOULDBLOCK ) return RECV_NULL;
 			err_Print(DEBUG_Ethnet, "ethernet recv error! \n");
 			goto out;
@@ -164,7 +162,6 @@ static int ether_Getchar(ethernet_t *this,u8 *buf)
 	++this->ether_recvhead;
 	--this->ether_recvlen;
 	return SUCCESS;
-
  out:
  	return FAIL;
 }
@@ -176,8 +173,7 @@ static int ether_Recv(ethernet_t *this,u8 *buf,int size)
 	int res = -1;
 	u8 *pbuf = buf;
 	while(size--){
-		res = this->ether_getchar(this,pbuf);
-		pbuf++;
+		res = this->ether_getchar(this,pbuf++);
 		if(SUCCESS != res) return res;
 	}
 	return pbuf-buf;
@@ -189,8 +185,7 @@ static void ether_Relese(ethernet_t **this)
 	assert_param(*this,NULL,;);
 	free((*this)->ether_recvbuf);
 	memset(*this,0,sizeof(ethernet_t));
-	free(*this);
-	*this = NULL;
+	free(*this);   *this = NULL;
 }
 
 ethernet_t *ether_Init(struct appitf_t *topuser)
@@ -224,7 +219,7 @@ ethernet_t *ether_Init(struct appitf_t *topuser)
 	}
 
 	return this;
-out1:
+ out1:
 	free(this->ether_recvbuf);
  out:
 	free(this);

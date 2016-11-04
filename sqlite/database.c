@@ -239,7 +239,6 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 
 	/* 开启外键约束 */
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
-	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 
 	/* 准备对象 */
 	int res = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
@@ -287,6 +286,7 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 	if(db)	sqlite3_close(db);
 	return SUCCESS;
  out:
+ 	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
  	if(stmt)	sqlite3_finalize(stmt);
 	if(db)	sqlite3_close(db);
 	debug(DEBUG_sqlite3,"Select Data fail!\n");

@@ -1,5 +1,5 @@
 
-COBJS := single.o
+COBJS := single.o update.o
 OBJS += $(COBJS)
 
 all:$(COBJS)

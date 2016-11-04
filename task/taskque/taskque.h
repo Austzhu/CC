@@ -50,10 +50,11 @@ typedef struct {
 	u8 data[0];
 } PureCmdArry_t;
 
+
 /* the struct for call back function */
 typedef struct {
 	u8 ctrl;
-	s32 (*pf)(Node_t*node,void *parent);
+	s32 (*pf)(Node_t*node,void*);
 } Proclist_t;
 
 struct appitf_t;
@@ -62,7 +63,7 @@ typedef struct Queue_t{
 	Taskque_t *Que_header;
 	struct appitf_t *parent;
 	s32 (*Task_Exec)(struct Queue_t*);
-	s32 (*Task_Append)(struct Queue_t*,u32 Que_type,u32 Task_level,void *pakect,int size);
+	s32 (*Task_Append)(struct Queue_t*,u32,u32 ,void *,int);
 	s32 (*get_Quetype)(struct Queue_t*,u8 ctrl);
 	void (*Que_release)(struct Queue_t**);
 } Queue_t;

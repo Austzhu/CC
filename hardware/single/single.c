@@ -450,7 +450,6 @@ out:
 	return update_status(this, light_info, info_size);
 }
 
-
 static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int size)
 {
 	assert_param(this,NULL,FAIL);
@@ -606,11 +605,10 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
 		Waittime = CoordiAddr[j].single_Count*10;
-		printf("\nWait time =%d\n",Waittime);
 		MakeSinglePack(&single,0x50,0x0001,Addr,getcnt);
 		topuser->Serial->serial_flush(topuser->Serial,COM_485);
 		topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
-		this->Display("Query electric Send data:",&single,sizeof(single));
+		this->Display("\nQuery electric Send data:",&single,sizeof(single));
 		topuser->Serial->serial_send(topuser->Serial,COM_485,\
 							(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
@@ -647,7 +645,6 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 	return SUCCESS;
 out:
 	/* The second response to PC */
-
 	if(-1 == flags )
 		Response_PC(this,NULL,0,0x03,FAIL,Query_elec|Is_res);
 	else
@@ -804,12 +801,10 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 	for(int j=0;j<Coordinate_count;){
 		Addr = CoordiAddr[j].Coor_Addr << 16;
 		Waitime = CoordiAddr[j].single_Count * 10;
-		printf("\nWait time =%d\n",Waitime);
-
 		MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
 		topuser->Serial->serial_flush(topuser->Serial,COM_485);
 		topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
-		this->Display("Query electric Send data:",&single,sizeof(single));
+		this->Display("\nQuery electric Send data:",&single,sizeof(single));
 		topuser->Serial->serial_send(topuser->Serial,COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
@@ -894,8 +889,44 @@ static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)
 	return SUCCESS;
 }
 
+static int sin_update(Single_t*this,int addr)
+{
+	assert_param(this,NULL,FAIL);
+
+	light_t single;
+	if(addr&0xffff){      //update single
+		MakeSinglePack(&single,0x01,0x80,addr,0);
+	}else{
+		MakeSinglePack(&single,0x10,0x80,addr,~0);
+	}
+	this->topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
+	this->Display("\nupdate Send data:",&single,sizeof(single));
+	this->topuser->Serial->serial_send(this->topuser->Serial,\
+				COM_485,(s8*)&single,sizeof(light_t),SendTimeout);
+	if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout)){
+		err_Print(DEBUG_update,"update recv package error!\n");
+		return FAIL;
+	}
+	this->update = update_init(this);
+	if(!this->update) goto out;
+	if(SUCCESS != this->update->update_start(this->update,addr,(char)single.Data[0]))
+		goto out;
+	this->update->update_release(&this->update);
+	return SUCCESS;
+ out:
+ 	printf("update error!\n");
+ 	this->update->update_release(&this->update);
+ 	return FAIL;
+}
+
 static void sin_release(struct Single_t **this)
 {
+	if((*this)->update && (*this)->update->update_release )
+		(*this)->update->update_release(&(*this)->update);
+	else {
+		free((*this)->update);
+		(*this)->update = NULL;
+	}
 	memset(*this,0,sizeof(Single_t));
 	free(*this);
 	*this = NULL;
@@ -916,10 +947,10 @@ Single_t *single_Init(struct appitf_t *topuser)
 	single->sin_Querystatus = sin_Querystatus;
 	single->sin_config = sin_Config;
 	single->sin_release = sin_release;
-
+	single->sin_update = sin_update;
 
 	if(!single->topuser || !single->sin_open || !single->sin_close || !single->sin_release ||\
-		!single->sin_reply || !single->sin_config || !single->sin_Queryelectric ||\
+		!single->sin_reply || !single->sin_config || !single->sin_Queryelectric || !single->sin_update||\
 		!single->sin_Querystatus || !single->sin_RecvPackage || !single->Display){
 		free(single);
 		return NULL;

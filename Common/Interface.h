@@ -22,40 +22,39 @@
 #include "Warn.h"
 
 
-#define Connect_ok		 	 0
-#define Connect_error		-1
-#define HeartBeat_ok		 	 0
-#define HeartBeat_error		-1
+#define Connect_ok              0
+#define Connect_error        -1
+#define HeartBeat_ok          0
+#define HeartBeat_error    -1
 
 typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;
 typedef enum { crc_get, crc_check }  crc_t;
 
 typedef struct{
-	u8 CCUID[6];				//集中控制器的UID
-	u8 DebugLevel;			//调试等级
-	u8 ControlMethod;			//控制模式
-	s8 ServerIpaddr[32];		//服务器IP
-	u16 ServerPort;			//服务器的端口
-	u8 ItfWay;					//集中器的操作方法
-	u8 HeartBCycle;			//心跳周期
-	u8 KwhSaveDay;			//电路保存天数
-	u8 KwhReadInter;			//电量的读取间隔
-	u8 Is_TCP;					//与服务器的连接方式
+	u8 CCUID[6];                   //集中控制器的UID
+	u8 DebugLevel;	             //调试等级
+	u8 ControlMethod;	      //控制模式
+	s8 ServerIpaddr[32];     //服务器IP
+	u16 ServerPort;             //服务器的端口
+	u8 ItfWay;                       //集中器的操作方法
+	u8 HeartBCycle;            //心跳周期
+	u8 KwhSaveDay;           //电路保存天数
+	u8 KwhReadInter;       //电量的读取间隔
+	u8 Is_TCP;                      //与服务器的连接方式
 } param_t;
 
 typedef struct appitf_t {
-	Queue_t 	*Queue;
+	Queue_t   *Queue;
 	ethernet_t *ethernet;
-	serial_t 	*Serial;
-	sql_t 		*sqlite;
-	Single_t 	*single;
-	Warn_t 	*warn;
+	serial_t   *Serial;
+	sql_t   *sqlite;
+	Single_t   *single;
+	Warn_t   *warn;
 	#ifdef Config_Meter
-	Meter_t 	*meter;
+	Meter_t   *meter;
 	#endif
-
-	int Connect_status;		//网络连接状态
-	int HeartBeat_status;		//心跳状态
+	int Connect_status;        //网络连接状态
+	int HeartBeat_status;    //心跳状态
 	param_t param;
 	int (*const UID_Check)(struct appitf_t *this,void*r_uid);
 	int (*const TopUserInsertQue)(struct appitf_t *this);
