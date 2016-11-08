@@ -158,7 +158,7 @@ s32 loadParam(void *app)
 	debug(DEBUG_loadfile,"File size: %d\n",i=ftell(fp));
 	if( filebuf = malloc(i+1), !filebuf){
 		debug(DEBUG_loadfile,"%s,%d:malloc err!\n",__func__,__LINE__);
-		//Write_log(err,"malloc for config file buffer fial!");
+		fclose(fp);
 		 return FAIL;
 	}
 	memset(filebuf,0,i+1);

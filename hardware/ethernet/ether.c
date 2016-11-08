@@ -184,6 +184,7 @@ static void ether_Relese(ethernet_t **this)
 	assert_param(this,NULL,;);
 	assert_param(*this,NULL,;);
 	free((*this)->ether_recvbuf);
+	(*this)->ether_close(*this);
 	memset(*this,0,sizeof(ethernet_t));
 	free(*this);   *this = NULL;
 }

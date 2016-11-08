@@ -51,8 +51,8 @@ compile:
 
 #将可程序拷贝到nfs目录下
 install:
-	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/
-	@cp -frd ./config/ $(PRJROOT)/rootfs/
+	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/ztcc
+	@cp -frd ./config/ $(PRJROOT)/rootfs/ztcc
 
 
 svnver:
