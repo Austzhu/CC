@@ -35,9 +35,9 @@ static u8* StrToHex(u8 *pbDest, u8 *pbSrc, int nLen)
  */
 static s32 GetStringParam(s8*filebuf,const char *Column,char *desk)
 {
-	assert_param(filebuf,NULL,FAIL);
-	assert_param(Column,NULL,FAIL);
-	assert_param(desk,NULL,FAIL);
+	assert_param(filebuf,FAIL);
+	assert_param(Column,FAIL);
+	assert_param(desk,FAIL);
 
 	char *res = strstr(filebuf,Column);
 	if(res){
@@ -51,8 +51,8 @@ static s32 GetStringParam(s8*filebuf,const char *Column,char *desk)
  */
 static u32 GetIntParam(s8*filebuf,const char *Column)
 {
-	assert_param(filebuf,NULL,ERRORS);
-	assert_param(Column,NULL,ERRORS);
+	assert_param(filebuf,ERRORS);
+	assert_param(Column,ERRORS);
 
 	char *res = strstr(filebuf,Column);
 	if(res){
@@ -66,9 +66,9 @@ static u32 GetIntParam(s8*filebuf,const char *Column)
  */
 static s32 GetHexParam(s8 *filebuf, const s8 *Column, u8 *dest, s32 nL)
 {
-	assert_param(filebuf,NULL,FAIL);
-	assert_param(Column,NULL,FAIL);
-	assert_param(dest,NULL,FAIL);
+	assert_param(filebuf,FAIL);
+	assert_param(Column,FAIL);
+	assert_param(dest,FAIL);
 
 	char *res = NULL;
 	res = strstr(filebuf,Column);
@@ -100,8 +100,8 @@ static s32 GetHexParam(s8 *filebuf, const s8 *Column, u8 *dest, s32 nL)
  */
 static s32 AssignmentParam(s8 *filebuf ,void *app)
 {
-	assert_param(filebuf,NULL,FAIL);
-	assert_param(app,NULL,FAIL);
+	assert_param(filebuf,FAIL);
+	assert_param(app,FAIL);
 	appitf_t *pa = app;
 	/* CCUID */
 	if( SUCCESS != GetHexParam(filebuf,"CCUID",pa->param.CCUID, sizeof(pa->param.CCUID)) )
@@ -144,7 +144,7 @@ s32 loadParam(void *app)
 	FILE *fp = NULL;
 	s8 *filebuf = NULL;
 	u32 i = 0;
-	assert_param(app,NULL,FAIL);
+	assert_param(app,FAIL);
 	/* 去除空行和带#号的行 且删除字段里的的空格 */
 	system("grep -v '^$' " FILE_PARAM " | grep -v '^#'  | sed 's/[[:space:]]//g' > temp");
 

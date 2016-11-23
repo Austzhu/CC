@@ -5,7 +5,7 @@
 	> Created Time:	2016年03月30日 星期三 10时38分53秒
  *******************************************************************/
 #include "database.h"
-#define Database_Path 	"./cc_corl.db"
+#define Database_Path 	"cc_corl.db"
 
 #if 0
 typedef struct {int errnum;char *Message;} errmsg_t;
@@ -69,7 +69,7 @@ void sql_errmsg(int err)
  */
 static int sql_Insert(const char *sql)
 {
-	assert_param(sql,NULL,FAIL);
+	assert_param(sql,FAIL);
 
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
@@ -109,7 +109,7 @@ static int sql_Insert(const char *sql)
 
 static int sql_delete(const char *sql)
 {
-	assert_param(sql,NULL,FAIL);
+	assert_param(sql,FAIL);
 
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
@@ -157,8 +157,8 @@ static int sql_delete(const char *sql)
  */
 static int sql_update(const char *table,const char *Condition)
 {
-	assert_param(Condition,"sql_update param 1 err!",FAIL);
-	assert_param(table,"sql_update param 2 err!",FAIL);
+	assert_param(Condition,FAIL);
+	assert_param(table,FAIL);
 
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
@@ -179,6 +179,7 @@ static int sql_update(const char *table,const char *Condition)
 		//Write_log(err,Asprintf("In %s %s %d:Prepare Sqlite fail!",__FILE__,__func__,__LINE__)  );
 		goto out;
 	}
+
 	/* 执行操作，向数据库里插入数据 */
 	int res = sqlite3_step(stmt);
 	if (SQLITE_DONE != res  ) {
@@ -188,13 +189,13 @@ static int sql_update(const char *table,const char *Condition)
 	 }
 
 	if(sql) free(sql);
-	if (stmt)sqlite3_finalize(stmt);
-	if(db)	sqlite3_close(db);
+	if(stmt)  sqlite3_finalize(stmt);
+	if(db)  sqlite3_close(db);
 	return SUCCESS;
  out:
  	if(sql) free(sql);
-	if (stmt)sqlite3_finalize(stmt);
-	if(db)	sqlite3_close(db);
+	if(stmt) sqlite3_finalize(stmt);
+	if(db)  sqlite3_close(db);
 	debug(DEBUG_sqlite3,"Update_Table fail!\n");
 	return FAIL;
 }
@@ -214,8 +215,8 @@ static int sql_update(const char *table,const char *Condition)
  */
 static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)
 {
-	assert_param(sql,NULL,FAIL);
-	assert_param(buf,NULL,FAIL);
+	assert_param(sql,FAIL);
+	assert_param(buf,FAIL);
 
 	u32 i=0,j=0;
 	sqlite3 *db = NULL;

@@ -1,10 +1,5 @@
-#########################################################################
-# File Name: create_database.sh
-# Author: Austzhu
-# mail: 153462902@.com
-# Created Time: 2016年05月17日 星期二 11时29分08秒
-#########################################################################
 #!/bin/sh
+
 dbname=cc_corl.db
 Table_Single=db_light
 Table_Coordi=db_coordinator

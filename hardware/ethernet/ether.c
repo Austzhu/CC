@@ -18,7 +18,7 @@
 
 static int ether_Connect(ethernet_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	struct sockaddr_in addr;
 	struct timeval timeo;
@@ -55,7 +55,7 @@ static int ether_Connect(ethernet_t *this)
 
 static void ether_Close(ethernet_t *this)
 {
-	assert_param(this,NULL,;);
+	assert_param(this,;);
 
 	if(this->ether_sock >0){
 		close(this->ether_sock);
@@ -65,7 +65,7 @@ static void ether_Close(ethernet_t *this)
 
 static int get_packageCheck(void *package,int size)
 {
-	assert_param(package,NULL,FAIL);
+	assert_param(package,FAIL);
 
 	u8 chk = 0;
 	u8 *pchar = package;
@@ -78,7 +78,7 @@ static int get_packageCheck(void *package,int size)
 static int ether_HeartBeat(ethernet_t *this)
 {
 	#define HeartSize 14
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	u8 heartbuf[24] = {0};
 	u8 *heart = heartbuf;
@@ -96,7 +96,7 @@ static int ether_HeartBeat(ethernet_t *this)
 static int ether_logon(ethernet_t *this)
 {
 	#define LogonSize 13
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	u8 logonBuf[24] = {0};
 	u8 *logon = logonBuf;
@@ -113,8 +113,8 @@ static int ether_logon(ethernet_t *this)
 static int ether_Send(ethernet_t *this,u8 *buffer,int size)
 {
 	#define Wait_SendEmpty  30
-	assert_param(this,NULL,FAIL);
-	assert_param(buffer,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(buffer,FAIL);
 	if(this->ether_sock < 0) goto out;
 
 	int buflen = -1;
@@ -140,8 +140,8 @@ static int ether_Send(ethernet_t *this,u8 *buffer,int size)
 
 static int ether_Getchar(ethernet_t *this,u8 *buf)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(buf,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(buf,FAIL);
 	if(this->ether_sock < 0) goto out;
 
 	if(this->ether_recvlen <= 0){
@@ -168,8 +168,8 @@ static int ether_Getchar(ethernet_t *this,u8 *buf)
 
 static int ether_Recv(ethernet_t *this,u8 *buf,int size)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(buf,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(buf,FAIL);
 	int res = -1;
 	u8 *pbuf = buf;
 	while(size--){
@@ -181,8 +181,8 @@ static int ether_Recv(ethernet_t *this,u8 *buf,int size)
 
 static void ether_Relese(ethernet_t **this)
 {
-	assert_param(this,NULL,;);
-	assert_param(*this,NULL,;);
+	assert_param(this,;);
+	assert_param(*this,;);
 	free((*this)->ether_recvbuf);
 	(*this)->ether_close(*this);
 	memset(*this,0,sizeof(ethernet_t));

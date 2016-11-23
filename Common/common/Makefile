@@ -1,5 +1,5 @@
 
-COBJS :=common.o
+COBJS :=common.o CRC.o
 OBJS += $(COBJS)
 
 all:$(COBJS)

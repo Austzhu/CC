@@ -15,7 +15,7 @@ DirSoft=$Topdir/Software
 CPATH=$Topdir/Common:$Topdir/Common/My_lib:$Topdir/Common/common:\
 $Topdir/config:$DirHard/ethernet:$DirSoft/process:$DirSoft/initstart:$DirSoft/Log:\
 $Topdir/sqlite:$Topdir/task/taskque:$Topdir/User:$Topdir/version:$DirHard/serial:\
-$DirHard/single:$DirHard/Meter:$DirSoft/Warn:$CPATH
+$DirHard/single:$DirHard/Meter:$DirSoft/Warn:$DirSoft/emfuture/include:$CPATH
 
 export CPATH
 

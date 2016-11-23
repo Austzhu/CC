@@ -1,6 +1,6 @@
 # Package Information for pkg-config
 
-prefix=/home/austzhu/soft/sqlite3
+prefix=/home/austzhu/soft/Tool/sql/install
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

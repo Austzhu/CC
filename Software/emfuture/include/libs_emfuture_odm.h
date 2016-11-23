@@ -8,6 +8,7 @@
 #ifndef LIBS_EMFUTURE_ODM_H_
 #define LIBS_EMFUTURE_ODM_H_
 
+
 #include <sys/types.h>
 #include <string.h>
 #include <stdio.h>
@@ -45,470 +46,470 @@
 #include <sys/file.h>
 #include <signal.h>
 
+#define EM_EC_6018
 
 #if defined(EM_EC4212_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB			1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB			1
+	#define CFG_GPIO_LIB			1
 #elif defined(EM_EC4212v3_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB			1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB			1
+	#define CFG_GPIO_LIB			1
 #elif defined(EM_EC4216_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB			1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB			1
+	#define CFG_GPIO_LIB			1
 #elif defined(EM_EC4216E_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB			1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB			1
+	#define CFG_GPIO_LIB			1
 #elif defined(EM_EC4218_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_ERTU5100_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DAC_LIB			1
-#define CFG_ADC_LIB			1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DAC_LIB			1
+	#define CFG_ADC_LIB			1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_KYLAND_32AI)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DAC_LIB			1
-#define CFG_ADC_LIB			1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DAC_LIB			1
+	#define CFG_ADC_LIB			1
 #elif defined(EM_PDM_24AI)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DAC_LIB			1
-#define CFG_ADC_LIB			1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DAC_LIB			1
+	#define CFG_ADC_LIB			1
 #elif defined(EM_PDM_24AI)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ADC_LIB			1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ADC_LIB			1
 #elif defined(EM_ERTU5108_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_EPSD9X5_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_EW322_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_EW3XX_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_FDA54_ODM)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_HB54YZ_ODM)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_TIANYBD_ODM)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ADC_LIB			1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ADC_LIB			1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_CSDTXY_ODM)
-#define CPU_T91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ADC_LIB			1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_T91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ADC_LIB			1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_BJHTFD_ODM)
-#define CPU_AT91SAM9G45		1
-#define CFG_USART_LIB		1
-#define CFG_ADC_LIB			1
-#define CFG_GPIO_LIB		1
-#define CFG_DAC_LIB			1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_KBD_LIB			1
+	#define CPU_AT91SAM9G45		1
+	#define CFG_USART_LIB		1
+	#define CFG_ADC_LIB			1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DAC_LIB			1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_KBD_LIB			1
 #elif defined(EM_BJZTXY_ODM)
-#define CPU_AT91SAM9G45		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_KBD_LIB			1
+	#define CPU_AT91SAM9G45		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_KBD_LIB			1
 #elif defined(EM_EC2012)
-#define CPU_AT91SAM9G20		1
-#define CFG_USART_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G20		1
+	#define CFG_USART_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC4210)
-#define CPU_AT91SAM9G20
-#define CFG_USART_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G20
+	#define CFG_USART_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC2212_EX)
-#define CPU_AT91SAM9G20		1
-#define CFG_USART_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G20		1
+	#define CFG_USART_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_BJTKY_ODM)
-#define CPU_AT91SAM9263		1
-#define CFG_USART_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9263		1
+	#define CFG_USART_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_BEIJZJ_ODM)
-#define CPU_AT91SAM9G20		1
-#define CFG_USART_LIB		1
-#define CFG_ADC_LIB			1
-#define CFG_GPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G20		1
+	#define CFG_USART_LIB		1
+	#define CFG_ADC_LIB			1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_BEIJQL_ODM)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_BEIJHL_ODM)
-#define CPU_AT91SAM9G45		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G45		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EU_6016)
-#define CPU_AT91SAM9G45		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G45		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_SOM9G45_PD)
-#define CPU_AT91SAM9G45		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9G45		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC2022E_PD)
-#define CPU_AT91SAM9X5		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AT91SAM9X5		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_LTC_2016)
-#define CPU_LOONGSON1B		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_LOONGSON1B		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_8310)
-#define CPU_PC8315E			1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_PC8315E			1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_HR405)
-#define CPU_AMCC405EP		1
-#define CFG_USART_LIB		1
-#define CFG_FIFO_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_AMCC405EP		1
+	#define CFG_USART_LIB		1
+	#define CFG_FIFO_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_ERTU5200_PD)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_DAC_LIB			1
-#define CFG_ADC_LIB			1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_DAC_LIB			1
+	#define CFG_ADC_LIB			1
 #elif defined(EM_CDHDR_ZX104A)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ADC_LIB			1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ADC_LIB			1
 #elif defined(EM_EC_6012)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_6210)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_6510)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_6018)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EU_6200)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_EC_TJMLODM)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_TIMER_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_TIMER_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_JBH_ODM)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_GPIO_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_GPIO_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
 #elif defined(EM_WXS_A8GATE)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_DTXY_A8GATE)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #elif defined(EM_ZHHR_A8GATE)
-#define CPU_TIAM335X		1
-#define CFG_USART_LIB		1
-#define CFG_ENGPIO_LIB		1
-#define CFG_DATETIM_LIB		1
-#define CFG_HIGHTIMER_LIB	1
-#define CFG_TIMER_LIB		1
-#define CFG_WDG_LIB			1
-#define CFG_MISCS_LIB		1
-#define CFG_GPIO_LIB		1
+	#define CPU_TIAM335X		1
+	#define CFG_USART_LIB		1
+	#define CFG_ENGPIO_LIB		1
+	#define CFG_DATETIM_LIB		1
+	#define CFG_HIGHTIMER_LIB	1
+	#define CFG_TIMER_LIB		1
+	#define CFG_WDG_LIB			1
+	#define CFG_MISCS_LIB		1
+	#define CFG_GPIO_LIB		1
 #endif
 
 
 
 
 
-//错误码定义
+/* 错误码定义 */
 #define ERROR_NOSUPPORT	-5		//当前不支持该功能
-#define ERROR_SYS		-4		//系统API返回错误（系统调用返回错误）
-#define ERROR_INPARA	-3		//参数错误（如参数不合法、缓冲区过小等）
-#define ERROR_TIMEOUT	-2		//操作超时
-#define ERROR_FAIL		-1		//其他错误，原因不明
-#define ERROR_OK		0		//操作成功
-
-//命令字定义
+#define ERROR_SYS			-4		//系统API返回错误（系统调用返回错误）
+#define ERROR_INPARA	 		-3		//参数错误（如参数不合法、缓冲区过小等）
+#define ERROR_TIMEOUT		-2		//操作超时
+#define ERROR_FAIL			-1		//其他错误，原因不明
+#define ERROR_OK				0		//操作成功
+/* 命令字定义 */
 #define	EMFUTURE_IOCTL_BASE	'E'
 
 
-//下面是分别针对库所支持部件的函数描述
+/* 下面是分别针对库所支持部件的函数描述 */
 #ifdef CFG_USART_LIB
 //************************************************************
 //*-----------------------------------------------------------
@@ -525,12 +526,11 @@
 
 //串口的默认参数
 #define COM_BAUDDEF		(115200)
-#define	COM_DABITSDEF	(8)
-#define COM_STBITSDEF	(1)
-#define COM_PARITYDEF	('N')
-#define COM_RTSCTSDEF	(0)
-#define DEFCFGFORCOM 	"115200,8,1,N,0"
-
+#define	COM_DABITSDEF		(8)
+#define COM_STBITSDEF		(1)
+#define COM_PARITYDEF		('N')
+#define COM_RTSCTSDEF		(0)
+#define DEFCFGFORCOM 		"115200,8,1,N,0"
 
 #ifdef __cplusplus
 extern "C" {
@@ -805,6 +805,7 @@ extern int ReadAdcValidChans(int *val);
 }
 #endif
 #endif
+
 
 #ifdef CFG_DAC_LIB
 //************************************************************
@@ -1735,18 +1736,6 @@ extern int FreeGPIOCfg(int gpio);
 //************************************************************
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#if defined(CPU_AT91SAM9263) || defined(CPU_AT91SAM9260) || defined(CPU_AT91SAM9G20) \
-		|| defined(CPU_AT91SAM9G45) || defined(CPU_AT91SAM9X5) || defined(CPU_TIAM335X)
-
-extern inline unsigned short _inw(unsigned long addr);
-extern inline void _outw(unsigned long addr, unsigned short dat);
-extern inline unsigned long _inl(unsigned long addr);
-extern inline void _outl(unsigned long addr, unsigned long dat);
-extern inline unsigned char _inb(unsigned long addr);
-extern inline void _outb(unsigned long addr, unsigned char dat);
-
 #endif
 
 extern void _nops(unsigned long nums);

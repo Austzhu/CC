@@ -28,7 +28,7 @@ fault_Message_t Message[] = {
 
 static int set_flags(Warn_t *this,int flags,int set_enu,int condition)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
 
 	switch(set_enu){
@@ -56,7 +56,7 @@ static int set_flags(Warn_t *this,int flags,int set_enu,int condition)
 			sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=%d "\
 			"where Base_Addr in (select Base_Addr from db_light b where b.lt_gid=0x%x);",flags,condition));
 		case so_brocast:
-			return sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=%d ;",flags));
+			return sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=%d",flags));
 		default:break;
 	}
 	return FAIL;
@@ -64,7 +64,7 @@ static int set_flags(Warn_t *this,int flags,int set_enu,int condition)
 
 static int clean_flags(Warn_t *this,int flags,int set_enu,int condition)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
 
 	switch(set_enu){
@@ -100,8 +100,8 @@ static int clean_flags(Warn_t *this,int flags,int set_enu,int condition)
 
 static int JudgeforSingle(Warn_t *this,struct sin_warn_t *info,int infosize)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(info,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(info,FAIL);
 
 	int power = 0;
 	for(int i=0;i<infosize;++i){
@@ -132,8 +132,8 @@ static int JudgeforSingle(Warn_t *this,struct sin_warn_t *info,int infosize)
 
 static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(info,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(info,FAIL);
 
 	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
 	int count = 0, errcount = 0;
@@ -157,7 +157,7 @@ static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)
 
 static int warn_verdict(struct Warn_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	int Coordi_count = 0; int res = -1;
 	struct Warn_info_t *Warn_info = NULL;
@@ -210,7 +210,7 @@ static const char *get_mark(int type)
 
 static int warn_Insert(struct Warn_t *this,int addr,int type)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	const char *pmessage = NULL;
 	int Index = 0x01;
@@ -218,8 +218,8 @@ static int warn_Insert(struct Warn_t *this,int addr,int type)
 	do{
 		if(type&Index){
 			pmessage = get_mark(Index);
-			sqlite->sql_insert(Asprintf("insert int db_warn(Add_time,Type,\
-				Grade,State,Addr,Remark) values(%ld,%d,%d,1,%d,%s);",time(NULL),\
+			sqlite->sql_insert(Asprintf("insert into db_warn(Add_time,Type,"\
+				"Grade,State,Addr,Remark) values(%ld,%d,%d,1,%d,\'%s\');",time(NULL),\
 				Index,Index==fault_coordi?0:1,addr,NULL==pmessage?"unknow warn type!":pmessage));
 		}
 	}while(Index<<=1);

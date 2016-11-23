@@ -24,6 +24,9 @@
 #include <ctype.h>
 #include <signal.h>
 #include <sys/select.h>
+#include <sys/stat.h>
+
+
 
 #include "debug.h"
 #include "base_type.h"

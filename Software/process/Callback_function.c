@@ -1,4 +1,5 @@
 #include "Callback_function.h"
+#include "process.h"
 #include "Interface.h"
 
 #define MakeShortResponse(pbuf,len,cmd,subcmd,result) do{\
@@ -35,8 +36,8 @@
 
 s32 CallBack_Response(Node_t *node,void *top)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(top,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(top,FAIL);
 
 	appitf_t *topuser = (appitf_t*)top;
 	u8 *Sendbuf = malloc(node->package[1] + 12);
@@ -51,7 +52,7 @@ s32 CallBack_Response(Node_t *node,void *top)
 		topuser->ethernet->ether_packagecheck(Sendbuf,node->package[1]+8);
 		topuser->ethernet->ether_send(topuser->ethernet,Sendbuf,node->package[1]+10);
 	}
-	#ifdef DisplayResPackage
+	#ifdef Config_showPackage
 		printf("Response package:");
 		for(int i=0,size=node->package[1]+10;i<size;++i)
 			printf("%02X ",*(Sendbuf+i));
@@ -63,8 +64,8 @@ s32 CallBack_Response(Node_t *node,void *top)
 
 s32 CallBack_Reset(Node_t *node,void *parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
@@ -120,8 +121,8 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 
 s32 CallBack_Config(Node_t *node,void *parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
 	u8 AckBuffer[64] = {0};
@@ -155,8 +156,8 @@ s32 CallBack_Config(Node_t *node,void *parent)
 
 s32 CallBack_answer(Node_t *node,void*parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
@@ -189,8 +190,8 @@ s32 CallBack_answer(Node_t *node,void*parent)
 
 s32 CallBack_single(Node_t *node,void*parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
@@ -201,10 +202,10 @@ s32 CallBack_single(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[6];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm-light : 0)<< 8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<< 8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light) << 8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light) << 8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_single,Addr,light);
 			MakeSingleResponse(AckBuffer,0x42,Addr,res);
@@ -227,10 +228,10 @@ s32 CallBack_single(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[6];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm- light : 0)<<8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX- light : 0)<<8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light)<<8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_single,Addr,light);
 			MakeSingleResponse(AckBuffer,0x47,Addr,res);
@@ -244,8 +245,8 @@ s32 CallBack_single(Node_t *node,void*parent)
 
 s32 CallBack_group(Node_t *node,void*parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
 	u8 AckBuffer[64] = {0};
@@ -255,10 +256,10 @@ s32 CallBack_group(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[4];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm-light : 0)<<8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light)<<8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_group,Addr,light);
 			/* The second response to PC */
@@ -283,10 +284,10 @@ s32 CallBack_group(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[4];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm-light : 0)<<8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light)<<8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_grouplight,Addr,light);
 			/* The second response to PC */
@@ -301,8 +302,8 @@ s32 CallBack_group(Node_t *node,void*parent)
 
 s32 CallBack_broadcast(Node_t *node,void*parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
 	u8 AckBuffer[64] = {0};
@@ -312,10 +313,10 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[3];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm-light : 0)<<8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light)<<8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_broadcast,0,light);
 			/* The second response to PC */
@@ -342,10 +343,10 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[3];
-			#ifdef Config_PWM_
-				light = (light<PeakPwm ? PeakPwm-light : 0)<<8;
+			#ifdef Config_PWM_N
+				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
 			#else
-				light = (light>PeakPwm ? PeakPwm : light)<<8;
+				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_broadlight,0,light);
 			/* The second response to PC */
@@ -360,8 +361,8 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 
 s32 CallBack_meter(Node_t *node,void*parent)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(parent,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(parent,FAIL);
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *_parent = (appitf_t*)parent;
 	 int res = -1;
@@ -393,8 +394,8 @@ s32 CallBack_meter(Node_t *node,void*parent)
 
 s32 CallBack_Update(Node_t *node,void *top)
 {
-	assert_param(node,NULL,FAIL);
-	assert_param(top,NULL,FAIL);
+	assert_param(node,FAIL);
+	assert_param(top,FAIL);
 	u8 AckBuffer[64] = {0};
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
 	appitf_t *topuser = (appitf_t*)top;

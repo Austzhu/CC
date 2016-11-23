@@ -9,6 +9,7 @@ TopUser_Relese	Common\Interface.c	/^static int TopUser_Relese(appitf_t *this)$/;
 TopUser_msleep	Common\Interface.c	/^void TopUser_msleep(u32 ms)$/;"	f
 TopUser_usleep	Common\Interface.c	/^static void TopUser_usleep(u32 us)$/;"	f	file:
 UID_Check	Common\Interface.c	/^static s32 UID_Check(appitf_t *this,void *r_uid)$/;"	f	file:
+app_exit	Common\Interface.c	/^static void app_exit(int signal)$/;"	f	file:
 appitf_init	Common\Interface.c	/^static int appitf_init(appitf_t *this)$/;"	f	file:
 auchCRCHi	Common\Interface.c	/^u8 auchCRCHi[]={$/;"	v
 auchCRCLo	Common\Interface.c	/^u8 auchCRCLo[]={$/;"	v
@@ -16,6 +17,7 @@ crc16_checkout	Common\Interface.c	/^int crc16_checkout(u8 *crc,  u8 *puchMsg,  s
 g_appity	Common\Interface.c	/^appitf_t g_appity = {$/;"	v
 get_check	Common\Interface.c	/^static int get_check(int cmd,u8*crc,u8 *pMessage,int len)$/;"	f	file:
 get_checkhl	Common\Interface.c	/^static int get_checkhl(int cmd,u8 *crc, u8 *message, int nLen)$/;"	f	file:
+module_release	Common\Interface.c	16;"	d	file:
 package_check	Common\Interface.c	/^static int package_check(void *package)$/;"	f	file:
 CCUID	Common\Interface.h	/^	u8 CCUID[6];                   \/\/集中控制器的UID$/;"	m	struct:__anon5
 Connect_error	Common\Interface.h	26;"	d
@@ -23,7 +25,6 @@ Connect_ok	Common\Interface.h	25;"	d
 Connect_status	Common\Interface.h	/^	int Connect_status;        \/\/网络连接状态$/;"	m	struct:appitf_t
 ControlMethod	Common\Interface.h	/^	u8 ControlMethod;	      \/\/控制模式$/;"	m	struct:__anon5
 Crc16	Common\Interface.h	/^	int (*const Crc16)(int,u8*,u8*,int);$/;"	m	struct:appitf_t
-Crc16_HL	Common\Interface.h	/^	int (*const Crc16_HL)(int,u8*,u8*,int);$/;"	m	struct:appitf_t
 DebugLevel	Common\Interface.h	/^	u8 DebugLevel;	             \/\/调试等级$/;"	m	struct:__anon5
 HeartBCycle	Common\Interface.h	/^	u8 HeartBCycle;            \/\/心跳周期$/;"	m	struct:__anon5
 HeartBeat_error	Common\Interface.h	28;"	d
@@ -66,6 +67,26 @@ str2hex	Common\Interface.h	/^	u8* (*const str2hex)(u8*,const char*);$/;"	m	struc
 usleep	Common\Interface.h	/^	void (*const usleep)(u32);$/;"	m	struct:appitf_t
 warn	Common\Interface.h	/^	Warn_t   *warn;$/;"	m	struct:appitf_t
 zigbee	Common\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon3
+CRC_16	Common\common\CRC.c	/^static int CRC_16(char *crc,  const char *puchMsg, int usDataLen,int flags)$/;"	f	file:
+CRC_16CK	Common\common\CRC.c	/^static int CRC_16CK(const char *crc,  const char *puchMsg, int usDataLen,int flags)$/;"	f	file:
+CRC_16CKH	Common\common\CRC.c	/^static int inline CRC_16CKH(const char *crc,  const char *puchMsg, int usDataLen)$/;"	f	file:
+CRC_16CKL	Common\common\CRC.c	/^static int inline CRC_16CKL(const char *crc,  const char *puchMsg, int usDataLen)$/;"	f	file:
+CRC_16H	Common\common\CRC.c	/^static int inline CRC_16H(char *crc,  const char *puchMsg, int usDataLen)$/;"	f	file:
+CRC_16L	Common\common\CRC.c	/^static int inline CRC_16L(char *crc,  const char *puchMsg, int usDataLen)$/;"	f	file:
+CRC_init	Common\common\CRC.c	/^CRC_t *CRC_init(CRC_t *this)$/;"	f
+CRC_release	Common\common\CRC.c	/^static void CRC_release(CRC_t**this)$/;"	f	file:
+FLAG_HL	Common\common\CRC.c	57;"	d	file:
+FLAG_LH	Common\common\CRC.c	58;"	d	file:
+auchCRCHi	Common\common\CRC.c	/^static u8 auchCRCHi[]={$/;"	v	file:
+auchCRCLo	Common\common\CRC.c	/^static u8 auchCRCLo[]={$/;"	v	file:
+CRCHL_check	Common\common\CRC.h	/^	int (*CRCHL_check)(const char*,const char*,int);$/;"	m	struct:CRC_t
+CRCHL_get	Common\common\CRC.h	/^	int (*CRCHL_get)(char*,const char*,int);$/;"	m	struct:CRC_t
+CRCLH_check	Common\common\CRC.h	/^	int (*CRCLH_check)(const char*,const char*,int);$/;"	m	struct:CRC_t
+CRCLH_get	Common\common\CRC.h	/^	int (*CRCLH_get)(char*,const char*,int);$/;"	m	struct:CRC_t
+CRC_release	Common\common\CRC.h	/^	void (*CRC_release)(struct CRC_t**);$/;"	m	struct:CRC_t
+CRC_t	Common\common\CRC.h	/^typedef struct CRC_t{$/;"	s
+CRC_t	Common\common\CRC.h	/^} CRC_t;$/;"	t	typeref:struct:CRC_t
+__CRC_H__	Common\common\CRC.h	14;"	d
 __BASE_TYPE_H__	Common\common\base_type.h	14;"	d
 _con	Common\common\base_type.h	18;"	d
 _un	Common\common\base_type.h	16;"	d
@@ -86,12 +107,15 @@ vu16	Common\common\base_type.h	36;"	d
 vu32	Common\common\base_type.h	37;"	d
 vu8	Common\common\base_type.h	35;"	d
 MessageBuffer	Common\common\common.c	/^char MessageBuffer[MessageBuffersize];$/;"	v
-Asprintf	Common\common\common.h	25;"	d
-Asprintf_Strlen	Common\common\common.h	26;"	d
+Asprintf	Common\common\common.h	37;"	d
+Asprintf_Strlen	Common\common\common.h	36;"	d
+DELETE	Common\common\common.h	49;"	d
+FREE	Common\common\common.h	58;"	d
 MessageBuffersize	Common\common\common.h	15;"	d
+NEW	Common\common\common.h	43;"	d
 __COMMON_H__	Common\common\common.h	13;"	d
-assert_param	Common\common\common.h	17;"	d
-bigend2littlend_2	Common\common\common.h	28;"	d
+assert_param	Common\common\common.h	27;"	d
+bigend2littlend_2	Common\common\common.h	41;"	d
 __FRAME_H__	Common\common\frame.h	14;"	d
 ctrl	Common\common\frame.h	/^	unsigned char ctrl;			\/\/控制域C$/;"	m	struct:__anon1
 data	Common\common\frame.h	/^	unsigned char data[0];$/;"	m	struct:__anon1
@@ -274,426 +298,427 @@ name	Software\emfuture\include\iio_utils.h	/^	char *name;$/;"	m	struct:iio_chann
 offset	Software\emfuture\include\iio_utils.h	/^	float offset;$/;"	m	struct:iio_channel_info
 scale	Software\emfuture\include\iio_utils.h	/^	float scale;$/;"	m	struct:iio_channel_info
 shift	Software\emfuture\include\iio_utils.h	/^	unsigned shift;$/;"	m	struct:iio_channel_info
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	110;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	123;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	135;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	146;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	210;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	220;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	230;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	285;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	381;"	d
-CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	392;"	d
-CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	109;"	d
-CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	122;"	d
-CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	134;"	d
-CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	232;"	d
-CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	380;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	103;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	116;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	128;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	140;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	151;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	161;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	171;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	181;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	191;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	201;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	212;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	222;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	233;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	243;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	252;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	260;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	268;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	276;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	287;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	296;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	304;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	314;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	324;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	334;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	344;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	354;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	365;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	374;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	386;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	398;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	408;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	418;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	428;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	438;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	448;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	458;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	467;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	477;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	487;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	53;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	63;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	73;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	83;"	d
-CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	93;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	102;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	115;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	127;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	139;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	150;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	160;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	170;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	180;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	190;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	200;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	211;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	221;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	270;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	278;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	294;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	313;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	323;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	333;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	343;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	353;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	364;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	373;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	385;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	397;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	407;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	417;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	427;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	437;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	447;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	457;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	466;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	476;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	486;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	52;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	62;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	72;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	82;"	d
-CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	92;"	d
-CFG_FIFO_LIB	Software\emfuture\include\libs_emfuture_odm.h	362;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	108;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	111;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	121;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	133;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	145;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	156;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	166;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	176;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	186;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	196;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	206;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	216;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	226;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	231;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	242;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	262;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	279;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	286;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	295;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	303;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	312;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	322;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	332;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	342;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	352;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	363;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	379;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	391;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	396;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	406;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	416;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	426;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	436;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	446;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	456;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	472;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	482;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	492;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	58;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	68;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	78;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	88;"	d
-CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	98;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	104;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	117;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	129;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	141;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	152;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	162;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	172;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	182;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	192;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	202;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	235;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	245;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	254;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	306;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	316;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	326;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	336;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	346;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	356;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	367;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	375;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	387;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	400;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	410;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	420;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	430;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	440;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	450;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	459;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	468;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	478;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	488;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	54;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	64;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	74;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	84;"	d
-CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	94;"	d
-CFG_KBD_LIB	Software\emfuture\include\libs_emfuture_odm.h	238;"	d
-CFG_KBD_LIB	Software\emfuture\include\libs_emfuture_odm.h	248;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	107;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	120;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	132;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	144;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	155;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	165;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	175;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	185;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	195;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	205;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	215;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	225;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	237;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	247;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	256;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	264;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	272;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	281;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	290;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	299;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	308;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	318;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	328;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	338;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	348;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	358;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	369;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	378;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	390;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	402;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	412;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	422;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	432;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	442;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	452;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	462;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	471;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	481;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	491;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	57;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	67;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	77;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	87;"	d
-CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	97;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	105;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	118;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	130;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	142;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	153;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	163;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	173;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	183;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	193;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	203;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	213;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	223;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	234;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	244;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	253;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	261;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	269;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	277;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	288;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	297;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	305;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	315;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	325;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	335;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	345;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	355;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	366;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	376;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	388;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	399;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	409;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	419;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	429;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	439;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	449;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	460;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	469;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	479;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	489;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	55;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	65;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	75;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	85;"	d
-CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	95;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	101;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	114;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	126;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	138;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	149;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	159;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	169;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	179;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	189;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	199;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	209;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	219;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	229;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	241;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	251;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	259;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	267;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	275;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	284;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	293;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	302;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	311;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	321;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	331;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	341;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	351;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	361;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	372;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	384;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	395;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	405;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	415;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	425;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	435;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	445;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	455;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	465;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	475;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	485;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	51;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	61;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	71;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	81;"	d
-CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	91;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	106;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	119;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	131;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	143;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	154;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	164;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	174;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	184;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	194;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	204;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	214;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	224;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	236;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	246;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	255;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	263;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	271;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	280;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	289;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	298;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	307;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	317;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	327;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	337;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	347;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	357;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	368;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	377;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	389;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	401;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	411;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	421;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	431;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	441;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	451;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	461;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	470;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	480;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	490;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	56;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	66;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	76;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	86;"	d
-CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	96;"	d
-COM_BAUDDEF	Software\emfuture\include\libs_emfuture_odm.h	527;"	d
-COM_DABITSDEF	Software\emfuture\include\libs_emfuture_odm.h	528;"	d
-COM_PARITYDEF	Software\emfuture\include\libs_emfuture_odm.h	530;"	d
-COM_RTSCTSDEF	Software\emfuture\include\libs_emfuture_odm.h	531;"	d
-COM_STBITSDEF	Software\emfuture\include\libs_emfuture_odm.h	529;"	d
-CPU_AMCC405EP	Software\emfuture\include\libs_emfuture_odm.h	360;"	d
-CPU_AT91SAM9263	Software\emfuture\include\libs_emfuture_odm.h	274;"	d
-CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	250;"	d
-CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	258;"	d
-CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	266;"	d
-CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	283;"	d
-CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	228;"	d
-CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	240;"	d
-CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	301;"	d
-CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	310;"	d
-CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	320;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	100;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	113;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	125;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	137;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	148;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	158;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	168;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	178;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	188;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	198;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	208;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	292;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	330;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	50;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	60;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	70;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	80;"	d
-CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	90;"	d
-CPU_LOONGSON1B	Software\emfuture\include\libs_emfuture_odm.h	340;"	d
-CPU_PC8315E	Software\emfuture\include\libs_emfuture_odm.h	350;"	d
-CPU_T91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	218;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	371;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	383;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	394;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	404;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	414;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	424;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	434;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	444;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	454;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	464;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	474;"	d
-CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	484;"	d
-DEBUG	Software\emfuture\include\libs_emfuture_odm.h	1760;"	d
-DEFCFGFORCOM	Software\emfuture\include\libs_emfuture_odm.h	532;"	d
-DOWN_KEY	Software\emfuture\include\libs_emfuture_odm.h	1460;"	d
-EMFUTURE_IOCTL_BASE	Software\emfuture\include\libs_emfuture_odm.h	508;"	d
-EMTIMER_HIGHSINSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1173;"	d
-EMTIMER_HIGHSPERSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1174;"	d
-EMTIMER_PERSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1124;"	d
-EMTIMER_SINSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1123;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	112;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	125;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	137;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	148;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	212;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	222;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	232;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	287;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	383;"	d
+CFG_ADC_LIB	Software\emfuture\include\libs_emfuture_odm.h	394;"	d
+CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	111;"	d
+CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	124;"	d
+CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	136;"	d
+CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	234;"	d
+CFG_DAC_LIB	Software\emfuture\include\libs_emfuture_odm.h	382;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	105;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	118;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	130;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	142;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	153;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	163;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	173;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	183;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	193;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	203;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	214;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	224;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	235;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	245;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	254;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	262;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	270;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	278;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	289;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	298;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	306;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	316;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	326;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	336;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	346;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	356;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	367;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	376;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	388;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	400;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	410;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	420;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	430;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	440;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	450;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	460;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	469;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	479;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	489;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	55;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	65;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	75;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	85;"	d
+CFG_DATETIM_LIB	Software\emfuture\include\libs_emfuture_odm.h	95;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	104;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	117;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	129;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	141;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	152;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	162;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	172;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	182;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	192;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	202;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	213;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	223;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	272;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	280;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	296;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	315;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	325;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	335;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	345;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	355;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	366;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	375;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	387;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	399;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	409;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	419;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	429;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	439;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	449;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	459;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	468;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	478;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	488;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	54;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	64;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	74;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	84;"	d
+CFG_ENGPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	94;"	d
+CFG_FIFO_LIB	Software\emfuture\include\libs_emfuture_odm.h	364;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	100;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	110;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	113;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	123;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	135;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	147;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	158;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	168;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	178;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	188;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	198;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	208;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	218;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	228;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	233;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	244;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	264;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	281;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	288;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	297;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	305;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	314;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	324;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	334;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	344;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	354;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	365;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	381;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	393;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	398;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	408;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	418;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	428;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	438;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	448;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	458;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	474;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	484;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	494;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	60;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	70;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	80;"	d
+CFG_GPIO_LIB	Software\emfuture\include\libs_emfuture_odm.h	90;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	106;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	119;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	131;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	143;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	154;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	164;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	174;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	184;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	194;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	204;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	237;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	247;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	256;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	308;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	318;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	328;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	338;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	348;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	358;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	369;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	377;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	389;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	402;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	412;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	422;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	432;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	442;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	452;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	461;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	470;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	480;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	490;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	56;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	66;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	76;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	86;"	d
+CFG_HIGHTIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	96;"	d
+CFG_KBD_LIB	Software\emfuture\include\libs_emfuture_odm.h	240;"	d
+CFG_KBD_LIB	Software\emfuture\include\libs_emfuture_odm.h	250;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	109;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	122;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	134;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	146;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	157;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	167;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	177;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	187;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	197;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	207;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	217;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	227;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	239;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	249;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	258;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	266;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	274;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	283;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	292;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	301;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	310;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	320;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	330;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	340;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	350;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	360;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	371;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	380;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	392;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	404;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	414;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	424;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	434;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	444;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	454;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	464;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	473;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	483;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	493;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	59;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	69;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	79;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	89;"	d
+CFG_MISCS_LIB	Software\emfuture\include\libs_emfuture_odm.h	99;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	107;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	120;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	132;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	144;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	155;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	165;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	175;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	185;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	195;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	205;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	215;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	225;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	236;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	246;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	255;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	263;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	271;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	279;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	290;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	299;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	307;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	317;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	327;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	337;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	347;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	357;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	368;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	378;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	390;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	401;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	411;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	421;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	431;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	441;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	451;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	462;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	471;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	481;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	491;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	57;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	67;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	77;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	87;"	d
+CFG_TIMER_LIB	Software\emfuture\include\libs_emfuture_odm.h	97;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	103;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	116;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	128;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	140;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	151;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	161;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	171;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	181;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	191;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	201;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	211;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	221;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	231;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	243;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	253;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	261;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	269;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	277;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	286;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	295;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	304;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	313;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	323;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	333;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	343;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	353;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	363;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	374;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	386;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	397;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	407;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	417;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	427;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	437;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	447;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	457;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	467;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	477;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	487;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	53;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	63;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	73;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	83;"	d
+CFG_USART_LIB	Software\emfuture\include\libs_emfuture_odm.h	93;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	108;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	121;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	133;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	145;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	156;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	166;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	176;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	186;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	196;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	206;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	216;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	226;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	238;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	248;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	257;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	265;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	273;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	282;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	291;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	300;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	309;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	319;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	329;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	339;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	349;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	359;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	370;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	379;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	391;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	403;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	413;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	423;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	433;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	443;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	453;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	463;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	472;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	482;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	492;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	58;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	68;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	78;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	88;"	d
+CFG_WDG_LIB	Software\emfuture\include\libs_emfuture_odm.h	98;"	d
+COM_BAUDDEF	Software\emfuture\include\libs_emfuture_odm.h	528;"	d
+COM_DABITSDEF	Software\emfuture\include\libs_emfuture_odm.h	529;"	d
+COM_PARITYDEF	Software\emfuture\include\libs_emfuture_odm.h	531;"	d
+COM_RTSCTSDEF	Software\emfuture\include\libs_emfuture_odm.h	532;"	d
+COM_STBITSDEF	Software\emfuture\include\libs_emfuture_odm.h	530;"	d
+CPU_AMCC405EP	Software\emfuture\include\libs_emfuture_odm.h	362;"	d
+CPU_AT91SAM9263	Software\emfuture\include\libs_emfuture_odm.h	276;"	d
+CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	252;"	d
+CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	260;"	d
+CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	268;"	d
+CPU_AT91SAM9G20	Software\emfuture\include\libs_emfuture_odm.h	285;"	d
+CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	230;"	d
+CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	242;"	d
+CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	303;"	d
+CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	312;"	d
+CPU_AT91SAM9G45	Software\emfuture\include\libs_emfuture_odm.h	322;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	102;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	115;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	127;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	139;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	150;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	160;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	170;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	180;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	190;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	200;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	210;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	294;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	332;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	52;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	62;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	72;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	82;"	d
+CPU_AT91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	92;"	d
+CPU_LOONGSON1B	Software\emfuture\include\libs_emfuture_odm.h	342;"	d
+CPU_PC8315E	Software\emfuture\include\libs_emfuture_odm.h	352;"	d
+CPU_T91SAM9X5	Software\emfuture\include\libs_emfuture_odm.h	220;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	373;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	385;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	396;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	406;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	416;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	426;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	436;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	446;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	456;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	466;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	476;"	d
+CPU_TIAM335X	Software\emfuture\include\libs_emfuture_odm.h	486;"	d
+DEBUG	Software\emfuture\include\libs_emfuture_odm.h	1749;"	d
+DEFCFGFORCOM	Software\emfuture\include\libs_emfuture_odm.h	533;"	d
+DOWN_KEY	Software\emfuture\include\libs_emfuture_odm.h	1461;"	d
+EMFUTURE_IOCTL_BASE	Software\emfuture\include\libs_emfuture_odm.h	509;"	d
+EMTIMER_HIGHSINSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1174;"	d
+EMTIMER_HIGHSPERSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1175;"	d
+EMTIMER_PERSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1125;"	d
+EMTIMER_SINSHOT_MODE	Software\emfuture\include\libs_emfuture_odm.h	1124;"	d
 EM_ADCTRIGER_HARDPERIOD	Software\emfuture\include\libs_emfuture_odm.h	710;"	d
 EM_ADCTRIGER_ONESHOT	Software\emfuture\include\libs_emfuture_odm.h	708;"	d
 EM_ADCTRIGER_SOFTPERIOD	Software\emfuture\include\libs_emfuture_odm.h	709;"	d
+EM_EC_6018	Software\emfuture\include\libs_emfuture_odm.h	49;"	d
 EM_GETADC_MODE_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	702;"	d
 EM_GETADC_RATE_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	701;"	d
 EM_GETADC_STAT_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	700;"	d
-EM_GET_SENSOR_RES	Software\emfuture\include\libs_emfuture_odm.h	1555;"	d
+EM_GET_SENSOR_RES	Software\emfuture\include\libs_emfuture_odm.h	1556;"	d
 EM_SETADC_DISCHAN_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	699;"	d
 EM_SETADC_ENCHAN_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	698;"	d
 EM_SETADC_MODE_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	697;"	d
@@ -701,13 +726,13 @@ EM_SETADC_RATE_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	696;"	d
 EM_SETADC_START_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	694;"	d
 EM_SETADC_STOP_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	695;"	d
 EM_SETADC_SWITCHKEY	Software\emfuture\include\libs_emfuture_odm.h	703;"	d
-EM_SET_SENSOR_RES	Software\emfuture\include\libs_emfuture_odm.h	1554;"	d
-ERROR_FAIL	Software\emfuture\include\libs_emfuture_odm.h	504;"	d
-ERROR_INPARA	Software\emfuture\include\libs_emfuture_odm.h	502;"	d
-ERROR_NOSUPPORT	Software\emfuture\include\libs_emfuture_odm.h	500;"	d
-ERROR_OK	Software\emfuture\include\libs_emfuture_odm.h	505;"	d
-ERROR_SYS	Software\emfuture\include\libs_emfuture_odm.h	501;"	d
-ERROR_TIMEOUT	Software\emfuture\include\libs_emfuture_odm.h	503;"	d
+EM_SET_SENSOR_RES	Software\emfuture\include\libs_emfuture_odm.h	1555;"	d
+ERROR_FAIL	Software\emfuture\include\libs_emfuture_odm.h	506;"	d
+ERROR_INPARA	Software\emfuture\include\libs_emfuture_odm.h	504;"	d
+ERROR_NOSUPPORT	Software\emfuture\include\libs_emfuture_odm.h	502;"	d
+ERROR_OK	Software\emfuture\include\libs_emfuture_odm.h	507;"	d
+ERROR_SYS	Software\emfuture\include\libs_emfuture_odm.h	503;"	d
+ERROR_TIMEOUT	Software\emfuture\include\libs_emfuture_odm.h	505;"	d
 FIFO_IOC_MAGIC	Software\emfuture\include\libs_emfuture_odm.h	632;"	d
 FIFO_RESET_IOCFG	Software\emfuture\include\libs_emfuture_odm.h	633;"	d
 FUNC	Software\emfuture\include\libs_emfuture_odm.h	/^typedef void (*FUNC) (int sig);$/;"	t
@@ -715,19 +740,19 @@ HFUNC	Software\emfuture\include\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int
 LIBS_EMFUTURE_ODM_H_	Software\emfuture\include\libs_emfuture_odm.h	9;"	d
 PIO_MODE_IN	Software\emfuture\include\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon21
 PIO_MODE_OUT	Software\emfuture\include\libs_emfuture_odm.h	/^	PIO_MODE_OUT = 0,$/;"	e	enum:__anon21
-PORT0_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1655;"	d
-PORT1_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1657;"	d
-PORT2_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1659;"	d
-PORT3_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1661;"	d
-PORT4_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1663;"	d
-PORT5_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1665;"	d
-PORTA_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1654;"	d
-PORTB_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1656;"	d
-PORTC_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1658;"	d
+PORT0_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1656;"	d
+PORT1_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1658;"	d
+PORT2_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1660;"	d
+PORT3_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1662;"	d
+PORT4_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1664;"	d
+PORT5_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1666;"	d
+PORTA_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1655;"	d
+PORTB_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1657;"	d
+PORTC_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1659;"	d
 PORTDEV	Software\emfuture\include\libs_emfuture_odm.h	629;"	d
-PORTD_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1660;"	d
-PORTE_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1662;"	d
-PORTF_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1664;"	d
+PORTD_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1661;"	d
+PORTE_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1663;"	d
+PORTF_GPIO	Software\emfuture\include\libs_emfuture_odm.h	1665;"	d
 PORT_BANK_2	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_BANK_2 = 0,$/;"	e	enum:__anon18
 PORT_BANK_4	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_BANK_4,$/;"	e	enum:__anon18
 PORT_BANK_5	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_BANK_5,$/;"	e	enum:__anon18
@@ -736,10 +761,10 @@ PORT_BANK_7	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_BANK_7,$/;"	e	
 PORT_WIDTH_16	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_WIDTH_16,$/;"	e	enum:__anon17
 PORT_WIDTH_32	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon17
 PORT_WIDTH_8	Software\emfuture\include\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon17
-TRACE	Software\emfuture\include\libs_emfuture_odm.h	1762;"	d
-TRACE	Software\emfuture\include\libs_emfuture_odm.h	1764;"	d
-UP_KEY	Software\emfuture\include\libs_emfuture_odm.h	1461;"	d
-UP_THRESHOLD_DOWN	Software\emfuture\include\libs_emfuture_odm.h	1457;"	d
+TRACE	Software\emfuture\include\libs_emfuture_odm.h	1751;"	d
+TRACE	Software\emfuture\include\libs_emfuture_odm.h	1753;"	d
+UP_KEY	Software\emfuture\include\libs_emfuture_odm.h	1462;"	d
+UP_THRESHOLD_DOWN	Software\emfuture\include\libs_emfuture_odm.h	1458;"	d
 __float_to_dacout	Software\emfuture\include\libs_emfuture_odm.h	/^struct __float_to_dacout {$/;"	s
 __sample_to_float	Software\emfuture\include\libs_emfuture_odm.h	/^struct __sample_to_float {$/;"	s
 bank	Software\emfuture\include\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon19
@@ -777,7 +802,7 @@ Default_debuglevel	Software\initstart\loadfile.h	17;"	d
 FILE_PARAM	Software\initstart\loadfile.h	12;"	d
 FileSize	Software\initstart\loadfile.h	11;"	d
 __loadfile_h__	Software\initstart\loadfile.h	8;"	d
-Append2Queue	Software\process\Callback_function.c	9;"	d	file:
+Append2Queue	Software\process\Callback_function.c	10;"	d	file:
 CallBack_Config	Software\process\Callback_function.c	/^s32 CallBack_Config(Node_t *node,void *parent)$/;"	f
 CallBack_Reset	Software\process\Callback_function.c	/^s32 CallBack_Reset(Node_t *node,void *parent)$/;"	f
 CallBack_Response	Software\process\Callback_function.c	/^s32 CallBack_Response(Node_t *node,void *top)$/;"	f
@@ -787,9 +812,10 @@ CallBack_broadcast	Software\process\Callback_function.c	/^s32 CallBack_broadcast
 CallBack_group	Software\process\Callback_function.c	/^s32 CallBack_group(Node_t *node,void*parent)$/;"	f
 CallBack_meter	Software\process\Callback_function.c	/^s32 CallBack_meter(Node_t *node,void*parent)$/;"	f
 CallBack_single	Software\process\Callback_function.c	/^s32 CallBack_single(Node_t *node,void*parent)$/;"	f
-Make2Response	Software\process\Callback_function.c	22;"	d	file:
-MakeShortResponse	Software\process\Callback_function.c	4;"	d	file:
-MakeSingleResponse	Software\process\Callback_function.c	16;"	d	file:
+Make2Response	Software\process\Callback_function.c	23;"	d	file:
+MakeShortResponse	Software\process\Callback_function.c	5;"	d	file:
+MakeSingleResponse	Software\process\Callback_function.c	17;"	d	file:
+MakeUpdateResponse	Software\process\Callback_function.c	28;"	d	file:
 __CALLBACE_FUNCTION_H__	Software\process\Callback_function.h	2;"	d
 CC_Inquire_Version	Software\process\process.c	/^int CC_Inquire_Version(u8 *buf,int size)$/;"	f
 CoordiConfig	Software\process\process.c	/^int CoordiConfig(u8 *package,  appitf_t *app)$/;"	f
@@ -798,17 +824,16 @@ Reset2DoFunctions	Software\process\process.c	/^int Reset2DoFunctions(void)$/;"	f
 SingleConfig	Software\process\process.c	/^int SingleConfig(u8 *package,appitf_t *app)$/;"	f
 time_tick	Software\process\process.c	/^int time_tick(u8 *package)$/;"	f
 __PROCESS_H__	Software\process\process.h	13;"	d
-KeepaliveThread	User\main.c	/^ static void *KeepaliveThread(void *args)$/;"	f	file:
+KeepaliveThread	User\main.c	/^static void *KeepaliveThread(void *args)$/;"	f	file:
 RecvInsertQueueThread	User\main.c	/^static void *RecvInsertQueueThread(void *args)$/;"	f	file:
 UserQueProcThread	User\main.c	/^static void *UserQueProcThread(void *args)$/;"	f	file:
 main	User\main.c	/^int main(int argc,char *argv[])$/;"	f
-COM_485	config\config.h	15;"	d
-COM_DIDO	config\config.h	16;"	d
+Config_COM485	config\config.h	15;"	d
+Config_COMDIDO	config\config.h	16;"	d
 Config_EC_6018	config\config.h	11;"	d
 Config_Log	config\config.h	10;"	d
-Config_Meter	config\config.h	12;"	d
-HeartBeatErrCnt	config\config.h	22;"	d
-PeakPwm	config\config.h	18;"	d
+Config_Meter	config\config.h	13;"	d
+Config_PWMAX	config\config.h	17;"	d
 __config_h__	config\config.h	8;"	d
 MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
 MakeSlaveOpenAll	hardware\Meter\Meter.c	23;"	d	file:
@@ -931,6 +956,7 @@ sin_close	hardware\single\single.c	/^static int sin_close(Single_t *this,int cmd
 sin_open	hardware\single\single.c	/^static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)$/;"	f	file:
 sin_release	hardware\single\single.c	/^static void sin_release(struct Single_t **this)$/;"	f	file:
 sin_reply	hardware\single\single.c	/^static int sin_reply(Single_t *this,int cmd,int subcmd,int res)$/;"	f	file:
+sin_update	hardware\single\single.c	/^static int sin_update(Single_t*this,int addr)$/;"	f	file:
 single_Count	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon9	file:
 single_Init	hardware\single\single.c	/^Single_t *single_Init(struct appitf_t *topuser)$/;"	f
 stat	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon7	file:
@@ -974,15 +1000,14 @@ sin_config	hardware\single\single.h	/^	int (*sin_config)(struct Single_t*,sin_cf
 sin_open	hardware\single\single.h	/^	int (*sin_open)(struct Single_t*,int,u32,u32);$/;"	m	struct:Single_t
 sin_release	hardware\single\single.h	/^	void (*sin_release)(struct Single_t**);$/;"	m	struct:Single_t
 sin_reply	hardware\single\single.h	/^	int (*sin_reply)(struct Single_t*,int,int,int);$/;"	m	struct:Single_t
-sin_update	hardware\single\single.h	/^	int (*sin_update)(struct Single_t*,int,char);$/;"	m	struct:Single_t
+sin_update	hardware\single\single.h	/^	int (*sin_update)(struct Single_t*,int);$/;"	m	struct:Single_t
 topuser	hardware\single\single.h	/^	struct appitf_t *topuser;$/;"	m	struct:Single_t	typeref:struct:Single_t::appitf_t
 update	hardware\single\single.h	/^	struct update_t *update;$/;"	m	struct:Single_t	typeref:struct:Single_t::update_t
-Coordinate_A	hardware\single\update.c	15;"	d	file:
-Coordinate_B	hardware\single\update.c	16;"	d	file:
-Single_A	hardware\single\update.c	13;"	d	file:
-Single_B	hardware\single\update.c	14;"	d	file:
 update_init	hardware\single\update.c	/^update_t *update_init(struct Single_t *subclass)$/;"	f
+update_recv_onebyte	hardware\single\update.c	/^static u8 update_recv_onebyte(struct update_t *this)$/;"	f	file:
 update_release	hardware\single\update.c	/^static void update_release(struct update_t **this)$/;"	f	file:
+update_send_package	hardware\single\update.c	/^static int update_send_package(struct update_t *this)$/;"	f	file:
+update_slave	hardware\single\update.c	/^static int update_slave(struct update_t *this)$/;"	f	file:
 update_start	hardware\single\update.c	/^static int update_start(struct update_t *this,int addr,char Image)$/;"	f	file:
 ACK	hardware\single\update.h	19;"	d
 CAN	hardware\single\update.h	21;"	d
@@ -1002,7 +1027,7 @@ info	hardware\single\update.h	/^	update_Info_t info;$/;"	m	struct:update_t
 package	hardware\single\update.h	/^	package_t package;$/;"	m	struct:update_t
 package_t	hardware\single\update.h	/^} package_t;$/;"	t	typeref:struct:__anon16
 single_addr	hardware\single\update.h	/^	u8 single_addr[2];$/;"	m	struct:__anon16
-subclass	hardware\single\update.h	/^	struct Single_t *subclass;   \/\/继承update的子类$/;"	m	struct:update_t	typeref:struct:update_t::Single_t
+subclass	hardware\single\update.h	/^	struct Single_t *subclass;      \/\/继承update的子类$/;"	m	struct:update_t	typeref:struct:update_t::Single_t
 update_Info_t	hardware\single\update.h	/^} update_Info_t;$/;"	t	typeref:struct:__anon15
 update_cframe	hardware\single\update.h	/^	int update_cframe;      \/\/当前第几帧数据$/;"	m	struct:__anon15
 update_checkType	hardware\single\update.h	/^	int update_checkType;$/;"	m	struct:__anon15
@@ -1012,9 +1037,12 @@ update_isCoordi	hardware\single\update.h	/^	int update_isCoordi;$/;"	m	struct:__
 update_isImageA	hardware\single\update.h	/^	int update_isImageA;$/;"	m	struct:__anon15
 update_ok	hardware\single\update.h	/^	int update_ok;$/;"	m	struct:__anon15
 update_pend	hardware\single\update.h	/^	int update_pend;$/;"	m	struct:__anon15
+update_recv_onebyte	hardware\single\update.h	/^	u8 (*update_recv_onebyte)(struct update_t*);$/;"	m	struct:update_t
 update_release	hardware\single\update.h	/^	void (*update_release)(struct update_t**);$/;"	m	struct:update_t
 update_repeat	hardware\single\update.h	/^	int update_repeat;$/;"	m	struct:__anon15
+update_send_package	hardware\single\update.h	/^	int (*update_send_package)(struct update_t*);$/;"	m	struct:update_t
 update_size	hardware\single\update.h	/^	int update_size;$/;"	m	struct:__anon15
+update_slave	hardware\single\update.h	/^	int (*update_slave)(struct update_t *);$/;"	m	struct:update_t
 update_start	hardware\single\update.h	/^	int (*update_start)(struct update_t*,int addr,char Image);$/;"	m	struct:update_t
 update_t	hardware\single\update.h	/^typedef struct update_t {$/;"	s
 update_t	hardware\single\update.h	/^} update_t;$/;"	t	typeref:struct:update_t
@@ -2171,36 +2199,36 @@ list_del_entry	task\taskque\list.h	/^static inline void list_del_entry(struct li
 list_del_init	task\taskque\list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f
 list_empty	task\taskque\list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f
 list_empty_careful	task\taskque\list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f
-list_entry	task\taskque\list.h	335;"	d
-list_first_entry	task\taskque\list.h	346;"	d
-list_first_entry_or_null	task\taskque\list.h	368;"	d
-list_for_each	task\taskque\list.h	392;"	d
-list_for_each_entry	task\taskque\list.h	430;"	d
-list_for_each_entry_continue	task\taskque\list.h	466;"	d
-list_for_each_entry_continue_reverse	task\taskque\list.h	480;"	d
-list_for_each_entry_from	task\taskque\list.h	493;"	d
-list_for_each_entry_reverse	task\taskque\list.h	441;"	d
-list_for_each_entry_safe	task\taskque\list.h	504;"	d
-list_for_each_entry_safe_continue	task\taskque\list.h	520;"	d
-list_for_each_entry_safe_from	task\taskque\list.h	536;"	d
-list_for_each_entry_safe_reverse	task\taskque\list.h	551;"	d
-list_for_each_prev	task\taskque\list.h	400;"	d
-list_for_each_prev_safe	task\taskque\list.h	419;"	d
-list_for_each_safe	task\taskque\list.h	409;"	d
+list_entry	task\taskque\list.h	336;"	d
+list_first_entry	task\taskque\list.h	347;"	d
+list_first_entry_or_null	task\taskque\list.h	369;"	d
+list_for_each	task\taskque\list.h	393;"	d
+list_for_each_entry	task\taskque\list.h	431;"	d
+list_for_each_entry_continue	task\taskque\list.h	467;"	d
+list_for_each_entry_continue_reverse	task\taskque\list.h	481;"	d
+list_for_each_entry_from	task\taskque\list.h	494;"	d
+list_for_each_entry_reverse	task\taskque\list.h	442;"	d
+list_for_each_entry_safe	task\taskque\list.h	505;"	d
+list_for_each_entry_safe_continue	task\taskque\list.h	521;"	d
+list_for_each_entry_safe_from	task\taskque\list.h	537;"	d
+list_for_each_entry_safe_reverse	task\taskque\list.h	552;"	d
+list_for_each_prev	task\taskque\list.h	401;"	d
+list_for_each_prev_safe	task\taskque\list.h	420;"	d
+list_for_each_safe	task\taskque\list.h	410;"	d
 list_head	task\taskque\list.h	/^typedef struct list_head {$/;"	s
 list_head	task\taskque\list.h	/^}list_head;$/;"	t	typeref:struct:list_head
 list_is_last	task\taskque\list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f
 list_is_singular	task\taskque\list.h	/^static inline int list_is_singular(const struct list_head *head)$/;"	f
-list_last_entry	task\taskque\list.h	357;"	d
+list_last_entry	task\taskque\list.h	358;"	d
 list_move	task\taskque\list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f
 list_move_tail	task\taskque\list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f
-list_next_entry	task\taskque\list.h	376;"	d
-list_prepare_entry	task\taskque\list.h	454;"	d
-list_prev_entry	task\taskque\list.h	384;"	d
+list_next_entry	task\taskque\list.h	377;"	d
+list_prepare_entry	task\taskque\list.h	455;"	d
+list_prev_entry	task\taskque\list.h	385;"	d
 list_replace	task\taskque\list.h	/^static inline void list_replace(struct list_head *old,$/;"	f
 list_replace_init	task\taskque\list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f
 list_rotate_left	task\taskque\list.h	/^static inline void list_rotate_left(struct list_head *head)$/;"	f
-list_safe_reset_next	task\taskque\list.h	569;"	d
+list_safe_reset_next	task\taskque\list.h	570;"	d
 list_splice	task\taskque\list.h	/^static inline void list_splice(const struct list_head *list,$/;"	f
 list_splice_init	task\taskque\list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_splice_tail	task\taskque\list.h	/^static inline void list_splice_tail(struct list_head *list,$/;"	f

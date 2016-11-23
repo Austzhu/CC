@@ -68,6 +68,6 @@ typedef struct Queue_t{
 	void (*Que_release)(struct Queue_t**);
 } Queue_t;
 
-extern Queue_t *Queue_Init(struct appitf_t *topuser);
+extern Queue_t *Queue_Init(Queue_t*,struct appitf_t *topuser);
 
 #endif

@@ -12,21 +12,21 @@
 *******************************************************************/
 #include "Interface.h"
 
- static void *KeepaliveThread(void *args)
- {
- 	while(1) g_appity.TopUserKeepalive(&g_appity);
- 	return NULL;
- }
+static void *KeepaliveThread(void *args)
+{
+	while(1) g_appity.TopUser_Keepalive(&g_appity);
+	return NULL;
+}
 
 static void *RecvInsertQueueThread(void *args)
 {
-	while(1) g_appity.TopUserInsertQue(&g_appity);
+	while(1) g_appity.TopUser_InsertQue(&g_appity);
 	return NULL;
 }
 
 static void *UserQueProcThread(void *args)
 {
-	while(1) g_appity.TopUserProcQue(&g_appity);
+	while(1) g_appity.TopUser_ProcQue(&g_appity);
 	return NULL;
 }
 
@@ -35,9 +35,9 @@ int main(int argc,char *argv[])
 	pthread_t thread_Keepalive = -1;
 	pthread_t thread_RecvInsert = -1;
 	pthread_t thread_UserProc = -1;
-	if(SUCCESS != g_appity.app_Init(&g_appity)){
+	if(SUCCESS != g_appity.TopUser_Init(&g_appity)){
 		debug(DEBUG_app,"system init error!\n");
-		g_appity.app_relese(&g_appity);
+		g_appity.TopUser_relese(&g_appity);
 	}
 	pthread_create(&thread_Keepalive,NULL,KeepaliveThread,NULL);sleep(1);
 	pthread_create(&thread_RecvInsert,NULL,RecvInsertQueueThread,NULL);
@@ -45,7 +45,7 @@ int main(int argc,char *argv[])
 
 	if(thread_Keepalive < 0 || thread_RecvInsert < 0 || thread_UserProc < 0 ){
 		debug(1,"one of pthread_create error!\n");
-		exit(-1);
+		g_appity.TopUser_relese(&g_appity);
 	}
 	pthread_join(thread_Keepalive,NULL);
 	pthread_join(thread_RecvInsert,NULL);

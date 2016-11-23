@@ -49,7 +49,7 @@ Proclist_t  ProcessFunc[][64]={
 
 static s32 get_Quetype(struct Queue_t *this,u8 ctrl)
 {
-	assert_param(this,NULL,-1);
+	assert_param(this,-1);
 	for(int i=0,size=sizeof(Que_classify)/sizeof(Que_classify[0]);  i<size;  ++i){
 		for(int j=0;Que_classify[i][j].cmdname != 0xff;++j){
 			if(ctrl == Que_classify[i][j].cmdname)
@@ -61,7 +61,7 @@ static s32 get_Quetype(struct Queue_t *this,u8 ctrl)
 
 static void Clean_Que(Queue_t *Que)
 {
-	assert_param(Que,NULL,;);
+	assert_param(Que,;);
 
 	Taskque_t *_pos = Que->Que_header;
 	do{
@@ -73,8 +73,8 @@ static void Clean_Que(Queue_t *Que)
 
 static s32 Task_Append(Queue_t *this,u32 Que_type,u32 task_level,void *pakect,int size)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(pakect,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(pakect,FAIL);
 
 	Node_t *node = malloc(size+sizeof(Node_t));
 	if(!node)  return FAIL;
@@ -99,7 +99,7 @@ static s32 Task_Append(Queue_t *this,u32 Que_type,u32 task_level,void *pakect,in
 
 static s32 Select_Task(Queue_t *this,Node_t **node)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	Taskque_t *pos = NULL;
 	list_for_each_entry(pos,&this->Que_header->entries,entries){
@@ -116,7 +116,7 @@ static s32 Select_Task(Queue_t *this,Node_t **node)
 
 static s32 Task_Exec(Queue_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	Node_t *node = NULL;
 	if(SUCCESS != Select_Task(this,&node) || !node) goto out;
@@ -137,16 +137,14 @@ out:
 
 static void Queue_Relese(Queue_t **this)
 {
-	assert_param(*this,NULL,;);
+	assert_param(*this,;);
 	Clean_Que(*this);
-	memset(*this,0,sizeof(Queue_t));
-	free(*this);
-	*this = NULL;
+	FREE(*this);
 }
 
 static int Create_QueueHeader(Queue_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	Taskque_t *temp = NULL;
 	/* create Queue list */
@@ -179,12 +177,15 @@ static int Create_QueueHeader(Queue_t *this)
 	return SUCCESS;
 }
 
-Queue_t *Queue_Init(struct appitf_t *topuser)
+Queue_t *Queue_Init(Queue_t *this,struct appitf_t *topuser)
 {
-	Queue_t *this = malloc(sizeof(Queue_t));
-	if(!this) return NULL;
-	memset(this,0,sizeof(Queue_t));
-
+	assert_null(topuser);
+	Queue_t *pthis = this;
+	if(!pthis){
+		this = malloc(sizeof(Queue_t));
+		if(!this) return NULL;
+	}
+	bzero(this,sizeof(Queue_t));
 	if(SUCCESS != Create_QueueHeader(this)){
 		err_Print(DEBUG_Queue," Create Queue Header error!\n");
 		goto out;
@@ -203,6 +204,8 @@ Queue_t *Queue_Init(struct appitf_t *topuser)
 	}
 	return this;
 out:
-	free(this);
+	if(this->Que_header)
+		Clean_Que(this);
+	if(!pthis)  FREE(this);
 	return NULL;
 }

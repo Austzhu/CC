@@ -10,15 +10,14 @@
 ** 版　本:	V1.0
 *******************************************************************/
 #include "serial.h"
-#ifndef  MC_ARM335X
-#include "../emfuture/include/libs_emfuture_odm.h"
+#ifdef Config_EC_6018
+#include "libs_emfuture_odm.h"
 #endif
 
 static int serial_Config(serial_t *this,u32 port,u32 speed,s32 bits,s32 stop,s8 parity)
 {
-	assert_param(this,NULL,FAIL);
-
- #ifdef MC_ARM335X
+	assert_param(this,FAIL);
+#ifdef Config_MC_ARM335X
 	struct {int speed;int bspeed;} _speed[] = { {2400,B2400},{4800,B4800},{9600,B9600},
 					{19200,B19200},{38400,B38400},{57600,B57600},{115200,B115200} };
 	struct termios opt;
@@ -84,40 +83,35 @@ static int serial_Config(serial_t *this,u32 port,u32 speed,s32 bits,s32 stop,s8 
  out:
  	perror("error!");
  	return FAIL;
- #else
+#else
  	return SetComCfg(this->serialfd[port], Asprintf("%d,%d,%d,%c,0",speed,bits,stop,parity));
- #endif
+#endif
 }
 
 static int serial_Open(serial_t *this,u32  port)
 {
-	assert_param(this,NULL,FAIL);
-	if(port > SerialMax) return FAIL;
-
- #ifdef  MC_ARM335X
+	if(port > SerialMax || !this) return FAIL;
+#ifdef  Config_MC_ARM335X
 	this->serialfd[port] = open( Asprintf("/dev/ttyO%d",port), O_RDWR|O_NOCTTY);
-	if(this->serialfd[port] < 0){
-		debug(DEBUG_Serial,"Open Serial port %d error!\n",port);
-		return FAIL;
-	}
-	if( 0 == isatty(this->serialfd[port]) ){
-		debug(DEBUG_Serial,"Is not tty devices!\n");
+	if(this->serialfd[port] < 0) goto out;
+	if( !isatty(this->serialfd[port])){
+		debug(DEBUG_Serial,"/dev/ttyO%d is't tty devices!\n",port);
 		this->serial_close(this,port);
 		return FAIL;
 	}
- #else
+#else
 	this->serialfd[port] = open( Asprintf("/dev/ttyS%d",port), O_RDWR | O_NONBLOCK);
-	if(this->serialfd[port] < 0){
-		debug(DEBUG_Serial,"Open Serial port %d error!\n",port);
-		return FAIL;
-	}
- #endif
+	if(this->serialfd[port] < 0) goto out;
+#endif
 	return SUCCESS;
+ out:
+	debug(DEBUG_Serial,"Open Serial port %d error!\n",port);
+	return FAIL;
 }
 
 static int serial_Close(serial_t *this,u32  port)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 	if( this->serialfd[port] > 0 ){
 		close( this->serialfd[port] );
 		this->serialfd[port] = -1;
@@ -127,8 +121,8 @@ static int serial_Close(serial_t *this,u32  port)
 
 static int serial_Recv(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(buf,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(buf,FAIL);
 
 	int fd = this->serialfd[port];
 	if( fd < 0 )return FAIL;
@@ -167,8 +161,8 @@ static int serial_Recv(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 
 static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 {
-	assert_param(this,NULL,FAIL);
-	assert_param(buf,NULL,FAIL);
+	assert_param(this,FAIL);
+	assert_param(buf,FAIL);
 
 	int fd = this->serialfd[port];
 	if( fd < 0 )  return FAIL;
@@ -205,7 +199,7 @@ static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 
 static void serial_flush(serial_t *this,int port)
 {
-	assert_param(this,NULL,;);
+	assert_param(this,;);
 	if(port < 0 || port >SerialMax) return;
 	tcflush(this->serialfd[port],TCIFLUSH|TCOFLUSH);
 }

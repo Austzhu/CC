@@ -1,11 +1,11 @@
 #CC = arm-linux-emfure-gcc
-CC = arm-linux-gcc
-CFLAGS =  -Wall
-CFLAGS += -Wno-implicit-function-declaration
+CC = arm2012-linux-gcc
+CFLAGS =  -Wall -O2
+#CFLAGS += -Wno-implicit-function-declaration
 #关闭由-O2优化选项带来的"警告"提示
-CFLAGS += -Wno-strict-aliasing
+#CFLAGS += -Wno-strict-aliasing
 #关闭数据包data数组越界的"警告"提示
-CFLAGS += -Wno-array-bounds
+#CFLAGS += -Wno-array-bounds
 CFLAGS += -std=gnu99
 
 LDFLAGS = -L$(PWD)/sqlite/lib -L$(PWD)/Software/emfuture/lib  -lsqlite3 -lEM_Middleware_Lib
@@ -52,7 +52,10 @@ compile:
 #将可程序拷贝到nfs目录下
 install:
 	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/ztcc
-	@cp -frd ./config/ $(PRJROOT)/rootfs/ztcc
+	@mkdir -p $(PRJROOT)/rootfs/ztcc/config $(PRJROOT)/rootfs/ztcc/update \
+			$(PRJROOT)/rootfs/ztcc/Logfile
+	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/ztcc/config
+	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/ztcc/config
 
 
 svnver:

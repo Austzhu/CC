@@ -38,6 +38,8 @@ struct appitf_t;
 typedef struct Single_t{
 	struct appitf_t *topuser;
 	struct update_t *update;
+	struct CRC_t *crc;
+
 	int (*sin_open)(struct Single_t*,int,u32,u32);
 	int (*sin_close)(struct Single_t*,int,u32);
 	int (*sin_reply)(struct Single_t*,int,int,int);
@@ -50,6 +52,6 @@ typedef struct Single_t{
 	void (*Display)(const char*,void*,int);
 } Single_t;
 
-extern Single_t *single_Init(struct appitf_t *topuser);
+extern Single_t *single_Init(Single_t *,struct appitf_t *topuser);
 
 #endif

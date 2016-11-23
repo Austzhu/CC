@@ -24,6 +24,7 @@ typedef struct list_head {
         const typeof( ((type *)0)->member ) *__mptr = (ptr);\
         (type *)( (char *)__mptr - offsetof(type,member) );})
 
+extern int __list_del_entry(struct list_head*);
 
 static inline void INIT_LIST_HEAD(struct list_head *list)
 {

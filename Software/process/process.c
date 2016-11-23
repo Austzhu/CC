@@ -19,7 +19,7 @@ int Reset2DoFunctions(void)
 
 int time_tick(u8 *package)
 {
-	assert_param(package,NULL,FAIL);
+	assert_param(package,FAIL);
 	/* 开发板设置时间格式
 	 * date 051114542016.59  月 日 时 分 年.秒
 	 * 把下发的时间格式化成字符串
@@ -39,7 +39,7 @@ int time_tick(u8 *package)
 
 int Query_time(u8 *buf,int bufsize)
 {
-	assert_param(buf,NULL,FAIL);
+	assert_param(buf,FAIL);
 
 	time_t SystemTime;
 	struct tm TimeRTC;
@@ -79,7 +79,7 @@ int Query_time(u8 *buf,int bufsize)
 
 int CC_Inquire_Version(u8 *buf,int size)
 {
-	assert_param(buf,NULL,FAIL);
+	assert_param(buf,FAIL);
 	memset(buf,0,size);
 	*buf++ = 0x51; *buf++ = 0x24; *buf++ = 0x80;
 	*buf++ = 0x22; *buf++ = 0xA2; *buf++ = 0x05;
@@ -89,8 +89,8 @@ int CC_Inquire_Version(u8 *buf,int size)
 
 int SingleConfig(u8 *package,appitf_t *app)
 {
-	assert_param(package,NULL,FAIL);
-	assert_param(app,NULL,FAIL);
+	assert_param(package,FAIL);
+	assert_param(app,FAIL);
 
 	TableSingle_t   tab_single;
 	tab_single.Wl_Addr 	= package[0];
@@ -125,14 +125,14 @@ int SingleConfig(u8 *package,appitf_t *app)
 
 int CoordiConfig(u8 *package,  appitf_t *app)
 {
-	assert_param(package,NULL,FAIL);
-	assert_param(app,NULL,FAIL);
+	assert_param(package,FAIL);
+	assert_param(app,FAIL);
 
 	TableCoordi_t tab_coor;
 	tab_coor.Wl_Addr 	= *package++;
 	tab_coor.Coor_gid 	= *package++;
 	memset(tab_coor.CC_id,0,sizeof(tab_coor.CC_id));
-	app->hex2str(tab_coor.CC_id,package,6);package += 6 ;
+	Hex2Str(tab_coor.CC_id,package,6);package += 6 ;
 	tab_coor.Base_Addr 	= *package++;
 	tab_coor.Map_Addr 	= *package;
 

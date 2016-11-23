@@ -28,9 +28,8 @@
 #define HeartBeat_error    -1
 
 typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;
-typedef enum { crc_get, crc_check }  crc_t;
 
-typedef struct{
+typedef struct Param{
 	u8 CCUID[6];                   //集中控制器的UID
 	u8 DebugLevel;	             //调试等级
 	u8 ControlMethod;	      //控制模式
@@ -44,32 +43,27 @@ typedef struct{
 } param_t;
 
 typedef struct appitf_t {
-	Queue_t   *Queue;
-	ethernet_t *ethernet;
-	serial_t   *Serial;
-	sql_t   *sqlite;
-	Single_t   *single;
-	Warn_t   *warn;
-	#ifdef Config_Meter
-	Meter_t   *meter;
-	#endif
 	int Connect_status;        //网络连接状态
 	int HeartBeat_status;    //心跳状态
-	param_t param;
-	int (*const UID_Check)(struct appitf_t *this,void*r_uid);
-	int (*const TopUserInsertQue)(struct appitf_t *this);
-	int (*const TopUserProcQue)(struct appitf_t *this);
-	int (*const TopUserKeepalive)(struct appitf_t *this);
-	int (*const TopUserRecvPackage)(struct appitf_t *this,u8*,int);
-	int (*const app_Init)(struct appitf_t *this);
-	int (*const app_relese)(struct appitf_t*);
-	int (*const packagecheck)(void*);
-	int (*const Crc16)(int,u8*,u8*,int);
-	int (*const Crc16_HL)(int,u8*,u8*,int);
-	u8* (*const str2hex)(u8*,const char*);
-	s8* (*const hex2str)(char*dest,const u8 *src,int size);
-	void (*const msleep)(u32);
-	void (*const usleep)(u32);
+	struct Param param;
+	struct sql_t *sqlite;
+	struct Warn_t *warn;
+	struct serial_t *Serial;
+	struct Single_t *single;
+	struct Queue_t *Queue;
+	struct ethernet_t *ethernet;
+	#ifdef Config_Meter
+	struct Meter_t *meter;
+	#endif
+
+	int (*const TopUser_Uidchk)(struct appitf_t *this,void*r_uid);
+	int (*const TopUser_InsertQue)(struct appitf_t *this);
+	int (*const TopUser_ProcQue)(struct appitf_t *this);
+	int (*const TopUser_Keepalive)(struct appitf_t *this);
+	int (*const TopUser_RecvPackage)(struct appitf_t *this,u8*,int);
+	int (*const TopUser_Init)(struct appitf_t *this);
+	int (*const TopUser_relese)(struct appitf_t*);
+	int (*const TopUser_pakgchk)(void*);
 } appitf_t;
 
 extern appitf_t g_appity;

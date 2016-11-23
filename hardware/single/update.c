@@ -15,7 +15,7 @@
 
 static int update_slave(struct update_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	this->update_send_package(this);
 	while(this->info.update_timeout){
@@ -53,7 +53,7 @@ static int update_slave(struct update_t *this)
 
 static int update_start(struct update_t *this,int addr,char Image)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	char update_file[32] = {0};
 	this->info.update_isCoordi = ((0xffff&addr) == 0)?!0:0;
@@ -98,17 +98,17 @@ static int update_start(struct update_t *this,int addr,char Image)
 
 static u8 update_recv_onebyte(struct update_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 	u8 res = 0;
 	serial_t *p_serial = this->subclass->topuser->Serial;
 	if(!p_serial) return FAIL;
 	return SUCCESS == p_serial->serial_recv(\
-		p_serial,COM_485,(s8*)&res,1,2000000)?res:FAIL;
+		p_serial,Config_COM485,(s8*)&res,1,2000000)?res:FAIL;
 }
 
 static int update_send_package(struct update_t *this)
 {
-	assert_param(this,NULL,FAIL);
+	assert_param(this,FAIL);
 
 	int readsize = 0;
 	appitf_t *topuser = this->subclass->topuser;
@@ -131,16 +131,17 @@ static int update_send_package(struct update_t *this)
 		//debug(DEBUG_update,"Fill databuf size %d\n",UPACKSIZE-readsize);
 		memset(this->package.data+readsize,CTRLZ,UPACKSIZE-readsize);
 	}
-	topuser->Crc16(crc_get,this->package.CRC16,this->package.data,UPACKSIZE);
+	this->subclass->crc->CRCHL_get((char*)(this->package.CRC16),(char*)(this->package.data),UPACKSIZE);
+	//topuser->Crc16(crc_get,this->package.CRC16,this->package.data,UPACKSIZE);
 	//this->subclass->Display("\npackage:",&this->package,sizeof(package_t));
 	return topuser->Serial->serial_send(topuser->Serial,\
-		COM_485,(s8*)&this->package,sizeof(package_t),2000000);
+		Config_COM485,(s8*)&this->package,sizeof(package_t),2000000);
 }
 
 static void update_release(struct update_t **this)
 {
-	assert_param(*this,NULL,;);
-	assert_param(this,NULL,;);
+	assert_param(*this,;);
+	assert_param(this,;);
 
 	memset (*this,0,sizeof(update_t));
 	free(*this);  *this = NULL;
