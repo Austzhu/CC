@@ -57,21 +57,6 @@ install:
 	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/ztcc/config
 	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/ztcc/config
 
-
-svnver:
-	@echo "#ifndef _H_VWESION_H_" > ./version/version.h
-	@echo "#define _H_VWESION_H_" >> ./version/version.h
-	@echo "#define VERSION \"(0.2) `./version/setlocalversion`\"" >> ./version/version.h
-	@echo "#endif" >> ./version/version.h
-
-tar:
-	tar -zcvf flash.gz autorun.sh ./bin/test_App
-	tar -zcvf conf.gz term.ini net_params.conf
-
-version:
-	./makeversion
-
-
 .PHONY: clean
 clean:
 	@find -type f \( -name '*.o' \) -print | xargs rm -f

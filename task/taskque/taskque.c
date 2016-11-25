@@ -137,6 +137,7 @@ out:
 
 static void Queue_Relese(Queue_t **this)
 {
+	assert_param(this,;);
 	assert_param(*this,;);
 	Clean_Que(*this);
 	FREE(*this);

@@ -206,20 +206,23 @@ static void serial_flush(serial_t *this,int port)
 
 static void serial_Relese(serial_t **this)
 {
+	assert_param(this,;);
+	assert_param(*this,;);
 	for(int i=0;i<SerialMax;++i)
-		if( (*this)->serialfd[i] > 0 ) close( (*this)->serialfd[i] );
-	memset(*this,0,sizeof(serial_t));
-	free(*this);
-	*this = NULL;
+		if( (*this)->serialfd[i] > 0 )
+			close( (*this)->serialfd[i] );
+	FREE(*this);
 }
 
-serial_t *serial_Init(u32 port,...)
+serial_t *serial_Init(serial_t *this,u32 port,...)
 {
 	int speed = 0;
 	va_list 	arg_ptr;
-	serial_t *temp = malloc(sizeof(serial_t));
-	if(!temp) return NULL;
-	memset(temp,0,sizeof(serial_t));
+	serial_t *temp = this;
+	if(!this){
+		temp = malloc(sizeof(serial_t));
+		if(!temp) return NULL;
+	}	bzero(temp,sizeof(serial_t));
 	memset(temp->serialfd,-1,sizeof(temp->serialfd));
 
 	temp->serial_open = serial_Open;
@@ -241,12 +244,11 @@ serial_t *serial_Init(u32 port,...)
 			if(SUCCESS != temp->serial_config(temp,i,speed,8,1,'N')) goto out;
 		}else  goto out;
 	}
-
 	va_end(arg_ptr);
 	return temp;
 out:
 	va_end(arg_ptr);
 out1:
-	free(temp);
+	if(!this)  FREE(temp);
 	return NULL;
 }

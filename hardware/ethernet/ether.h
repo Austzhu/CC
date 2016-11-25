@@ -21,8 +21,8 @@ typedef struct ethernet_t{
 	int ether_recvlen;				//缓存数据的长度
 	int ether_recvhead;				//缓存数据中的读指针偏移量
 	u8 *ether_recvbuf;				//数据的缓存区
-	pthread_mutex_t ether_lock;
 	struct appitf_t *parent;
+	pthread_mutex_t ether_lock;
 
 	int (*ether_connect)(struct ethernet_t*);
 	int (*ether_logon)(struct ethernet_t*);
@@ -35,6 +35,6 @@ typedef struct ethernet_t{
 	void (*ether_close)(struct ethernet_t*);
 } ethernet_t;
 
-extern ethernet_t *ether_Init(struct appitf_t *topuser);
+extern ethernet_t *ether_Init(ethernet_t*,struct appitf_t *topuser);
 
 #endif

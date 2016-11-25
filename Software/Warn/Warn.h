@@ -30,9 +30,9 @@
 typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;
 
 typedef enum {
-	fault_none		= 0x00,			//没有故障
-	fault_single	= 0x01,			//单灯设备故障
-	fault_coordi 	= 0x02,			//协调器设备故障
+	fault_none         = 0x00,			//没有故障
+	fault_single        = 0x01,			//单灯设备故障
+	fault_coordi       = 0x02,			//协调器设备故障
 	fault_communication = 0x04,	//通讯故障
 	fault_light 		= 0x08,			//灯具故障
 	fault_valtage	= 0x10,			//供电电压故障
@@ -43,9 +43,9 @@ typedef struct sin_warn_t{
 	int addr;
 	int Warn_flags;
 	int opt_flags;
-	int Rpow;  int Rvol;  int Rpf; 	//额定功率, 电压, 功率因数
-	int light;    int elec;  int vol;		//实际 状态,调光值,电流,电压
-	fault_t fault_flags;				//故障内容
+	int Rpow;  int Rvol;  int Rpf; 	 //额定功率, 电压, 功率因数
+	int light;    int elec;  int vol;    //实际 状态,调光值,电流,电压
+	fault_t fault_flags;                  //故障内容
 } sin_warn_t;
 
 struct Warn_info_t{
@@ -66,6 +66,6 @@ typedef struct Warn_t{
 	void(*warn_relese)(struct Warn_t**);
 } Warn_t;
 
-extern Warn_t *warn_init(void*);
+extern Warn_t *warn_init(Warn_t*,void*);
 
 #endif	//end of  __WARN_H__

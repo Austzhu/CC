@@ -953,7 +953,8 @@ static void sin_release(struct Single_t **this)
 
 Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 {
-	if(!single){
+	Single_t *pth = single;
+	if(!pth){
 		single = (Single_t*)malloc(sizeof(Single_t));
 		if(!single) return NULL;
 	}	bzero(single,sizeof(Single_t));
@@ -981,6 +982,6 @@ Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 out:
 	DELETE(single->crc,CRC_release);
 out1:
-	FREE(single);
+	if(!pth) FREE(single);
 	return NULL;
 }

@@ -109,6 +109,6 @@ typedef struct sql_t{
 	void (*sql_release)(struct sql_t**);
 } sql_t;
 
-extern sql_t *sql_Init(void);
+extern sql_t *sql_Init(sql_t*);
 
 #endif

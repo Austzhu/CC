@@ -216,7 +216,8 @@ static void meter_release(struct Meter_t **this)
 Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)
 {
 	assert_param(topuser,NULL);
-	if(!this){
+	Meter_t*pth = this;
+	if(!pth){
 		this = malloc(sizeof(Meter_t));
 		if(!this) return NULL;
 	}
@@ -238,6 +239,6 @@ Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)
 out:
 	DELETE(this->crc,CRC_release);
 out1:
-	FREE(this);
+	if(!pth) FREE(this);
 	return NULL;
 }

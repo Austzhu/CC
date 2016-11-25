@@ -5,61 +5,7 @@
 	> Created Time:	2016年03月30日 星期三 10时38分53秒
  *******************************************************************/
 #include "database.h"
-#define Database_Path 	"cc_corl.db"
-
-#if 0
-typedef struct {int errnum;char *Message;} errmsg_t;
-static errmsg_t ERRMessage[] = {
-	[0]   = {0,"Successful result"},
-	[1]   = {1,"SQL error or missing database"},
-	[2]   = {2,"Internal logic error in SQLite "},
-	[3]   = {3,"Access permission denied"},
-	[4]   = {4,"Callback routine requested an abort "},
-	[5]   = {5,"The database file is locked "},
-	[6]   = {6,"A table in the database is locked"},
-	[7]   = {7,"A malloc() failed"},
-	[8]   = {8,"Attempt to write a readonly database "},
-	[9]   = {9,"Operation terminated by sqlite3_interrupt()"},
-	[10] = {10,"Some kind of disk I/O error occurred"},
-	[11] = {11,"The database disk image is malformed"},
-	[12] = {12,"Unknown opcode in sqlite3_file_control() "},
-	[13] = {13,"Insertion failed because database is full "},
-	[14] = {14,"Unable to open the database file "},
-	[15] = {15,"Database lock protocol error"},
-	[16] = {16,"Database is empty"},
-	[17] = {17,"The database schema changed "},
-	[18] = {18,"String or BLOB exceeds size limit "},
-	[19] = {19,"Abort due to constraint violation"},
-	[20] = {20,"Data type mismatch "},
-	[21] = {21,"Library used incorrectly"},
-	[22] = {22,"Uses OS features not supported on host "},
-	[23] = {23,"Authorization denied"},
-	[24] = {24,"Auxiliary database format error"},
-	[25] = {25,"2nd parameter to sqlite3_bind out of range"},
-	[26] = {26,"File opened that is not a database file"},
-	[27] = {27,"Notifications from sqlite3_log()"},
-	[28] = {28,"Warnings from sqlite3_log()"},
-	[29] = {100,"sqlite3_step() has another row ready"},
-	[30] = {101,"sqlite3_step() has finished executing "},
-};
-
-
-void sql_errmsg(int err)
-{
-	if(err > 28){
-		for(int i=29,size=sizeof(ERRMessage)/sizeof(ERRMessage[0]);i<=size;++i){
-			if(i >= size ){
-				printf("Error Message:Unknown error Message!\n");
-				break;
-			}else if(ERRMessage[i].errnum == err){
-				printf("Error Message:%s\n",ERRMessage[i].Message);
-				break;
-			}
-		}
-	}else
-		printf("Error Message:%s\n",ERRMessage[err].Message);
-}
-#endif
+#define Database_Path "cc_corl.db"
 
 /**
  * [ 往数据库里插入一条数据]
@@ -282,7 +228,6 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 			goto out;
 		}
 	}
-
 	if(stmt)	sqlite3_finalize(stmt);
 	if(db)	sqlite3_close(db);
 	return SUCCESS;
@@ -296,16 +241,19 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 
 static void sql_release(struct sql_t**this)
 {
-	memset(*this,0,sizeof(sql_t));
-	free(*this);
-	*this = NULL;
+	assert_param(this,;);
+	assert_param(*this,;);
+	FREE(*this);
 }
 
-sql_t *sql_Init(void)
+sql_t *sql_Init(sql_t *this)
 {
-	sql_t *sql = malloc(sizeof(sql_t));
-	if(!sql) return NULL;
-	memset(sql,0,sizeof(sql_t));
+	sql_t *sql = this;
+	if(!this){
+		sql= malloc(sizeof(sql_t));
+		if(!sql) return NULL;
+	}
+	bzero(sql,sizeof(sql_t));
 
 	sql->sql_insert = sql_Insert;
 	sql->sql_delete = sql_delete;
@@ -313,11 +261,11 @@ sql_t *sql_Init(void)
 	sql->sql_select = sql_select;
 	sql->sql_release = sql_release;
 
-	if( !sql->sql_insert  ||  !sql->sql_delete  ||\
-	!sql->sql_update  ||  !sql->sql_select  ||  !sql->sql_release){
-		free(sql);
-		return NULL;
-	}
+	if( !sql->sql_insert || !sql->sql_delete || !sql->sql_update ||\
+		!sql->sql_select  ||  !sql->sql_release)
+		goto out;
 	return sql;
-
+out:
+	if(!this)  FREE(sql);
+	return NULL;
 }

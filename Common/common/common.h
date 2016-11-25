@@ -66,7 +66,7 @@ extern char MessageBuffer[];
 	if(NULL == (ptr)) return rtn;\
 }while(0)
 
-#define INIT_FAIL(ptr,func,args...)  INIT(ptr,func,FAIL,##args)
+#define INIT_FAIL(ptr,func,args...)  INIT(ptr,func,FAIL,NULL,##args)
 
 
 extern char* Hex2Str(char*dest,const u8 *src,int size);

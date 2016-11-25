@@ -185,17 +185,16 @@ static void ether_Relese(ethernet_t **this)
 	assert_param(*this,;);
 	free((*this)->ether_recvbuf);
 	(*this)->ether_close(*this);
-	memset(*this,0,sizeof(ethernet_t));
-	free(*this);   *this = NULL;
+	FREE(*this);
 }
 
-ethernet_t *ether_Init(struct appitf_t *topuser)
+ethernet_t *ether_Init(ethernet_t *this,struct appitf_t *topuser)
 {
-	ethernet_t *this = malloc(sizeof(ethernet_t));
-	if(!this) return NULL;
-
-	memset(this,0,sizeof(ethernet_t));
-
+	ethernet_t *pth = this;
+	if(!pth){
+		this = calloc(sizeof(ethernet_t),sizeof(char));
+		if(!this) return NULL;
+	}
 	this->ether_sock = -1;
 	this->ether_recvbuf = calloc(ether_RecvBufSize,sizeof(char));
 	if(!this->ether_recvbuf) goto out;
@@ -211,18 +210,16 @@ ethernet_t *ether_Init(struct appitf_t *topuser)
 	this->ether_recv  = ether_Recv;
 	this->ether_relese  = ether_Relese;
 	this->ether_close  = ether_Close;
-
 	if( !this->parent || !this->ether_connect || !this->ether_logon ||\
 		!this->ether_packagecheck || !this->ether_send || !this->ether_heartbeat || \
 		!this->ether_getchar || !this->ether_recv || !this->ether_relese || !this->ether_close){
 		err_Print(DEBUG_Ethnet,"Here are some Api pointer is NULL!\n");
 		goto out1;
 	}
-
 	return this;
  out1:
-	free(this->ether_recvbuf);
+	FREE(this->ether_recvbuf);
  out:
-	free(this);
+	if(!pth) FREE(this);
 	return NULL;
 }

@@ -197,11 +197,10 @@ static int appitf_init(appitf_t *this)
 	loadParam(&g_appity);
 	this->Connect_status = Connect_error;
 	this->HeartBeat_status = HeartBeat_error;
-
-	INIT_FAIL(this->Queue,Queue_Init,NULL,this);                        /* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);                     /* init for Queue */
 	switch(this->param.ItfWay){
 		case ether_net:
-			INIT_FAIL(this->ethernet,ether_Init,this);       /* init for ethernet */
+			INIT_FAIL(this->ethernet,ether_Init,this);     /* init for ethernet */
 			break;
 		case gprs:break;
 		case zigbee:break;
@@ -210,9 +209,9 @@ static int appitf_init(appitf_t *this)
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<Config_COM485) |\
 		(0x01<<Config_COMDIDO)),9600,9600);              /* init for serial */
 	INIT_FAIL(this->sqlite,sql_Init);                                        /* init for sqlite */
-	INIT_FAIL(this->single,single_Init,NULL,this);               /* init for single */
+	INIT_FAIL(this->single,single_Init,this);                          /* init for single */
 	#ifdef Config_Meter
-	INIT_FAIL(this->meter,meter_init,NULL,this);              /* init for dido */
+	INIT_FAIL(this->meter,meter_init,this);                         /* init for dido */
 	#endif
 	INIT_FAIL(this->warn,warn_init,this);                             /* init for warn */
 	if( access("cc_corl.db",F_OK))

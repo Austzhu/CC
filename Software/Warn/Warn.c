@@ -230,15 +230,20 @@ static int warn_Insert(struct Warn_t *this,int addr,int type)
 
 static void warn_relese(Warn_t **this)
 {
-	memset(*this,0,sizeof(Warn_t));
-	free(*this);
-	*this = NULL;
+	assert_param(this,;);
+	assert_param(*this,;);
+	FREE(*this);
 }
 
-Warn_t *warn_init(void *topuser)
+Warn_t *warn_init(Warn_t *this,void *topuser)
 {
-	Warn_t *warn = (Warn_t*)calloc(1,sizeof(Warn_t));
-	if(!warn) return NULL;
+	Warn_t *warn = this;
+	if(!this){
+		warn = (Warn_t*)malloc(sizeof(Warn_t));
+		if(!warn) return NULL;
+	}
+	bzero(warn,sizeof(Warn_t));
+
 	warn->topuser = topuser;
 	warn->warn_relese = warn_relese;
 	warn->warn_setflags = set_flags;
@@ -246,11 +251,11 @@ Warn_t *warn_init(void *topuser)
 	warn->warn_verdict = warn_verdict;
 	warn->warn_Insert = warn_Insert;
 
-	if(!warn->topuser || !warn->warn_relese ||\
-		!warn->warn_setflags || !warn->warn_cleanflags || \
-		!warn->warn_verdict || !warn->warn_Insert ){
-		free(warn);
-		return NULL;
-	}
+	if(!warn->topuser || !warn->warn_relese || !warn->warn_setflags ||\
+		!warn->warn_cleanflags || !warn->warn_verdict || !warn->warn_Insert )
+		goto out;
 	return warn;
+out:
+	if(!this) FREE(warn);
+	return NULL;
 }
