@@ -25,7 +25,7 @@
 #include <signal.h>
 #include <sys/select.h>
 #include <sys/stat.h>
-
+#include <netinet/tcp.h>
 
 
 #include "debug.h"
@@ -36,8 +36,5 @@
 #include "version.h"
 #include "common.h"
 #include "log.h"
-
-extern pthread_mutex_t mutex_ether;
-extern pthread_mutex_t mutex_task;
 
 #endif	//end of __include_h__

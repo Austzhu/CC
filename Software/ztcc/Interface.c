@@ -74,7 +74,10 @@ static int TopUser_Keepalive(appitf_t *this)
 		if(this->ethernet && this->ethernet->ether_heartbeat &&\
 			SUCCESS != this->ethernet->ether_heartbeat(this->ethernet))
 			return FAIL;
-		msleep(1000*this->param.HeartBCycle);
+		for(int ii=0;ii<1000;++ii){
+			msleep(this->param.HeartBCycle);
+			if(!this->pthread_start) return FAIL;
+		}
 	}else{
 		this->Connect_status = Connect_error;
 		/* 判断是否使用网络方式 */
@@ -89,7 +92,10 @@ static int TopUser_Keepalive(appitf_t *this)
 				this->ethernet->ether_heartbeat /* function HeartBeat is not null */ && \
 				SUCCESS == this->ethernet->ether_logon(this->ethernet) /* log on success? */&&\
 				SUCCESS == this->ethernet->ether_heartbeat(this->ethernet) ){
-				msleep(1000*this->param.HeartBCycle);
+				for(int ii=0;ii<1000;++ii){
+					msleep(this->param.HeartBCycle);
+					if(!this->pthread_start) return FAIL;
+				}
 				return SUCCESS;
 			}else{
 				err_Print(1,"ethernet logon or heartbeat error!\n");
@@ -131,6 +137,7 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 	while(*buffer != 0x68){    /* recv header */
 		res = this->ethernet->ether_getchar(this->ethernet,pchar);
 		if(res != SUCCESS) msleep(5);    //接收失败睡眠5ms,否则cpu的占用率会很高
+		if(!this->pthread_start) return FAIL;
 	}	pchar++;
 	res = this->ethernet->ether_recv(this->ethernet,pchar,9);
 	if(res == 9){
@@ -173,15 +180,20 @@ static int TopUser_Relese(appitf_t *this)
 {
 	assert_param(this,FAIL);
 	printf("  app exit!\n");
+	this->pthread_start = 0;
 	DELETE(this->Queue,Que_release);
 	DELETE(this->ethernet,ether_relese);
-	DELETE(this->Serial,serial_relese);
-	DELETE(this->sqlite,sql_release);
-	DELETE(this->single,sin_release);
 	DELETE(this->warn,warn_relese);
-	#ifdef Config_Meter
-	DELETE(this->meter,meter_release);
+	DELETE(this->single,sin_release);
+	DELETE(this->sqlite,sql_release);
+	DELETE(this->Serial,serial_relese);
+	#ifdef  Config_TCP_Server
+		DELETE(this->tcp_server,ser_release);
 	#endif
+	#ifdef Config_Meter
+		DELETE(this->meter,meter_release);
+	#endif
+
 	_exit(0);
 }
 
@@ -197,27 +209,32 @@ static int appitf_init(appitf_t *this)
 	loadParam(&g_appity);
 	this->Connect_status = Connect_error;
 	this->HeartBeat_status = HeartBeat_error;
-	INIT_FAIL(this->Queue,Queue_Init,this);                     /* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
 	switch(this->param.ItfWay){
 		case ether_net:
-			INIT_FAIL(this->ethernet,ether_Init,this);     /* init for ethernet */
+			INIT_FAIL(this->ethernet,ether_Init,this);	/* init for ethernet */
 			break;
 		case gprs:break;
 		case zigbee:break;
 		default:debug(DEBUG_app,"Unknow communication %d.\n",this->param.ItfWay); return FAIL;
 	}
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<Config_COM485) |\
-		(0x01<<Config_COMDIDO)),9600,9600);              /* init for serial */
-	INIT_FAIL(this->sqlite,sql_Init);                                        /* init for sqlite */
-	INIT_FAIL(this->single,single_Init,this);                          /* init for single */
+		(0x01<<Config_COMDIDO)),9600,9600);		/* init for serial */
+	INIT_FAIL(this->sqlite,sql_Init);						/* init for sqlite */
+	INIT_FAIL(this->single,single_Init,this);				/* init for single */
 	#ifdef Config_Meter
-	INIT_FAIL(this->meter,meter_init,this);                         /* init for dido */
+	INIT_FAIL(this->meter,meter_init,this);				/* init for dido */
 	#endif
-	INIT_FAIL(this->warn,warn_init,this);                             /* init for warn */
+	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
+	#ifdef  Config_TCP_Server
+		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
+	#endif
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");
 
 	signal(SIGINT,app_exit);    /* catch signal "ctrl+c" to exit application */
+	this->tcp_server->ser_start(g_appity.tcp_server,8889);
+	this->pthread_start = 1;
 	return SUCCESS;
 }
 

@@ -48,6 +48,7 @@ static int ether_Connect(ethernet_t *this)
 		this->ether_close(this);
 		goto out;
 	}
+	debug(DEBUG_Ethnet,"Connect to server success!\n");
 	return SUCCESS;
  out:
 	return FAIL;

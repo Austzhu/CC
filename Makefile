@@ -1,5 +1,9 @@
-#CC = arm-linux-emfure-gcc
-CC = arm2012-linux-gcc
+# Makefile for ztcc or lamp
+# Copyright (C) 2016-2020
+# Author: Austzhu
+# Mail: 153462902@.com
+# For conditions of distribution and use, see copyright notice
+
 CFLAGS =  -Wall -O2
 #CFLAGS += -Wno-implicit-function-declaration
 #关闭由-O2优化选项带来的"警告"提示
@@ -8,9 +12,23 @@ CFLAGS =  -Wall -O2
 #CFLAGS += -Wno-array-bounds
 CFLAGS += -std=gnu99
 
-LDFLAGS = -L$(PWD)/sqlite/lib -L$(PWD)/Software/emfuture/lib  -lsqlite3 -lEM_Middleware_Lib
-#LDFLAGS = -L$(PWD)/sqlite/lib   -lsqlite3
-#LDFLAGS = -L/usr/local/sqlite3/lib/   -lsqlite3
+#OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
+OBJS_PATH +=./Common/common ./hardware/ethernet ./Software/initstart \
+./task/taskque  ./User  ./Software/process ./hardware/serial ./sqlite ./hardware/single \
+./hardware/Meter ./Software/Warn ./Software/ztcc ./Software/lamp
+
+ifeq (${Config_bord},e6018)
+CC := arm2012-linux-gcc
+LDFLAGS = -L$(PWD)/library/e6018 -L$(PWD)/library/sql_armv7  -lsqlite3 -lEM_Middleware_Lib
+target := ztcc
+else ifeq (${Config_bord},e3100)
+CC = armv5-linux-gcc
+LDFLAGS = -L$(PWD)/library/e3100 -L$(PWD)/library/sql_armv5  -lsqlite3  -lEM_Middleware_Lib -ldl -lrt
+target := lamp
+endif
+
+CC ?= gcc
+target ?= none
 
 LINKFLAGS = -lpthread
 DFLAGS =
@@ -20,10 +38,6 @@ output := output
 Rootdir=$(PWD)
 export output CFLAGS Rootdir
 
-#OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
-OBJS_PATH +=./Common/common ./Common  ./hardware/ethernet ./Software/initstart \
-./task/taskque  ./User  ./Software/process ./hardware/serial ./sqlite ./hardware/single \
-./hardware/Meter ./Software/Warn
 
 
 #包含子目录的工程文件
@@ -32,9 +46,9 @@ include $(INCLUDE)
 
 DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
 
-all: Version ztcc Automountusb  Watchrsh
+all: Version ${target} Automountusb  Watchrsh
 
-ztcc: compile
+${target}: compile
 	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS)
 Version:
 	@`./version/setlocalversion`
@@ -51,11 +65,11 @@ compile:
 
 #将可程序拷贝到nfs目录下
 install:
-	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/ztcc
-	@mkdir -p $(PRJROOT)/rootfs/ztcc/config $(PRJROOT)/rootfs/ztcc/update \
-			$(PRJROOT)/rootfs/ztcc/Logfile
-	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/ztcc/config
-	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/ztcc/config
+	@mkdir -p $(PRJROOT)/rootfs/${target}/config $(PRJROOT)/rootfs/${target}/update \
+			$(PRJROOT)/rootfs/${target}/Logfile
+	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/${target}
+	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/${target}/config
+	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/${target}/config
 
 .PHONY: clean
 clean:

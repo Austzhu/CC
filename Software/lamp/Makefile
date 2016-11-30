@@ -1,5 +1,5 @@
 
-COBJS :=ether.o ether_server.o
+COBJS :=wizdom.o
 OBJS += $(COBJS)
 
 all:$(COBJS)

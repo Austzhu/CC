@@ -7,13 +7,8 @@
 #ifndef __database_h__
 #define __database_h__
 #include "include.h"
-#include "./include/sqlite3.h"
+#include "sqlite3.h"
 
-#define Table_Single		"db_light"
-#define Table_Coordi 		"db_coordinator"
-#define Table_Task 		"db_task"
-#define Table_Tasklist		"db_tasklist"
-#define Table_Warn		"db_warn"
 #define Table_Info 		"db_info_light"
 
 #define Get_CountByCondition(ptr,table,Column,Condition) ({ int count;\
