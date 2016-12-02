@@ -68,7 +68,7 @@ extern char MessageBuffer[];
 
 #define INIT_FAIL(ptr,func,args...)  INIT(ptr,func,FAIL,NULL,##args)
 
-
+extern int get_check_sum(void *pkg,int size);
 extern char* Hex2Str(char*dest,const u8 *src,int size);
 extern u8 *Str2Hex(u8 *dest,const char *src);
 extern void msleep(u32 ms);

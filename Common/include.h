@@ -26,6 +26,7 @@
 #include <sys/select.h>
 #include <sys/stat.h>
 #include <netinet/tcp.h>
+#include <sys/reboot.h>
 
 
 #include "debug.h"

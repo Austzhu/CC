@@ -14,14 +14,9 @@
 #ifndef __ETHER_H__
 #define __ETHER_H__
 #include "include.h"
-
-struct appitf_t;
+struct opt_param_t;
 typedef struct ethernet_t{
-	int ether_sock;					//网络连接的socket
-	int ether_recvlen;				//缓存数据的长度
-	int ether_recvhead;			//缓存数据中的读指针偏移量
-	u8 *ether_recvbuf;				//数据的缓存区
-	struct appitf_t *parent;
+	struct opt_param_t *opt_param;
 	pthread_mutex_t ether_lock;
 
 	int (*ether_connect)(struct ethernet_t*);
@@ -35,6 +30,6 @@ typedef struct ethernet_t{
 	void (*ether_close)(struct ethernet_t*);
 } ethernet_t;
 
-extern ethernet_t *ether_Init(ethernet_t*,struct appitf_t *topuser);
+extern ethernet_t *ether_Init(ethernet_t*,struct opt_param_t*opt_param);
 
 #endif

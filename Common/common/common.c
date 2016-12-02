@@ -49,3 +49,15 @@ void msleep(u32 ms)
 	tv.tv_usec = ms%1000000;
 	select(0, NULL,NULL,NULL,&tv);
 }
+
+
+int get_check_sum(void *pkg,int size)
+{
+	assert_param(pkg,FAIL);
+	u8 chk = 0;
+	u8 *pchar = pkg;
+	for(int i=0;i<size;++i) chk += *pchar++;
+	*pchar++ = chk;
+	*pchar = 0x16;
+	return SUCCESS;
+}

@@ -32,7 +32,7 @@
 #define HeartBeat_ok 	 	0
 #define HeartBeat_error 	-1
 
-typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;
+typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;
 
 typedef struct param_t{
 	u8 CCUID[6]; 			//集中控制器的UID
@@ -51,13 +51,14 @@ typedef struct appitf_t {
 	int Connect_status;	//网络连接状态
 	int HeartBeat_status;	//心跳状态
 	int pthread_start;
-	struct Param param;
+	struct param_t param;
 	struct sql_t *sqlite;
 	struct Warn_t *warn;
 	struct serial_t *Serial;
 	struct Single_t *single;
 	struct Queue_t *Queue;
-	struct ethernet_t *ethernet;
+	//struct ethernet_t *ethernet;
+	struct operate_t *opt_Itf;
 	struct server_t *tcp_server;
 	#ifdef Config_Meter
 	struct Meter_t *meter;

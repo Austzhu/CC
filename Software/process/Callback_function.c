@@ -46,12 +46,11 @@ s32 CallBack_Response(Node_t *node,void *top)
 	Sendbuf[0] = Sendbuf[7] = 0x68;
 	memcpy(Sendbuf+1,topuser->param.CCUID,6);
 	memcpy(Sendbuf+8,node->package + 2,node->package[1]);
-	if(topuser->param.ItfWay == ether_net  /* 使用网络连接才能调用这接口 */ &&\
-		topuser->ethernet  /* 是否定义了网络连接的类 */  &&\
-		topuser->ethernet->ether_packagecheck != NULL){
-		topuser->ethernet->ether_packagecheck(Sendbuf,node->package[1]+8);
-		topuser->ethernet->ether_send(topuser->ethernet,Sendbuf,node->package[1]+10);
-	}
+	/* 获取校验码 */
+	get_check_sum(Sendbuf,node->package[1]+8);
+	if(topuser->opt_Itf && topuser->opt_Itf->opt_send)	/* check point is initialized */
+		topuser->opt_Itf->opt_send(topuser->opt_Itf,Sendbuf,node->package[1]+10);
+
 	#ifdef Config_showPackage
 		printf("Response package:");
 		for(int i=0,size=node->package[1]+10;i<size;++i)
@@ -76,43 +75,37 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 			res = Reset2DoFunctions();
 			MakeShortResponse(AckBuffer,03,0xA2,0x01,res);
 			Append2Queue(AckBuffer,_parent->Queue);
-			if(res == SUCCESS)
-				 debug(DEBUG_reset,"^^^^^reset success.....\n");
-			else debug(DEBUG_reset,"^^^^^reset fail.....\n");
+			debug(DEBUG_reset,"^^^^^reset %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
 		case 0x02:		//reboot
 			MakeShortResponse(AckBuffer,03,0xA2,0x02,SUCCESS);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^reboot success.....\n");
-			system("reboot");
+			reboot(RB_AUTOBOOT);
 			break;
 		case 0x03:	//time tick
 			res = time_tick(&package->data[1]);
 			MakeShortResponse(AckBuffer,03,0xA2,0x03,res);
 			Append2Queue(AckBuffer,_parent->Queue);
-			if(res == SUCCESS)
-				 debug(DEBUG_reset,"Time tick success!\n");
-			else debug(DEBUG_reset,"Time tick error!\n");
+			debug(DEBUG_reset,"^^^^^Time tick %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
 		case 0x04:	//Query time
 			res = Query_time(AckBuffer,sizeof(AckBuffer));
-			if(SUCCESS == res){
+			debug(DEBUG_reset,"^^^^^Query time %s^^^^^\n",res == SUCCESS ? "success":"error");
+			if(SUCCESS == res)
 				Append2Queue(AckBuffer,_parent->Queue);
-				debug(DEBUG_reset,"Query time success!\n");
-			}else debug(DEBUG_reset,"Query time error!\n");
 			break;
 		case 0x05: 	//Query time
 			res = CC_Inquire_Version(AckBuffer,sizeof(AckBuffer));
-			if(SUCCESS == res){
+			debug(DEBUG_reset,"^^^^^Inquire Version %s^^^^^\n",res == SUCCESS ? "success":"error");
+			if(SUCCESS == res)
 				Append2Queue(AckBuffer,_parent->Queue);
-				debug(DEBUG_reset,"CC Inquire Version success!\n");
-			}else debug(DEBUG_reset,"CC Inquire Version error!\n");
 			break;
 		case 0x70:	//poweroff
 			MakeShortResponse(AckBuffer,03,0xA2,0x70,SUCCESS);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^poweroff success.....\n");
-			system("poweroff");
+			reboot(RB_POWER_OFF);
 			break;
 		default:break;
 	}

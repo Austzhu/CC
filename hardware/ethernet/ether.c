@@ -13,7 +13,6 @@
 #include "ether.h"
 #include "Interface.h"
 
-#define ether_RecvBufSize        2048
 #define ether_SocketTimeout   5
 
 static int ether_Connect(ethernet_t *this)
@@ -23,27 +22,27 @@ static int ether_Connect(ethernet_t *this)
 	struct sockaddr_in addr;
 	struct timeval timeo;
 	this->ether_close(this);
-	appitf_t *parent = (appitf_t *)this->parent;
-	if(parent->param.Is_TCP){
+
+	if(this->opt_param->param->Is_TCP){
 		debug(DEBUG_Ethnet,"Connect for TCP!\n");
-		this->ether_sock = socket(AF_INET, SOCK_STREAM, 0);
+		this->opt_param->fd = socket(AF_INET, SOCK_STREAM, 0);
 	}else{
 		debug(DEBUG_Ethnet,"Connect for UDP!\n");
-		this->ether_sock = socket(AF_INET, SOCK_DGRAM, 0);
+		this->opt_param->fd = socket(AF_INET, SOCK_DGRAM, 0);
 	}
-	if(this->ether_sock <= 0) goto out;
+	if(this->opt_param->fd <= 0) goto out;
 
 	/*设置socket 相关属性*/
-	memset(&addr, 0, sizeof(addr));
-	memset(&timeo,0,sizeof(timeo));
+	bzero(&addr,sizeof(addr));
+	bzero(&timeo,sizeof(timeo));
 	addr.sin_family = AF_INET;
-	addr.sin_port 	 = htons(parent->param.ServerPort);
-	addr.sin_addr.s_addr = inet_addr(parent->param.ServerIpaddr);
+	addr.sin_port 	 = htons(this->opt_param->param->ServerPort);
+	addr.sin_addr.s_addr = inet_addr(this->opt_param->param->ServerIpaddr);
 
-	timeo.tv_sec = ether_SocketTimeout; 	 // 10 seconds 超时
-	setsockopt(this->ether_sock, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
+	timeo.tv_sec = ether_SocketTimeout; 	 // 5 seconds 超时
+	setsockopt(this->opt_param->fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
 
-	if (connect(this->ether_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+	if (connect(this->opt_param->fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 		err_Print(DEBUG_Ethnet, "Connect to Server failed!\n");
 		this->ether_close(this);
 		goto out;
@@ -57,10 +56,9 @@ static int ether_Connect(ethernet_t *this)
 static void ether_Close(ethernet_t *this)
 {
 	assert_param(this,;);
-
-	if(this->ether_sock >0){
-		close(this->ether_sock);
-		this->ether_sock = -1;
+	if(this->opt_param && this->opt_param->fd > 0){
+		close(this->opt_param->fd);
+		this->opt_param->fd = -1;
 	}
 }
 
@@ -80,17 +78,9 @@ static int ether_HeartBeat(ethernet_t *this)
 {
 	#define HeartSize 14
 	assert_param(this,FAIL);
-
-	u8 heartbuf[24] = {0};
-	u8 *heart = heartbuf;
-
-	*heart++ = 0x68;
-	memcpy(heart,((appitf_t*)this->parent)->param.CCUID,6);
-	heart += 6;
-	*heart++ = 0x68;  *heart++ = 0xA1;
-	*heart++ = 0x02;  *heart++ = 0x02;
-	*heart++ = 0x00;
-	this->ether_packagecheck(heartbuf,HeartSize-2);
+	u8 heartbuf[24] = {0x68,0,0,0,0,0,0,0x68,0xA1,0x02,0x02,0x02,0};
+	memcpy(heartbuf+1,this->opt_param->param->CCUID,6);
+	get_check_sum(heartbuf,HeartSize-2);
 	return this->ether_send(this,heartbuf,HeartSize);
 }
 
@@ -99,36 +89,31 @@ static int ether_logon(ethernet_t *this)
 	#define LogonSize 13
 	assert_param(this,FAIL);
 
-	u8 logonBuf[24] = {0};
-	u8 *logon = logonBuf;
-
-	*logon++ = 0x68;
-	memcpy(logon,((appitf_t*)this->parent)->param.CCUID,6);
-	logon += 6;
-	*logon++ = 0x68;  *logon++ = 0xA1;
-	*logon++ = 0x01;  *logon++ = 0x01;
-	this->ether_packagecheck(logonBuf,LogonSize-2);
+	u8 logonBuf[24] = {0x68,0,0,0,0,0,0,0x68,0xA1,0x01,0x01,0};
+	memcpy(logonBuf+1,this->opt_param->param->CCUID,6);
+	get_check_sum(logonBuf,LogonSize-2);
 	return this->ether_send(this,logonBuf,LogonSize);
 }
 
 static int ether_Send(ethernet_t *this,u8 *buffer,int size)
 {
-	#define Wait_SendEmpty  30
 	assert_param(this,FAIL);
 	assert_param(buffer,FAIL);
-	if(this->ether_sock < 0) goto out;
 
+	int fd = this->opt_param->fd;
 	int buflen = -1;
+	if(fd < 0) goto out;
+
 	pthread_mutex_lock(&this->ether_lock);                      //get the ether lock
-	if( send(this->ether_sock,buffer,size,MSG_NOSIGNAL) < 0){
+	if( send(fd,buffer,size,MSG_NOSIGNAL) < 0){
 		pthread_mutex_unlock(&this->ether_lock);          //relese the ether lock
 		err_Print(DEBUG_Ethnet, "ethernet send data error!\n");
 		goto out;
 	}
 	pthread_mutex_unlock(&this->ether_lock);                 //relese the ether lock
 	/* make sure send success! */
-	for(int i=0; i < Wait_SendEmpty; ++i){
-		if (ioctl(this->ether_sock, SIOCOUTQ, &buflen)) {
+	for(int i=0; i < 30; ++i){
+		if (ioctl(fd, SIOCOUTQ, &buflen)) {
 			err_Print(DEBUG_Ethnet, "The data is not sent out!\n");
 			goto out;
 		}
@@ -143,25 +128,23 @@ static int ether_Getchar(ethernet_t *this,u8 *buf)
 {
 	assert_param(this,FAIL);
 	assert_param(buf,FAIL);
-	if(this->ether_sock < 0) goto out;
 
-	if(this->ether_recvlen <= 0){
-		this->ether_recvlen = recv(this->ether_sock,\
-			this->ether_recvbuf, ether_RecvBufSize, MSG_DONTWAIT);
+	int socket_fd = this->opt_param->fd;
+	if(socket_fd < 0) goto out;
+
+	if(this->opt_param->r_len <= 0){
+		this->opt_param->r_len = recv(socket_fd,this->opt_param->r_buf,Buffer_Size, MSG_DONTWAIT);
 		/* recv error or the peer has performed an orderly shutdown */
-		if( this->ether_recvlen <= 0  ){
+		if( this->opt_param->r_len <= 0  ){
 			/* have no data */
 			if(errno == EWOULDBLOCK ) return RECV_NULL;
 			err_Print(DEBUG_Ethnet, "ethernet recv error! \n");
 			goto out;
-		}else{
-			this->ether_recvhead = 0;
-		}
+		}else  this->opt_param->r_ptr = 0;
 	}
-
-	*buf = this->ether_recvbuf[this->ether_recvhead];
-	++this->ether_recvhead;
-	--this->ether_recvlen;
+	*buf = this->opt_param->r_buf[this->opt_param->r_ptr];
+	++this->opt_param->r_ptr;
+	--this->opt_param->r_len;
 	return SUCCESS;
  out:
  	return FAIL;
@@ -171,11 +154,12 @@ static int ether_Recv(ethernet_t *this,u8 *buf,int size)
 {
 	assert_param(this,FAIL);
 	assert_param(buf,FAIL);
+
 	int res = -1;
 	u8 *pbuf = buf;
 	while(size--){
-		res = this->ether_getchar(this,pbuf++);
-		if(SUCCESS != res) return res;
+		if(SUCCESS != (res = this->ether_getchar(this,pbuf++)) )
+			return res;
 	}
 	return pbuf-buf;
 }
@@ -184,24 +168,28 @@ static void ether_Relese(ethernet_t **this)
 {
 	assert_param(this,;);
 	assert_param(*this,;);
-	free((*this)->ether_recvbuf);
+
 	(*this)->ether_close(*this);
 	FREE(*this);
 }
 
-ethernet_t *ether_Init(ethernet_t *this,struct appitf_t *topuser)
+ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)
 {
+	assert_param(opt_param,NULL);
+
 	ethernet_t *pth = this;
 	if(!pth){
-		this = calloc(sizeof(ethernet_t),sizeof(char));
+		this = malloc(sizeof(ethernet_t));
 		if(!this) return NULL;
 	}
-	this->ether_sock = -1;
-	this->ether_recvbuf = calloc(ether_RecvBufSize,sizeof(char));
-	if(!this->ether_recvbuf) goto out;
+	bzero(this,sizeof(ethernet_t));
+
+	this->opt_param = opt_param;
+	this->opt_param->fd 		= -1;
+	this->opt_param->r_ptr	= 0;
+	this->opt_param->r_len	= 0;
 	pthread_mutex_init(&(this->ether_lock),NULL);
 
-	this->parent =  topuser;
 	this->ether_connect  = ether_Connect;
 	this->ether_logon  = ether_logon;
 	this->ether_packagecheck  = get_packageCheck;
@@ -211,15 +199,13 @@ ethernet_t *ether_Init(ethernet_t *this,struct appitf_t *topuser)
 	this->ether_recv  = ether_Recv;
 	this->ether_relese  = ether_Relese;
 	this->ether_close  = ether_Close;
-	if( !this->parent || !this->ether_connect || !this->ether_logon ||\
+	if( !this->opt_param || !this->ether_connect || !this->ether_logon ||\
 		!this->ether_packagecheck || !this->ether_send || !this->ether_heartbeat || \
 		!this->ether_getchar || !this->ether_recv || !this->ether_relese || !this->ether_close){
 		err_Print(DEBUG_Ethnet,"Here are some Api pointer is NULL!\n");
-		goto out1;
+		goto out;
 	}
 	return this;
- out1:
-	FREE(this->ether_recvbuf);
  out:
 	if(!pth) FREE(this);
 	return NULL;

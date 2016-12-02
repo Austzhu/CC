@@ -37,12 +37,7 @@
 static int meter_response(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 res,int reslut)
 {
 	assert_param(topuser,FAIL);
-	u8 pf[32] = {0};
-
-	pf[0] = 0x52; pf[1] = 0x08;pf[2] = 0x80;
-	pf[3] = 0x06;pf[4] = 0xE1;pf[5] = subcmd;
-	pf[6] = slave_addr;pf[7] = ndo;pf[8] = res;
-	pf[9] = reslut;
+	u8 pf[12] = { 0x52,0x08,0x80,0x06,0xe1,subcmd,slave_addr,ndo,res,reslut,0 };
 	Task_merter(pf,topuser->Queue);
 	return SUCCESS;
 }
@@ -50,16 +45,10 @@ static int meter_response(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 r
 static int meter_res_atonce(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 res,int reslut)
 {
 	assert_param(topuser,FAIL);
-
-	u8 Ackbuf[32] = {0};
-	Ackbuf[0] = Ackbuf[7] = 0x68;
+	u8 Ackbuf[24] = { 0x68,0,0,0,0,0,0,0x68,0x80,0x06,0x0e1,subcmd,slave_addr,ndo,res,reslut,0};
 	memcpy(Ackbuf+1,topuser->param.CCUID,6);
-	Ackbuf[8] = 0x80; Ackbuf[9] = 0x06;
-	Ackbuf[10] = 0xe1; Ackbuf[11] = subcmd;
-	Ackbuf[12] = slave_addr; Ackbuf[13] = ndo;
-	Ackbuf[14] = res; Ackbuf[15] = reslut;
-	topuser->ethernet->ether_packagecheck(Ackbuf,16);
-	return topuser->ethernet->ether_send(topuser->ethernet,Ackbuf,18);
+	get_check_sum(Ackbuf,16);
+	return topuser->opt_Itf->opt_send(topuser->opt_Itf,Ackbuf,18);
 }
 
 static int reado(Meter_t *this,u8 slave_addr)
@@ -73,15 +62,12 @@ static int reado(Meter_t *this,u8 slave_addr)
 
 	MakeSlave(pslave,slave_addr,0x01,0x08);
 	this->crc->CRCLH_get(pslave+6,pslave,6);
-	//topuser->Crc16_HL(crc_get,pslave+6,pslave,6);
 	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
 	topuser->single->Display("meter reado  Send data:",slave,8);
 	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,slave,8,SendTimeout);
 	topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,slave,6,2*SendTimeout);
 	topuser->single->Display("meter reado  recv data:",&slave,6);
 	res = this->crc->CRCLH_check(pslave+4,pslave,4);
-	//res = topuser->Crc16_HL(crc_check,pslave+4,pslave,4);
-
 	if(SUCCESS != res){
 		debug(1,"Meter read do crc_check error!\n");
 		return -1;
@@ -109,12 +95,10 @@ static int meter_sendpackage(Meter_t *this,u8 slave_addr,void *Message,u8 setval
 	*(pf+6) = 1;				//size of next value
 	*(pf+7) = setval;
 	this->crc->CRCLH_get(pf+8,pf,8);
-	//topuser->Crc16_HL(crc_get,pf+8,pf,8);
 	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
 	topuser->single->Display("meter open all Send data:",pf,10);
 	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,pf,10,SendTimeout);
 	return topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,pf,8,2*SendTimeout);
-
 }
 
 static int meter_open(Meter_t *this,u8 slave_addr, u8 ndo)
@@ -122,13 +106,15 @@ static int meter_open(Meter_t *this,u8 slave_addr, u8 ndo)
 	assert_param(this,FAIL);
 
 	char slave[16] ={0};
+	/* get status befor oprate */
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
 		meter_res_atonce(this->topuser,sub_open,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
+	/* send package to meter */
 	meter_sendpackage(this,slave_addr,slave, res|ndo);
-
+	/* get status after operate */
 	return  this->meter_reado(this,slave_addr,ndo,sub_open);
 }
 
@@ -137,12 +123,15 @@ static int meter_close(Meter_t *this,u8 slave_addr, u8 ndo)
 	assert_param(this,FAIL);
 
 	char slave[16] = {0};
+	/* get status befor oprate */
 	int res = reado(this,slave_addr);
 	if(-1 == res)  {
 		meter_res_atonce(this->topuser,sub_close,slave_addr,ndo,0,FAIL);
 		return FAIL;
 	}
+	/* send package to meter */
 	meter_sendpackage(this,slave_addr,slave, ~ndo&res);
+	/* get status after operate */
 	return this->meter_reado(this,slave_addr,ndo,sub_close);
 }
 
@@ -157,14 +146,12 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 
 	MakeSlave(pslave,slave_addr,0x02,0x08);
 	this->crc->CRCLH_get(pslave+6,pslave,6);
-	//topuser->Crc16_HL(crc_get,pslave+6,pslave,6);
 	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
 	topuser->single->Display("meter readi  Send data:",slave,8);
 	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,slave,8,SendTimeout);
 	topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,slave,6,2*SendTimeout);
 	topuser->single->Display("meter readi  recv data:",slave,6);
 	res = this->crc->CRCLH_check(pslave+4,pslave,4);
-	//res = topuser->Crc16_HL(crc_check,pslave+4,pslave,4);
 
 	if(SUCCESS != res){
 		debug(1,"Meter read di crc_check error!\n");
@@ -208,7 +195,6 @@ static void meter_release(struct Meter_t **this)
 {
 	assert_param(this,;);
 	assert_param(*this,;);
-
 	DELETE((*this)->crc,CRC_release);
 	FREE(*this);
 }
@@ -224,6 +210,7 @@ Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)
 	bzero(this,sizeof(Meter_t));
 	this->crc = CRC_init(NULL);
 	if(!this->crc) goto out1;
+
 	this->topuser = topuser;
 	this->meter_open = meter_open;
 	this->meter_close = meter_close;

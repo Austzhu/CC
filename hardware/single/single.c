@@ -164,7 +164,6 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
 			MakeSinglePack(&single,0x01,0x0001,Addr,light);
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
-			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Single open Send data:",&single,sizeof(single));
 			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout) ||\
@@ -301,8 +300,8 @@ static int sin_reply(Single_t *this,int cmd,int subcmd,int res)
 	Ackbuf[8] = 0x80; Ackbuf[9] = 0x03;
 	Ackbuf[10] = cmd; Ackbuf[11] = subcmd;
 	Ackbuf[12] = res;
-	this->topuser->ethernet->ether_packagecheck(Ackbuf,13);
-	return this->topuser->ethernet->ether_send(this->topuser->ethernet,Ackbuf,15);
+	get_check_sum(Ackbuf,13);
+	return this->topuser->opt_Itf->opt_send(this->topuser->opt_Itf,Ackbuf,15);
 }
 
 static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
@@ -487,8 +486,6 @@ static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int siz
 			MakeSinglePack((light_t*)Sendbuf,ctrl,0x0001,addr,count);
 			this->crc->CRCHL_get((char*)Sendbuf+10,(char*)Sendbuf,10);
 			this->crc->CRCHL_get((char*)Sendbuf+12+count,(char*)Sendbuf+12,count);
-			//topuser->Crc16(crc_get,Sendbuf+10,Sendbuf,10);
-			//topuser->Crc16(crc_get,Sendbuf+12+count,Sendbuf+12,count);
 			this->Display("Query Send data:",Sendbuf,count+14);
 			for(int repeat=3;repeat>=0;--repeat){
 				topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
@@ -886,7 +883,6 @@ static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)
 				topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
 				MakeSinglePack(&single,0x01,0x0400,Addr,0);
 				this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
-				//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 				this->Display("Single Query status Send data:",&single,sizeof(single));
 				topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 				rtn = this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout);
@@ -921,10 +917,8 @@ static int sin_update(Single_t*this,int addr)
 		MakeSinglePack(&single,0x10,0x80,addr,~0);
 	}
 	this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
-	//this->topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 	this->Display("\nupdate Send data:",&single,sizeof(single));
-	this->topuser->Serial->serial_send(this->topuser->Serial,\
-				Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+	this->topuser->Serial->serial_send(this->topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 	if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout)){
 		err_Print(DEBUG_update,"update recv package error!\n");
 		return FAIL;
@@ -933,7 +927,9 @@ static int sin_update(Single_t*this,int addr)
 	if(!this->update) goto out;
 	if(SUCCESS != this->update->update_start(this->update,addr,(char)single.Data[0]))
 		goto out;
-	this->update->update_release(&this->update);
+
+	//this->update->update_release(&this->update);
+	DELETE(this->update,update_release);
 	return SUCCESS;
  out:
  	printf("update error!\n");
@@ -957,22 +953,24 @@ Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 	if(!pth){
 		single = (Single_t*)malloc(sizeof(Single_t));
 		if(!single) return NULL;
-	}	bzero(single,sizeof(Single_t));
+	}
+	bzero(single,sizeof(Single_t));
 
 	single->crc = CRC_init(NULL);
 	if(!single->crc) goto out1;
 
-	single->topuser = topuser;
-	single->Display = Display_package;
-	single->sin_RecvPackage = sin_RecvPackage;
-	single->sin_open = sin_open;
-	single->sin_close = sin_close;
-	single->sin_reply = sin_reply;
-	single->sin_Queryelectric = sin_Queryelectric;
-	single->sin_Querystatus = sin_Querystatus;
-	single->sin_config = sin_Config;
-	single->sin_release = sin_release;
-	single->sin_update = sin_update;
+	single->topuser 			= topuser;
+	single->Display 			= Display_package;
+	single->sin_open 			= sin_open;
+	single->sin_close 			= sin_close;
+	single->sin_reply 			= sin_reply;
+	single->sin_config 			= sin_Config;
+	single->sin_release 		= sin_release;
+	single->sin_update 		= sin_update;
+	single->sin_Queryelectric 	= sin_Queryelectric;
+	single->sin_Querystatus 	= sin_Querystatus;
+	single->sin_RecvPackage 	= sin_RecvPackage;
+
 
 	if(!single->topuser || !single->sin_open || !single->sin_close || !single->sin_release ||\
 		!single->sin_reply || !single->sin_config || !single->sin_Queryelectric || !single->sin_update||\

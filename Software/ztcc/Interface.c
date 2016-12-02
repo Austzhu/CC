@@ -71,39 +71,33 @@ static int TopUser_Keepalive(appitf_t *this)
 	if(this->HeartBeat_status == HeartBeat_ok){
 		this->HeartBeat_status = HeartBeat_error;
 		/* HeartBeat */
-		if(this->ethernet && this->ethernet->ether_heartbeat &&\
-			SUCCESS != this->ethernet->ether_heartbeat(this->ethernet))
+		if(this->opt_Itf && this->opt_Itf->opt_heartbeat &&\
+			SUCCESS != this->opt_Itf->opt_heartbeat(this->opt_Itf) )
 			return FAIL;
+
 		for(int ii=0;ii<1000;++ii){
 			msleep(this->param.HeartBCycle);
 			if(!this->pthread_start) return FAIL;
 		}
 	}else{
-		this->Connect_status = Connect_error;
-		/* 判断是否使用网络方式 */
-		if(this->param.ItfWay == ether_net){
-			/* connect to server */
-			if(this->ethernet && this->ethernet->ether_connect)
-				this->Connect_status = this->ethernet->ether_connect(this->ethernet) == \
-				SUCCESS ? Connect_ok : Connect_error;
-			/* logon and heartbeat */
-			if(   this->Connect_status == Connect_ok /* connect ok */ &&\
-				this->ethernet->ether_logon /* function logon is not null */ && \
-				this->ethernet->ether_heartbeat /* function HeartBeat is not null */ && \
-				SUCCESS == this->ethernet->ether_logon(this->ethernet) /* log on success? */&&\
-				SUCCESS == this->ethernet->ether_heartbeat(this->ethernet) ){
-				for(int ii=0;ii<1000;++ii){
-					msleep(this->param.HeartBCycle);
-					if(!this->pthread_start) return FAIL;
-				}
-				return SUCCESS;
-			}else{
-				err_Print(1,"ethernet logon or heartbeat error!\n");
-				this->Connect_status = Connect_error;
-				//msleep(3000);
-				return FAIL;
+		/* connect to server */
+		this->Connect_status = \
+			this->opt_Itf->opt_connect(this->opt_Itf) == SUCCESS ? Connect_ok : Connect_error;
+		/* logon and heartbeat */
+		if(   this->Connect_status == Connect_ok	/* connect ok */ &&\
+			SUCCESS == this->opt_Itf->opt_logon(this->opt_Itf)	/* log on success? */&&\
+			SUCCESS == this->opt_Itf->opt_heartbeat(this->opt_Itf) ){		/* heartbeat success? */
+			for(int ii=0;ii<1000;++ii){
+				msleep(this->param.HeartBCycle);
+				if(!this->pthread_start) return FAIL;
 			}
-		}	//end of if(this->ItfWay == ether_net){
+			return SUCCESS;
+		}else{
+			err_Print(1,"ethernet logon or heartbeat error!\n");
+			this->Connect_status = Connect_error;
+			this->HeartBeat_status = HeartBeat_error;
+			return FAIL;
+		}
 	}
 	return SUCCESS;
 }
@@ -135,11 +129,11 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 	int res = -1, len = 0;
 	u8 *pchar = buffer;
 	while(*buffer != 0x68){    /* recv header */
-		res = this->ethernet->ether_getchar(this->ethernet,pchar);
+		res = this->opt_Itf->opt_getchar(this->opt_Itf,pchar);
 		if(res != SUCCESS) msleep(5);    //接收失败睡眠5ms,否则cpu的占用率会很高
 		if(!this->pthread_start) return FAIL;
 	}	pchar++;
-	res = this->ethernet->ether_recv(this->ethernet,pchar,9);
+	res = this->opt_Itf->opt_recv(this->opt_Itf,pchar,9);
 	if(res == 9){
 		pchar += 9;
 		len = *(pchar-1)+2;
@@ -157,7 +151,7 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 		return FAIL;
 	}
 	/* recv  remain data */
-	res = this->ethernet->ether_recv(this->ethernet,pchar,len);
+	res = this->opt_Itf->opt_recv(this->opt_Itf,pchar,len);
 	if(res == len){
 		/* check the package */
 		if(SUCCESS != this->TopUser_pakgchk(buffer) ){
@@ -180,9 +174,10 @@ static int TopUser_Relese(appitf_t *this)
 {
 	assert_param(this,FAIL);
 	printf("  app exit!\n");
+
 	this->pthread_start = 0;
 	DELETE(this->Queue,Que_release);
-	DELETE(this->ethernet,ether_relese);
+	DELETE(this->opt_Itf,opt_relese);
 	DELETE(this->warn,warn_relese);
 	DELETE(this->single,sin_release);
 	DELETE(this->sqlite,sql_release);
@@ -209,17 +204,10 @@ static int appitf_init(appitf_t *this)
 	loadParam(&g_appity);
 	this->Connect_status = Connect_error;
 	this->HeartBeat_status = HeartBeat_error;
+
 	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
-	switch(this->param.ItfWay){
-		case ether_net:
-			INIT_FAIL(this->ethernet,ether_Init,this);	/* init for ethernet */
-			break;
-		case gprs:break;
-		case zigbee:break;
-		default:debug(DEBUG_app,"Unknow communication %d.\n",this->param.ItfWay); return FAIL;
-	}
-	INIT_FAIL(this->Serial,serial_Init,((0x01<<Config_COM485) |\
-		(0x01<<Config_COMDIDO)),9600,9600);		/* init for serial */
+	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
+	INIT_FAIL(this->Serial,serial_Init,((0x01<<Config_COM485) | (0x01<<Config_COMDIDO)),9600,9600);	/* init for serial */
 	INIT_FAIL(this->sqlite,sql_Init);						/* init for sqlite */
 	INIT_FAIL(this->single,single_Init,this);				/* init for single */
 	#ifdef Config_Meter
@@ -228,12 +216,12 @@ static int appitf_init(appitf_t *this)
 	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
 	#ifdef  Config_TCP_Server
 		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
+		this->tcp_server->ser_start(g_appity.tcp_server,8889);
 	#endif
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");
-
-	signal(SIGINT,app_exit);    /* catch signal "ctrl+c" to exit application */
-	this->tcp_server->ser_start(g_appity.tcp_server,8889);
+	/* catch signal "ctrl+c" to exit application */
+	signal(SIGINT,app_exit);
 	this->pthread_start = 1;
 	return SUCCESS;
 }

@@ -12,27 +12,27 @@
 #ifndef __COMMUNICATE_H__
 #define __COMMUNICATE_H__
 #include "include.h"
-struct param_t;
+#define Buffer_Size	2048
 
+struct param_t;
 typedef struct opt_param_t{
 	int 	fd;
-	void *r_buf;
+	u8 *r_buf;
 	int 	r_ptr;
-	int 	w_ptr;
-	struct param_t *param;
+	int 	r_len;
+	struct param_t *param;	//全局设置参数
 } opt_param_t;
 
 typedef struct operate_t {
-	void *opt_Itfway;
+	void *opt_Itfway;		//指向具体通讯方式的类
+
 	struct opt_param_t opt_param;
 	int	  (*opt_connect)(struct operate_t*);
 	int	  (*opt_logon)(struct operate_t*);
-	int	  (*opt_getcheck)(void *pkg,int size);
 	int 	  (*opt_send)(struct operate_t*,u8 *buffer,int size);
 	int	  (*opt_heartbeat)(struct operate_t*);
 	int	  (*opt_getchar)(struct operate_t*,u8*);
 	int	  (*opt_recv)(struct operate_t*,u8*,int);
-	void (*opt_close)(struct operate_t*);
 	void (*opt_relese)(struct operate_t**);
 } operate_t;
 

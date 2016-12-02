@@ -132,7 +132,6 @@ static int update_send_package(struct update_t *this)
 		memset(this->package.data+readsize,CTRLZ,UPACKSIZE-readsize);
 	}
 	this->subclass->crc->CRCHL_get((char*)(this->package.CRC16),(char*)(this->package.data),UPACKSIZE);
-	//topuser->Crc16(crc_get,this->package.CRC16,this->package.data,UPACKSIZE);
 	//this->subclass->Display("\npackage:",&this->package,sizeof(package_t));
 	return topuser->Serial->serial_send(topuser->Serial,\
 		Config_COM485,(s8*)&this->package,sizeof(package_t),2000000);
