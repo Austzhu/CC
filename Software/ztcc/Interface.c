@@ -100,7 +100,7 @@ static int TopUser_Keepalive(appitf_t *this)
 			}else{
 				err_Print(1,"ethernet logon or heartbeat error!\n");
 				this->Connect_status = Connect_error;
-				msleep(3000);
+				//msleep(3000);
 				return FAIL;
 			}
 		}	//end of if(this->ItfWay == ether_net){

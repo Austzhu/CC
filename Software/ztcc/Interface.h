@@ -16,6 +16,7 @@
 #include "serial.h"
 #include "database.h"
 #include "single.h"
+#include "operate.h"
 #ifdef Config_Meter
 #include "Meter.h"
 #endif
@@ -25,6 +26,7 @@
 #endif
 
 
+
 #define Connect_ok 		0
 #define Connect_error 	-1
 #define HeartBeat_ok 	 	0
@@ -32,7 +34,7 @@
 
 typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;
 
-typedef struct Param{
+typedef struct param_t{
 	u8 CCUID[6]; 			//集中控制器的UID
 	u8 DebugLevel; 		 //调试等级
 	u8 ControlMethod;		//控制模式

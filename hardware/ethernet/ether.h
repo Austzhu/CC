@@ -19,7 +19,7 @@ struct appitf_t;
 typedef struct ethernet_t{
 	int ether_sock;					//网络连接的socket
 	int ether_recvlen;				//缓存数据的长度
-	int ether_recvhead;				//缓存数据中的读指针偏移量
+	int ether_recvhead;			//缓存数据中的读指针偏移量
 	u8 *ether_recvbuf;				//数据的缓存区
 	struct appitf_t *parent;
 	pthread_mutex_t ether_lock;

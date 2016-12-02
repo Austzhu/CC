@@ -15,7 +15,7 @@ CFLAGS += -std=gnu99
 #OBJS_PATH := $(shell find -maxdepth 1 -type d -name '*' | grep '[a-z]')
 OBJS_PATH +=./Common/common ./hardware/ethernet ./Software/initstart \
 ./task/taskque  ./User  ./Software/process ./hardware/serial ./sqlite ./hardware/single \
-./hardware/Meter ./Software/Warn ./Software/ztcc ./Software/lamp
+./hardware/Meter ./Software/Warn ./Software/ztcc ./Software/lamp ./Software/operate
 
 ifeq (${Config_bord},e6018)
 CC := arm2012-linux-gcc
@@ -65,11 +65,12 @@ compile:
 
 #将可程序拷贝到nfs目录下
 install:
-	@mkdir -p $(PRJROOT)/rootfs/${target}/config $(PRJROOT)/rootfs/${target}/update \
-			$(PRJROOT)/rootfs/${target}/Logfile
-	@cp -frd ./Applications/*  $(PRJROOT)/rootfs/${target}
-	@cp -frd ./config/Create_Database.sh $(PRJROOT)/rootfs/${target}/config
-	@cp -frd ./config/fileparam.ini $(PRJROOT)/rootfs/${target}/config
+	@mkdir -p $(PRJROOT)/nfs/${target}/config $(PRJROOT)/nfs/${target}/update \
+			$(PRJROOT)/nfs/${target}/Logfile $(PRJROOT)/nfs/${target}/tools
+	@cp -frd ./Applications/${target} $(PRJROOT)/nfs/${target}
+	@cp -frd ./Applications/Automountusb  ./Applications/Watchrsh  $(PRJROOT)/nfs/${target}/tools
+	@cp -frd ./config/Create_Database.sh $(PRJROOT)/nfs/${target}/config
+	@cp -frd ./config/fileparam.ini $(PRJROOT)/nfs/${target}/config
 
 .PHONY: clean
 clean:

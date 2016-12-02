@@ -21,7 +21,7 @@ STAGING_DIR=/
 CPATH=$Topdir/Common:$Topdir/Common/common:$Topdir/config:$DirHard/ethernet:\
 $DirSoft/process:$DirSoft/initstart:$DirSoft/Log:$Topdir/sqlite:$Topdir/task/taskque:\
 $Topdir/User:$Topdir/version:$DirHard/serial:$DirHard/single:$DirHard/Meter:$DirSoft/Warn:\
-$DirSoft/ztcc:$DirSoft/lamp:$CPATH
+$DirSoft/ztcc:$DirSoft/lamp:$DirSoft/operate:$CPATH
 
 create_lib(){
 	if [ ! -f $1/libsqlite3.so ];then

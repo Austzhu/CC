@@ -14,7 +14,7 @@
 #include "Interface.h"
 
 #define ether_RecvBufSize        2048
-#define ether_SocketTimeout   30
+#define ether_SocketTimeout   5
 
 static int ether_Connect(ethernet_t *this)
 {
@@ -40,7 +40,7 @@ static int ether_Connect(ethernet_t *this)
 	addr.sin_port 	 = htons(parent->param.ServerPort);
 	addr.sin_addr.s_addr = inet_addr(parent->param.ServerIpaddr);
 
-	timeo.tv_sec = ether_SocketTimeout; 	 // 30 seconds 超时
+	timeo.tv_sec = ether_SocketTimeout; 	 // 10 seconds 超时
 	setsockopt(this->ether_sock, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
 
 	if (connect(this->ether_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
