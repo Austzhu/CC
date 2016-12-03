@@ -51,7 +51,7 @@ s32 CallBack_Response(Node_t *node,void *top)
 	if(topuser->opt_Itf && topuser->opt_Itf->opt_send)	/* check point is initialized */
 		topuser->opt_Itf->opt_send(topuser->opt_Itf,Sendbuf,node->package[1]+10);
 
-	#ifdef Config_showPackage
+	#ifdef CFG_showPackage
 		printf("Response package:");
 		for(int i=0,size=node->package[1]+10;i<size;++i)
 			printf("%02X ",*(Sendbuf+i));
@@ -195,10 +195,10 @@ s32 CallBack_single(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[6];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<< 8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX-light : 0)<< 8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light) << 8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light) << 8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_single,Addr,light);
 			MakeSingleResponse(AckBuffer,0x42,Addr,res);
@@ -221,10 +221,10 @@ s32 CallBack_single(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[6];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX- light : 0)<<8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX- light : 0)<<8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_single,Addr,light);
 			MakeSingleResponse(AckBuffer,0x47,Addr,res);
@@ -249,10 +249,10 @@ s32 CallBack_group(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[4];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX-light : 0)<<8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_group,Addr,light);
 			/* The second response to PC */
@@ -277,10 +277,10 @@ s32 CallBack_group(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[4];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX-light : 0)<<8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_grouplight,Addr,light);
 			/* The second response to PC */
@@ -306,10 +306,10 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 	switch(package->data[0]){
 		case 0x42:
 			light = node->package[3];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX-light : 0)<<8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_broadcast,0,light);
 			/* The second response to PC */
@@ -336,10 +336,10 @@ s32 CallBack_broadcast(Node_t *node,void*parent)
 			break;
 		case 0x47:
 			light = node->package[3];
-			#ifdef Config_PWM_N
-				light = (light<Config_PWMAX ? Config_PWMAX-light : 0)<<8;
+			#ifdef CFG_PWM_N
+				light = (light<CFG_PWMAX ? CFG_PWMAX-light : 0)<<8;
 			#else
-				light = (light>Config_PWMAX ? Config_PWMAX : light)<<8;
+				light = (light>CFG_PWMAX ? CFG_PWMAX : light)<<8;
 			#endif
 			res = _parent->single->sin_open(_parent->single,cmd_broadlight,0,light);
 			/* The second response to PC */

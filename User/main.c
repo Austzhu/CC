@@ -15,7 +15,7 @@
 static void *KeepaliveThread(void *args)
 {
 	while(g_appity.pthread_start) g_appity.TopUser_Keepalive(&g_appity);
-	#ifdef  Config_exitMessage
+	#ifdef  CFG_exitMessage
 		printf("Top KeepaliveThread exit!\n");
 	#endif
 	return NULL;
@@ -24,7 +24,7 @@ static void *KeepaliveThread(void *args)
 static void *RecvInsertQueueThread(void *args)
 {
 	while(g_appity.pthread_start) g_appity.TopUser_InsertQue(&g_appity);
-	#ifdef  Config_exitMessage
+	#ifdef  CFG_exitMessage
 		printf("Top RecvInsertQueueThread exit!\n");
 	#endif
 	return NULL;
@@ -33,7 +33,7 @@ static void *RecvInsertQueueThread(void *args)
 static void *UserQueProcThread(void *args)
 {
 	while(g_appity.pthread_start) g_appity.TopUser_ProcQue(&g_appity);
-	#ifdef  Config_exitMessage
+	#ifdef  CFG_exitMessage
 		printf("Top UserQueProcThread exit!\n");
 	#endif
 	return NULL;

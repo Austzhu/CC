@@ -32,7 +32,7 @@ static void *pthread_listen(void *args)
 	socklen_t clientlen = sizeof(struct sockaddr_in);
 	while(this->thread_on){
 		/* if client count greater then client max sleep to wait */
-		if(this->client_count >= Config_client_max) {
+		if(this->client_count >= CFG_client_max) {
 			sleep(1);  continue;
 		}
 		temp = malloc(sizeof(client_t));
@@ -56,7 +56,7 @@ static void *pthread_listen(void *args)
 		/* add client ip to sqlite */
 		temp = NULL;
 	}
-	#ifdef  Config_exitMessage
+	#ifdef  CFG_exitMessage
 		printf("thread listen exit!\n");
 	#endif
 	return NULL;
@@ -89,7 +89,7 @@ static void *pthread_status(void *args)
 		}
 		sleep(1);
 	}
-	#ifdef  Config_exitMessage
+	#ifdef  CFG_exitMessage
 		printf("pthreade status exit!\n");
 	#endif
 	return NULL;
@@ -129,10 +129,10 @@ static int ser_keepalive(int fd)
 	keepalive_t keepalive;
 	bzero(&keepalive,sizeof(keepalive_t));
 
-	keepalive.keepalive_on = 1;
-	keepalive.keepalive_idle = Config_keepidle;
-	keepalive.keepalive_inteval = Config_keepinterval;
-	keepalive.keepalive_count = Config_keepcount;
+	keepalive.keepalive_on 		= 1;
+	keepalive.keepalive_idle 		= CFG_keepidle;
+	keepalive.keepalive_inteval 	= CFG_keepinterval;
+	keepalive.keepalive_count 	= CFG_keepcount;
 
 	setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,&keepalive.keepalive_on,sizeof(int));
 	setsockopt(fd, SOL_TCP, TCP_KEEPIDLE,&keepalive.keepalive_idle,sizeof(int));
@@ -159,7 +159,7 @@ static int ser_start(struct server_t*this,u16 port)
 	/* set keepalive param */
 	ser_keepalive(this->server_fd);
 	/* 设置地址重用 */
-	int reuse_addr = Config_ReuseAddr;
+	int reuse_addr = CFG_ReuseAddr;
 	setsockopt(this->server_fd,SOL_SOCKET,SO_REUSEADDR,&reuse_addr,sizeof(int));
 	/* bind addr */
 	if( bind(this->server_fd, (struct sockaddr*)&this->server_addr, sizeof(this->server_addr)) < 0){
@@ -167,7 +167,7 @@ static int ser_start(struct server_t*this,u16 port)
 		return FAIL;
 	}
 	/* listen ether */
-	if(listen(this->server_fd,Config_client_max) < 0){
+	if(listen(this->server_fd,CFG_client_max) < 0){
 		perror("listen");
 		return FAIL;
 	}

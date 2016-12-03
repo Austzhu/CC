@@ -207,7 +207,7 @@ static int appitf_init(appitf_t *this)
 
 	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
-	INIT_FAIL(this->Serial,serial_Init,((0x01<<Config_COM485) | (0x01<<Config_COMDIDO)),9600,9600);	/* init for serial */
+	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);	/* init for serial */
 	INIT_FAIL(this->sqlite,sql_Init);						/* init for sqlite */
 	INIT_FAIL(this->single,single_Init,this);				/* init for single */
 	#ifdef Config_Meter

@@ -69,7 +69,7 @@ static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)
 	TableCoordi_t *cp = package;
 	appitf_t *topuser = this->topuser;
 	u32 Addr = 0;
-	topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 	switch(cmd){
 		case cfg_sinMap:
 			Addr = (sp->Coor_id<<16) | sp->Base_Addr;
@@ -77,7 +77,7 @@ static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Single Config MapAddr Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			break;
 		case cfg_sinGroup:
 			Addr = (sp->Coor_id << 16) | sp->Base_Addr;
@@ -86,7 +86,7 @@ static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Coordinate Config Group Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			break;
 		case cfg_coorMap:
 			Addr = cp->Base_Addr <<16;
@@ -95,7 +95,7 @@ static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Coordinate Config MapAddr Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			break;
 		default:break;
 	}
@@ -126,7 +126,7 @@ static int sin_RecvPackage(Single_t *this,void *buffer,int size,int timeout)
 	appitf_t *topuser = this->topuser;
 	u8 *Pbuf = buffer;
 	memset(buffer,0,size);
-	do{ topuser->Serial->serial_recv(topuser->Serial,Config_COM485,(char*)buffer,1,100000);
+	do{ topuser->Serial->serial_recv(topuser->Serial,CFG_COM485,(char*)buffer,1,100000);
 		if(0xff == *Pbuf) break;
 		else printf("."),fflush(stdout);
 	}while(timeout--);
@@ -135,7 +135,7 @@ static int sin_RecvPackage(Single_t *this,void *buffer,int size,int timeout)
 		debug(DEBUG_single," Wait Header Timeout!\n");
 		return FAIL;
 	}
-	int res = topuser->Serial->serial_recv(topuser->Serial,Config_COM485,(char*)(Pbuf+1),size-1,1000000);
+	int res = topuser->Serial->serial_recv(topuser->Serial,CFG_COM485,(char*)(Pbuf+1),size-1,1000000);
 	if(SUCCESS != res){
 		debug(DEBUG_single,">>>>>Can not recv from Uart1\n");
 		return FAIL;
@@ -157,15 +157,15 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 	appitf_t *topuser = this->topuser;
 	int res = FAIL;
 	int repcnt = 3;
-	topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 	switch(cmd){
 		case cmd_single:
 		repeat:
-			topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+			topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 			MakeSinglePack(&single,0x01,0x0001,Addr,light);
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			this->Display("Single open Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout) ||\
 				0 != single.Data[0] ){
 				if(repcnt--) goto repeat;	//send package again until repcnt == 0
@@ -183,7 +183,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("group open Send data:",&single,sizeof(single));
-			res = topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			res = topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x42,res);
 			/*  set operate_flags */
@@ -194,7 +194,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Broadcast open Send data:",&single,sizeof(single));
-			res = topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			res = topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x42,res);
 			/*  set operate_flags */
@@ -205,7 +205,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("group light Send data:",&single,sizeof(single));
-			res = topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			res = topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x47,res);
 			/*  set operate_flags */
@@ -216,7 +216,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Broadcast light Send data:",&single,sizeof(single));
-			res = topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			res = topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x47,res);
 			/*  set operate_flags */
@@ -238,16 +238,16 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 	appitf_t *topuser = this->topuser;
 	int res = FAIL;
 	int repcnt = 3;
-	topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 	switch(cmd){
 		case cmd_single:
 		repeat:
-			topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+			topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 			MakeSinglePack(&single,0x01,0x0002,Addr,0);
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("Single close Send data:",&single,sizeof(single));
-			topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout) ||\
 				0 != single.Data[0] ){
 				if(repcnt--)  goto repeat;
@@ -265,7 +265,7 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 			this->Display("group close Send data:",&single,sizeof(single));
-			res = topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+			res = topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,02,0x43,res);
 			/*  set operate_flags */
@@ -276,7 +276,7 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 			this->Display("broadcast close Send data:",&single,sizeof(single));
 			res = topuser->Serial->serial_send(topuser->Serial,\
-				Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+				CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 			/* The first response to pc */
 			this->sin_reply(this,03,0x43,res);
 			/*  set operate_flags */
@@ -336,7 +336,7 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 					case Query_stat:
 						info_start->status = p_stat[i].stat;
 						info_start->light = p_stat[i].light;
-						#ifdef Config_PWM_N
+						#ifdef CFG_PWM_N
 							info_end->light = (p_stat[i].light<Config_PWMAX)?Config_PWMAX-p_stat[i].light:0xfe;
 						#endif
 						/* set flags about status */
@@ -357,7 +357,7 @@ static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\
 					case Query_stat:
 						info_end->status = p_stat[i].stat;
 						info_end->light = p_stat[i].light;
-						#ifdef Config_PWM_N
+						#ifdef CFG_PWM_N
 							info_end->light = (p_stat[i].light<Config_PWMAX)?Config_PWMAX-p_stat[i].light:0xfe;
 						#endif
 						/* set flags about status */
@@ -488,8 +488,8 @@ static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int siz
 			this->crc->CRCHL_get((char*)Sendbuf+12+count,(char*)Sendbuf+12,count);
 			this->Display("Query Send data:",Sendbuf,count+14);
 			for(int repeat=3;repeat>=0;--repeat){
-				topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
-				topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)Sendbuf,count+14,SendTimeout);
+				topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
+				topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)Sendbuf,count+14,SendTimeout);
 				if(SUCCESS == this->sin_RecvPackage(this,Sendbuf,sizeof(light_t),RecvTimeout) &&\
 					0 == Sendbuf[8] && 0 == Sendbuf[9] ) break;
 				if(repeat <= 0) goto out;
@@ -617,11 +617,11 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 		Addr = CoordiAddr[j].Coor_Addr << 16;
 		Waittime = CoordiAddr[j].single_Count*10;
 		MakeSinglePack(&single,0x50,0x0001,Addr,getcnt);
-		topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+		topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 		this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 		//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 		this->Display("\nQuery electric Send data:",&single,sizeof(single));
-		topuser->Serial->serial_send(topuser->Serial,Config_COM485,\
+		topuser->Serial->serial_send(topuser->Serial,CFG_COM485,\
 							(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
@@ -632,7 +632,7 @@ static int Query_electric(Single_t *this,int flags, int Is_res)
 		}
 		int reslen = (single.Data[0]<<8) | single.Data[1];
 		if(reslen >0 && SUCCESS == topuser->Serial->serial_recv(topuser->Serial,\
-			Config_COM485,(char*)recvbuf,reslen+2,3000000)){
+			CFG_COM485,(char*)recvbuf,reslen+2,3000000)){
 			//if(SUCCESS != topuser->Crc16(crc_check,(u8*)recvbuf+reslen,(u8*)recvbuf,reslen)){
 			if(SUCCESS != this->crc->CRCHL_get((char*)recvbuf+reslen,(char*)recvbuf,reslen)){
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
@@ -681,12 +681,12 @@ static int sin_Queryelectric(Single_t *this,int cmd, u32 Addr)
 		case cmd_single:
 			for(int repeat=3;repeat;--repeat){
 				if(repeat <= 0){/* set error flags */break;}
-				topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+				topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 				MakeSinglePack(&single,0x01,0x0010,Addr,0);
 				this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 				//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 				this->Display("Single Query status Send data:",&single,sizeof(single));
-				topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+				topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 				rtn = this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout);
 				if(rtn != SUCCESS) continue;
 				status = single.Data[0]<<24 | single.Data[1] << 16;
@@ -694,7 +694,7 @@ static int sin_Queryelectric(Single_t *this,int cmd, u32 Addr)
 				this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 				//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 				this->Display("Single Query status Send data:",&single,sizeof(single));
-				topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+				topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 				rtn = this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout);
 				if(rtn == SUCCESS) break;
 			}
@@ -817,11 +817,11 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 		Addr = CoordiAddr[j].Coor_Addr << 16;
 		Waitime = CoordiAddr[j].single_Count * 10;
 		MakeSinglePack(&single,0x40,0x0001,Addr,getcnt);
-		topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+		topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 		this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 		//topuser->Crc16(crc_get,single.Crc16,(u8*)&single,sizeof(single)-2);
 		this->Display("\nQuery electric Send data:",&single,sizeof(single));
-		topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+		topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 		/* when get error triplicate */
 		for(int repeat=3;repeat--;){
 			if(SUCCESS == this->sin_RecvPackage(this,&single,\
@@ -831,7 +831,7 @@ static int Query_status(Single_t*this,int flags,int Is_res)
 		}
 		int reslen = (single.Data[0]<<8) | single.Data[1];
 		if(reslen >0 && SUCCESS == topuser->Serial->serial_recv(topuser->Serial,\
-			Config_COM485,(char*)recvbuf,reslen+2,3000000)){
+			CFG_COM485,(char*)recvbuf,reslen+2,3000000)){
 			//if(SUCCESS != topuser->Crc16(crc_check,(u8*)recvbuf+reslen,(u8*)recvbuf,reslen)){
 			if(SUCCESS != this->crc->CRCHL_get((char*)recvbuf+reslen,(char*)recvbuf,reslen)){
 				debug(DEBUG_single,"Single Addr List Crc16 check err!\n");
@@ -880,11 +880,11 @@ static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)
 	switch(cmd){
 		case cmd_single:
 			for(int repeat=3;repeat--;){
-				topuser->Serial->serial_flush(topuser->Serial,Config_COM485);
+				topuser->Serial->serial_flush(topuser->Serial,CFG_COM485);
 				MakeSinglePack(&single,0x01,0x0400,Addr,0);
 				this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 				this->Display("Single Query status Send data:",&single,sizeof(single));
-				topuser->Serial->serial_send(topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+				topuser->Serial->serial_send(topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 				rtn = this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout);
 				if(rtn == SUCCESS)  break;
 				if(repeat <= 0){/* set error flags */}
@@ -918,7 +918,7 @@ static int sin_update(Single_t*this,int addr)
 	}
 	this->crc->CRCHL_get((char*)single.Crc16,(char*)&single,sizeof(single)-2);
 	this->Display("\nupdate Send data:",&single,sizeof(single));
-	this->topuser->Serial->serial_send(this->topuser->Serial,Config_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
+	this->topuser->Serial->serial_send(this->topuser->Serial,CFG_COM485,(s8*)&single,sizeof(light_t),SendTimeout);
 	if(SUCCESS != this->sin_RecvPackage(this,&single,sizeof(light_t),RecvTimeout)){
 		err_Print(DEBUG_update,"update recv package error!\n");
 		return FAIL;

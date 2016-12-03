@@ -1,9 +1,7 @@
+-include $(Rootdir)/autoconf.mk
+COBJS-y :=ether.o
+COBJS-${Config_TCP_Server} += ether_server.o
+OBJS += $(COBJS-y)
+all:$(COBJS-y)
+include $(Rootdir)/rules.mk
 
-COBJS :=ether.o ether_server.o
-OBJS += $(COBJS)
-
-all:$(COBJS)
-
-%.o:%.c
-	@$(CC) -c $<  $(CFLAGS) $(DFLAGS) -o $(Rootdir)/$(output)/$@
-$(COBJS):

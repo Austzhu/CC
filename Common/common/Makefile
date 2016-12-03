@@ -1,9 +1,5 @@
-
-COBJS :=common.o CRC.o
-OBJS += $(COBJS)
-
-all:$(COBJS)
-
-%.o:%.c
-	@$(CC) -c $<  $(CFLAGS) $(DFLAGS) -o $(Rootdir)/$(output)/$@
-$(COBJS):
+-include $(Rootdir)/autoconf.mk
+COBJS-y :=common.o CRC.o
+OBJS += $(COBJS-y)
+all:$(COBJS-y)
+include $(Rootdir)/rules.mk

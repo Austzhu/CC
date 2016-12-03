@@ -17,7 +17,7 @@
 static int serial_Config(serial_t *this,u32 port,u32 speed,s32 bits,s32 stop,s8 parity)
 {
 	assert_param(this,FAIL);
-#ifdef Config_MC_ARM335X
+#ifdef CFG_MC_ARM335X
 	struct {int speed;int bspeed;} _speed[] = { {2400,B2400},{4800,B4800},{9600,B9600},
 					{19200,B19200},{38400,B38400},{57600,B57600},{115200,B115200} };
 	struct termios opt;
@@ -91,7 +91,7 @@ static int serial_Config(serial_t *this,u32 port,u32 speed,s32 bits,s32 stop,s8 
 static int serial_Open(serial_t *this,u32  port)
 {
 	if(port > SerialMax || !this) return FAIL;
-#ifdef  Config_MC_ARM335X
+#ifdef  CFG_MC_ARM335X
 	this->serialfd[port] = open( Asprintf("/dev/ttyO%d",port), O_RDWR|O_NOCTTY);
 	if(this->serialfd[port] < 0) goto out;
 	if( !isatty(this->serialfd[port])){

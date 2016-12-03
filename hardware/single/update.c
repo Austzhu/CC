@@ -103,7 +103,7 @@ static u8 update_recv_onebyte(struct update_t *this)
 	serial_t *p_serial = this->subclass->topuser->Serial;
 	if(!p_serial) return FAIL;
 	return SUCCESS == p_serial->serial_recv(\
-		p_serial,Config_COM485,(s8*)&res,1,2000000)?res:FAIL;
+		p_serial,CFG_COM485,(s8*)&res,1,2000000)?res:FAIL;
 }
 
 static int update_send_package(struct update_t *this)
@@ -134,7 +134,7 @@ static int update_send_package(struct update_t *this)
 	this->subclass->crc->CRCHL_get((char*)(this->package.CRC16),(char*)(this->package.data),UPACKSIZE);
 	//this->subclass->Display("\npackage:",&this->package,sizeof(package_t));
 	return topuser->Serial->serial_send(topuser->Serial,\
-		Config_COM485,(s8*)&this->package,sizeof(package_t),2000000);
+		CFG_COM485,(s8*)&this->package,sizeof(package_t),2000000);
 }
 
 static void update_release(struct update_t **this)

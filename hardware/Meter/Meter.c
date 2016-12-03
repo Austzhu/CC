@@ -62,10 +62,10 @@ static int reado(Meter_t *this,u8 slave_addr)
 
 	MakeSlave(pslave,slave_addr,0x01,0x08);
 	this->crc->CRCLH_get(pslave+6,pslave,6);
-	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COMDIDO);
 	topuser->single->Display("meter reado  Send data:",slave,8);
-	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,slave,8,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,slave,6,2*SendTimeout);
+	topuser->Serial->serial_send(topuser->Serial,CFG_COMDIDO,slave,8,SendTimeout);
+	topuser->Serial->serial_recv(topuser->Serial,CFG_COMDIDO,slave,6,2*SendTimeout);
 	topuser->single->Display("meter reado  recv data:",&slave,6);
 	res = this->crc->CRCLH_check(pslave+4,pslave,4);
 	if(SUCCESS != res){
@@ -95,10 +95,10 @@ static int meter_sendpackage(Meter_t *this,u8 slave_addr,void *Message,u8 setval
 	*(pf+6) = 1;				//size of next value
 	*(pf+7) = setval;
 	this->crc->CRCLH_get(pf+8,pf,8);
-	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COMDIDO);
 	topuser->single->Display("meter open all Send data:",pf,10);
-	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,pf,10,SendTimeout);
-	return topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,pf,8,2*SendTimeout);
+	topuser->Serial->serial_send(topuser->Serial,CFG_COMDIDO,pf,10,SendTimeout);
+	return topuser->Serial->serial_recv(topuser->Serial,CFG_COMDIDO,pf,8,2*SendTimeout);
 }
 
 static int meter_open(Meter_t *this,u8 slave_addr, u8 ndo)
@@ -146,10 +146,10 @@ static int meter_readi(Meter_t *this,u8 slave_addr,u8 ndo,subcmd_t subcmd)
 
 	MakeSlave(pslave,slave_addr,0x02,0x08);
 	this->crc->CRCLH_get(pslave+6,pslave,6);
-	topuser->Serial->serial_flush(topuser->Serial,Config_COMDIDO);
+	topuser->Serial->serial_flush(topuser->Serial,CFG_COMDIDO);
 	topuser->single->Display("meter readi  Send data:",slave,8);
-	topuser->Serial->serial_send(topuser->Serial,Config_COMDIDO,slave,8,SendTimeout);
-	topuser->Serial->serial_recv(topuser->Serial,Config_COMDIDO,slave,6,2*SendTimeout);
+	topuser->Serial->serial_send(topuser->Serial,CFG_COMDIDO,slave,8,SendTimeout);
+	topuser->Serial->serial_recv(topuser->Serial,CFG_COMDIDO,slave,6,2*SendTimeout);
 	topuser->single->Display("meter readi  recv data:",slave,6);
 	res = this->crc->CRCLH_check(pslave+4,pslave,4);
 
