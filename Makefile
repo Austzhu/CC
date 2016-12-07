@@ -5,9 +5,8 @@
 # For conditions of distribution and use, see copyright notice
 #
 CFLAGS =  -Wall -O2
-CFLAGS += -std=gnu99
 LINKFLAGS = -lpthread
-DFLAGS =
+DFLAGS = -std=gnu99
 OBJS :=
 Rootdir=$(PWD)
 output := output
@@ -33,14 +32,16 @@ export output CFLAGS Rootdir CC  DFLAGS
 
 
 #包含子目录的工程文件
-INCLUDE := $(addsuffix /Makefile, $(OBJS_PATH))
-include $(INCLUDE)
-DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
+#INCLUDE := $(addsuffix /Makefile, $(OBJS_PATH))
+#include $(INCLUDE)
+#DESTOBJS := $(addprefix ./$(output)/, $(notdir $(OBJS)))
+DESTOBJS := ${Rootdir}/output/*.o
 
-all: Version ${target} Automountusb  Watchrsh
+
+all: autoconf.mk Version ${target} Automountusb  Watchrsh
 
 ${target}: compile
-	@$(CC)  $(DESTOBJS) -o ./Applications/$@ $(LINKFLAGS) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(DFLAGS) $(LINKFLAGS) $(LDFLAGS)  -o ./Applications/$@  $(DESTOBJS)
 
 Version:
 	@`./version/setlocalversion`

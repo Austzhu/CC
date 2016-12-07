@@ -150,7 +150,6 @@ s32 loadParam(void *app)
 
 	if(fp = fopen("./temp","r") , !fp){
 		debug(DEBUG_loadfile,"%s,%d:open file fail!\n",__func__,__LINE__);
-		//Write_log(err,"Open Config file error!");
 		return FAIL;
 	}
 	/* 准备好文件大小的缓存区 */

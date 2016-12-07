@@ -47,4 +47,4 @@ export CPATH Config_bord STAGING_DIR
 #env | grep 'CPATH'
 
 make distclean
-make autoconf.mk && make && make install && echo "******make install success!******"
+make && make install && echo "******make install success!******"

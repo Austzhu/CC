@@ -21,5 +21,6 @@ extern int Query_time(u8 *buf,int bufsize);
 extern int CC_Inquire_Version(u8 *buf,int size);
 extern int SingleConfig(u8 *package,appitf_t *app);
 extern int CoordiConfig(u8 *package,appitf_t *app);
+extern int delete_sql(u8 *package,appitf_t *app);
 
 #endif

@@ -12,6 +12,16 @@
 #include "process.h"
 #include "database.h"
 
+#define Mktime(_tm,p_data,_time) do{\
+	(_tm)->tm_year	=	100 + *Pdata++;\
+	(_tm)->tm_mon	= *Pdata++  -  1;\
+	(_tm)->tm_mday	= *Pdata++;\
+	(_tm)->tm_hour	= *Pdata++;\
+	(_tm)->tm_min  	= *Pdata++;\
+	(_tm)->tm_sec   	= *Pdata++;\
+	_time = mktime(_tm);\
+}while(0)
+
 int Reset2DoFunctions(void)
 {
 	return SUCCESS;
@@ -151,4 +161,56 @@ int CoordiConfig(u8 *package,  appitf_t *app)
 			"Coor_gid,CC_id,Map_Addr) values(%d,%d,%d,'%s',%d);",tab_coor.Wl_Addr,\
 			tab_coor.Base_Addr,tab_coor.Coor_gid,tab_coor.CC_id,tab_coor.Map_Addr));
 	}
+}
+
+int delete_sql(u8 *Pdata,appitf_t *app)
+{
+	assert_param(Pdata,FAIL);
+	assert_param(app,FAIL);
+
+	struct tm tim = {0};
+	time_t start = 0,end = 0;
+
+	switch(*Pdata++){
+		case 0x00:		//协调器记录表
+			if(*Pdata++ == 0x00){
+				return app->sqlite->sql_delete(Asprintf(\
+					"delete from db_coordinator where Base_Addr=0x%x;",*Pdata));
+			}else{
+				debug(DEBUG_DelSql,"db_coordinator have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}	break;
+		case 0x01:		//单灯记录表
+			if(*Pdata++ == 0x00){
+				return app->sqlite->sql_delete(Asprintf(\
+					"delete from db_light where Base_Addr=0x%x;",*Pdata<<8 | *(Pdata+1)));
+			}else{
+				debug(DEBUG_DelSql,"db_light have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}	break;
+		case 0x02:		//任务表
+			if(*Pdata == 0x01){//名称
+				return app->sqlite->sql_delete(Asprintf("delete from db_task where Name=%s;",Pdata+1));
+			}else if(*Pdata++ == 0x02){//时间范围
+				Mktime(&tim,Pdata,start);
+				Mktime(&tim,Pdata,end);
+				return app->sqlite->sql_delete(Asprintf(\
+					"delete from db_task where Start_Date < %ld AND Start_Date > %ld",end,start));
+			}else{
+				debug(DEBUG_DelSql,"db_task have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}	break;
+		case 0x03:		//报警日志记录表
+			if(*Pdata++ == 0x02){//名称
+				Mktime(&tim,Pdata,start);
+				Mktime(&tim,Pdata,end);
+				return app->sqlite->sql_delete(Asprintf(\
+					"delete from db_warn where Start_Date < %ld AND Start_Date > %ld",end,start));
+			}else{
+				debug(DEBUG_DelSql,"db_warn have no coilmn type %d\n",*(Pdata-1));
+				return FAIL;
+			}	break;
+		default:break;
+	}
+	return FAIL;
 }
