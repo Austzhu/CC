@@ -13,13 +13,24 @@
 #include "database.h"
 
 #define Mktime(_tm,p_data,_time) do{\
-	(_tm)->tm_year	=	100 + *Pdata++;\
-	(_tm)->tm_mon	= *Pdata++  -  1;\
-	(_tm)->tm_mday	= *Pdata++;\
-	(_tm)->tm_hour	= *Pdata++;\
-	(_tm)->tm_min  	= *Pdata++;\
-	(_tm)->tm_sec   	= *Pdata++;\
+	(_tm)->tm_year		= *p_data++ + 100;\
+	(_tm)->tm_mon	= *p_data++  -  1;\
+	(_tm)->tm_mday	= *p_data++;\
+	(_tm)->tm_hour	= *p_data++;\
+	(_tm)->tm_min  	= *p_data++;\
+	(_tm)->tm_sec   	= *p_data++;\
 	_time = mktime(_tm);\
+}while(0)
+
+
+#define gettime(pbf,_tm) do{\
+	*pbf++ = (_tm)->tm_year %100;\
+	*pbf++ = (_tm)->tm_mon + 1;\
+	*pbf++ = (_tm)->tm_mday;\
+	*pbf++ = (_tm)->tm_wday;\
+	*pbf++ = (_tm)->tm_hour;\
+	*pbf++ = (_tm)->tm_min;\
+	*pbf++ = (_tm)->tm_sec;\
 }while(0)
 
 int Reset2DoFunctions(void)
@@ -30,70 +41,61 @@ int Reset2DoFunctions(void)
 int time_tick(u8 *package)
 {
 	assert_param(package,FAIL);
-	/* 开发板设置时间格式
-	 * date 051114542016.59  月 日 时 分 年.秒
-	 * 把下发的时间格式化成字符串
-	 */
-	s8 	set_time[32]={0};
-	#ifdef Config_EC_6018
-		sprintf(set_time,"date %04u%02u%02u%02u%02u.%02u",\
-			package[0]+2000,package[1],package[2],package[4],package[5],package[6]);
-	#else
-		sprintf(set_time,"date %02u%02u%02u%02u%04u.%02u",\
-			package[1],package[2],package[4],package[5],package[0]+2000,package[6]);
-	#endif
-	//debug(DEBUG_chktime,"Time tick cmd:%s\n",set_time);
-	system(set_time);
+	struct timeval tv = {0};
+	struct tm tm = {0};
+	tm.tm_year 	= *(package+0) + 100;
+	tm.tm_mon	= *(package+1)  - 1;
+	tm.tm_mday	= *(package+2);
+	tm.tm_hour	= *(package+4);
+	tm.tm_min  	= *(package+5);
+	tm.tm_sec   	= *(package+6);
+	tv.tv_sec 		= mktime(&tm);
+	debug(DEBUG_chktime,"set linux time: %s",ctime(&tv.tv_sec));
+	if( settimeofday(&tv,NULL) != 0)
+		return FAIL;
 	return SUCCESS;
 }
 
 int Query_time(u8 *buf,int bufsize)
 {
 	assert_param(buf,FAIL);
+	u8 *const pbuf = buf;
+	time_t SystemTime = 0;
+	struct tm TimeRTC = {0};
+	struct tm TimeSystem = {0};
+	bzero(buf,bufsize);
+	*buf++ = 0x51; *buf++ = 0x13; *buf++ = 0x80;
+	*buf++ = 0x11; *buf++ = 0xA2; *buf++ = 0x04;
 
-	time_t SystemTime;
-	struct tm TimeRTC;
-	struct tm TimeSystem;
-
-	memset(buf,0,bufsize);
-	memset(&TimeRTC,0,sizeof(struct tm));
-	memset(&TimeSystem,0,sizeof(struct tm));
+	/* system time */
 	time(&SystemTime);
 	TimeSystem = *localtime(&SystemTime);
-	int  fd = open("/dev/rtc0",O_RDONLY,0);
-	if(fd < 0) return FAIL;
-	if(ioctl(fd,RTC_RD_TIME,&TimeRTC)){
-		close(fd); 	return FAIL;
-	}	close(fd);
-
-	*buf++ = 0x51; *buf++ = 0x12; *buf++ = 0x80;
-	*buf++ = 0x10; *buf++ = 0xA2; *buf++ = 0x04;
-	/* system time */
-	*buf++ = TimeSystem.tm_year%100;
-	*buf++ = TimeSystem.tm_mon+1;
-	*buf++ = TimeSystem.tm_mday;
-	*buf++ = TimeSystem.tm_wday;
-	*buf++ = TimeSystem.tm_hour;
-	*buf++ = TimeSystem.tm_min;
-	*buf++ = TimeSystem.tm_sec;
+	gettime(buf,&TimeSystem);
 	/* get rtc time */
-	*buf++ = TimeRTC.tm_year%100;
-	*buf++ = TimeRTC.tm_mon+1;
-	*buf++ = TimeRTC.tm_mday;
-	*buf++ = TimeRTC.tm_wday;
-	*buf++ = TimeRTC.tm_hour;
-	*buf++ = TimeRTC.tm_min;
-	*buf++ = TimeRTC.tm_sec;
+	int  fd = open("/dev/rtc0",O_RDONLY,0);
+	if(fd < 0) goto out;
+	if(ioctl(fd,RTC_RD_TIME,&TimeRTC))
+		goto out;
+	close(fd);
+	gettime(buf,&TimeRTC);
+
+	*(pbuf+20) = SUCCESS;
 	return SUCCESS;
+out:
+	if(fd > 0) close(fd);
+	*(pbuf+20) = FAIL;
+	return FAIL;
 }
 
 int CC_Inquire_Version(u8 *buf,int size)
 {
 	assert_param(buf,FAIL);
-	memset(buf,0,size);
-	*buf++ = 0x51; *buf++ = 0x24; *buf++ = 0x80;
-	*buf++ = 0x22; *buf++ = 0xA2; *buf++ = 0x05;
+	bzero(buf,size);
+	u8 * const pf = buf;
+	*buf++ = 0x51; *buf++ = 0x25; *buf++ = 0x80;
+	*buf++ = 0x23; *buf++ = 0xA2; *buf++ = 0x05;
 	sprintf((char*)buf,"%s",VERSION_NUMBER);
+	*(pf+0x23+3) = SUCCESS;
 	return SUCCESS;
 }
 

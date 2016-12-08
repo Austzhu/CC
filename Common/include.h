@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <netinet/tcp.h>
 #include <sys/reboot.h>
+#include <sys/timeb.h>
 
 
 #include "debug.h"

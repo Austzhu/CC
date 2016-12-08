@@ -92,15 +92,13 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 			break;
 		case 0x04:	//Query time
 			res = Query_time(AckBuffer,sizeof(AckBuffer));
+			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^Query time %s^^^^^\n",res == SUCCESS ? "success":"error");
-			if(SUCCESS == res)
-				Append2Queue(AckBuffer,_parent->Queue);
 			break;
 		case 0x05: 	//Query time
 			res = CC_Inquire_Version(AckBuffer,sizeof(AckBuffer));
+			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^Inquire Version %s^^^^^\n",res == SUCCESS ? "success":"error");
-			if(SUCCESS == res)
-				Append2Queue(AckBuffer,_parent->Queue);
 			break;
 		case 0x70:	//poweroff
 			MakeShortResponse(AckBuffer,03,0xA2,0x70,SUCCESS);
