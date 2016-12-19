@@ -182,7 +182,7 @@ static int TopUser_Relese(appitf_t *this)
 	DELETE(this->single,sin_release);
 	DELETE(this->sqlite,sql_release);
 	DELETE(this->Serial,serial_relese);
-	#ifdef  Config_TCP_Server
+	#ifdef Config_TCP_Server
 		DELETE(this->tcp_server,ser_release);
 	#endif
 	#ifdef Config_Meter
@@ -205,7 +205,7 @@ static int appitf_init(appitf_t *this)
 	this->Connect_status = Connect_error;
 	this->HeartBeat_status = HeartBeat_error;
 
-	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);				/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);	/* init for serial */
 	INIT_FAIL(this->sqlite,sql_Init);						/* init for sqlite */
@@ -213,9 +213,9 @@ static int appitf_init(appitf_t *this)
 	#ifdef Config_Meter
 	INIT_FAIL(this->meter,meter_init,this);				/* init for dido */
 	#endif
-	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
+	INIT_FAIL(this->warn,warn_init,this);					/* init for warn */
 	#ifdef  Config_TCP_Server
-		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
+		INIT_FAIL(this->tcp_server,ser_init);				/* init for tcp server */
 		this->tcp_server->ser_start(g_appity.tcp_server,8889);
 	#endif
 	if( access("cc_corl.db",F_OK))

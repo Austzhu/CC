@@ -40,6 +40,7 @@ vu8	Common\common\base_type.h	35;"	d
 Hex2Str	Common\common\common.c	/^char* Hex2Str(char*dest,const u8 *src,int size)$/;"	f
 MessageBuffer	Common\common\common.c	/^char MessageBuffer[MessageBuffersize];$/;"	v
 Str2Hex	Common\common\common.c	/^u8 *Str2Hex(u8 *dest,const char *src)$/;"	f
+get_check_sum	Common\common\common.c	/^int get_check_sum(void *pkg,int size)$/;"	f
 msleep	Common\common\common.c	/^void msleep(u32 ms)$/;"	f
 Asprintf	Common\common\common.h	39;"	d
 Asprintf_Strlen	Common\common\common.h	38;"	d
@@ -80,6 +81,7 @@ DEBUG_Timetask	Common\debug.h	20;"	d
 DEBUG_app	Common\debug.h	46;"	d
 DEBUG_cc2server	Common\debug.h	28;"	d
 DEBUG_chktime	Common\debug.h	30;"	d
+DEBUG_config	Common\debug.h	49;"	d
 DEBUG_coordinate	Common\debug.h	37;"	d
 DEBUG_inqTime	Common\debug.h	32;"	d
 DEBUG_inqVersion	Common\debug.h	33;"	d
@@ -101,12 +103,12 @@ MY_DEBUG	Common\debug.h	5;"	d
 NOTICE	Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon2
 WARNING	Common\debug.h	/^	WARNING,$/;"	e	enum:__anon2
 __DEBUG_H__	Common\debug.h	2;"	d
-debug	Common\debug.h	52;"	d
-debug	Common\debug.h	54;"	d
-debug	Common\debug.h	56;"	d
+debug	Common\debug.h	53;"	d
+debug	Common\debug.h	55;"	d
+debug	Common\debug.h	57;"	d
 debug_level	Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon2
-err_Print	Common\debug.h	60;"	d
-err_Print	Common\debug.h	62;"	d
+err_Print	Common\debug.h	61;"	d
+err_Print	Common\debug.h	63;"	d
 ERRORS	Common\err_code.h	21;"	d
 FAIL	Common\err_code.h	18;"	d
 Open_FAIL	Common\err_code.h	22;"	d
@@ -319,6 +321,34 @@ wiz_release	Software\lamp\wizdom.h	/^	void (*wiz_release)(struct wizdom_t**);$/;
 wiz_setaddr	Software\lamp\wizdom.h	/^	int (*wiz_setaddr)(struct wizdom_t*,char addr);$/;"	m	struct:wizdom_t
 wizdom_t	Software\lamp\wizdom.h	/^typedef struct wizdom_t{$/;"	s
 wizdom_t	Software\lamp\wizdom.h	/^} wizdom_t;$/;"	t	typeref:struct:wizdom_t
+operate_init	Software\operate\operate.c	/^operate_t *operate_init(struct operate_t *this, struct param_t *param)$/;"	f
+opt_connect	Software\operate\operate.c	/^static int opt_connect(struct operate_t *this)$/;"	f	file:
+opt_getchar	Software\operate\operate.c	/^static int opt_getchar(struct operate_t *this,u8 *ch)$/;"	f	file:
+opt_heartbeat	Software\operate\operate.c	/^static int opt_heartbeat(struct operate_t *this)$/;"	f	file:
+opt_logon	Software\operate\operate.c	/^static int opt_logon(struct operate_t *this)$/;"	f	file:
+opt_recv	Software\operate\operate.c	/^static int opt_recv(struct operate_t *this,u8 *buf, int size)$/;"	f	file:
+opt_relese	Software\operate\operate.c	/^static void opt_relese(struct operate_t **this)$/;"	f	file:
+opt_send	Software\operate\operate.c	/^static int opt_send(struct operate_t *this,u8 *buffer,int size)$/;"	f	file:
+Buffer_Size	Software\operate\operate.h	15;"	d
+__COMMUNICATE_H__	Software\operate\operate.h	13;"	d
+fd	Software\operate\operate.h	/^	int 	fd;$/;"	m	struct:opt_param_t
+operate_t	Software\operate\operate.h	/^typedef struct operate_t {$/;"	s
+operate_t	Software\operate\operate.h	/^} operate_t;$/;"	t	typeref:struct:operate_t
+opt_Itfway	Software\operate\operate.h	/^	void *opt_Itfway;		\/\/指向具体通讯方式的类$/;"	m	struct:operate_t
+opt_connect	Software\operate\operate.h	/^	int	  (*opt_connect)(struct operate_t*);$/;"	m	struct:operate_t
+opt_getchar	Software\operate\operate.h	/^	int	  (*opt_getchar)(struct operate_t*,u8*);$/;"	m	struct:operate_t
+opt_heartbeat	Software\operate\operate.h	/^	int	  (*opt_heartbeat)(struct operate_t*);$/;"	m	struct:operate_t
+opt_logon	Software\operate\operate.h	/^	int	  (*opt_logon)(struct operate_t*);$/;"	m	struct:operate_t
+opt_param	Software\operate\operate.h	/^	struct opt_param_t opt_param;$/;"	m	struct:operate_t	typeref:struct:operate_t::opt_param_t
+opt_param_t	Software\operate\operate.h	/^typedef struct opt_param_t{$/;"	s
+opt_param_t	Software\operate\operate.h	/^} opt_param_t;$/;"	t	typeref:struct:opt_param_t
+opt_recv	Software\operate\operate.h	/^	int	  (*opt_recv)(struct operate_t*,u8*,int);$/;"	m	struct:operate_t
+opt_relese	Software\operate\operate.h	/^	void (*opt_relese)(struct operate_t**);$/;"	m	struct:operate_t
+opt_send	Software\operate\operate.h	/^	int 	  (*opt_send)(struct operate_t*,u8 *buffer,int size);$/;"	m	struct:operate_t
+param	Software\operate\operate.h	/^	struct param_t *param;	\/\/全局设置参数$/;"	m	struct:opt_param_t	typeref:struct:opt_param_t::param_t
+r_buf	Software\operate\operate.h	/^	u8 *r_buf;$/;"	m	struct:opt_param_t
+r_len	Software\operate\operate.h	/^	int 	r_len;$/;"	m	struct:opt_param_t
+r_ptr	Software\operate\operate.h	/^	int 	r_ptr;$/;"	m	struct:opt_param_t
 Append2Queue	Software\process\Callback_function.c	10;"	d	file:
 CallBack_Config	Software\process\Callback_function.c	/^s32 CallBack_Config(Node_t *node,void *parent)$/;"	f
 CallBack_Reset	Software\process\Callback_function.c	/^s32 CallBack_Reset(Node_t *node,void *parent)$/;"	f
@@ -336,9 +366,12 @@ MakeUpdateResponse	Software\process\Callback_function.c	28;"	d	file:
 __CALLBACE_FUNCTION_H__	Software\process\Callback_function.h	2;"	d
 CC_Inquire_Version	Software\process\process.c	/^int CC_Inquire_Version(u8 *buf,int size)$/;"	f
 CoordiConfig	Software\process\process.c	/^int CoordiConfig(u8 *package,  appitf_t *app)$/;"	f
+Mktime	Software\process\process.c	15;"	d	file:
 Query_time	Software\process\process.c	/^int Query_time(u8 *buf,int bufsize)$/;"	f
 Reset2DoFunctions	Software\process\process.c	/^int Reset2DoFunctions(void)$/;"	f
 SingleConfig	Software\process\process.c	/^int SingleConfig(u8 *package,appitf_t *app)$/;"	f
+delete_sql	Software\process\process.c	/^int delete_sql(u8 *Pdata,appitf_t *app)$/;"	f
+gettime	Software\process\process.c	26;"	d	file:
 time_tick	Software\process\process.c	/^int time_tick(u8 *package)$/;"	f
 __PROCESS_H__	Software\process\process.h	13;"	d
 TopUser_InsertQue	Software\ztcc\Interface.c	/^static s32 TopUser_InsertQue(appitf_t *this)$/;"	f	file:
@@ -351,26 +384,25 @@ app_exit	Software\ztcc\Interface.c	/^static void app_exit(int signal)$/;"	f	file
 appitf_init	Software\ztcc\Interface.c	/^static int appitf_init(appitf_t *this)$/;"	f	file:
 g_appity	Software\ztcc\Interface.c	/^appitf_t g_appity = {$/;"	v
 package_check	Software\ztcc\Interface.c	/^static int package_check(void *package)$/;"	f	file:
-CCUID	Software\ztcc\Interface.h	/^	u8 CCUID[6];                   \/\/集中控制器的UID$/;"	m	struct:Param
-Connect_error	Software\ztcc\Interface.h	26;"	d
-Connect_ok	Software\ztcc\Interface.h	25;"	d
-Connect_status	Software\ztcc\Interface.h	/^	int Connect_status;        \/\/网络连接状态$/;"	m	struct:appitf_t
-ControlMethod	Software\ztcc\Interface.h	/^	u8 ControlMethod;	      \/\/控制模式$/;"	m	struct:Param
-DebugLevel	Software\ztcc\Interface.h	/^	u8 DebugLevel;	             \/\/调试等级$/;"	m	struct:Param
-HeartBCycle	Software\ztcc\Interface.h	/^	u8 HeartBCycle;            \/\/心跳周期$/;"	m	struct:Param
-HeartBeat_error	Software\ztcc\Interface.h	28;"	d
-HeartBeat_ok	Software\ztcc\Interface.h	27;"	d
-HeartBeat_status	Software\ztcc\Interface.h	/^	int HeartBeat_status;    \/\/心跳状态$/;"	m	struct:appitf_t
-Is_TCP	Software\ztcc\Interface.h	/^	u8 Is_TCP;                      \/\/与服务器的连接方式$/;"	m	struct:Param
-ItfWay	Software\ztcc\Interface.h	/^	u8 ItfWay;                       \/\/集中器的操作方法$/;"	m	struct:Param
-ItfWay_t	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	t	typeref:enum:__anon40
-KwhReadInter	Software\ztcc\Interface.h	/^	u8 KwhReadInter;       \/\/电量的读取间隔$/;"	m	struct:Param
-KwhSaveDay	Software\ztcc\Interface.h	/^	u8 KwhSaveDay;           \/\/电路保存天数$/;"	m	struct:Param
-Param	Software\ztcc\Interface.h	/^typedef struct Param{$/;"	s
+CCUID	Software\ztcc\Interface.h	/^	u8 CCUID[6]; 			\/\/集中控制器的UID$/;"	m	struct:param_t
+Connect_error	Software\ztcc\Interface.h	31;"	d
+Connect_ok	Software\ztcc\Interface.h	30;"	d
+Connect_status	Software\ztcc\Interface.h	/^	int Connect_status;	\/\/网络连接状态$/;"	m	struct:appitf_t
+ControlMethod	Software\ztcc\Interface.h	/^	u8 ControlMethod;		\/\/控制模式$/;"	m	struct:param_t
+DebugLevel	Software\ztcc\Interface.h	/^	u8 DebugLevel; 		 \/\/调试等级$/;"	m	struct:param_t
+HeartBCycle	Software\ztcc\Interface.h	/^	u8 HeartBCycle;		\/\/心跳周期$/;"	m	struct:param_t
+HeartBeat_error	Software\ztcc\Interface.h	33;"	d
+HeartBeat_ok	Software\ztcc\Interface.h	32;"	d
+HeartBeat_status	Software\ztcc\Interface.h	/^	int HeartBeat_status;	\/\/心跳状态$/;"	m	struct:appitf_t
+Is_TCP	Software\ztcc\Interface.h	/^	u8 Is_TCP;				\/\/与服务器的连接方式$/;"	m	struct:param_t
+ItfWay	Software\ztcc\Interface.h	/^	u8 ItfWay;				\/\/集中器的操作方法$/;"	m	struct:param_t
+ItfWay_t	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	t	typeref:enum:__anon40
+KwhReadInter	Software\ztcc\Interface.h	/^	u8 KwhReadInter;		\/\/电量的读取间隔$/;"	m	struct:param_t
+KwhSaveDay	Software\ztcc\Interface.h	/^	u8 KwhSaveDay;		\/\/电路保存天数$/;"	m	struct:param_t
 Queue	Software\ztcc\Interface.h	/^	struct Queue_t *Queue;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Queue_t
 Serial	Software\ztcc\Interface.h	/^	struct serial_t *Serial;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::serial_t
-ServerIpaddr	Software\ztcc\Interface.h	/^	s8 ServerIpaddr[32];     \/\/服务器IP$/;"	m	struct:Param
-ServerPort	Software\ztcc\Interface.h	/^	u16 ServerPort;             \/\/服务器的端口$/;"	m	struct:Param
+ServerIpaddr	Software\ztcc\Interface.h	/^	s8 ServerIpaddr[32]; 	\/\/服务器IP$/;"	m	struct:param_t
+ServerPort	Software\ztcc\Interface.h	/^	u16 ServerPort;		\/\/服务器的端口$/;"	m	struct:param_t
 TopUser_Init	Software\ztcc\Interface.h	/^	int (*const TopUser_Init)(struct appitf_t *this);$/;"	m	struct:appitf_t
 TopUser_InsertQue	Software\ztcc\Interface.h	/^	int (*const TopUser_InsertQue)(struct appitf_t *this);$/;"	m	struct:appitf_t
 TopUser_Keepalive	Software\ztcc\Interface.h	/^	int (*const TopUser_Keepalive)(struct appitf_t *this);$/;"	m	struct:appitf_t
@@ -382,36 +414,41 @@ TopUser_relese	Software\ztcc\Interface.h	/^	int (*const TopUser_relese)(struct a
 __Interface_h__	Software\ztcc\Interface.h	13;"	d
 appitf_t	Software\ztcc\Interface.h	/^typedef struct appitf_t {$/;"	s
 appitf_t	Software\ztcc\Interface.h	/^} appitf_t;$/;"	t	typeref:struct:appitf_t
-ether_net	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
-ethernet	Software\ztcc\Interface.h	/^	struct ethernet_t *ethernet;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::ethernet_t
-gprs	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
+ether_net	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
+gprs	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
+lora	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
 meter	Software\ztcc\Interface.h	/^	struct Meter_t *meter;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Meter_t
-param	Software\ztcc\Interface.h	/^	struct Param param;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Param
-param_t	Software\ztcc\Interface.h	/^} param_t;$/;"	t	typeref:struct:Param
+opt_Itf	Software\ztcc\Interface.h	/^	struct operate_t *opt_Itf;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::operate_t
+param	Software\ztcc\Interface.h	/^	struct param_t param;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::param_t
+param_t	Software\ztcc\Interface.h	/^typedef struct param_t{$/;"	s
+param_t	Software\ztcc\Interface.h	/^} param_t;$/;"	t	typeref:struct:param_t
+pthread_start	Software\ztcc\Interface.h	/^	int pthread_start;$/;"	m	struct:appitf_t
 single	Software\ztcc\Interface.h	/^	struct Single_t *single;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Single_t
 sqlite	Software\ztcc\Interface.h	/^	struct sql_t *sqlite;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::sql_t
 tcp_server	Software\ztcc\Interface.h	/^	struct server_t *tcp_server;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::server_t
 warn	Software\ztcc\Interface.h	/^	struct Warn_t *warn;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Warn_t
-zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
+zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
 KeepaliveThread	User\main.c	/^static void *KeepaliveThread(void *args)$/;"	f	file:
 RecvInsertQueueThread	User\main.c	/^static void *RecvInsertQueueThread(void *args)$/;"	f	file:
 UserQueProcThread	User\main.c	/^static void *UserQueProcThread(void *args)$/;"	f	file:
 main	User\main.c	/^int main(int argc,char *argv[])$/;"	f
 BARD_E6018	config\config.h	10;"	d
-Config_COM485	config\config.h	30;"	d
-Config_COMDIDO	config\config.h	31;"	d
+CFG_COM485	config\config.h	34;"	d
+CFG_COMDIDO	config\config.h	35;"	d
+CFG_PWMAX	config\config.h	36;"	d
+CFG_ReuseAddr	config\config.h	28;"	d
+CFG_client_max	config\config.h	27;"	d
+CFG_keepcount	config\config.h	31;"	d
+CFG_keepidle	config\config.h	29;"	d
+CFG_keepinterval	config\config.h	30;"	d
 Config_EC_6018	config\config.h	14;"	d
-Config_Log	config\config.h	29;"	d
+Config_Log	config\config.h	15;"	d
+Config_Log	config\config.h	20;"	d
 Config_Meter	config\config.h	13;"	d
-Config_PWMAX	config\config.h	33;"	d
-Config_ReuseAddr	config\config.h	22;"	d
-Config_ReuseAddr	config\config.h	26;"	d
-Config_TCP_Server	config\config.h	15;"	d
-Config_client_max	config\config.h	21;"	d
-Config_keepcount	config\config.h	25;"	d
-Config_keepidle	config\config.h	23;"	d
-Config_keepinterval	config\config.h	24;"	d
-Config_wizdom	config\config.h	17;"	d
+Config_TCP_Server	config\config.h	18;"	d
+Config_operate	config\config.h	16;"	d
+Config_operate	config\config.h	21;"	d
+Config_wizdom	config\config.h	19;"	d
 __config_h__	config\config.h	8;"	d
 MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
 MakeSlaveOpenAll	hardware\Meter\Meter.c	23;"	d	file:
@@ -446,19 +483,17 @@ sub_readi	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_re
 sub_reado	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
 subcmd_t	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	t	typeref:enum:__anon4
 topuser	hardware\Meter\Meter.h	/^	struct appitf_t *topuser;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::appitf_t
-HeartSize	hardware\ethernet\ether.c	81;"	d	file:
-LogonSize	hardware\ethernet\ether.c	99;"	d	file:
-Wait_SendEmpty	hardware\ethernet\ether.c	116;"	d	file:
+HeartSize	hardware\ethernet\ether.c	79;"	d	file:
+LogonSize	hardware\ethernet\ether.c	89;"	d	file:
 ether_Close	hardware\ethernet\ether.c	/^static void ether_Close(ethernet_t *this)$/;"	f	file:
 ether_Connect	hardware\ethernet\ether.c	/^static int ether_Connect(ethernet_t *this)$/;"	f	file:
 ether_Getchar	hardware\ethernet\ether.c	/^static int ether_Getchar(ethernet_t *this,u8 *buf)$/;"	f	file:
 ether_HeartBeat	hardware\ethernet\ether.c	/^static int ether_HeartBeat(ethernet_t *this)$/;"	f	file:
-ether_Init	hardware\ethernet\ether.c	/^ethernet_t *ether_Init(ethernet_t *this,struct appitf_t *topuser)$/;"	f
+ether_Init	hardware\ethernet\ether.c	/^ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)$/;"	f
 ether_Recv	hardware\ethernet\ether.c	/^static int ether_Recv(ethernet_t *this,u8 *buf,int size)$/;"	f	file:
-ether_RecvBufSize	hardware\ethernet\ether.c	16;"	d	file:
 ether_Relese	hardware\ethernet\ether.c	/^static void ether_Relese(ethernet_t **this)$/;"	f	file:
 ether_Send	hardware\ethernet\ether.c	/^static int ether_Send(ethernet_t *this,u8 *buffer,int size)$/;"	f	file:
-ether_SocketTimeout	hardware\ethernet\ether.c	17;"	d	file:
+ether_SocketTimeout	hardware\ethernet\ether.c	16;"	d	file:
 ether_logon	hardware\ethernet\ether.c	/^static int ether_logon(ethernet_t *this)$/;"	f	file:
 get_packageCheck	hardware\ethernet\ether.c	/^static int get_packageCheck(void *package,int size)$/;"	f	file:
 __ETHER_H__	hardware\ethernet\ether.h	15;"	d
@@ -470,16 +505,12 @@ ether_lock	hardware\ethernet\ether.h	/^	pthread_mutex_t ether_lock;$/;"	m	struct
 ether_logon	hardware\ethernet\ether.h	/^	int (*ether_logon)(struct ethernet_t*);$/;"	m	struct:ethernet_t
 ether_packagecheck	hardware\ethernet\ether.h	/^	int (*ether_packagecheck)(void *package,int size);$/;"	m	struct:ethernet_t
 ether_recv	hardware\ethernet\ether.h	/^	int (*ether_recv)(struct ethernet_t*,u8*,int);$/;"	m	struct:ethernet_t
-ether_recvbuf	hardware\ethernet\ether.h	/^	u8 *ether_recvbuf;				\/\/数据的缓存区$/;"	m	struct:ethernet_t
-ether_recvhead	hardware\ethernet\ether.h	/^	int ether_recvhead;				\/\/缓存数据中的读指针偏移量$/;"	m	struct:ethernet_t
-ether_recvlen	hardware\ethernet\ether.h	/^	int ether_recvlen;				\/\/缓存数据的长度$/;"	m	struct:ethernet_t
 ether_relese	hardware\ethernet\ether.h	/^	void (*ether_relese)(struct ethernet_t**);$/;"	m	struct:ethernet_t
 ether_send	hardware\ethernet\ether.h	/^	int (*ether_send)(struct ethernet_t*,u8 *buffer,int size);$/;"	m	struct:ethernet_t
-ether_sock	hardware\ethernet\ether.h	/^	int ether_sock;					\/\/网络连接的socket$/;"	m	struct:ethernet_t
 ethernet_t	hardware\ethernet\ether.h	/^typedef struct ethernet_t{$/;"	s
 ethernet_t	hardware\ethernet\ether.h	/^} ethernet_t;$/;"	t	typeref:struct:ethernet_t
-parent	hardware\ethernet\ether.h	/^	struct appitf_t *parent;$/;"	m	struct:ethernet_t	typeref:struct:ethernet_t::appitf_t
-Clean_list	hardware\ethernet\ether_server.c	17;"	d	file:
+opt_param	hardware\ethernet\ether.h	/^	struct opt_param_t *opt_param;$/;"	m	struct:ethernet_t	typeref:struct:ethernet_t::opt_param_t
+Clean_list	hardware\ethernet\ether_server.c	16;"	d	file:
 pthread_listen	hardware\ethernet\ether_server.c	/^static void *pthread_listen(void *args)$/;"	f	file:
 pthread_status	hardware\ethernet\ether_server.c	/^static void *pthread_status(void *args)$/;"	f	file:
 ser_flush	hardware\ethernet\ether_server.c	/^static void ser_flush(int socketfd)$/;"	f	file:
@@ -1397,7 +1428,6 @@ regAddr	library\e6018\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon32
 regData	library\e6018\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon32
 reserved	library\e6018\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon31
 width	library\e6018\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon31
-create_lib	mk.sh	/^create_lib(){$/;"	f
 Database_Path	sqlite\database.c	8;"	d	file:
 sql_Init	sqlite\database.c	/^sql_t *sql_Init(sql_t *this)$/;"	f
 sql_Insert	sqlite\database.c	/^static int sql_Insert(const char *sql)$/;"	f	file:
@@ -2051,7 +2081,7 @@ xQueryPhrase	sqlite\sqlite3.h	/^  int (*xQueryPhrase)(Fts5Context*, int iPhrase,
 xRandomness	sqlite\sqlite3.h	/^  int (*xRandomness)(sqlite3_vfs*, int nByte, char *zOut);$/;"	m	struct:sqlite3_vfs
 xRead	sqlite\sqlite3.h	/^  int (*xRead)(sqlite3_file*, void*, int iAmt, sqlite3_int64 iOfst);$/;"	m	struct:sqlite3_io_methods
 xRealloc	sqlite\sqlite3.h	/^  void *(*xRealloc)(void*,int);  \/* Resize an allocation *\/$/;"	m	struct:sqlite3_mem_methods
-xRekey	sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, sqlite3_pcache_page*, $/;"	m	struct:sqlite3_pcache_methods2
+xRekey	sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, sqlite3_pcache_page*,$/;"	m	struct:sqlite3_pcache_methods2
 xRekey	sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, void*, unsigned oldKey, unsigned newKey);$/;"	m	struct:sqlite3_pcache_methods
 xRelease	sqlite\sqlite3.h	/^  int (*xRelease)(sqlite3_vtab *pVTab, int);$/;"	m	struct:sqlite3_module
 xRename	sqlite\sqlite3.h	/^  int (*xRename)(sqlite3_vtab *pVtab, const char *zNew);$/;"	m	struct:sqlite3_module
@@ -2077,8 +2107,8 @@ xSize	sqlite\sqlite3.h	/^  int (*xSize)(void*);           \/* Return the size of
 xSleep	sqlite\sqlite3.h	/^  int (*xSleep)(sqlite3_vfs*, int microseconds);$/;"	m	struct:sqlite3_vfs
 xSync	sqlite\sqlite3.h	/^  int (*xSync)(sqlite3_file*, int flags);$/;"	m	struct:sqlite3_io_methods
 xSync	sqlite\sqlite3.h	/^  int (*xSync)(sqlite3_vtab *pVTab);$/;"	m	struct:sqlite3_module
-xTokenize	sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Context*, $/;"	m	struct:Fts5ExtensionApi
-xTokenize	sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Tokenizer*, $/;"	m	struct:fts5_tokenizer
+xTokenize	sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Context*,$/;"	m	struct:Fts5ExtensionApi
+xTokenize	sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Tokenizer*,$/;"	m	struct:fts5_tokenizer
 xTruncate	sqlite\sqlite3.h	/^  int (*xTruncate)(sqlite3_file*, sqlite3_int64 size);$/;"	m	struct:sqlite3_io_methods
 xTruncate	sqlite\sqlite3.h	/^  void (*xTruncate)(sqlite3_pcache*, unsigned iLimit);$/;"	m	struct:sqlite3_pcache_methods
 xTruncate	sqlite\sqlite3.h	/^  void (*xTruncate)(sqlite3_pcache*, unsigned iLimit);$/;"	m	struct:sqlite3_pcache_methods2

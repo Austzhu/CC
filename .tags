@@ -14,9 +14,10 @@ BARD_E6018	.\config\config.h	10;"	d
 Base_Addr	.\sqlite\database.h	/^	s32 Base_Addr;	\/\/单灯地址$/;"	m	struct:__anon43
 Base_Addr	.\sqlite\database.h	/^	u32 Base_Addr;          \/\/协调器地址$/;"	m	struct:__anon41
 Base_Addr	.\sqlite\database.h	/^	u32 Base_Addr;          \/\/单灯地址$/;"	m	struct:__anon42
+Buffer_Size	.\Software\operate\operate.h	15;"	d
 CAN	.\hardware\single\update.h	21;"	d
 CC	.\Software\Log\log.h	/^	CC		= 0X01,$/;"	e	enum:__anon36
-CCUID	.\Software\ztcc\Interface.h	/^	u8 CCUID[6];                   \/\/集中控制器的UID$/;"	m	struct:Param
+CCUID	.\Software\ztcc\Interface.h	/^	u8 CCUID[6]; 			\/\/集中控制器的UID$/;"	m	struct:param_t
 CC_Inquire_Version	.\Software\process\process.c	/^int CC_Inquire_Version(u8 *buf,int size)$/;"	f
 CC_id	.\sqlite\database.h	/^	s8 CC_id[16];               \/\/集中器ID$/;"	m	struct:__anon41
 CFG_ADC_LIB	.\library\e3100\libs_emfuture_odm.h	1518;"	d
@@ -35,6 +36,8 @@ CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	232;"	d
 CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	287;"	d
 CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	383;"	d
 CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	394;"	d
+CFG_COM485	.\config\config.h	34;"	d
+CFG_COMDIDO	.\config\config.h	35;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	1517;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	1529;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	1542;"	d
@@ -305,6 +308,8 @@ CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	69;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	79;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	89;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	99;"	d
+CFG_PWMAX	.\config\config.h	36;"	d
+CFG_ReuseAddr	.\config\config.h	28;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	107;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	1513;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	1525;"	d
@@ -467,6 +472,10 @@ CFG_WDG_LIB	.\library\e6018\libs_emfuture_odm.h	68;"	d
 CFG_WDG_LIB	.\library\e6018\libs_emfuture_odm.h	78;"	d
 CFG_WDG_LIB	.\library\e6018\libs_emfuture_odm.h	88;"	d
 CFG_WDG_LIB	.\library\e6018\libs_emfuture_odm.h	98;"	d
+CFG_client_max	.\config\config.h	27;"	d
+CFG_keepcount	.\config\config.h	31;"	d
+CFG_keepidle	.\config\config.h	29;"	d
+CFG_keepinterval	.\config\config.h	30;"	d
 COM_BAUDDEF	.\library\e3100\libs_emfuture_odm.h	1642;"	d
 COM_BAUDDEF	.\library\e3100\libs_emfuture_odm.h	190;"	d
 COM_BAUDDEF	.\library\e6018\libs_emfuture_odm.h	528;"	d
@@ -564,29 +573,23 @@ CallBack_group	.\Software\process\Callback_function.c	/^s32 CallBack_group(Node_
 CallBack_meter	.\Software\process\Callback_function.c	/^s32 CallBack_meter(Node_t *node,void*parent)$/;"	f
 CallBack_single	.\Software\process\Callback_function.c	/^s32 CallBack_single(Node_t *node,void*parent)$/;"	f
 Clean_Que	.\task\taskque\taskque.c	/^static void Clean_Que(Queue_t *Que)$/;"	f	file:
-Clean_list	.\hardware\ethernet\ether_server.c	17;"	d	file:
+Clean_list	.\hardware\ethernet\ether_server.c	16;"	d	file:
 Clean_list	.\task\taskque\taskque.c	10;"	d	file:
 Close_log	.\Software\Log\log.c	/^static void Close_log(Logfile_t logf)$/;"	f	file:
 Cmd	.\hardware\single\single.h	/^	u8 	Cmd[2];                  \/\/高字节在前，低字节在后$/;"	m	struct:__anon12
 Cmd	.\sqlite\database.h	/^	u8	Cmd[300];	\/\/任务命令$/;"	m	struct:__anon45
-Config_COM485	.\config\config.h	30;"	d
-Config_COMDIDO	.\config\config.h	31;"	d
 Config_EC_6018	.\config\config.h	14;"	d
-Config_Log	.\config\config.h	29;"	d
+Config_Log	.\config\config.h	15;"	d
+Config_Log	.\config\config.h	20;"	d
 Config_Meter	.\config\config.h	13;"	d
-Config_PWMAX	.\config\config.h	33;"	d
-Config_ReuseAddr	.\config\config.h	22;"	d
-Config_ReuseAddr	.\config\config.h	26;"	d
-Config_TCP_Server	.\config\config.h	15;"	d
-Config_client_max	.\config\config.h	21;"	d
-Config_keepcount	.\config\config.h	25;"	d
-Config_keepidle	.\config\config.h	23;"	d
-Config_keepinterval	.\config\config.h	24;"	d
-Config_wizdom	.\config\config.h	17;"	d
-Connect_error	.\Software\ztcc\Interface.h	26;"	d
-Connect_ok	.\Software\ztcc\Interface.h	25;"	d
-Connect_status	.\Software\ztcc\Interface.h	/^	int Connect_status;        \/\/网络连接状态$/;"	m	struct:appitf_t
-ControlMethod	.\Software\ztcc\Interface.h	/^	u8 ControlMethod;	      \/\/控制模式$/;"	m	struct:Param
+Config_TCP_Server	.\config\config.h	18;"	d
+Config_operate	.\config\config.h	16;"	d
+Config_operate	.\config\config.h	21;"	d
+Config_wizdom	.\config\config.h	19;"	d
+Connect_error	.\Software\ztcc\Interface.h	31;"	d
+Connect_ok	.\Software\ztcc\Interface.h	30;"	d
+Connect_status	.\Software\ztcc\Interface.h	/^	int Connect_status;	\/\/网络连接状态$/;"	m	struct:appitf_t
+ControlMethod	.\Software\ztcc\Interface.h	/^	u8 ControlMethod;		\/\/控制模式$/;"	m	struct:param_t
 Coor_Addr	.\Software\Warn\Warn.h	/^	int Coor_Addr;$/;"	m	struct:Warn_info_t
 Coor_Addr	.\hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
 Coor_Addr	.\hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon7	file:
@@ -619,6 +622,7 @@ DEBUG_Timetask	.\Common\debug.h	20;"	d
 DEBUG_app	.\Common\debug.h	46;"	d
 DEBUG_cc2server	.\Common\debug.h	28;"	d
 DEBUG_chktime	.\Common\debug.h	30;"	d
+DEBUG_config	.\Common\debug.h	49;"	d
 DEBUG_coordinate	.\Common\debug.h	37;"	d
 DEBUG_inqTime	.\Common\debug.h	32;"	d
 DEBUG_inqVersion	.\Common\debug.h	33;"	d
@@ -639,7 +643,7 @@ DOWN_KEY	.\library\e3100\libs_emfuture_odm.h	1143;"	d
 DOWN_KEY	.\library\e6018\libs_emfuture_odm.h	1461;"	d
 Data	.\hardware\single\single.h	/^	u8 	Data[2];$/;"	m	struct:__anon12
 Database_Path	.\sqlite\database.c	8;"	d	file:
-DebugLevel	.\Software\ztcc\Interface.h	/^	u8 DebugLevel;	             \/\/调试等级$/;"	m	struct:Param
+DebugLevel	.\Software\ztcc\Interface.h	/^	u8 DebugLevel; 		 \/\/调试等级$/;"	m	struct:param_t
 Default_CCUID	.\Software\initstart\loadfile.h	16;"	d
 Default_HeartBCycle	.\Software\initstart\loadfile.h	20;"	d
 Default_ItfWay	.\Software\initstart\loadfile.h	19;"	d
@@ -759,11 +763,11 @@ Group_Addr	.\hardware\single\single.h	/^	u8 	Group_Addr;$/;"	m	struct:__anon12
 HFUNC	.\library\e3100\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int sig, siginfo_t *extra, void *args);$/;"	t
 HFUNC	.\library\e6018\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int sig, siginfo_t *extra, void *args);$/;"	t
 Header	.\hardware\single\single.h	/^	u8	Header;$/;"	m	struct:__anon12
-HeartBCycle	.\Software\ztcc\Interface.h	/^	u8 HeartBCycle;            \/\/心跳周期$/;"	m	struct:Param
-HeartBeat_error	.\Software\ztcc\Interface.h	28;"	d
-HeartBeat_ok	.\Software\ztcc\Interface.h	27;"	d
-HeartBeat_status	.\Software\ztcc\Interface.h	/^	int HeartBeat_status;    \/\/心跳状态$/;"	m	struct:appitf_t
-HeartSize	.\hardware\ethernet\ether.c	81;"	d	file:
+HeartBCycle	.\Software\ztcc\Interface.h	/^	u8 HeartBCycle;		\/\/心跳周期$/;"	m	struct:param_t
+HeartBeat_error	.\Software\ztcc\Interface.h	33;"	d
+HeartBeat_ok	.\Software\ztcc\Interface.h	32;"	d
+HeartBeat_status	.\Software\ztcc\Interface.h	/^	int HeartBeat_status;	\/\/心跳状态$/;"	m	struct:appitf_t
+HeartSize	.\hardware\ethernet\ether.c	79;"	d	file:
 Hex2Str	.\Common\common\common.c	/^char* Hex2Str(char*dest,const u8 *src,int size)$/;"	f
 IIO_MAX_NAME_LENGTH	.\library\e3100\libs_emfuture_odm.h	136;"	d
 IIO_MAX_NAME_LENGTH	.\library\e3100\libs_emfuture_odm.h	1588;"	d
@@ -774,14 +778,14 @@ INIT_FAIL	.\Common\common\common.h	69;"	d
 INIT_LIST_HEAD	.\Common\list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
 Instert_Table	.\hardware\single\single.c	/^static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\\$/;"	f	file:
 Inter_Time	.\sqlite\database.h	/^	u32	Inter_Time; 		\/\/运行时间间隔$/;"	m	struct:__anon44
-Is_TCP	.\Software\ztcc\Interface.h	/^	u8 Is_TCP;                      \/\/与服务器的连接方式$/;"	m	struct:Param
-ItfWay	.\Software\ztcc\Interface.h	/^	u8 ItfWay;                       \/\/集中器的操作方法$/;"	m	struct:Param
-ItfWay_t	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	t	typeref:enum:__anon40
+Is_TCP	.\Software\ztcc\Interface.h	/^	u8 Is_TCP;				\/\/与服务器的连接方式$/;"	m	struct:param_t
+ItfWay	.\Software\ztcc\Interface.h	/^	u8 ItfWay;				\/\/集中器的操作方法$/;"	m	struct:param_t
+ItfWay_t	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	t	typeref:enum:__anon40
 Judge_fault	.\Software\Warn\Warn.c	/^static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)$/;"	f	file:
 JudgeforSingle	.\Software\Warn\Warn.c	/^static int JudgeforSingle(Warn_t *this,struct sin_warn_t *info,int infosize)$/;"	f	file:
 KeepaliveThread	.\User\main.c	/^static void *KeepaliveThread(void *args)$/;"	f	file:
-KwhReadInter	.\Software\ztcc\Interface.h	/^	u8 KwhReadInter;       \/\/电量的读取间隔$/;"	m	struct:Param
-KwhSaveDay	.\Software\ztcc\Interface.h	/^	u8 KwhSaveDay;           \/\/电路保存天数$/;"	m	struct:Param
+KwhReadInter	.\Software\ztcc\Interface.h	/^	u8 KwhReadInter;		\/\/电量的读取间隔$/;"	m	struct:param_t
+KwhSaveDay	.\Software\ztcc\Interface.h	/^	u8 KwhSaveDay;		\/\/电路保存天数$/;"	m	struct:param_t
 LEVEL	.\Common\debug.h	6;"	d
 LIBS_EMFUTURE_ODM_H_	.\library\e3100\libs_emfuture_odm.h	1461;"	d
 LIBS_EMFUTURE_ODM_H_	.\library\e3100\libs_emfuture_odm.h	9;"	d
@@ -792,7 +796,7 @@ LogCount	.\Software\Log\log.h	10;"	d
 Log_err	.\Software\Log\log.h	/^	Log_err 	= 0x100$/;"	e	enum:__anon36
 Log_fd	.\Software\Log\log.c	/^static int Log_fd[LogCount];$/;"	v	file:
 Logfile_t	.\Software\Log\log.h	/^}Logfile_t;$/;"	t	typeref:enum:__anon36
-LogonSize	.\hardware\ethernet\ether.c	99;"	d	file:
+LogonSize	.\hardware\ethernet\ether.c	89;"	d	file:
 MY_DEBUG	.\Common\debug.h	5;"	d
 Make2Response	.\Software\process\Callback_function.c	23;"	d	file:
 MakeServerLog	.\Software\Log\log.c	/^static s32 MakeServerLog(s8 *buf, faalpkt_t *pkg)$/;"	f	file:
@@ -813,6 +817,7 @@ MessageBuffer	.\Common\common\common.c	/^char MessageBuffer[MessageBuffersize];$
 MessageBuffersize	.\Common\common\common.h	15;"	d
 Meter_t	.\hardware\Meter\Meter.h	/^typedef struct Meter_t{$/;"	s
 Meter_t	.\hardware\Meter\Meter.h	/^} Meter_t;$/;"	t	typeref:struct:Meter_t
+Mktime	.\Software\process\process.c	15;"	d	file:
 Mstrcpy	.\Software\initstart\loadfile.c	/^static char *Mstrcpy(char*dest,const char *src,const char EOB)$/;"	f	file:
 NAK	.\hardware\single\update.h	20;"	d
 NEW	.\Common\common\common.h	45;"	d
@@ -870,7 +875,6 @@ PORT_WIDTH_32	.\library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__
 PORT_WIDTH_32	.\library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon29
 PORT_WIDTH_8	.\library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon23
 PORT_WIDTH_8	.\library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon29
-Param	.\Software\ztcc\Interface.h	/^typedef struct Param{$/;"	s
 Pointer_Err	.\Common\err_code.h	25;"	d
 Pointer_NULL	.\Common\err_code.h	26;"	d
 Priority	.\sqlite\database.h	/^	u32  	Priority; 		\/\/优先级$/;"	m	struct:__anon44
@@ -1296,8 +1300,8 @@ SendTimeout	.\hardware\Meter\Meter.c	15;"	d	file:
 SendTimeout	.\hardware\single\single.c	22;"	d	file:
 Serial	.\Software\ztcc\Interface.h	/^	struct serial_t *Serial;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::serial_t
 SerialMax	.\hardware\serial\serial.h	16;"	d
-ServerIpaddr	.\Software\ztcc\Interface.h	/^	s8 ServerIpaddr[32];     \/\/服务器IP$/;"	m	struct:Param
-ServerPort	.\Software\ztcc\Interface.h	/^	u16 ServerPort;             \/\/服务器的端口$/;"	m	struct:Param
+ServerIpaddr	.\Software\ztcc\Interface.h	/^	s8 ServerIpaddr[32]; 	\/\/服务器IP$/;"	m	struct:param_t
+ServerPort	.\Software\ztcc\Interface.h	/^	u16 ServerPort;		\/\/服务器的端口$/;"	m	struct:param_t
 SingleAddr	.\hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
 SingleConfig	.\Software\process\process.c	/^int SingleConfig(u8 *package,appitf_t *app)$/;"	f
 Single_Addr	.\hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon6	file:
@@ -1384,7 +1388,6 @@ Update_Pend	.\Common\err_code.h	24;"	d
 UserQueProcThread	.\User\main.c	/^static void *UserQueProcThread(void *args)$/;"	f	file:
 VALUE_NULL	.\Common\err_code.h	19;"	d
 WARNING	.\Common\debug.h	/^	WARNING,$/;"	e	enum:__anon2
-Wait_SendEmpty	.\hardware\ethernet\ether.c	116;"	d	file:
 Wait_time	.\sqlite\database.h	/^	u32	Wait_time;	\/\/执行延迟时间$/;"	m	struct:__anon45
 Warn_Coordi_All	.\Software\Warn\Warn.h	28;"	d
 Warn_Coordi_close	.\Software\Warn\Warn.h	24;"	d
@@ -1417,6 +1420,7 @@ _SQLITE3_H_	.\sqlite\sqlite3.h	34;"	d
 __BASE_TYPE_H__	.\Common\common\base_type.h	14;"	d
 __CALLBACE_FUNCTION_H__	.\Software\process\Callback_function.h	2;"	d
 __COMMON_H__	.\Common\common\common.h	13;"	d
+__COMMUNICATE_H__	.\Software\operate\operate.h	13;"	d
 __CRC_H__	.\Common\common\CRC.h	14;"	d
 __DEBUG_H__	.\Common\debug.h	2;"	d
 __ERROR_CODE__	.\Common\err_code.h	15;"	d
@@ -1576,7 +1580,6 @@ create_collation_v2	.\sqlite\sqlite3ext.h	/^  int (*create_collation_v2)(sqlite3
 create_function	.\sqlite\sqlite3ext.h	/^  int  (*create_function)(sqlite3*,const char*,int,int,void*,$/;"	m	struct:sqlite3_api_routines
 create_function16	.\sqlite\sqlite3ext.h	/^  int  (*create_function16)(sqlite3*,const void*,int,int,void*,$/;"	m	struct:sqlite3_api_routines
 create_function_v2	.\sqlite\sqlite3ext.h	/^  int (*create_function_v2)(sqlite3*,const char*,int,int,void*,$/;"	m	struct:sqlite3_api_routines
-create_lib	.\mk.sh	/^create_lib(){$/;"	f
 create_module	.\sqlite\sqlite3ext.h	/^  int (*create_module)(sqlite3*,const char*,const sqlite3_module*,void*);$/;"	m	struct:sqlite3_api_routines
 create_module_v2	.\sqlite\sqlite3ext.h	/^  int (*create_module_v2)(sqlite3*,const char*,const sqlite3_module*,void*,$/;"	m	struct:sqlite3_api_routines
 ctrl	.\Common\common\frame.h	/^	unsigned char ctrl;			\/\/控制域C$/;"	m	struct:__anon1
@@ -1598,11 +1601,12 @@ db_mutex	.\sqlite\sqlite3ext.h	/^  sqlite3_mutex *(*db_mutex)(sqlite3*);$/;"	m	s
 db_readonly	.\sqlite\sqlite3ext.h	/^  int (*db_readonly)(sqlite3*,const char*);$/;"	m	struct:sqlite3_api_routines
 db_release_memory	.\sqlite\sqlite3ext.h	/^  int (*db_release_memory)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 db_status	.\sqlite\sqlite3ext.h	/^  int (*db_status)(sqlite3*,int,int*,int*,int);$/;"	m	struct:sqlite3_api_routines
-debug	.\Common\debug.h	52;"	d
-debug	.\Common\debug.h	54;"	d
-debug	.\Common\debug.h	56;"	d
+debug	.\Common\debug.h	53;"	d
+debug	.\Common\debug.h	55;"	d
+debug	.\Common\debug.h	57;"	d
 debug_level	.\Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon2
 declare_vtab	.\sqlite\sqlite3ext.h	/^  int (*declare_vtab)(sqlite3*,const char*);$/;"	m	struct:sqlite3_api_routines
+delete_sql	.\Software\process\process.c	/^int delete_sql(u8 *Pdata,appitf_t *app)$/;"	f
 dep	.\Common\common\frame.h	/^	unsigned char dep;			\/\/=68H$/;"	m	struct:__anon1
 desc	.\sqlite\sqlite3.h	/^     unsigned char desc;       \/* True for DESC.  False for ASC. *\/$/;"	m	struct:sqlite3_index_info::sqlite3_index_orderby
 double	.\sqlite\sqlite3.h	268;"	d
@@ -1618,8 +1622,8 @@ entries	.\hardware\ethernet\ether_server.h	/^	struct list_head  entries;$/;"	m	s
 entries	.\task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon48	typeref:struct:__anon48::list_head
 entries	.\task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon49	typeref:struct:__anon49::list_head
 err	.\Software\Log\log.h	/^	err,$/;"	e	enum:__anon36
-err_Print	.\Common\debug.h	60;"	d
-err_Print	.\Common\debug.h	62;"	d
+err_Print	.\Common\debug.h	61;"	d
+err_Print	.\Common\debug.h	63;"	d
 errcode	.\sqlite\sqlite3ext.h	/^  int  (*errcode)(sqlite3*db);$/;"	m	struct:sqlite3_api_routines
 errmsg	.\sqlite\sqlite3ext.h	/^  const char * (*errmsg)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 errmsg16	.\sqlite\sqlite3ext.h	/^  const void * (*errmsg16)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
@@ -1630,12 +1634,11 @@ ether_Close	.\hardware\ethernet\ether.c	/^static void ether_Close(ethernet_t *th
 ether_Connect	.\hardware\ethernet\ether.c	/^static int ether_Connect(ethernet_t *this)$/;"	f	file:
 ether_Getchar	.\hardware\ethernet\ether.c	/^static int ether_Getchar(ethernet_t *this,u8 *buf)$/;"	f	file:
 ether_HeartBeat	.\hardware\ethernet\ether.c	/^static int ether_HeartBeat(ethernet_t *this)$/;"	f	file:
-ether_Init	.\hardware\ethernet\ether.c	/^ethernet_t *ether_Init(ethernet_t *this,struct appitf_t *topuser)$/;"	f
+ether_Init	.\hardware\ethernet\ether.c	/^ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)$/;"	f
 ether_Recv	.\hardware\ethernet\ether.c	/^static int ether_Recv(ethernet_t *this,u8 *buf,int size)$/;"	f	file:
-ether_RecvBufSize	.\hardware\ethernet\ether.c	16;"	d	file:
 ether_Relese	.\hardware\ethernet\ether.c	/^static void ether_Relese(ethernet_t **this)$/;"	f	file:
 ether_Send	.\hardware\ethernet\ether.c	/^static int ether_Send(ethernet_t *this,u8 *buffer,int size)$/;"	f	file:
-ether_SocketTimeout	.\hardware\ethernet\ether.c	17;"	d	file:
+ether_SocketTimeout	.\hardware\ethernet\ether.c	16;"	d	file:
 ether_close	.\hardware\ethernet\ether.h	/^	void (*ether_close)(struct ethernet_t*);$/;"	m	struct:ethernet_t
 ether_connect	.\hardware\ethernet\ether.h	/^	int (*ether_connect)(struct ethernet_t*);$/;"	m	struct:ethernet_t
 ether_getchar	.\hardware\ethernet\ether.h	/^	int (*ether_getchar)(struct ethernet_t*,u8*);$/;"	m	struct:ethernet_t
@@ -1643,17 +1646,12 @@ ether_heartbeat	.\hardware\ethernet\ether.h	/^	int (*ether_heartbeat)(struct eth
 ether_lock	.\hardware\ethernet\ether.h	/^	pthread_mutex_t ether_lock;$/;"	m	struct:ethernet_t
 ether_logon	.\hardware\ethernet\ether.c	/^static int ether_logon(ethernet_t *this)$/;"	f	file:
 ether_logon	.\hardware\ethernet\ether.h	/^	int (*ether_logon)(struct ethernet_t*);$/;"	m	struct:ethernet_t
-ether_net	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
+ether_net	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
 ether_packagecheck	.\hardware\ethernet\ether.h	/^	int (*ether_packagecheck)(void *package,int size);$/;"	m	struct:ethernet_t
 ether_recv	.\hardware\ethernet\ether.h	/^	int (*ether_recv)(struct ethernet_t*,u8*,int);$/;"	m	struct:ethernet_t
-ether_recvbuf	.\hardware\ethernet\ether.h	/^	u8 *ether_recvbuf;				\/\/数据的缓存区$/;"	m	struct:ethernet_t
-ether_recvhead	.\hardware\ethernet\ether.h	/^	int ether_recvhead;				\/\/缓存数据中的读指针偏移量$/;"	m	struct:ethernet_t
-ether_recvlen	.\hardware\ethernet\ether.h	/^	int ether_recvlen;				\/\/缓存数据的长度$/;"	m	struct:ethernet_t
 ether_relese	.\hardware\ethernet\ether.h	/^	void (*ether_relese)(struct ethernet_t**);$/;"	m	struct:ethernet_t
 ether_send	.\hardware\ethernet\ether.h	/^	int (*ether_send)(struct ethernet_t*,u8 *buffer,int size);$/;"	m	struct:ethernet_t
 ether_server	.\Software\lamp\wizdom.h	/^	server_t *ether_server;$/;"	m	struct:wizdom_t
-ether_sock	.\hardware\ethernet\ether.h	/^	int ether_sock;					\/\/网络连接的socket$/;"	m	struct:ethernet_t
-ethernet	.\Software\ztcc\Interface.h	/^	struct ethernet_t *ethernet;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::ethernet_t
 ethernet_t	.\hardware\ethernet\ether.h	/^typedef struct ethernet_t{$/;"	s
 ethernet_t	.\hardware\ethernet\ether.h	/^} ethernet_t;$/;"	t	typeref:struct:ethernet_t
 exec	.\sqlite\sqlite3ext.h	/^  int  (*exec)(sqlite3*,const char*,sqlite3_callback,void*,char**);$/;"	m	struct:sqlite3_api_routines
@@ -1673,6 +1671,7 @@ fault_none	.\Software\Warn\Warn.h	/^	fault_none         = 0x00,			\/\/没有故�
 fault_single	.\Software\Warn\Warn.h	/^	fault_single        = 0x01,			\/\/单灯设备故障$/;"	e	enum:__anon39
 fault_t	.\Software\Warn\Warn.h	/^}  fault_t;$/;"	t	typeref:enum:__anon39
 fault_valtage	.\Software\Warn\Warn.h	/^	fault_valtage	= 0x10,			\/\/供电电压故障$/;"	e	enum:__anon39
+fd	.\Software\operate\operate.h	/^	int 	fd;$/;"	m	struct:opt_param_t
 file_control	.\sqlite\sqlite3ext.h	/^  int (*file_control)(sqlite3*,const char*,int,void*);$/;"	m	struct:sqlite3_api_routines
 finalize	.\sqlite\sqlite3ext.h	/^  int  (*finalize)(sqlite3_stmt*pStmt);$/;"	m	struct:sqlite3_api_routines
 find_block	.\tools\AutoMountUsb.c	/^static const char *find_block(const char *buffer,const char *coulmn)$/;"	f	file:
@@ -1696,13 +1695,15 @@ get_Quetype	.\task\taskque\taskque.c	/^static s32 get_Quetype(struct Queue_t *th
 get_Quetype	.\task\taskque\taskque.h	/^	s32 (*get_Quetype)(struct Queue_t*,u8 ctrl);$/;"	m	struct:Queue_t
 get_autocommit	.\sqlite\sqlite3ext.h	/^  int  (*get_autocommit)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 get_auxdata	.\sqlite\sqlite3ext.h	/^  void * (*get_auxdata)(sqlite3_context*,int);$/;"	m	struct:sqlite3_api_routines
+get_check_sum	.\Common\common\common.c	/^int get_check_sum(void *pkg,int size)$/;"	f
 get_mark	.\Software\Warn\Warn.c	/^static const char *get_mark(int type)$/;"	f	file:
 get_packageCheck	.\hardware\ethernet\ether.c	/^static int get_packageCheck(void *package,int size)$/;"	f	file:
 get_table	.\sqlite\sqlite3ext.h	/^  int  (*get_table)(sqlite3*,const char*,char***,int*,int*,char**);$/;"	m	struct:sqlite3_api_routines
+gettime	.\Software\process\process.c	26;"	d	file:
 global_recover	.\sqlite\sqlite3ext.h	/^  int  (*global_recover)(void);$/;"	m	struct:sqlite3_api_routines
 gpio_mode_t	.\library\e3100\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon27
 gpio_mode_t	.\library\e6018\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon33
-gprs	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
+gprs	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
 head	.\Common\common\frame.h	/^	unsigned char head;		\/\/=68H$/;"	m	struct:__anon1
 header	.\hardware\single\update.h	/^	u8 header;$/;"	m	struct:__anon14
 iColumn	.\sqlite\sqlite3.h	/^     int iColumn;              \/* Column constrained.  -1 for ROWID *\/$/;"	m	struct:sqlite3_index_info::sqlite3_index_constraint
@@ -1810,6 +1811,7 @@ load_extension	.\sqlite\sqlite3ext.h	/^  int (*load_extension)(sqlite3*,const ch
 location	.\library\e3100\libs_emfuture_odm.h	/^	unsigned location;$/;"	m	struct:iio_channel_info
 location	.\library\e6018\iio_utils.h	/^	unsigned location;$/;"	m	struct:iio_channel_info
 log	.\sqlite\sqlite3ext.h	/^  void (*log)(int,const char*,...);$/;"	m	struct:sqlite3_api_routines
+lora	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40
 lt_gid	.\sqlite\database.h	/^	u32 lt_gid;                    \/\/单灯组ID$/;"	m	struct:__anon42
 main	.\User\main.c	/^int main(int argc,char *argv[])$/;"	f
 main	.\tools\AutoMountUsb.c	/^int main(int argc, char* argv[])$/;"	f
@@ -1868,7 +1870,30 @@ open	.\sqlite\sqlite3ext.h	/^  int  (*open)(const char*,sqlite3**);$/;"	m	struct
 open16	.\sqlite\sqlite3ext.h	/^  int  (*open16)(const void*,sqlite3**);$/;"	m	struct:sqlite3_api_routines
 open_v2	.\sqlite\sqlite3ext.h	/^  int (*open_v2)(const char*,sqlite3**,int,const char*);$/;"	m	struct:sqlite3_api_routines
 operate_flags	.\sqlite\database.h	/^	u32 operate_flags; \/\/操作设备状态$/;"	m	struct:__anon43
+operate_init	.\Software\operate\operate.c	/^operate_t *operate_init(struct operate_t *this, struct param_t *param)$/;"	f
+operate_t	.\Software\operate\operate.h	/^typedef struct operate_t {$/;"	s
+operate_t	.\Software\operate\operate.h	/^} operate_t;$/;"	t	typeref:struct:operate_t
+opt_Itf	.\Software\ztcc\Interface.h	/^	struct operate_t *opt_Itf;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::operate_t
+opt_Itfway	.\Software\operate\operate.h	/^	void *opt_Itfway;		\/\/指向具体通讯方式的类$/;"	m	struct:operate_t
+opt_connect	.\Software\operate\operate.c	/^static int opt_connect(struct operate_t *this)$/;"	f	file:
+opt_connect	.\Software\operate\operate.h	/^	int	  (*opt_connect)(struct operate_t*);$/;"	m	struct:operate_t
 opt_flags	.\Software\Warn\Warn.h	/^	int opt_flags;$/;"	m	struct:sin_warn_t
+opt_getchar	.\Software\operate\operate.c	/^static int opt_getchar(struct operate_t *this,u8 *ch)$/;"	f	file:
+opt_getchar	.\Software\operate\operate.h	/^	int	  (*opt_getchar)(struct operate_t*,u8*);$/;"	m	struct:operate_t
+opt_heartbeat	.\Software\operate\operate.c	/^static int opt_heartbeat(struct operate_t *this)$/;"	f	file:
+opt_heartbeat	.\Software\operate\operate.h	/^	int	  (*opt_heartbeat)(struct operate_t*);$/;"	m	struct:operate_t
+opt_logon	.\Software\operate\operate.c	/^static int opt_logon(struct operate_t *this)$/;"	f	file:
+opt_logon	.\Software\operate\operate.h	/^	int	  (*opt_logon)(struct operate_t*);$/;"	m	struct:operate_t
+opt_param	.\Software\operate\operate.h	/^	struct opt_param_t opt_param;$/;"	m	struct:operate_t	typeref:struct:operate_t::opt_param_t
+opt_param	.\hardware\ethernet\ether.h	/^	struct opt_param_t *opt_param;$/;"	m	struct:ethernet_t	typeref:struct:ethernet_t::opt_param_t
+opt_param_t	.\Software\operate\operate.h	/^typedef struct opt_param_t{$/;"	s
+opt_param_t	.\Software\operate\operate.h	/^} opt_param_t;$/;"	t	typeref:struct:opt_param_t
+opt_recv	.\Software\operate\operate.c	/^static int opt_recv(struct operate_t *this,u8 *buf, int size)$/;"	f	file:
+opt_recv	.\Software\operate\operate.h	/^	int	  (*opt_recv)(struct operate_t*,u8*,int);$/;"	m	struct:operate_t
+opt_relese	.\Software\operate\operate.c	/^static void opt_relese(struct operate_t **this)$/;"	f	file:
+opt_relese	.\Software\operate\operate.h	/^	void (*opt_relese)(struct operate_t**);$/;"	m	struct:operate_t
+opt_send	.\Software\operate\operate.c	/^static int opt_send(struct operate_t *this,u8 *buffer,int size)$/;"	f	file:
+opt_send	.\Software\operate\operate.h	/^	int 	  (*opt_send)(struct operate_t*,u8 *buffer,int size);$/;"	m	struct:operate_t
 orderByConsumed	.\sqlite\sqlite3.h	/^  int orderByConsumed;       \/* True if output is already ordered *\/$/;"	m	struct:sqlite3_index_info
 overload_function	.\sqlite\sqlite3ext.h	/^  int (*overload_function)(sqlite3*, const char *zFuncName, int nArg);$/;"	m	struct:sqlite3_api_routines
 pAppData	.\sqlite\sqlite3.h	/^  void *pAppData;                \/* Argument to xInit() and xShutdown() *\/$/;"	m	struct:sqlite3_mem_methods
@@ -1890,9 +1915,10 @@ package	.\task\taskque\taskque.h	/^	u8	package[0];$/;"	m	struct:__anon48
 package_check	.\Software\ztcc\Interface.c	/^static int package_check(void *package)$/;"	f	file:
 package_len	.\task\taskque\taskque.h	/^	s32 package_len;$/;"	m	struct:__anon48
 package_t	.\hardware\single\update.h	/^} package_t;$/;"	t	typeref:struct:__anon14
-param	.\Software\ztcc\Interface.h	/^	struct Param param;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Param
-param_t	.\Software\ztcc\Interface.h	/^} param_t;$/;"	t	typeref:struct:Param
-parent	.\hardware\ethernet\ether.h	/^	struct appitf_t *parent;$/;"	m	struct:ethernet_t	typeref:struct:ethernet_t::appitf_t
+param	.\Software\operate\operate.h	/^	struct param_t *param;	\/\/全局设置参数$/;"	m	struct:opt_param_t	typeref:struct:opt_param_t::param_t
+param	.\Software\ztcc\Interface.h	/^	struct param_t param;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::param_t
+param_t	.\Software\ztcc\Interface.h	/^typedef struct param_t{$/;"	s
+param_t	.\Software\ztcc\Interface.h	/^} param_t;$/;"	t	typeref:struct:param_t
 parent	.\task\taskque\taskque.h	/^	struct appitf_t *parent;$/;"	m	struct:Queue_t	typeref:struct:Queue_t::appitf_t
 pf	.\task\taskque\taskque.h	/^	s32 (*pf)(Node_t*node,void*);$/;"	m	struct:__anon51
 port_attr_t	.\library\e3100\libs_emfuture_odm.h	/^} port_attr_t;$/;"	t	typeref:struct:__anon25
@@ -1911,10 +1937,14 @@ prev	.\Common\list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	ty
 profile	.\sqlite\sqlite3ext.h	/^  void * (*profile)(sqlite3*,void(*)(void*,const char*,sqlite_uint64),void*);$/;"	m	struct:sqlite3_api_routines
 progress_handler	.\sqlite\sqlite3ext.h	/^  void  (*progress_handler)(sqlite3*,int,int(*)(void*),void*);$/;"	m	struct:sqlite3_api_routines
 pthread_listen	.\hardware\ethernet\ether_server.c	/^static void *pthread_listen(void *args)$/;"	f	file:
+pthread_start	.\Software\ztcc\Interface.h	/^	int pthread_start;$/;"	m	struct:appitf_t
 pthread_status	.\hardware\ethernet\ether_server.c	/^static void *pthread_status(void *args)$/;"	f	file:
 queue_type	.\task\taskque\taskque.h	/^	u32 queue_type;$/;"	m	struct:__anon49
 rParentScore	.\sqlite\sqlite3.h	/^  sqlite3_rtree_dbl rParentScore;   \/* Score of parent node *\/$/;"	m	struct:sqlite3_rtree_query_info
 rScore	.\sqlite\sqlite3.h	/^  sqlite3_rtree_dbl rScore;         \/* OUT: Write the score here *\/$/;"	m	struct:sqlite3_rtree_query_info
+r_buf	.\Software\operate\operate.h	/^	u8 *r_buf;$/;"	m	struct:opt_param_t
+r_len	.\Software\operate\operate.h	/^	int 	r_len;$/;"	m	struct:opt_param_t
+r_ptr	.\Software\operate\operate.h	/^	int 	r_ptr;$/;"	m	struct:opt_param_t
 randomness	.\sqlite\sqlite3ext.h	/^  void (*randomness)(int,void*);$/;"	m	struct:sqlite3_api_routines
 reado	.\hardware\Meter\Meter.c	/^static int reado(Meter_t *this,u8 slave_addr)$/;"	f	file:
 realloc	.\sqlite\sqlite3ext.h	/^  void *(*realloc)(void*,int);$/;"	m	struct:sqlite3_api_routines
@@ -2549,7 +2579,7 @@ xQueryPhrase	.\sqlite\sqlite3.h	/^  int (*xQueryPhrase)(Fts5Context*, int iPhras
 xRandomness	.\sqlite\sqlite3.h	/^  int (*xRandomness)(sqlite3_vfs*, int nByte, char *zOut);$/;"	m	struct:sqlite3_vfs
 xRead	.\sqlite\sqlite3.h	/^  int (*xRead)(sqlite3_file*, void*, int iAmt, sqlite3_int64 iOfst);$/;"	m	struct:sqlite3_io_methods
 xRealloc	.\sqlite\sqlite3.h	/^  void *(*xRealloc)(void*,int);  \/* Resize an allocation *\/$/;"	m	struct:sqlite3_mem_methods
-xRekey	.\sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, sqlite3_pcache_page*, $/;"	m	struct:sqlite3_pcache_methods2
+xRekey	.\sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, sqlite3_pcache_page*,$/;"	m	struct:sqlite3_pcache_methods2
 xRekey	.\sqlite\sqlite3.h	/^  void (*xRekey)(sqlite3_pcache*, void*, unsigned oldKey, unsigned newKey);$/;"	m	struct:sqlite3_pcache_methods
 xRelease	.\sqlite\sqlite3.h	/^  int (*xRelease)(sqlite3_vtab *pVTab, int);$/;"	m	struct:sqlite3_module
 xRename	.\sqlite\sqlite3.h	/^  int (*xRename)(sqlite3_vtab *pVtab, const char *zNew);$/;"	m	struct:sqlite3_module
@@ -2575,8 +2605,8 @@ xSize	.\sqlite\sqlite3.h	/^  int (*xSize)(void*);           \/* Return the size 
 xSleep	.\sqlite\sqlite3.h	/^  int (*xSleep)(sqlite3_vfs*, int microseconds);$/;"	m	struct:sqlite3_vfs
 xSync	.\sqlite\sqlite3.h	/^  int (*xSync)(sqlite3_file*, int flags);$/;"	m	struct:sqlite3_io_methods
 xSync	.\sqlite\sqlite3.h	/^  int (*xSync)(sqlite3_vtab *pVTab);$/;"	m	struct:sqlite3_module
-xTokenize	.\sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Context*, $/;"	m	struct:Fts5ExtensionApi
-xTokenize	.\sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Tokenizer*, $/;"	m	struct:fts5_tokenizer
+xTokenize	.\sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Context*,$/;"	m	struct:Fts5ExtensionApi
+xTokenize	.\sqlite\sqlite3.h	/^  int (*xTokenize)(Fts5Tokenizer*,$/;"	m	struct:fts5_tokenizer
 xTruncate	.\sqlite\sqlite3.h	/^  int (*xTruncate)(sqlite3_file*, sqlite3_int64 size);$/;"	m	struct:sqlite3_io_methods
 xTruncate	.\sqlite\sqlite3.h	/^  void (*xTruncate)(sqlite3_pcache*, unsigned iLimit);$/;"	m	struct:sqlite3_pcache_methods
 xTruncate	.\sqlite\sqlite3.h	/^  void (*xTruncate)(sqlite3_pcache*, unsigned iLimit);$/;"	m	struct:sqlite3_pcache_methods2
@@ -2590,4 +2620,4 @@ xWrite	.\sqlite\sqlite3.h	/^  int (*xWrite)(sqlite3_file*, const void*, int iAmt
 xthreadsafe	.\sqlite\sqlite3ext.h	/^  int (*xthreadsafe)(void);$/;"	m	struct:sqlite3_api_routines
 zErrMsg	.\sqlite\sqlite3.h	/^  char *zErrMsg;                  \/* Error message from sqlite3_mprintf() *\/$/;"	m	struct:sqlite3_vtab
 zName	.\sqlite\sqlite3.h	/^  const char *zName;       \/* Name of this virtual file system *\/$/;"	m	struct:sqlite3_vfs
-zigbee	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee  }  ItfWay_t;$/;"	e	enum:__anon40
+zigbee	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon40

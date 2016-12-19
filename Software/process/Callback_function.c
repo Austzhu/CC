@@ -123,6 +123,12 @@ s32 CallBack_Config(Node_t *node,void *parent)
 
 	switch(package->data[0]){
 		case 0x01:break;
+		case 0x02:
+			res = tunnel_config(package->data +1,_parent);
+			MakeShortResponse(AckBuffer,03,0xA3,0x02,res);
+			Append2Queue(AckBuffer,_parent->Queue);
+			debug(DEBUG_reset,"Tunnel config %s\n",res==SUCCESS? "success!":"error!");
+			break;
 		case 0x04:		//模式切换
 			if(package->data[1] > 0 && package->data[1] < 5){
 				_parent->param.ControlMethod = package->data[1];

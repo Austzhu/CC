@@ -12,7 +12,6 @@
 *******************************************************************/
 #include "ether_server.h"
 
-#ifdef Config_TCP_Server
 
 #define Clean_list(head,type,member)  do{\
 	type *_pos = list_entry((*head)->member.next, type, member);\
@@ -252,4 +251,3 @@ static void ser_release(server_t **this)
 	return ser;
 }
 
-#endif  //end of #ifdef Config_TCP_Server

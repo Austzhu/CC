@@ -7,44 +7,40 @@
 #!/bin/bash
 
 if [ $# -lt 1 ];then
-	echo "use ./mk.sh e6180 || ./mk.sh e3100"
+	echo "use $0 e6180 || $0 e3100"
 	exit 0
+else
+	Config_bord=$1
 fi
-Config_bord=$1
-Topdir=$PWD
-DirCom=$Topdir/Common
-DirHard=$Topdir/hardware
-DirSoft=$Topdir/Software
+
+CURDIR=${PWD}
+COMDIR=${CURDIR}/Common
+HARDIR=${CURDIR}/hardware
+SOFTDIR=${CURDIR}/Software
 
 STAGING_DIR=/
 #增加c语言的头文件搜索路径
-CPATH=$Topdir/Common:$Topdir/Common/common:$Topdir/config:$DirHard/ethernet:\
-$DirSoft/process:$DirSoft/initstart:$DirSoft/Log:$Topdir/sqlite:$Topdir/task/taskque:\
-$Topdir/User:$Topdir/version:$DirHard/serial:$DirHard/single:$DirHard/Meter:$DirSoft/Warn:\
-$DirSoft/ztcc:$DirSoft/lamp:$DirSoft/operate:$CPATH
+CPATH=${COMDIR}:${COMDIR}/common:\
+${CURDIR}/config:${CURDIR}/sqlite:${CURDIR}/task/taskque:${CURDIR}/version:\
+${HARDIR}/ethernet:${HARDIR}/serial:${HARDIR}/single:${HARDIR}/Meter:\
+${SOFTDIR}/process:${SOFTDIR}/initstart:${SOFTDIR}/Log:${SOFTDIR}/Warn:${SOFTDIR}/ztcc:\
+${SOFTDIR}/lamp:${SOFTDIR}/operate
 
-create_lib(){
-	if [ ! -f $1/libsqlite3.so ];then
-		ln -s libsqlite3.so.0.8.6 $1/libsqlite3.so && echo "Create soft link sqlite3.so suceess!"
-	fi
-	if [ ! -f $1/libsqlite3.so.0 ];then
-		ln -s libsqlite3.so.0.8.6 $1/libsqlite3.so.0 && echo "Create soft link sqlite3.so.0 suceess!"
-	fi
-}
-
-if [ ${Config_bord} == e6018 ] ; then
-	echo "*****board is e6018*****"
-	CPATH=${Topdir}/library/e6018:${Topdir}/library/sql_armv7:$CPATH
-	create_lib ${Topdir}/library/sql_armv7
-elif [ ${Config_bord} == e3100 ] ; then
-	echo "*****board is e3100*****"
-	CPATH=${Topdir}/library/e3100:${Topdir}/library/sql_armv5:$CPATH
-	create_lib ${Topdir}/library/sql_armv5
-fi
+case ${Config_bord} in
+	e6018)
+		CPATH=${CURDIR}/library/e6018:${CURDIR}/library/sql_armv7:${CPATH}
+		;;
+	e3100)
+		CPATH=${CURDIR}/library/e3100:${CURDIR}/library/sql_armv5:${CPATH}
+		;;
+	*)
+		echo "error:\"Config_bord=${Config_bord} not define\""
+		exit -1
+		;;
+esac
 
 export CPATH Config_bord STAGING_DIR
-
-#env | grep 'CPATH'
-
+env | grep 'CPATH' ; echo "" ; echo ""
+echo "*****board is ${Config_bord}*****"
 make distclean
 make && make install && echo "******make install success!******"

@@ -141,12 +141,12 @@ int CoordiConfig(u8 *package,  appitf_t *app)
 	assert_param(app,FAIL);
 
 	TableCoordi_t tab_coor;
-	tab_coor.Wl_Addr 	= *package++;
-	tab_coor.Coor_gid 	= *package++;
+	tab_coor.Wl_Addr 		= *package++;
+	tab_coor.Coor_gid 		= *package++;
 	memset(tab_coor.CC_id,0,sizeof(tab_coor.CC_id));
 	Hex2Str(tab_coor.CC_id,package,6);package += 6 ;
 	tab_coor.Base_Addr 	= *package++;
-	tab_coor.Map_Addr 	= *package;
+	tab_coor.Map_Addr		= *package;
 
 	debug(DEBUG_CC_Config,"CCUID: %s,Wl_Addr=0x%02x,Coor_gid=0x%02x,"\
 		"Base_Addr=0x%02x,Map_Addr=0x%02x\n",tab_coor.CC_id,\
@@ -215,4 +215,9 @@ int delete_sql(u8 *Pdata,appitf_t *app)
 		default:break;
 	}
 	return FAIL;
+}
+
+int tunnel_config(u8 *package,appitf_t *app)
+{
+	return SUCCESS;
 }
