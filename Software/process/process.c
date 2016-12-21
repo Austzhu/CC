@@ -42,18 +42,17 @@ int time_tick(u8 *package)
 {
 	assert_param(package,FAIL);
 	struct timeval tv = {0};
-	struct tm tm = {0};
-	tm.tm_year 	= *(package+0) + 100;
-	tm.tm_mon	= *(package+1)  - 1;
-	tm.tm_mday	= *(package+2);
-	tm.tm_hour	= *(package+4);
-	tm.tm_min  	= *(package+5);
-	tm.tm_sec   	= *(package+6);
+	struct tm tm = {
+		.tm_year 	= *(package+0) + 100,
+		.tm_mon	= *(package+1)  - 1,
+		.tm_mday	= *(package+2),
+		.tm_hour	= *(package+4),
+		.tm_min  	= *(package+5),
+		.tm_sec   	= *(package+6),
+	};
 	tv.tv_sec 		= mktime(&tm);
 	debug(DEBUG_chktime,"set linux time: %s",ctime(&tv.tv_sec));
-	if( settimeofday(&tv,NULL) != 0)
-		return FAIL;
-	return SUCCESS;
+	return  settimeofday(&tv,NULL) == 0 ? SUCCESS : FAIL;
 }
 
 int Query_time(u8 *buf,int bufsize)
@@ -79,12 +78,10 @@ int Query_time(u8 *buf,int bufsize)
 	close(fd);
 	gettime(buf,&TimeRTC);
 
-	*(pbuf+20) = SUCCESS;
-	return SUCCESS;
+	return *(pbuf+20) = SUCCESS;
 out:
 	if(fd > 0) close(fd);
-	*(pbuf+20) = FAIL;
-	return FAIL;
+	return *(pbuf+20) = FAIL;
 }
 
 int CC_Inquire_Version(u8 *buf,int size)
@@ -219,5 +216,17 @@ int delete_sql(u8 *Pdata,appitf_t *app)
 
 int tunnel_config(u8 *package,appitf_t *app)
 {
-	return SUCCESS;
+	assert_param(package,FAIL);
+	assert_param(app,FAIL);
+
+	struct { u8 one_way;  u8 speed;  u16 lenth;  u8 sensor; } tun = {
+		.one_way = *package,
+		.speed 	= *(package+1),
+		.lenth 	= *(package+2)<<8 | *(package+3),
+		.sensor	= *(package+4),
+	};
+	debug(1,"config > one_way:%d,speed:%d,lenth:%d,sensor:%d.\n",\
+		tun.one_way,tun.speed,tun.lenth,tun.sensor);
+	return app->sqlite->sql_insert(Asprintf("insert into db_tunnel_info(tun_bothway,tun_speed,"\
+		"tun_length,tun_sensor) values(%d,%d,%d,%d);",tun.one_way,tun.speed,tun.lenth,tun.sensor));
 }

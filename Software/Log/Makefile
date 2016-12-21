@@ -1,5 +1,5 @@
--include $(Rootdir)/autoconf.mk
+-include $(ROOTDIR)/autoconf.mk
 COBJS-${Config_Log} :=log.o
 OBJS += $(COBJS-y)
 all:$(COBJS-y)
-include $(Rootdir)/rules.mk
+include $(ROOTDIR)/rules.mk

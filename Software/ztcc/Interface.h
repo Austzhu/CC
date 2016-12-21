@@ -24,7 +24,9 @@
 #ifdef Config_TCP_Server
 #include "ether_server.h"
 #endif
-
+#ifdef Config_autoControl
+#include "auto_sensor.h"
+#endif
 
 
 #define Connect_ok 		0
@@ -51,15 +53,24 @@ typedef struct appitf_t {
 	int Connect_status;	//网络连接状态
 	int HeartBeat_status;	//心跳状态
 	int pthread_start;
+	pthread_t thread_Keepalive ;
+	pthread_t thread_RecvInsert;
+	pthread_t thread_UserProc ;
 	struct param_t param;
-	struct sql_t *sqlite;
-	struct Warn_t *warn;
-	struct serial_t *Serial;
-	struct Single_t *single;
+
+	#ifdef Config_serial
+	struct serial_t 	*Serial;
+	#endif
+	#ifdef Config_Sqlite
+	struct sql_t 	*sqlite;
+	#endif
+	struct Warn_t 	*warn;
+	struct Single_t 	*single;
 	struct Queue_t *Queue;
-	//struct ethernet_t *ethernet;
 	struct operate_t *opt_Itf;
-	struct server_t *tcp_server;
+	#ifdef Config_TCP_Server
+	struct server_t 	*tcp_server;
+	#endif
 	#ifdef Config_Meter
 	struct Meter_t *meter;
 	#endif

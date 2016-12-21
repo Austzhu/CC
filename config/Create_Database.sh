@@ -115,6 +115,7 @@ sqlite3 ${dbname} \
 	tun_bothway 	integer default 0,
 	tun_speed   	integer default 80,
 	tun_length   	integer default 200,
+	tun_sensor   	integer default 0,
 	PRIMARY KEY (id)
 );"
 

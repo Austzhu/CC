@@ -373,6 +373,7 @@ SingleConfig	Software\process\process.c	/^int SingleConfig(u8 *package,appitf_t 
 delete_sql	Software\process\process.c	/^int delete_sql(u8 *Pdata,appitf_t *app)$/;"	f
 gettime	Software\process\process.c	26;"	d	file:
 time_tick	Software\process\process.c	/^int time_tick(u8 *package)$/;"	f
+tunnel_config	Software\process\process.c	/^int tunnel_config(u8 *package,appitf_t *app)$/;"	f
 __PROCESS_H__	Software\process\process.h	13;"	d
 TopUser_InsertQue	Software\ztcc\Interface.c	/^static s32 TopUser_InsertQue(appitf_t *this)$/;"	f	file:
 TopUser_Keepalive	Software\ztcc\Interface.c	/^static int TopUser_Keepalive(appitf_t *this)$/;"	f	file:

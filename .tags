@@ -2400,6 +2400,7 @@ topuser	.\hardware\single\single.h	/^	struct appitf_t *topuser;$/;"	m	struct:Sin
 total_changes	.\sqlite\sqlite3ext.h	/^  int  (*total_changes)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 trace	.\sqlite\sqlite3ext.h	/^  void * (*trace)(sqlite3*,void(*xTrace)(void*,const char*),void*);$/;"	m	struct:sqlite3_api_routines
 transfer_bindings	.\sqlite\sqlite3ext.h	/^  int  (*transfer_bindings)(sqlite3_stmt*,sqlite3_stmt*);$/;"	m	struct:sqlite3_api_routines
+tunnel_config	.\Software\process\process.c	/^int tunnel_config(u8 *package,appitf_t *app)$/;"	f
 u16	.\Common\common\base_type.h	26;"	d
 u32	.\Common\common\base_type.h	27;"	d
 u8	.\Common\common\base_type.h	25;"	d

@@ -13,6 +13,52 @@
 #include "single.h"
 #include "loadfile.h"
 
+static void *KeepaliveThread(void *args)
+{
+	if(!args){
+		printf("create KeepaliveThread error!\n");
+		pthread_exit(NULL);
+	}
+	appitf_t *this = (appitf_t*)args;
+	while(this->pthread_start)
+		this->TopUser_Keepalive(this);
+	#ifdef  CFG_exitMessage
+		printf("Top KeepaliveThread exit!\n");
+	#endif
+	pthread_exit(NULL);
+}
+
+static void *RecvInsertQueueThread(void *args)
+{
+	if(!args){
+		printf("create RecvInsertQueueThread error!\n");
+		pthread_exit(NULL);
+	}
+	appitf_t *this = (appitf_t*)args;
+	while(this->pthread_start)
+		this->TopUser_InsertQue(this);
+	#ifdef  CFG_exitMessage
+		printf("Top RecvInsertQueueThread exit!\n");
+	#endif
+	pthread_exit(NULL);
+}
+
+static void *UserQueProcThread(void *args)
+{
+	if(!args){
+		printf("create UserQueProcThread error!\n");
+		pthread_exit(NULL);
+	}
+	appitf_t *this = (appitf_t*)args;
+	while(this->pthread_start)
+		this->TopUser_ProcQue(this);
+	#ifdef  CFG_exitMessage
+		printf("Top UserQueProcThread exit!\n");
+	#endif
+	pthread_exit(NULL);
+}
+
+
 static s32 inline UID_Check(appitf_t *this,void *r_uid)
 {
 	if(!this || !r_uid) return FAIL;
@@ -176,19 +222,35 @@ static int TopUser_Relese(appitf_t *this)
 	printf("  app exit!\n");
 
 	this->pthread_start = 0;
+	if(this->thread_Keepalive > 0 ){
+		pthread_join(this->thread_Keepalive,NULL);
+		printf("thread_Keepalive exit!\n");
+	}
+	if(this->thread_RecvInsert > 0 ){
+		pthread_join(this->thread_RecvInsert,NULL);
+		printf("thread_RecvInsert exit!\n");
+	}
+	if(this->thread_UserProc > 0 ){
+		pthread_join(this->thread_UserProc,NULL);
+		printf("thread_UserProc exit!\n");
+	}
+
 	DELETE(this->Queue,Que_release);
 	DELETE(this->opt_Itf,opt_relese);
 	DELETE(this->warn,warn_relese);
 	DELETE(this->single,sin_release);
+	#ifdef Config_Sqlite
 	DELETE(this->sqlite,sql_release);
+	#endif
+	#ifdef Config_serial
 	DELETE(this->Serial,serial_relese);
+	#endif
 	#ifdef Config_TCP_Server
-		DELETE(this->tcp_server,ser_release);
+	DELETE(this->tcp_server,ser_release);
 	#endif
 	#ifdef Config_Meter
-		DELETE(this->meter,meter_release);
+	DELETE(this->meter,meter_release);
 	#endif
-
 	_exit(0);
 }
 
@@ -202,27 +264,43 @@ static int appitf_init(appitf_t *this)
 	assert_param(this,FAIL);
 
 	loadParam(&g_appity);
-	this->Connect_status = Connect_error;
-	this->HeartBeat_status = HeartBeat_error;
+	this->Connect_status 		= Connect_error;
+	this->HeartBeat_status 	= HeartBeat_error;
+	this->thread_Keepalive 	= -1;
+	this->thread_RecvInsert 	= -1;
+	this->thread_UserProc 	= -1;
+	this->pthread_start 		=   1;
 
-	INIT_FAIL(this->Queue,Queue_Init,this);				/* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
-	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);	/* init for serial */
+	#ifdef Config_serial								/* init for serial */
+	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);
+	#endif
+	#ifdef Config_Sqlite
 	INIT_FAIL(this->sqlite,sql_Init);						/* init for sqlite */
+	#endif
 	INIT_FAIL(this->single,single_Init,this);				/* init for single */
 	#ifdef Config_Meter
 	INIT_FAIL(this->meter,meter_init,this);				/* init for dido */
 	#endif
-	INIT_FAIL(this->warn,warn_init,this);					/* init for warn */
+	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
 	#ifdef  Config_TCP_Server
-		INIT_FAIL(this->tcp_server,ser_init);				/* init for tcp server */
+		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
 		this->tcp_server->ser_start(g_appity.tcp_server,8889);
 	#endif
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh &");
+
+	/*  create thread */
+	pthread_create(&this->thread_Keepalive,NULL,KeepaliveThread,this);
+	pthread_create(&this->thread_RecvInsert,NULL,RecvInsertQueueThread,this);
+	pthread_create(&this->thread_UserProc,NULL,UserQueProcThread,this);
+	if(this->thread_Keepalive < 0 || this->thread_RecvInsert < 0 || this->thread_UserProc < 0){
+		printf("create pthread error!\n");
+		return FAIL;
+	}
 	/* catch signal "ctrl+c" to exit application */
 	signal(SIGINT,app_exit);
-	this->pthread_start = 1;
 	return SUCCESS;
 }
 

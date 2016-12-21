@@ -14,6 +14,10 @@
 	#define Config_EC_6018
 	#define Config_Log
 	#define Config_operate
+	#define Config_autoControl
+	#define Config_ether
+	#define Config_serial
+	#define Config_Sqlite
 #elif defined(BORD_E3100)
 	#define Config_TCP_Server
 	#define Config_wizdom

@@ -24,7 +24,7 @@ CPATH=${COMDIR}:${COMDIR}/common:\
 ${CURDIR}/config:${CURDIR}/sqlite:${CURDIR}/task/taskque:${CURDIR}/version:\
 ${HARDIR}/ethernet:${HARDIR}/serial:${HARDIR}/single:${HARDIR}/Meter:\
 ${SOFTDIR}/process:${SOFTDIR}/initstart:${SOFTDIR}/Log:${SOFTDIR}/Warn:${SOFTDIR}/ztcc:\
-${SOFTDIR}/lamp:${SOFTDIR}/operate
+${SOFTDIR}/lamp:${SOFTDIR}/operate:${SOFTDIR}/auto_control
 
 case ${Config_bord} in
 	e6018)
@@ -40,7 +40,7 @@ case ${Config_bord} in
 esac
 
 export CPATH Config_bord STAGING_DIR
-env | grep 'CPATH' ; echo "" ; echo ""
+#env | grep 'CPATH' ; echo "" ; echo ""
 echo "*****board is ${Config_bord}*****"
 make distclean
 make && make install && echo "******make install success!******"

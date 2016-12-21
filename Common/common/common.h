@@ -48,13 +48,14 @@ extern char MessageBuffer[];
 	ptr;\
 })
 
-#define DELETE(ptr,func) do{\
-	if(ptr){\
-		if((ptr)->func){\
-			(ptr)->func(&ptr);\
-			if(ptr){ free(ptr); ptr = NULL;  }\
-		}else{  free(ptr);  ptr = NULL;  }\
-	}\
+#define DELETE(ptr,func,args...) do{\
+	if(ptr && (ptr)->func ) \
+		(ptr)->func(&ptr,##args);\
+	if(!ptr) free(ptr); ptr = NULL;\
+}while(0)
+
+#define DELETE_NPTR(ptr,func) do{\
+	(ptr)->func((typeof(ptr)*)ptr,0);\
 }while(0)
 
 #define FREE(ptr) do{\
@@ -67,6 +68,10 @@ extern char MessageBuffer[];
 }while(0)
 
 #define INIT_FAIL(ptr,func,args...)  INIT(ptr,func,FAIL,NULL,##args)
+
+#define INIT_NPTR(ptr,func,rtn,args...) do{\
+	if(NULL == func(ptr,##args)) return rtn;\
+}while(0)
 
 extern int get_check_sum(void *pkg,int size);
 extern char* Hex2Str(char*dest,const u8 *src,int size);

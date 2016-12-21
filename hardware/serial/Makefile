@@ -1,5 +1,5 @@
--include $(Rootdir)/autoconf.mk
-COBJS-y :=serial.o
+-include $(ROOTDIR)/autoconf.mk
+COBJS-${Config_serial} :=serial.o
 OBJS += $(COBJS-y)
 all:$(COBJS-y)
-include $(Rootdir)/rules.mk
+include $(ROOTDIR)/rules.mk

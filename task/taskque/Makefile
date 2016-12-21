@@ -1,5 +1,5 @@
--include $(Rootdir)/autoconf.mk
+-include $(ROOTDIR)/autoconf.mk
 COBJS-y :=taskque.o
 OBJS += $(COBJS-y)
 all:$(COBJS-y)
-include $(Rootdir)/rules.mk
+include $(ROOTDIR)/rules.mk

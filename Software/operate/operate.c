@@ -107,8 +107,10 @@ static void opt_relese(struct operate_t **this)
 
 	switch((*this)->opt_param.param->ItfWay){
 		case ether_net:
+		#ifdef Config_ether
 			((ethernet_t*)(*this)->opt_Itfway)->ether_relese( (ethernet_t**)&((*this)->opt_Itfway) );
 			(*this)->opt_Itfway = NULL;
+		#endif
 			break;
 		case gprs:break;
 		case zigbee:break;
@@ -138,8 +140,10 @@ operate_t *operate_init(struct operate_t *this, struct param_t *param)
 	this->opt_param.param = param;
 	switch(param->ItfWay){
 		case ether_net:
+		#ifdef Config_ether
 			this->opt_Itfway = ether_Init(this->opt_Itfway,&(this->opt_param));
 			if(!this->opt_Itfway) goto out;
+		#endif
 			break;
 		case gprs:break;
 		case zigbee:break;

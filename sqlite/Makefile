@@ -1,5 +1,5 @@
--include $(Rootdir)/autoconf.mk
-COBJS-y :=database.o
+-include $(ROOTDIR)/autoconf.mk
+COBJS-${Config_Sqlite} :=database.o
 OBJS += $(COBJS-y)
 all:$(COBJS-y)
-include $(Rootdir)/rules.mk
+include $(ROOTDIR)/rules.mk

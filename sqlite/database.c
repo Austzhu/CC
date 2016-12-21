@@ -28,7 +28,7 @@ static int sql_Insert(const char *sql)
 	}
 	/* 开启外键约束 */
 	sqlite3_exec(db,"PRAGMA foreign_keys = ON;", NULL, NULL,NULL);
-	debug(DEBUG_sqlite3,"Sql: %s\n",sql);
+	//debug(DEBUG_sqlite3,"Sql: %s\n",sql);
 	/* 准备对象 */
 	res = sqlite3_prepare_v2(db,sql,strlen(sql),&stmt,NULL);
 	if( SQLITE_OK !=  res ){
