@@ -55,7 +55,7 @@ extern char MessageBuffer[];
 }while(0)
 
 #define DELETE_NPTR(ptr,func) do{\
-	(ptr)->func((typeof(ptr)*)ptr,0);\
+	(ptr)->func((typeof(ptr)*)ptr,false);\
 }while(0)
 
 #define FREE(ptr) do{\

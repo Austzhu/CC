@@ -162,7 +162,7 @@ static int sql_update(const char *table,const char *Condition)
  * 		如果没有字符串，可变参数传入0即可
  * 	成功返回SUCCESS ，失败返回FAIL
  * eg:	struct {int CoordiAddr;int SingleAddr;}buf[1000];
- * 	Select_Table_V2( sql,  (char*)buf,   sizeof(buf[0]),   sizeof(buf)/sizeof(buf[0]),  0);
+ * 	sql_select( sql,  (char*)buf,   sizeof(buf[0]),   sizeof(buf)/sizeof(buf[0]),  0);
  */
 static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)
 {

@@ -18,11 +18,10 @@ typedef enum{ traffic = 0, light } value_t;
 typedef struct sensor_t {
 	int traffic[COLLECT_CNT];
 	int light[COLLECT_CNT];
-	pthread_mutex_t sensor_lock;
-	pthread_t sensor_thread;
-	int sensor_start;
 
 	int (*sensor_get_values)(struct sensor_t*,value_t);
+	int (*sensor_get_stream)(struct sensor_t*);
+	int (*sensor_get_light)(struct sensor_t*);
 	void (*sensor_release)(struct sensor_t**,int);
 
 } sensor_t;

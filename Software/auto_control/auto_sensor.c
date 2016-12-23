@@ -10,47 +10,66 @@
 ** 版　本:	V1.0
 *******************************************************************/
 #include "auto_sensor.h"
-static int sensor_get_values(struct sensor_t *this, value_t value)
-{
-	assert_param(this,0);
 
-	int max, min, sum = 0;
-	int *buffer = (value == traffic) ? this->traffic : this->light;
-	max=min = *buffer;
-	for(int i=0; i++< COLLECT_CNT; ){
-		sum +=  *buffer;
-		if(*buffer > max) max = *buffer;
-		else if(*buffer < min)  min = *buffer;
-		++buffer;
+static int sensor_get_values(struct sensor_t *this, value_t flags)
+{
+	assert_param(this,false);
+
+	static int ave = 0;
+	int sum = 0, cnt = 0;
+	int *buffer = NULL;
+	switch(flags){
+		case traffic:
+			buffer = this->traffic;
+			this->sensor_get_stream(this);
+			break;
+		case light:
+			buffer = this->light;
+			this->sensor_get_light(this);
+			break;
+		default:
+			return false;
 	}
-	return (sum-max-min)/(COLLECT_CNT-2);
+	int max = *buffer, min = *buffer;
+
+	for(int i=0; i++ < COLLECT_CNT; ++buffer){
+		if(ave > 0){
+			if(*buffer > ave/2 /* 50% */ && *buffer < ave*3/2 /* 150% */){
+				*buffer > max ? max = *buffer : (*buffer < min ? min = *buffer : 0);
+				sum += *buffer;  ++cnt;
+			}
+		}else{
+			if(*buffer > 0){
+				*buffer > max ? max = *buffer : (*buffer < min ? min = *buffer : 0);
+				sum +=  *buffer;  ++cnt;
+			}
+		}
+	}
+	ave = cnt > 5 ? (sum-max-min)/(cnt-2) : sum/cnt;
+	return ave;
+}
+
+static int sensor_get_stream(struct sensor_t *this)
+{
+	assert_param(this,false);
+	static int index = 0;
+	this->traffic[index++] = rand()%1500;
+	index %= COLLECT_CNT;
+	return true;
+}
+static int sensor_get_light(struct sensor_t *this)
+{
+	assert_param(this,false);
+	static int index = 0;
+	this->light[index++] = rand()%4500;
+	index %= COLLECT_CNT;
+	return true;
 }
 
 static void sensor_release(struct sensor_t **this,int Is_ptr)
 {
 	assert_param(this,;);
-	sensor_t *_this = Is_ptr ? *this : (sensor_t *)this;
-	_this->sensor_start = 0;
-	pthread_join(_this->sensor_thread, NULL);
 	if(Is_ptr)  FREE(*this);
-
-}
-
-void *sensor_pthread(void *args)
-{
-	sensor_t *this = args;
-	srand(time(NULL));
-	static int index = 0;
-	while(this->sensor_start){
-		pthread_mutex_lock(&this->sensor_lock);
-		this->traffic[index] = rand();
-		this->light[index] = rand();
-		pthread_mutex_unlock(&this->sensor_lock);
-		++index;
-		index %= COLLECT_CNT;
-		msleep(1000);
-	}
-	pthread_exit(NULL);
 }
 
 sensor_t *sensor_init(struct sensor_t *this)
@@ -61,15 +80,12 @@ sensor_t *sensor_init(struct sensor_t *this)
 		if(!this)  return NULL;
 	}
 	bzero(this,sizeof(sensor_t));
-	pthread_mutex_init(&this->sensor_lock,NULL);
+	srand(time(NULL));
 
 	this->sensor_get_values = sensor_get_values;
+	this->sensor_get_stream = sensor_get_stream;
+	this->sensor_get_light = sensor_get_light;
 	this->sensor_release = sensor_release;
-	this->sensor_start = 1;
-	if(0 != pthread_create(&this->sensor_thread,NULL,sensor_pthread,this))
-		goto out;
+
 	return this;
- out:
- 	if(!temp) FREE(this);
- 	return NULL;
 }

@@ -19,7 +19,7 @@ int main(int argc,char *argv[])
 		debug(DEBUG_app,"system init error!\n");
 		g_appity.TopUser_relese(&g_appity);
 	}
-	while(1){
+	while(true){
 		sleep(1000);
 	}
 }

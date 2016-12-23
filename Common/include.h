@@ -28,6 +28,7 @@
 #include <netinet/tcp.h>
 #include <sys/reboot.h>
 #include <sys/timeb.h>
+#include <stdbool.h>
 
 
 #include "debug.h"
