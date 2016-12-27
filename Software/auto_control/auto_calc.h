@@ -37,7 +37,7 @@ typedef struct calc_t{
 	int (*calc_light_base)(struct calc_t*);
 	int (*calc_light_exit)(struct calc_t*);
 	void (*calc_release)(struct calc_t**,int);
-}calc_t;
+} calc_t;
 
 extern calc_t *calc_init(struct calc_t *this);
 

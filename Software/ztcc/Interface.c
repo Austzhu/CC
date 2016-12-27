@@ -251,6 +251,9 @@ static int TopUser_Relese(appitf_t *this)
 	#ifdef Config_Meter
 	DELETE(this->meter,meter_release);
 	#endif
+	#ifdef  Config_autoControl
+	DELETE(this->auto_mode,control_release,true);
+	#endif
 	_exit(0);
 }
 
@@ -270,8 +273,10 @@ static int appitf_init(appitf_t *this)
 	this->thread_RecvInsert 	= -1;
 	this->thread_UserProc 	= -1;
 	this->pthread_start 		=   1;
+	if( access("cc_corl.db",F_OK))
+		system("./config/Create_Database.sh");
 
-	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);				/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
 	#ifdef Config_serial								/* init for serial */
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);
@@ -288,8 +293,10 @@ static int appitf_init(appitf_t *this)
 		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
 		this->tcp_server->ser_start(g_appity.tcp_server,8889);
 	#endif
-	if( access("cc_corl.db",F_OK))
-		system("./config/Create_Database.sh &");
+	#ifdef  Config_autoControl
+		INIT_FAIL(this->auto_mode,control_init,this->single);
+		this->auto_mode->control_start(this->auto_mode);
+	#endif
 
 	/*  create thread */
 	pthread_create(&this->thread_Keepalive,NULL,KeepaliveThread,this);

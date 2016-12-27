@@ -30,7 +30,7 @@ static int sensor_get_values(struct sensor_t *this, value_t flags)
 		default:
 			return false;
 	}
-	int max = *buffer, min = *buffer;
+	int max = *buffer, min = max;
 
 	for(int i=0; i++ < COLLECT_CNT; ++buffer){
 		if(ave > 0){

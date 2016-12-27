@@ -8,6 +8,8 @@ Table_Tasklist=db_tasklist
 Table_Warn=db_warn
 Table_info=db_info_light
 Table_tunnel=db_tunnel_info
+Table_pwm_Index=db_index_pwm
+Table_group_info=db_group_info
 
 #开启外键支持
 sqlite3 ${dbname} "PRAGMA foreign_keys = ON;"
@@ -22,7 +24,7 @@ sqlite3 ${dbname} \
 	Coor_gid 	integer NOT NULL,
 	CC_id		text 	NOT NULL,
 	Map_Addr 	integer NOT NULL,
-	Warn_flags integer default 0,
+	Warn_flags	integer default 0,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
 	CHECK (Base_Addr < 0xff AND Base_Addr > 0x20)
@@ -58,7 +60,7 @@ sqlite3 ${dbname} \
 	light_E 			integer default 0,
 	light_P 			integer default 0,
 	light_V 			integer default 0,
-	light_D 		integer default 0,
+	light_D 			integer default 0,
 	rtime 			integer default 0,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
@@ -118,6 +120,27 @@ sqlite3 ${dbname} \
 	tun_sensor   	integer default 0,
 	PRIMARY KEY (id)
 );"
+
+sqlite3 ${dbname}  "drop table if exists ${Table_pwm_Index} ;"
+sqlite3 ${dbname} \
+"create table ${Table_pwm_Index}(
+	id 			integer,
+	level 		integer NOT NULL,
+	light_min	integer NOT NULL,
+	light_max	integer NOT NULL,
+	PRIMARY KEY (id)
+);"
+
+sqlite3 ${dbname}  "drop table if exists ${Table_group_info} ;"
+sqlite3 ${dbname} \
+"create table ${Table_group_info}(
+	id 			integer,
+	gid 			integer NOT NULL,
+	pwm_value	integer default 0,
+	PRIMARY KEY (id)
+);"
+
+
 
 #建立唯一性约束索引(升序)
 sqlite3 ${dbname} "CREATE UNIQUE INDEX ${Table_Coordi}_index_id ON ${Table_Coordi}(id ASC);"

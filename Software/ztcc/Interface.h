@@ -25,6 +25,8 @@
 #include "ether_server.h"
 #endif
 #ifdef Config_autoControl
+#include "auto_control.h"
+#include "auto_calc.h"
 #include "auto_sensor.h"
 #endif
 
@@ -73,6 +75,9 @@ typedef struct appitf_t {
 	#endif
 	#ifdef Config_Meter
 	struct Meter_t *meter;
+	#endif
+	#ifdef  Config_autoControl
+		control_t *auto_mode;
 	#endif
 
 	int (*const TopUser_Uidchk)(struct appitf_t *this,void*r_uid);

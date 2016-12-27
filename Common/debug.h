@@ -47,6 +47,8 @@ typedef enum{
 #define DEBUG_reset 			1
 #define DEBUG_server 		1
 #define DEBUG_config 		1
+#define DEBUG_autocontrol 	1
+#define DEBUG_auto 			1
 
 
 #if 	MY_DEBUG == 1

@@ -107,9 +107,9 @@ static int calc_light_base(struct calc_t *this)
 	struct { int speed; int max; int min;} table_base[] = {
 		[0] = { .speed = 120, 	.max = 10000, 	.min = 4500 },
 		[1] = { .speed = 100, 	.max = 10000, 	.min = 4500 },
-		[2] = { .speed = 80,  	.max = 10000, 	.min = 4500 },
-		[3] = { .speed = 60,  	.max = 10000, 	.min = 4500 },
-		[4] = { .speed = 40,  	.max = 10000, 	.min = 4500 }
+		[2] = { .speed = 80,   	.max = 10000, 	.min = 4500 },
+		[3] = { .speed = 60,   	.max = 10000, 	.min = 4500 },
+		[4] = { .speed = 40,   	.max = 10000, 	.min = 4500 }
 	};
 	int Index = 0;
 repeat:
