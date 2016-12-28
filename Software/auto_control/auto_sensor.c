@@ -13,7 +13,7 @@
 
 static int sensor_get_values(struct sensor_t *this, value_t flags)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 
 	static int ave = 0;
 	int sum = 0, cnt = 0;
@@ -28,7 +28,7 @@ static int sensor_get_values(struct sensor_t *this, value_t flags)
 			this->sensor_get_light(this);
 			break;
 		default:
-			return false;
+			return FAIL;
 	}
 	int max = *buffer, min = max;
 
@@ -51,19 +51,19 @@ static int sensor_get_values(struct sensor_t *this, value_t flags)
 
 static int sensor_get_stream(struct sensor_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 	static int index = 0;
 	this->traffic[index++] = rand()%1500;
 	index %= COLLECT_CNT;
-	return true;
+	return SUCCESS;
 }
 static int sensor_get_light(struct sensor_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 	static int index = 0;
 	this->light[index++] = rand()%4500;
 	index %= COLLECT_CNT;
-	return true;
+	return SUCCESS;
 }
 
 static void sensor_release(struct sensor_t **this,int Is_ptr)

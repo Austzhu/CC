@@ -15,6 +15,21 @@
 #include "taskque.h"
 #include "update.h"
 
+#define Set_db_group_info(p_sql,gid,val) do{\
+	int cnt = 0;\
+	if( (gid) < 0){\
+		(p_sql)->sql_update("db_group_info",Asprintf("set pwm_value=%d ",(val)));\
+		break;\
+	}\
+	if(SUCCESS != (p_sql)->sql_select(Asprintf("select count(*) from "\
+		"db_group_info where gid=%d;",(gid) ),(char*)&cnt,sizeof(int),1,0)) break;\
+	if(cnt > 0){	/* 表中存在 */\
+		(p_sql)->sql_update("db_group_info",Asprintf("set pwm_value=%d where gid=%d",(val),(gid)));\
+	}else{	/* 表中不存在 */\
+		(p_sql)->sql_insert(Asprintf("insert into db_group_info(gid,pwm_value) values(%d,%d); ",(gid),(val)));\
+	}\
+}while(0)
+
 #define GetSingleCunt    30
 #define Query_res             0x80
 #define Query_nores        0

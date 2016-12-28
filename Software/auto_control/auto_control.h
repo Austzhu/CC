@@ -29,7 +29,7 @@ typedef struct control_t{
 	int (*control_getvalues)(struct control_t*);
 	int (*control_limit)(struct control_t*);
 	int (*control_openloop)(struct control_t*);
-	int (*control_output)(struct control_t*,int group);
+	int (*control_output)(struct control_t*,int group, int light);
 	int (*control_start)(struct control_t*);
 	int (*control_stop)(struct control_t*);
 	int (*control_PID)(struct control_t*);

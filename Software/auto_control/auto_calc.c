@@ -21,7 +21,7 @@
  */
 static int calc_K(struct calc_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 	/*  入口段亮度折减系数K,扩大了100000倍 */
 	struct {int speed; int max; int min;} table_K[] ={
 		[0] = {.speed = 120,	.max = 7000,  .min = 5000 },
@@ -58,23 +58,23 @@ repeat:
 
 static int calc_light_enter(struct calc_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 
 	int K = this->calc_K(this);
 	this->args.extern_light = this->sensor->sensor_get_values(this->sensor,light);
 	this->args.light_enter[0] = (K * this->args.extern_light)/100000; 	//入口1段
 	this->args.light_enter[1] = this->args.light_enter[0]/2;				//入口2段
-	return true;
+	return SUCCESS;
 }
 
 static int calc_light_transit(struct calc_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 	int Le = this->args.light_enter[0];
 	this->args.light_transit[0] = 15*Le/100;
 	this->args.light_transit[1] =    5*Le/100;
 	this->args.light_transit[2] =    2*Le/100;
-	return true;
+	return SUCCESS;
 }
 
 
@@ -101,7 +101,7 @@ static int calc_light_transit(struct calc_t *this)
  */
 static int calc_light_base(struct calc_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 
 	/* 基本段亮度计算值，扩大1000倍。 */
 	struct { int speed; int max; int min;} table_base[] = {
@@ -131,20 +131,21 @@ repeat:
 	/*   系数扩大了1000倍。 */
 	int K = (table_base[Index].max - table_base[Index].min)/\
 		(this->args.bothway == 0 ? 850/* 单车道(1200-350) */ : 470/* 双向车道(650-180) */);
-	this->args.light_base = (table_base[Index].min + K * this->args.extern_stream)/1000  ;
-	if(this->args.light_base > table_base[Index].max)
-		this->args.light_base = table_base[Index].max;
-	return true;
+	this->args.light_base[0] = (table_base[Index].min + K * this->args.extern_stream)  ;
+	if(this->args.light_base[0] > table_base[Index].max)
+		this->args.light_base[0] = table_base[Index].max;
+	this->args.light_base[0] /= 1000;
+	return SUCCESS;
 }
 
 static int calc_light_exit(struct calc_t *this)
 {
-	assert_param(this,false);
+	assert_param(this,FAIL);
 
-	int Lb = this->args.light_base;
+	int Lb = this->args.light_base[0];
 	this->args.light_exit[0] = 3 * Lb;
 	this->args.light_exit[1] = 5 * Lb;
-	return true;
+	return SUCCESS;
 }
 
 static void calc_release(struct calc_t **this,int Is_ptr)

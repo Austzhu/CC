@@ -188,6 +188,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->sin_reply(this,02,0x42,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,1,so_group,0xff&(Addr>>16));
+			Set_db_group_info(this->topuser->sqlite,(Addr>>24)&0xff,(light>>8)&0xff);
 			break;
 		case cmd_broadcast:
 			MakeSinglePack(&single,0x04,0x0001,Addr,light);
@@ -199,6 +200,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->sin_reply(this,03,0x42,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,1,so_brocast,0);
+			Set_db_group_info(this->topuser->sqlite,-1,(light>>8)&0xff);
 			break;
 		case cmd_grouplight:
 			MakeSinglePack(&single,0x02,0x0001,Addr,light);
@@ -210,6 +212,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->sin_reply(this,02,0x47,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,1,so_group,0xff&(Addr>>16));
+			Set_db_group_info(this->topuser->sqlite,(Addr>>24)&0xff,(light>>8)&0xff);
 			break;
 		case cmd_broadlight:
 			MakeSinglePack(&single,0x04,0x0001,Addr,light);
@@ -221,6 +224,7 @@ static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)
 			this->sin_reply(this,03,0x47,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,1,so_brocast,0);
+			Set_db_group_info(this->topuser->sqlite,-1,(light>>8)&0xff);
 			break;
 		default:
 			debug(DEBUG_single,"Unknow sin_close cmd:%d\n",cmd);
@@ -270,6 +274,7 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			this->sin_reply(this,02,0x43,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,0,so_group,0xff&(Addr>>16));
+			Set_db_group_info(this->topuser->sqlite,(Addr>>24)&0xff,0);
 			break;
 		case cmd_broadcast:
 			MakeSinglePack(&single,0x04,0x0002,Addr,0);
@@ -281,6 +286,7 @@ static int sin_close(Single_t *this,int cmd, u32 Addr)
 			this->sin_reply(this,03,0x43,res);
 			/*  set operate_flags */
 			topuser->warn->warn_setflags(topuser->warn,0,so_brocast,0);
+			Set_db_group_info(this->topuser->sqlite,-1,0);
 			break;
 		default:
 			debug(DEBUG_single,"Unknow sin_close cmd:%d\n",cmd);
