@@ -18,11 +18,11 @@ typedef struct list_head {
 
 #define LIST_HEAD(name) struct list_head name = LIST_HEAD_INIT(name)
 
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#define offset_of(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
 #define container_of(ptr, type, member) ({\
         const typeof( ((type *)0)->member ) *__mptr = (ptr);\
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+        (type *)( (char *)__mptr - offset_of(type,member) );})
 
 extern int __list_del_entry(struct list_head*);
 

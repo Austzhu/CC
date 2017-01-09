@@ -1,3 +1,3 @@
 %.o:%.c
-	$(CC) $(CFLAGS) $(DFLAGS) -c -o $(ROOTDIR)/$(output)/$@  	$<
+	$(CC)  $(CFLAGS) $(DFLAGS) -c -o $(ROOTDIR)/$(output)/$@  	$<
 $(COBJS-y):

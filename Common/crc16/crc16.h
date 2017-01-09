@@ -14,13 +14,10 @@
 #define __CRC_H__
 #include "include.h"
 
-typedef struct CRC_t{
-	int (*CRCHL_get)(char*,const char*,int);
-	int (*CRCHL_check)(const char*,const char*,int);
-	int (*CRCLH_get)(char*,const char*,int);
-	int (*CRCLH_check)(const char*,const char*,int);
-	void (*CRC_release)(struct CRC_t**);
-} CRC_t;
+extern int crc_hight(unsigned char *crc,unsigned char *puchMsg, int usDataLen);
+extern int crc_low(unsigned char *crc,unsigned char *puchMsg, int usDataLen);
+extern int crc_cmp_hight(uint8_t *crc,  uint8_t *puchMsg,  int usDataLen);
+extern int crc_cmp_low(uint8_t *crc,  uint8_t *puchMsg,  int usDataLen);
 
-extern CRC_t *CRC_init(CRC_t *);
+
 #endif

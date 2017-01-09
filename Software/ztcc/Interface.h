@@ -30,6 +30,9 @@
 #include "auto_sensor.h"
 #endif
 
+#ifdef Config_UART
+#include "UART.h"
+#endif
 
 #define Connect_ok 		0
 #define Connect_error 	-1
@@ -37,6 +40,16 @@
 #define HeartBeat_error 	-1
 
 typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;
+
+typedef struct {
+	unsigned char head;		//=68H
+	unsigned char rtua[6];
+	unsigned char dep;			//=68H
+	unsigned char ctrl;			//控制域C
+	unsigned char len;			//data length
+	unsigned char data[0];
+} faalpkt_t;
+
 
 typedef struct param_t{
 	u8 CCUID[6]; 			//集中控制器的UID

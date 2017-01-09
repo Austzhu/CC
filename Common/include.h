@@ -33,11 +33,10 @@
 
 #include "debug.h"
 #include "base_type.h"
-#include "frame.h"
 #include "err_code.h"
 #include "config.h"
 #include "version.h"
 #include "common.h"
 #include "log.h"
-
+#include "crc16.h"
 #endif	//end of __include_h__

@@ -32,24 +32,26 @@ typedef enum{
 #define DEBUG_inqTime 		1 		//查询时间命令调试
 #define DEBUG_inqVersion	1		//查询版本号
 #define DEBUG_DIDO 			1 		//DIDO调试
-#define DEBUG_Broadcast 	1 		//广播命令
+#define DEBUG_Broadcast 		1 		//广播命令
 #define DEBUG_sqlite3 		1 		//sqlite数据库调试
 #define DEBUG_coordinate 	1		//协调器的调试宏
-#define DEBUG_single 		1 		//单灯
+#define DEBUG_single 			1 		//单灯
 #define DEBUG_loadfile 		1		//加载配置文件调试宏
 #define DEBUG_list 			1
 #define DEBUG_update 		1		//升级程序调试宏
-#define DEBUG_DelSql		1
+#define DEBUG_DelSql			1
 
 #define DEBUG_Ethnet 		1 		//网络调试宏
 #define DEBUG_Queue 		1
 #define DEBUG_app 			1
 #define DEBUG_reset 			1
-#define DEBUG_server 		1
-#define DEBUG_config 		1
+#define DEBUG_server 			1
+#define DEBUG_config 			1
 #define DEBUG_autocontrol 	1
 #define DEBUG_auto 			1
-
+#define DEBUG_autosensor 	1
+#define DEBUG_UART 			1
+#define DEBUG_sensor 		1
 
 #if 	MY_DEBUG == 1
 	#define debug(level,fmt,args...)  do{ if(level<=LEVEL) printf(fmt,##args); }while(0)

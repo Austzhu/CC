@@ -14,7 +14,6 @@
 #define __WIZDOM_H__
 #include "include.h"
 #include "ether_server.h"
-#include "CRC.h"
 
 enum {
 	Register_brigt 		= 0x0100, 		//光照
@@ -29,7 +28,7 @@ typedef struct { u8 addr;  int Register;  void *result;  int result_size; } resu
 
 typedef struct wizdom_t{
 	server_t *ether_server;
-	CRC_t *crc;
+	//CRC_t *crc;
 	int (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);
 	int (*wiz_getaddr)(struct wizdom_t*);
 	int (*wiz_setaddr)(struct wizdom_t*,char addr);

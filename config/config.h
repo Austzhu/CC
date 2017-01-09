@@ -8,6 +8,11 @@
 #define __config_h__
 
 #define BARD_E6018
+#define Config_ztcc
+
+#if !defined(Config_ztcc) && !defined(Config_lamp)
+#error "must define one of 'Config_ztcc, Config_lamp'"
+#endif
 
 #if defined(BARD_E6018)
 	#define Config_Meter
@@ -18,6 +23,7 @@
 	#define Config_ether
 	#define Config_serial
 	#define Config_Sqlite
+	#define Config_UART
 #elif defined(BORD_E3100)
 	#define Config_TCP_Server
 	#define Config_wizdom
@@ -36,9 +42,9 @@
 #endif
 
 #define CFG_COM485 			1 		//和协调器通讯的串口
-#define CFG_COMDIDO			3 		//和扩展DIDO通讯的串口
+#define CFG_COMDIDO		3 		//和扩展DIDO通讯的串口
 #define CFG_PWMAX			0x1D 	//PWM的峰值
-//#define CFG_PWM_N 					//负极性的pwm
+//#define CFG_PWM_N 				//负极性的pwm
 //#define CFG_MC_ARM335X 			 //支持Ti-AM335x开发板
 //#define CFG_showPackage 			//是否打印回复上位机的数据包
 //#define CFG_exitMessage

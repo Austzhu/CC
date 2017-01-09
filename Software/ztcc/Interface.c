@@ -58,7 +58,6 @@ static void *UserQueProcThread(void *args)
 	pthread_exit(NULL);
 }
 
-
 static s32 inline UID_Check(appitf_t *this,void *r_uid)
 {
 	if(!this || !r_uid) return FAIL;
@@ -269,14 +268,14 @@ static int appitf_init(appitf_t *this)
 	loadParam(&g_appity);
 	this->Connect_status 		= Connect_error;
 	this->HeartBeat_status 	= HeartBeat_error;
-	this->thread_Keepalive 	= -1;
+	this->thread_Keepalive 		= -1;
 	this->thread_RecvInsert 	= -1;
-	this->thread_UserProc 	= -1;
+	this->thread_UserProc 		= -1;
 	this->pthread_start 		=   1;
 	if( access("cc_corl.db",F_OK))
 		system("./config/Create_Database.sh");
 
-	INIT_FAIL(this->Queue,Queue_Init,this);				/* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);		/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
 	#ifdef Config_serial								/* init for serial */
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);
@@ -290,12 +289,12 @@ static int appitf_init(appitf_t *this)
 	#endif
 	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
 	#ifdef  Config_TCP_Server
-		INIT_FAIL(this->tcp_server,ser_init);			/* init for tcp server */
+		INIT_FAIL(this->tcp_server,ser_init);				/* init for tcp server */
 		this->tcp_server->ser_start(g_appity.tcp_server,8889);
 	#endif
 	#ifdef  Config_autoControl
 		INIT_FAIL(this->auto_mode,control_init,this->single);
-		this->auto_mode->control_start(this->auto_mode);
+		//this->auto_mode->control_start(this->auto_mode);
 	#endif
 
 	/*  create thread */

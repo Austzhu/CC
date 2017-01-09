@@ -19,7 +19,7 @@ static int wiz_Query(struct wizdom_t*this,client_t *client,result_t *res)
 	char buffer[12] = {res->addr,3,0,0,0,2,0};
 	buffer[2] = (res->Register>>8)&0xff;
 	buffer[3] = (res->Register)&0xff;
-	this->crc->CRCLH_get(buffer+6,buffer,6);
+	crc_low((uint8_t*)buffer+6,(uint8_t*)buffer,6);
 	this->wiz_display("Send:",buffer,8);
 
 	/* clear kernel recv buffer */
@@ -33,7 +33,7 @@ static int wiz_Query(struct wizdom_t*this,client_t *client,result_t *res)
 		return FAIL;
 	}
 	this->wiz_display("Recv:",buffer,9);
-	if(SUCCESS != this->crc->CRCLH_check(buffer+7,buffer,7)){
+	if(SUCCESS != crc_cmp_low((uint8_t*)buffer+7,(uint8_t*)buffer,7)){
 		err_Print(1,"CRC check error!\n");
 		return FAIL;
 	}
@@ -62,7 +62,7 @@ static int wiz_Query(struct wizdom_t*this,client_t *client,result_t *res)
 static int wiz_getaddr(struct wizdom_t*this)
 {
 	char buffer[12] = {0xff,6,0,3,0};
-	this->crc->CRCLH_get(buffer+6,buffer,6);
+	crc_low((uint8_t*)buffer+6,(uint8_t*)buffer,6);
 	this->wiz_display("Send:",buffer,8);
 
 	client_t *client = list_entry(this->ether_server->client_header->entries.next, client_t, entries);
@@ -85,7 +85,7 @@ static int wiz_getaddr(struct wizdom_t*this)
 static int wiz_setaddr(struct wizdom_t*this,char addr)
 {
 	char buffer[12] = {0xff,6,0,2,0,addr,0};
-	this->crc->CRCLH_get(buffer+6,buffer,6);
+	crc_low((uint8_t*)buffer+6,(uint8_t)buffer,6);
 	this->wiz_display("Send:",buffer,8);
 
 	client_t *client = list_entry(this->ether_server->client_header->entries.next, client_t, entries);
@@ -118,7 +118,7 @@ static void wiz_release(struct wizdom_t**this)
 {
 	if(!this || !*this) return ;
 	DELETE((*this)->ether_server,ser_release);
-	DELETE((*this)->crc,CRC_release);
+	//DELETE((*this)->crc,CRC_release);
 	FREE(*this);
 }
 
@@ -135,12 +135,12 @@ wizdom_t *wiz_init(wizdom_t *this)
 		if(!fist) FREE(this);
 		return NULL;
 	}
-	this->crc = CRC_init(NULL);
-	if(!this->crc){
-		DELETE(this->ether_server,ser_release);
-		if(!fist) FREE(this);
-		return NULL;
-	}
+	// this->crc = CRC_init(NULL);
+	// if(!this->crc){
+	// 	DELETE(this->ether_server,ser_release);
+	// 	if(!fist) FREE(this);
+	// 	return NULL;
+	// }
  	this->wiz_Query = wiz_Query;
 	this->wiz_getaddr = wiz_getaddr;
 	this->wiz_setaddr = wiz_setaddr;

@@ -131,7 +131,7 @@ static int update_send_package(struct update_t *this)
 		//debug(DEBUG_update,"Fill databuf size %d\n",UPACKSIZE-readsize);
 		memset(this->package.data+readsize,CTRLZ,UPACKSIZE-readsize);
 	}
-	this->subclass->crc->CRCHL_get((char*)(this->package.CRC16),(char*)(this->package.data),UPACKSIZE);
+	crc_hight(this->package.CRC16,this->package.data,UPACKSIZE);
 	//this->subclass->Display("\npackage:",&this->package,sizeof(package_t));
 	return topuser->Serial->serial_send(topuser->Serial,\
 		CFG_COM485,(s8*)&this->package,sizeof(package_t),2000000);

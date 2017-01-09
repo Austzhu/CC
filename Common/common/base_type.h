@@ -22,10 +22,12 @@
 #define s32 int
 #define s64 double
 
+
 #define u8    _un char
 #define u16  _un short
 #define u32  _un int
 #define ul32 _un long
+#define uchar u8
 
 #define v8    _vol char
 #define v16  _vol short

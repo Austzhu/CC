@@ -53,7 +53,7 @@ struct appitf_t;
 typedef struct Single_t{
 	struct appitf_t *topuser;
 	struct update_t *update;
-	struct CRC_t *crc;
+	//struct CRC_t *crc;
 
 	int (*sin_open)(struct Single_t*,int,u32,u32);
 	int (*sin_close)(struct Single_t*,int,u32);
