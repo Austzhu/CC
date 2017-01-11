@@ -138,13 +138,7 @@ static int control_limit(control_t *this)
 static int control_openloop(control_t *this)
 {
 	assert_param(this,FAIL);
-	int limit = 0, light = 0;
-	int *light_buf[] ={
-		this->calc->args.light_enter,
-		this->calc->args.light_transit,
-		this->calc->args.light_base,
-		this->calc->args.light_exit
-	};
+
 	sql_t *sql = this->calc->sql;
 	if(!sql) {
 		debug(DEBUG_auto,"sql is NULL in class auto_calc!\n");
@@ -152,7 +146,14 @@ static int control_openloop(control_t *this)
 	}
 	/* get values */
 	this->control_getvalues(this);
-	limit = this->control_limit(this);
+#if 0
+	int *light_buf[] ={
+		this->calc->args.light_enter,
+		this->calc->args.light_transit,
+		this->calc->args.light_base,
+		this->calc->args.light_exit
+	};
+	int  light = 0, limit = this->control_limit(this);
 
 	if(limit){
 		for(int i=0,j=1; i < 32; ++i, j <<= 1){
@@ -165,6 +166,7 @@ static int control_openloop(control_t *this)
 			}	// end of if(limit & j){
 		}	// end of for(int i=0,j=1;
 	}	// end of if(limit){
+#endif
 	return SUCCESS;
 }
 
@@ -198,7 +200,8 @@ static void *control_pthread(void *args)
 static int control_start(control_t *this)
 {
 	assert_param(this,FAIL);
-
+	if(this->pthread_start)		/* thread is start */
+		return SUCCESS;
 	this->pthread_start = 1;
 	if(pthread_create(&this->control_thread, NULL,control_pthread,this)){
 		debug(DEBUG_autocontrol,"In class auto control pthread create error!\n");

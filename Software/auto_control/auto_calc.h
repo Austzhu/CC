@@ -19,10 +19,10 @@ typedef struct calc_args_t{
 	int dedign_speed;		//设计时速
 	int bothway;			//单双向车道
 	int extern_light;		//洞外亮度
-	int extern_stream;  	//洞外车流量
-	int light_enter[8];    	//入口段
-	int light_transit[8];  	//过渡段
-	int light_base[8];			//基本段
+	int extern_stream;  		//洞外车流量
+	int light_enter[8];    		//入口段
+	int light_transit[8];  		//过渡段
+	int light_base[8];		//基本段
 	int light_exit[8]; 		//出口段
 } calc_args_t;
 

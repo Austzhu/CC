@@ -125,7 +125,9 @@ static int serial_Recv(serial_t *this,u32  port,s8* buf,u32 len,s32  block)
 	assert_param(buf,FAIL);
 
 	int fd = this->serialfd[port];
-	if( fd < 0 )return FAIL;
+	if( fd < 0 ){
+		return FAIL;
+	}
 	memset(buf,0,len);
 
 	fd_set fdset;

@@ -26,6 +26,7 @@ OBJS_PATH +=${ROOTDIR}/Software/ztcc
 OBJS_PATH +=${ROOTDIR}/Software/operate
 OBJS_PATH +=${ROOTDIR}/Software/auto_control
 OBJS_PATH +=${ROOTDIR}/Software/process
+OBJS_PATH +=${ROOTDIR}/Software/kalman
 
 CMD := $(shell find ${ROOTDIR}/ -type d | egrep -v '.git|output|library|tools')
 IFLAGS = $(addprefix -I,${CMD})

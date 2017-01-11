@@ -950,12 +950,12 @@ Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 	// single->crc = CRC_init(NULL);
 	// if(!single->crc) goto out1;
 
-	single->topuser 			= topuser;
+	single->topuser 		= topuser;
 	single->Display 			= Display_package;
-	single->sin_open 			= sin_open;
-	single->sin_close 			= sin_close;
-	single->sin_reply 			= sin_reply;
-	single->sin_config 			= sin_Config;
+	single->sin_open 		= sin_open;
+	single->sin_close 		= sin_close;
+	single->sin_reply 		= sin_reply;
+	single->sin_config 		= sin_Config;
 	single->sin_release 		= sin_release;
 	single->sin_update 		= sin_update;
 	single->sin_Queryelectric 	= sin_Queryelectric;

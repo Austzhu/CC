@@ -20,11 +20,12 @@ SOFTDIR=${CURDIR}/Software
 
 STAGING_DIR=/
 #增加c语言的头文件搜索路径
-CPATH=${COMDIR}:${COMDIR}/common:${COMDIR}/crc16:\
-${CURDIR}/config:${CURDIR}/sqlite:${CURDIR}/task/taskque:${CURDIR}/version:\
-${HARDIR}/ethernet:${HARDIR}/serial:${HARDIR}/single:${HARDIR}/Meter:\
-${SOFTDIR}/process:${SOFTDIR}/initstart:${SOFTDIR}/Log:${SOFTDIR}/Warn:${SOFTDIR}/ztcc:\
-${SOFTDIR}/lamp:${SOFTDIR}/operate:${SOFTDIR}/auto_control
+CPATH=${COMDIR}:${COMDIR}/common:${COMDIR}/crc16
+CPATH=${CPATH}:${CURDIR}/config:${CURDIR}/sqlite:${CURDIR}/task/taskque:${CURDIR}/version
+CPATH=${CPATH}:${HARDIR}/ethernet:${HARDIR}/serial:${HARDIR}/single:${HARDIR}/Meter
+CPATH=${CPATH}:${SOFTDIR}/process:${SOFTDIR}/initstart:${SOFTDIR}/Log:${SOFTDIR}/Warn
+CPATH=${CPATH}:${SOFTDIR}/ztcc:${SOFTDIR}/lamp:${SOFTDIR}/operate:${SOFTDIR}/auto_control
+CPATH=${CPATH}:${SOFTDIR}/kalman
 
 case ${Config_bord} in
 	e6018)

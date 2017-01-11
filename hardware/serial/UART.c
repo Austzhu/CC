@@ -18,7 +18,7 @@ static int uart_open(struct uart_t *this)
 	this->uart_fd = open( Asprintf("/dev/ttyO%d",this->uart_port),  O_RDWR|O_NOCTTY);
 	if(this->uart_fd < 0) goto out;
 	if( !isatty(this->uart_fd) ){
-		debug(DEBUG_Serial,"/dev/ttyO%d is't tty devices!\n",this->uart_port);
+		debug(DEBUG_UART,"/dev/ttyO%d is't tty devices!\n",this->uart_port);
 		this->uart_close(this);
 		return FAIL;
 	}
@@ -28,7 +28,7 @@ static int uart_open(struct uart_t *this)
 #endif
 	return SUCCESS;
  out:
-	debug(DEBUG_Serial,"Open Serial port %d error!\n",this->uart_port);
+	debug(DEBUG_UART,"Open Serial port %d error!\n",this->uart_port);
 	return FAIL;
 }
 
@@ -138,18 +138,22 @@ static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t bloc
 		.tv_sec = block/1000000,
 		.tv_usec= block%1000000,
 	};
+	bzero(buf,length);
 	//ioctl(fd,FIONREAD,&CombufSize);	//读出内核缓存中有多少字节的数据
  repeat:
 	FD_ZERO(&fdset);
 	FD_SET(fd,&fdset);
 	switch(select(fd+1, &fdset,NULL,NULL,&tv)){
-		case -1:	debug(DEBUG_Serial,"select err:%s\n",strerror(errno));
+		case -1:	debug(DEBUG_UART,"select err:%s\n",strerror(errno));
 			return FAIL;
 		case 0:	return FAIL;	/* time out */
 		default:
 		if(FD_ISSET(fd, &fdset)){
 			cnt = read(fd,buf+rptr,length-rptr);
-			if(cnt < 0)	return FAIL;
+			if(cnt < 0){
+				perror("uart read");
+				return FAIL;
+			}
 			rptr += cnt;
 			if(rptr < length) goto repeat;
 			return SUCCESS;
@@ -173,7 +177,7 @@ static int uart_send(struct uart_t *this,const char * buf,uint32_t length,int32_
 	FD_ZERO(&fdset);
 	FD_SET(fd,&fdset);
 	switch(select(fd+1, NULL,&fdset,NULL,&tv)){
-		case -1:	debug(DEBUG_Serial,"select err!\n");
+		case -1:	debug(DEBUG_UART,"select err!\n");
 			return FAIL;
 		case 0:	return FAIL;	/* time out */
 		default:

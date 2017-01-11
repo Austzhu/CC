@@ -30,7 +30,6 @@ static int calc_K(struct calc_t *this)
 		[3] = {.speed = 60,	.max = 2200,  .min = 1500 },
 		[4] = {.speed = 40,	.max = 1200,  .min = 1000 }
 	};
-	int Kj = 0, K = 0;		//计算K时，斜率。
 	int Index = 0;
 repeat:
 	switch(this->args.dedign_speed){
@@ -39,31 +38,38 @@ repeat:
 		case 80:	Index = 2;  break;
 		case 60:	Index = 3;  break;
 		default:
-			if(this->args.dedign_speed <= 0){
-				this->sql->sql_select("select tun_speed,tun_bothway "\
-					"from db_tunnel_info;",(void*)&this->args,sizeof(this->args),1,0);
-				if(this->args.dedign_speed <= 0) return 0;
-				goto repeat;
-			}
-			Index = 4;
-			break;
+		if(this->args.dedign_speed <= 0){
+			this->sql->sql_select("select tun_speed,tun_bothway "\
+				"from db_tunnel_info;",(void*)&this->args,sizeof(this->args),1,0);
+			if(this->args.dedign_speed <= 0) return 0;
+			goto repeat;
+		}
+		Index = 4;
+		break;
 	}
-
-	Kj = (table_K[Index].max - table_K[Index].min)/\
-		(this->args.bothway == 0 ? 850/* 单车道(1200-350) */ : 470/* 双向车道(650-180) */);
+	/* 获取车流量 */
 	this->args.extern_stream = this->sensor->sensor_get_values(this->sensor,traffic);
-	return ((K = table_K[Index].min + Kj*this->args.extern_stream) >\
-							table_K[Index].max)  ?  table_K[Index].max  :  K;
+	/*y=kx+b 计算k,b*/
+	float Kj = (table_K[Index].max - table_K[Index].min)/\
+		(this->args.bothway == 0 ? 850.0/* 单车道(1200-350) */ : 470.0/* 双向车道(650-180) */);
+	float b = table_K[Index].max - Kj * (this->args.bothway == 0 ? 1200 : 650);
+	float K = Kj*this->args.extern_stream + b;		// y = k*x +b
+
+	debug(DEBUG_calc,"stream=%d,K=%f\n",this->args.extern_stream,K);
+
+	return (int) (K > table_K[Index].max ? table_K[Index].max : K+0.5);
 }
 
 static int calc_light_enter(struct calc_t *this)
 {
 	assert_param(this,FAIL);
-
 	int K = this->calc_K(this);
 	this->args.extern_light = this->sensor->sensor_get_values(this->sensor,light);
 	this->args.light_enter[0] = (K * this->args.extern_light)/100000; 	//入口1段
 	this->args.light_enter[1] = this->args.light_enter[0]/2;				//入口2段
+
+	debug(DEBUG_calc,"enter 1 is %d\n",this->args.light_enter[0]);
+	debug(DEBUG_calc,"enter 2 is %d\n",this->args.light_enter[1]);
 	return SUCCESS;
 }
 

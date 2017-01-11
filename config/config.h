@@ -24,6 +24,7 @@
 	#define Config_serial
 	#define Config_Sqlite
 	#define Config_UART
+	#define Config_KALMAN
 #elif defined(BORD_E3100)
 	#define Config_TCP_Server
 	#define Config_wizdom

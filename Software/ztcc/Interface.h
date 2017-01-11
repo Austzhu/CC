@@ -35,7 +35,7 @@
 #endif
 
 #define Connect_ok 		0
-#define Connect_error 	-1
+#define Connect_error 		-1
 #define HeartBeat_ok 	 	0
 #define HeartBeat_error 	-1
 
@@ -56,7 +56,7 @@ typedef struct param_t{
 	u8 DebugLevel; 		 //调试等级
 	u8 ControlMethod;		//控制模式
 	s8 ServerIpaddr[32]; 	//服务器IP
-	u16 ServerPort;		//服务器的端口
+	u16 ServerPort;			//服务器的端口
 	u8 ItfWay;				//集中器的操作方法
 	u8 HeartBCycle;		//心跳周期
 	u8 KwhSaveDay;		//电路保存天数
@@ -65,7 +65,7 @@ typedef struct param_t{
 } param_t;
 
 typedef struct appitf_t {
-	int Connect_status;	//网络连接状态
+	int Connect_status;		//网络连接状态
 	int HeartBeat_status;	//心跳状态
 	int pthread_start;
 	pthread_t thread_Keepalive ;

@@ -77,5 +77,5 @@ extern int get_check_sum(void *pkg,int size);
 extern char* Hex2Str(char*dest,const u8 *src,int size);
 extern u8 *Str2Hex(u8 *dest,const char *src);
 extern void msleep(u32 ms);
-
+extern void display_pack(const char *mes,const char *buf, int length);
 #endif		//#ifndef __COMMON_H__

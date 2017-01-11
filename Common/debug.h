@@ -3,7 +3,7 @@
 
 #define ERR_PRINT
 #define MY_DEBUG 	2
-#define LEVEL 		5 	//设置调试打印等级
+#define LEVEL 			5 	//设置调试打印等级
 
 typedef enum{
 	CRIT,
@@ -16,7 +16,7 @@ typedef enum{
 
 #define EthnetSend_Print		0		//开启显示网口发送数据的宏
 
-#define DEBUG_Logon 		1
+#define DEBUG_Logon 			1
 #define DEBUG_Timetask 		1		//定时任务
 #define DEBUG_CC_Config 	1		//集中器配置
 #define DEBUG_ERR 			1		//出现错误
@@ -30,7 +30,7 @@ typedef enum{
 #define DEBUG_chktime 		1 		//对时调试
 
 #define DEBUG_inqTime 		1 		//查询时间命令调试
-#define DEBUG_inqVersion	1		//查询版本号
+#define DEBUG_inqVersion		1		//查询版本号
 #define DEBUG_DIDO 			1 		//DIDO调试
 #define DEBUG_Broadcast 		1 		//广播命令
 #define DEBUG_sqlite3 		1 		//sqlite数据库调试
@@ -51,7 +51,9 @@ typedef enum{
 #define DEBUG_auto 			1
 #define DEBUG_autosensor 	1
 #define DEBUG_UART 			1
-#define DEBUG_sensor 		1
+#define DEBUG_sensor 		0
+#define DEBUG_calc 			1
+#define DEBUG_kalman 		1
 
 #if 	MY_DEBUG == 1
 	#define debug(level,fmt,args...)  do{ if(level<=LEVEL) printf(fmt,##args); }while(0)

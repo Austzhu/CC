@@ -61,3 +61,12 @@ int get_check_sum(void *pkg,int size)
 	*pchar = 0x16;
 	return SUCCESS;
 }
+
+void display_pack(const char *mes,const char *buf, int length)
+{
+	if(!mes || !buf || length<0 ) return ;
+	printf("%s:",mes);
+	while(length--)
+		printf("%02x ",*buf++);
+	printf("\n");
+}

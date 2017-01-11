@@ -15,15 +15,19 @@
 #ifdef Config_UART
 #include "UART.h"
 #endif
-
-#define COLLECT_CNT 	12
+#ifdef Config_KALMAN
+#include "kalman.h"
+#endif
 
 typedef enum{ traffic = 0, light } value_t;
 typedef struct sensor_t {
-	int traffic[COLLECT_CNT];
-	int light[COLLECT_CNT];
+	int traffic, light;
 	#ifdef Config_UART
 	uart_t *uart2;
+	#endif
+	#ifdef Config_KALMAN
+	kalman_t *kalman_light;
+	kalman_t *kalman_stream;
 	#endif
 	int (*sensor_get_values)(struct sensor_t*,value_t);
 	int (*sensor_get_stream)(struct sensor_t*);
