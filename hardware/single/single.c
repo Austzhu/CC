@@ -380,7 +380,7 @@ static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)
 	sqlite3_stmt* stmt = NULL;
 	const char *sql = "update db_info_light set Warn_flags=?1,light_V=?2,light_E=?3,"\
 			"light_p=?4,rtime=?5,light_status=?6,light_val=?7 where Base_Addr=?8 ;";
-	if( SQLITE_OK != sqlite3_open("./cc_corl.db",&db) ){
+	if( SQLITE_OK != sqlite3_open(CFG_DB_NAME,&db) ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
 		goto out;
 	}

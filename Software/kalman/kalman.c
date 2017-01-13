@@ -14,17 +14,17 @@ static float kal_filter(struct kalman_t *this, float kal_Z)
 	float Kg = (P_now*this->kal_H) / ( P_now*this->kal_H + this->kal_R );	//kg = Pnow*H/(Pnow*H+R)
 	float X_now = this->kal_A*this->kal_X + \
 		Kg*(kal_Z - this->kal_A*this->kal_H*this->kal_X);					//Xn = A*Xlast + Kg(Zx - A*H*Xlast);
-	//debug(DEBUG_kalman,"kg=%f\n",Kg);
 	/* update P,X */
 	this->kal_P = (1-Kg)*P_now;
 	this->kal_X = X_now;
+	debug(DEBUG_kalman,"\nPnow = %f,plast=%f,kg=%f\n",P_now,this->kal_P,Kg);
 	return X_now;
 }
 
-void kal_release(struct kalman_t **this)
+void kal_release(struct kalman_t **this,int isptr)
 {
-	if(!this || !*this)	return ;
-	FREE(*this);
+	if(!this)	return ;
+	if(isptr) FREE(*this);
 }
 
 struct kalman_t *kalman_init(kalman_t *this,int A,int H,int Q,int R)

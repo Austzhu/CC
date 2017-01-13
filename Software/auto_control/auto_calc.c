@@ -22,64 +22,73 @@
 static int calc_K(struct calc_t *this)
 {
 	assert_param(this,FAIL);
+
+	/**
+	 *  可以优化成 y = k*x + b, 计算出k, b的列表。
+	 *  以后调用就不需要每次都计算浪费时间
+	 */
+
 	/*  入口段亮度折减系数K,扩大了100000倍 */
-	struct {int speed; int max; int min;} table_K[] ={
+	struct table_t{int speed; int max; int min;} *tb=NULL, table_K[] ={
 		[0] = {.speed = 120,	.max = 7000,  .min = 5000 },
 		[1] = {.speed = 100,	.max = 4500,  .min = 3500 },
 		[2] = {.speed = 80,	.max = 3500,  .min = 2500 },
 		[3] = {.speed = 60,	.max = 2200,  .min = 1500 },
 		[4] = {.speed = 40,	.max = 1200,  .min = 1000 }
 	};
-	int Index = 0;
 repeat:
 	switch(this->args.dedign_speed){
-		case 120:	Index = 0;  break;
-		case 100:	Index = 1;  break;
-		case 80:	Index = 2;  break;
-		case 60:	Index = 3;  break;
+		case 120:	tb = table_K + 0;  break;
+		case 100:	tb = table_K + 1;  break;
+		case 80:	tb = table_K + 2;  break;
+		case 60:	tb = table_K + 3;  break;
 		default:
 		if(this->args.dedign_speed <= 0){
 			this->sql->sql_select("select tun_speed,tun_bothway "\
 				"from db_tunnel_info;",(void*)&this->args,sizeof(this->args),1,0);
-			if(this->args.dedign_speed <= 0) return 0;
+			if(this->args.dedign_speed <= 0) return FAIL;
 			goto repeat;
 		}
-		Index = 4;
-		break;
+		tb = table_K +  4; 	break;
 	}
+	if(!tb) return FAIL;
+
 	/* 获取车流量 */
 	this->args.extern_stream = this->sensor->sensor_get_values(this->sensor,traffic);
-	/*y=kx+b 计算k,b*/
-	float Kj = (table_K[Index].max - table_K[Index].min)/\
-		(this->args.bothway == 0 ? 850.0/* 单车道(1200-350) */ : 470.0/* 双向车道(650-180) */);
-	float b = table_K[Index].max - Kj * (this->args.bothway == 0 ? 1200 : 650);
-	float K = Kj*this->args.extern_stream + b;		// y = k*x +b
+	/*y=kx+b 计算k,b. 单车道(1200-350=850) 双车道(650-180=470) */
+	float K = (tb->max - tb->min)/ (this->args.bothway == 0 ? 850.0: 470.0);
+	float b = tb->max - K * (this->args.bothway == 0 ? 1200 : 650);
+	float y = K*this->args.extern_stream + b;		// y = k*x +b
 
-	debug(DEBUG_calc,"stream=%d,K=%f\n",this->args.extern_stream,K);
+	debug(DEBUG_calc,"\nstream=%d,K=%f\n",this->args.extern_stream,y);
 
-	return (int) (K > table_K[Index].max ? table_K[Index].max : K+0.5);
+	return (int) ( y > tb->max ? tb->max : (y > tb->min ? tb->min : y )  +0.5);
 }
 
 static int calc_light_enter(struct calc_t *this)
 {
 	assert_param(this,FAIL);
 	int K = this->calc_K(this);
+	if(FAIL == K) return FAIL;
+
 	this->args.extern_light = this->sensor->sensor_get_values(this->sensor,light);
-	this->args.light_enter[0] = (K * this->args.extern_light)/100000; 	//入口1段
+	this->args.light_enter[0] = (K * this->args.extern_light)/1000; 	//入口1段
 	this->args.light_enter[1] = this->args.light_enter[0]/2;				//入口2段
 
-	debug(DEBUG_calc,"enter 1 is %d\n",this->args.light_enter[0]);
-	debug(DEBUG_calc,"enter 2 is %d\n",this->args.light_enter[1]);
+	debug(DEBUG_calc,"enter 1~2 is %d,%d\n",\
+		this->args.light_enter[0],this->args.light_enter[1]);
 	return SUCCESS;
 }
 
 static int calc_light_transit(struct calc_t *this)
 {
 	assert_param(this,FAIL);
-	int Le = this->args.light_enter[0];
-	this->args.light_transit[0] = 15*Le/100;
-	this->args.light_transit[1] =    5*Le/100;
-	this->args.light_transit[2] =    2*Le/100;
+	int enter = this->args.light_enter[0];
+	this->args.light_transit[0] = enter*15/100;
+	this->args.light_transit[1] = enter*5/100;
+	this->args.light_transit[2] = enter*2/100;
+	debug(DEBUG_calc,"transit 1~3 is %d,%d,%d\n",\
+		this->args.light_transit[0],this->args.light_transit[1],this->args.light_transit[2]);
 	return SUCCESS;
 }
 
@@ -108,39 +117,39 @@ static int calc_light_transit(struct calc_t *this)
 static int calc_light_base(struct calc_t *this)
 {
 	assert_param(this,FAIL);
-
 	/* 基本段亮度计算值，扩大1000倍。 */
-	struct { int speed; int max; int min;} table_base[] = {
-		[0] = { .speed = 120, 	.max = 10000, 	.min = 4500 },
-		[1] = { .speed = 100, 	.max = 10000, 	.min = 4500 },
-		[2] = { .speed = 80,   	.max = 10000, 	.min = 4500 },
-		[3] = { .speed = 60,   	.max = 10000, 	.min = 4500 },
-		[4] = { .speed = 40,   	.max = 10000, 	.min = 4500 }
+	struct base_table_t { int speed; int max; int min;} *tb = NULL, table_base[] = {
+		[0] = { .speed = 120, .max = 10000, 	.min = 4500 },
+		[1] = { .speed = 100, .max = 6500, 	.min = 3000 },
+		[2] = { .speed = 80,   	.max = 3500, 	.min = 1500 },
+		[3] = { .speed = 60,   	.max = 2500, 	.min = 1000 },
+		[4] = { .speed = 40,   	.max = 10000, 	.min = 1000 }
 	};
-	int Index = 0;
 repeat:
 	switch(this->args.dedign_speed){
-		case 120:	Index = 0;  break;
-		case 100:	Index = 1;  break;
-		case 80:	Index = 2;  break;
-		case 60:	Index = 3;  break;
+		case 120:	tb = table_base +0;  break;
+		case 100:	tb = table_base +1;  break;
+		case 80:	tb = table_base +2;  break;
+		case 60:	tb = table_base +3;  break;
 		default:
 			if(this->args.dedign_speed <= 0){
 				this->sql->sql_select("select tun_speed,tun_bothway "\
 					"from db_tunnel_info;",(void*)&this->args,sizeof(this->args),1,0);
-				if(this->args.dedign_speed <= 0) return 0;
+				if(this->args.dedign_speed <= 0) return FAIL;
 				goto repeat;
 			}
-			Index = 4;
-			break;
+			tb = table_base +4;  break;
 	}
-	/*   系数扩大了1000倍。 */
-	int K = (table_base[Index].max - table_base[Index].min)/\
-		(this->args.bothway == 0 ? 850/* 单车道(1200-350) */ : 470/* 双向车道(650-180) */);
-	this->args.light_base[0] = (table_base[Index].min + K * this->args.extern_stream)  ;
-	if(this->args.light_base[0] > table_base[Index].max)
-		this->args.light_base[0] = table_base[Index].max;
-	this->args.light_base[0] /= 1000;
+	if(!tb) return FAIL;
+	/*   系数扩大了1000倍,单车道(1200-350=850)  双向车道(650-180=470) */
+	float K = (tb->max - tb->min)/(this->args.bothway == 0 ? 850.0: 470.0);
+	float b = tb->max - K * (this->args.bothway == 0 ? 1200 : 650);
+	float y = K * this->args.extern_stream  +  b; 								//y = k * x +b;
+
+	this->args.light_base[0] = (int)(  (y>tb->max ? \
+		tb->max : (y < tb->min ? tb->min : y))/10.0 +0.5 );
+	this->args.light_base[1] = this->args.light_base[0] * 80 /100;
+	debug(DEBUG_calc,"base is %d\n",this->args.light_base[0]);
 	return SUCCESS;
 }
 
@@ -148,9 +157,11 @@ static int calc_light_exit(struct calc_t *this)
 {
 	assert_param(this,FAIL);
 
-	int Lb = this->args.light_base[0];
-	this->args.light_exit[0] = 3 * Lb;
-	this->args.light_exit[1] = 5 * Lb;
+	int base = this->args.light_base[0];
+	this->args.light_exit[0] = 3 * base;
+	this->args.light_exit[1] = 5 * base;
+	debug(DEBUG_calc,"exit 1~2 is %d,%d\n",\
+		this->args.light_exit[0],this->args.light_exit[1]);
 	return SUCCESS;
 }
 

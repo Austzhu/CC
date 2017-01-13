@@ -9,18 +9,20 @@
 #include "include.h"
 #include "sqlite3.h"
 
-#define Table_Info 		"db_info_light"
+#ifndef CFG_DB_NAME
+#error "must define the path name of data base"
+#endif
 
 #define Get_CountByCondition(ptr,table,Column,Condition) ({ int count;\
-		ptr->sql_select(Asprintf("select count(%s) from %s  %s;",Column,\
-		table,Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
+ptr->sql_select(Asprintf("select count(%s) from %s  %s;",Column,table,\
+Condition), (char*)&count,sizeof(int),1,0) ==SUCCESS ? (int)count:-1;})
 
 #define Get_CountByColumn(ptr,table,Column)  Get_CountByCondition(ptr,table,Column," ")
-#define Get_light_info_count(ptr,Column)  Get_CountByColumn(ptr,Table_Info,Column)
+#define Get_light_info_count(ptr,Column)  Get_CountByColumn(ptr,CFG_tb_light_info,Column)
 
-#define sql_isexist(ptr,table,Condition)  ( {int Addr = 0;\
-	ptr->sql_select(Asprintf("select Base_Addr from %s where Base_Addr=%d;",\
-		table,Condition), (char*)&Addr,sizeof(int),1,0) == SUCCESS ? Addr : 0;})
+#define sql_isexist(ptr,table,Condition)  ( {int Addr = 0;ptr->sql_select(\
+Asprintf("select Base_Addr from %s where Base_Addr=%d;",table,\
+Condition), (char*)&Addr,sizeof(int),1,0) == SUCCESS ? Addr : 0;})
 
 
 /* 协调器记录表（db_coordinator） */

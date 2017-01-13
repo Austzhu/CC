@@ -32,7 +32,18 @@
 	#define Config_operate
 #endif
 
-
+#ifdef Config_Sqlite
+#define CFG_DB_NAME 	"cc_corl.db"
+#define CFG_tb_coordi 	"db_coordinator"
+#define CFG_tb_single 		"db_light"
+#define CFG_tb_task 		"db_task"
+#define CFG_tb_tasklist	"db_tasklist"
+#define CFG_tb_light_info	"db_info_light"
+#define CFG_tb_warn 		"db_warn"
+#define CFG_tb_tunnel 	"db_tunnel_info"
+#define CFG_tb_pwm 		"db_index_pwm"
+#define CFG_tb_gpinfo		"db_group_info"
+#endif
 
 #ifdef Config_TCP_Server
 #define CFG_client_max 		10

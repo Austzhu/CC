@@ -73,6 +73,7 @@ DEBUG_config	Common\debug.h	49;"	d
 DEBUG_coordinate	Common\debug.h	37;"	d
 DEBUG_inqTime	Common\debug.h	32;"	d
 DEBUG_inqVersion	Common\debug.h	33;"	d
+DEBUG_kalman	Common\debug.h	56;"	d
 DEBUG_list	Common\debug.h	40;"	d
 DEBUG_loadfile	Common\debug.h	39;"	d
 DEBUG_reboot	Common\debug.h	29;"	d
@@ -92,12 +93,12 @@ MY_DEBUG	Common\debug.h	5;"	d
 NOTICE	Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon1
 WARNING	Common\debug.h	/^	WARNING,$/;"	e	enum:__anon1
 __DEBUG_H__	Common\debug.h	2;"	d
-debug	Common\debug.h	58;"	d
-debug	Common\debug.h	60;"	d
-debug	Common\debug.h	62;"	d
+debug	Common\debug.h	59;"	d
+debug	Common\debug.h	61;"	d
+debug	Common\debug.h	63;"	d
 debug_level	Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon1
-err_Print	Common\debug.h	66;"	d
-err_Print	Common\debug.h	68;"	d
+err_Print	Common\debug.h	67;"	d
+err_Print	Common\debug.h	69;"	d
 ERRORS	Common\err_code.h	21;"	d
 FAIL	Common\err_code.h	18;"	d
 Open_FAIL	Common\err_code.h	22;"	d
@@ -271,6 +272,8 @@ calc_light_enter	Software\auto_control\auto_calc.c	/^static int calc_light_enter
 calc_light_exit	Software\auto_control\auto_calc.c	/^static int calc_light_exit(struct calc_t *this)$/;"	f	file:
 calc_light_transit	Software\auto_control\auto_calc.c	/^static int calc_light_transit(struct calc_t *this)$/;"	f	file:
 calc_release	Software\auto_control\auto_calc.c	/^static void calc_release(struct calc_t **this,int Is_ptr)$/;"	f	file:
+ONE_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon25
+TWO_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon25
 __AUTO_CALC_H__	Software\auto_control\auto_calc.h	13;"	d
 args	Software\auto_control\auto_calc.h	/^	calc_args_t args;$/;"	m	struct:calc_t
 bothway	Software\auto_control\auto_calc.h	/^	int bothway;			\/\/单双向车道$/;"	m	struct:calc_args_t
@@ -286,67 +289,71 @@ calc_t	Software\auto_control\auto_calc.h	/^typedef struct calc_t{$/;"	s
 calc_t	Software\auto_control\auto_calc.h	/^} calc_t;$/;"	t	typeref:struct:calc_t
 dedign_speed	Software\auto_control\auto_calc.h	/^	int dedign_speed;		\/\/设计时速$/;"	m	struct:calc_args_t
 extern_light	Software\auto_control\auto_calc.h	/^	int extern_light;		\/\/洞外亮度$/;"	m	struct:calc_args_t
-extern_stream	Software\auto_control\auto_calc.h	/^	int extern_stream;  	\/\/洞外车流量$/;"	m	struct:calc_args_t
-light_base	Software\auto_control\auto_calc.h	/^	int light_base[8];			\/\/基本段$/;"	m	struct:calc_args_t
-light_enter	Software\auto_control\auto_calc.h	/^	int light_enter[8];    	\/\/入口段$/;"	m	struct:calc_args_t
-light_exit	Software\auto_control\auto_calc.h	/^	int light_exit[8]; 		\/\/出口段$/;"	m	struct:calc_args_t
-light_transit	Software\auto_control\auto_calc.h	/^	int light_transit[8];  	\/\/过渡段$/;"	m	struct:calc_args_t
+extern_stream	Software\auto_control\auto_calc.h	/^	int extern_stream;  		\/\/洞外车流量$/;"	m	struct:calc_args_t
+light_base	Software\auto_control\auto_calc.h	/^	int light_base[2];		\/\/基本段$/;"	m	struct:calc_args_t
+light_enter	Software\auto_control\auto_calc.h	/^	int light_enter[4];    		\/\/入口段$/;"	m	struct:calc_args_t
+light_exit	Software\auto_control\auto_calc.h	/^	int light_exit[2]; 		\/\/出口段$/;"	m	struct:calc_args_t
+light_transit	Software\auto_control\auto_calc.h	/^	int light_transit[6];  		\/\/过渡段$/;"	m	struct:calc_args_t
 sensor	Software\auto_control\auto_calc.h	/^	sensor_t *sensor;$/;"	m	struct:calc_t
 sql	Software\auto_control\auto_calc.h	/^	struct sql_t *sql;$/;"	m	struct:calc_t	typeref:struct:calc_t::sql_t
-Is_border	Software\auto_control\auto_control.c	80;"	d	file:
-control_PID	Software\auto_control\auto_control.c	/^static int control_PID(control_t *this)$/;"	f	file:
-control_getvalues	Software\auto_control\auto_control.c	/^static int control_getvalues(control_t *this)$/;"	f	file:
-control_init	Software\auto_control\auto_control.c	/^control_t *control_init(struct control_t *this, void *single)$/;"	f
-control_lightcmp	Software\auto_control\auto_control.c	/^static int control_lightcmp(control_t *this)$/;"	f	file:
-control_limit	Software\auto_control\auto_control.c	/^static int control_limit(control_t *this)$/;"	f	file:
-control_openloop	Software\auto_control\auto_control.c	/^static int control_openloop(control_t *this)$/;"	f	file:
-control_output	Software\auto_control\auto_control.c	/^static int control_output(control_t *this,int group,int light)$/;"	f	file:
-control_pthread	Software\auto_control\auto_control.c	/^static void *control_pthread(void *args)$/;"	f	file:
-control_release	Software\auto_control\auto_control.c	/^static void control_release(control_t **this, int Is_ptr)$/;"	f	file:
-control_start	Software\auto_control\auto_control.c	/^static int control_start(control_t *this)$/;"	f	file:
-control_stop	Software\auto_control\auto_control.c	/^static int control_stop(control_t *this)$/;"	f	file:
-get_gid_info	Software\auto_control\auto_control.c	/^static void get_gid_info(control_t *this)$/;"	f	file:
-get_gid_pwm	Software\auto_control\auto_control.c	/^static int get_gid_pwm(control_t *this)$/;"	f	file:
+control_init	Software\auto_control\auto_control.c	/^struct control_t *control_init(struct control_t *this, void *single)$/;"	f
+ctrl_PID	Software\auto_control\auto_control.c	/^static int ctrl_PID(control_t *this)$/;"	f	file:
+ctrl_exec	Software\auto_control\auto_control.c	/^static int ctrl_exec(control_t *this, sql_t *sql)$/;"	f	file:
+ctrl_getvalues	Software\auto_control\auto_control.c	/^static int ctrl_getvalues(control_t *this)$/;"	f	file:
+ctrl_openloop	Software\auto_control\auto_control.c	/^static int ctrl_openloop(control_t *this)$/;"	f	file:
+ctrl_output	Software\auto_control\auto_control.c	/^static int ctrl_output(control_t *this, int32_t group, int32_t light)$/;"	f	file:
+ctrl_pthread	Software\auto_control\auto_control.c	/^static void *ctrl_pthread(void *args)$/;"	f	file:
+ctrl_release	Software\auto_control\auto_control.c	/^static void ctrl_release(control_t **this, int Is_ptr)$/;"	f	file:
+ctrl_set_light_current	Software\auto_control\auto_control.c	/^static void ctrl_set_light_current(control_t *this)$/;"	f	file:
+ctrl_start	Software\auto_control\auto_control.c	/^static int ctrl_start(control_t *this)$/;"	f	file:
+ctrl_stop	Software\auto_control\auto_control.c	/^static int ctrl_stop(control_t *this)$/;"	f	file:
+ctrl_update_info	Software\auto_control\auto_control.c	/^static int32_t ctrl_update_info(control_t *this,sql_t *sql)$/;"	f	file:
+select_pwm_level	Software\auto_control\auto_control.c	/^static int32_t inline select_pwm_level(sql_t *sql, void *buf, int32_t keyword)$/;"	f	file:
+CFG_COLUMN	Software\auto_control\auto_control.h	16;"	d
 __AUTO_CONTROL_H__	Software\auto_control\auto_control.h	13;"	d
-base	Software\auto_control\auto_control.h	/^typedef enum { enter = 1, transit, base, outway } output_t;$/;"	e	enum:__anon25
+args	Software\auto_control\auto_control.h	/^	struct calc_args_t *args;$/;"	m	struct:control_t	typeref:struct:control_t::calc_args_t
+base_0	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon27
+base_1	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon27
 calc	Software\auto_control\auto_control.h	/^	struct calc_t *calc;$/;"	m	struct:control_t	typeref:struct:control_t::calc_t
-control_PID	Software\auto_control\auto_control.h	/^	int (*control_PID)(struct control_t*);$/;"	m	struct:control_t
-control_getvalues	Software\auto_control\auto_control.h	/^	int (*control_getvalues)(struct control_t*);$/;"	m	struct:control_t
-control_limit	Software\auto_control\auto_control.h	/^	int (*control_limit)(struct control_t*);$/;"	m	struct:control_t
-control_openloop	Software\auto_control\auto_control.h	/^	int (*control_openloop)(struct control_t*);$/;"	m	struct:control_t
-control_output	Software\auto_control\auto_control.h	/^	int (*control_output)(struct control_t*,int group, int light);$/;"	m	struct:control_t
-control_release	Software\auto_control\auto_control.h	/^	void (*control_release)(struct control_t**,int);$/;"	m	struct:control_t
-control_start	Software\auto_control\auto_control.h	/^	int (*control_start)(struct control_t*);$/;"	m	struct:control_t
-control_stop	Software\auto_control\auto_control.h	/^	int (*control_stop)(struct control_t*);$/;"	m	struct:control_t
+column_t	Software\auto_control\auto_control.h	/^} column_t;$/;"	t	typeref:enum:__anon27
 control_t	Software\auto_control\auto_control.h	/^typedef struct control_t{$/;"	s
 control_t	Software\auto_control\auto_control.h	/^} control_t;$/;"	t	typeref:struct:control_t
-control_thread	Software\auto_control\auto_control.h	/^	pthread_t control_thread;$/;"	m	struct:control_t
-enter	Software\auto_control\auto_control.h	/^typedef enum { enter = 1, transit, base, outway } output_t;$/;"	e	enum:__anon25
-g_val	Software\auto_control\auto_control.h	/^	struct { int gid; int pwm; int limit[2];}g_val[gid_cnt_max];$/;"	m	struct:__anon26	typeref:struct:__anon26::__anon27
-gid	Software\auto_control\auto_control.h	/^	struct { int gid; int pwm; int limit[2];}g_val[gid_cnt_max];$/;"	m	struct:__anon26::__anon27
-gid_cnt	Software\auto_control\auto_control.h	/^	int gid_cnt;$/;"	m	struct:__anon26
-gid_cnt_max	Software\auto_control\auto_control.h	16;"	d
-gid_info	Software\auto_control\auto_control.h	/^	gid_info_t gid_info;$/;"	m	struct:control_t
-gid_info_t	Software\auto_control\auto_control.h	/^} gid_info_t;$/;"	t	typeref:struct:__anon26
-limit	Software\auto_control\auto_control.h	/^	struct { int gid; int pwm; int limit[2];}g_val[gid_cnt_max];$/;"	m	struct:__anon26::__anon27
-output_t	Software\auto_control\auto_control.h	/^typedef enum { enter = 1, transit, base, outway } output_t;$/;"	t	typeref:enum:__anon25
-outway	Software\auto_control\auto_control.h	/^typedef enum { enter = 1, transit, base, outway } output_t;$/;"	e	enum:__anon25
-pthread_start	Software\auto_control\auto_control.h	/^	int pthread_start;$/;"	m	struct:control_t
-pwm	Software\auto_control\auto_control.h	/^	struct { int gid; int pwm; int limit[2];}g_val[gid_cnt_max];$/;"	m	struct:__anon26::__anon27
+ctrl_PID	Software\auto_control\auto_control.h	/^	int (*ctrl_PID)(struct control_t*);$/;"	m	struct:control_t
+ctrl_exec	Software\auto_control\auto_control.h	/^	int (*ctrl_exec)(struct control_t*,sql_t *);$/;"	m	struct:control_t
+ctrl_getvalues	Software\auto_control\auto_control.h	/^	int (*ctrl_getvalues)(struct control_t*);$/;"	m	struct:control_t
+ctrl_openloop	Software\auto_control\auto_control.h	/^	int (*ctrl_openloop)(struct control_t*);$/;"	m	struct:control_t
+ctrl_output	Software\auto_control\auto_control.h	/^	int (*ctrl_output)(struct control_t*,int group, int light);$/;"	m	struct:control_t
+ctrl_release	Software\auto_control\auto_control.h	/^	void (*ctrl_release)(struct control_t**,int);$/;"	m	struct:control_t
+ctrl_start	Software\auto_control\auto_control.h	/^	int (*ctrl_start)(struct control_t*);$/;"	m	struct:control_t
+ctrl_stop	Software\auto_control\auto_control.h	/^	int (*ctrl_stop)(struct control_t*);$/;"	m	struct:control_t
+ctrl_thread	Software\auto_control\auto_control.h	/^	pthread_t ctrl_thread;$/;"	m	struct:control_t
+enter_0	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon27
+enter_1	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon27
+exit_0	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon27
+exit_1	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon27
+group_cnt	Software\auto_control\auto_control.h	/^	int32_t group_cnt;$/;"	m	struct:control_t
+intensify_0	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
+intensify_1	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
+intensify_2	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
+left	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon26
+light_current	Software\auto_control\auto_control.h	/^	int32_t *light_current;$/;"	m	struct:light_info_t
+light_info	Software\auto_control\auto_control.h	/^	light_info_t light_info[CFG_COLUMN];$/;"	m	struct:control_t
+light_info_t	Software\auto_control\auto_control.h	/^typedef struct light_info_t{$/;"	s
+light_info_t	Software\auto_control\auto_control.h	/^} light_info_t;$/;"	t	typeref:struct:light_info_t
+pthread_start	Software\auto_control\auto_control.h	/^	int32_t pthread_start;$/;"	m	struct:control_t
+pwm_level	Software\auto_control\auto_control.h	/^	int32_t pwm_level[2];$/;"	m	struct:light_info_t
+right	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon26
 single	Software\auto_control\auto_control.h	/^	struct Single_t 	*single;$/;"	m	struct:control_t	typeref:struct:control_t::Single_t
-transit	Software\auto_control\auto_control.h	/^typedef enum { enter = 1, transit, base, outway } output_t;$/;"	e	enum:__anon25
-Q	Software\auto_control\auto_sensor.c	13;"	d	file:
-R	Software\auto_control\auto_sensor.c	14;"	d	file:
-sensor_Kman	Software\auto_control\auto_sensor.c	/^static int sensor_Kman(float Zx)$/;"	f	file:
 sensor_get_light	Software\auto_control\auto_sensor.c	/^static int sensor_get_light(struct sensor_t *this)$/;"	f	file:
 sensor_get_stream	Software\auto_control\auto_sensor.c	/^static int sensor_get_stream(struct sensor_t *this)$/;"	f	file:
 sensor_get_values	Software\auto_control\auto_sensor.c	/^static int sensor_get_values(struct sensor_t *this, value_t flags)$/;"	f	file:
 sensor_init	Software\auto_control\auto_sensor.c	/^sensor_t *sensor_init(struct sensor_t *this)$/;"	f
 sensor_pack	Software\auto_control\auto_sensor.c	/^static int sensor_pack(struct sensor_t *this,uint8_t *buf)$/;"	f	file:
 sensor_release	Software\auto_control\auto_sensor.c	/^static void sensor_release(struct sensor_t **this,int Is_ptr)$/;"	f	file:
-COLLECT_CNT	Software\auto_control\auto_sensor.h	19;"	d
 __AUTO_SENSOR_H__	Software\auto_control\auto_sensor.h	13;"	d
-light	Software\auto_control\auto_sensor.h	/^	int light[COLLECT_CNT];$/;"	m	struct:sensor_t
+kalman_light	Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_light;$/;"	m	struct:sensor_t
+kalman_stream	Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_stream;$/;"	m	struct:sensor_t
+light	Software\auto_control\auto_sensor.h	/^	int traffic, light;$/;"	m	struct:sensor_t
 light	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon28
 sensor_get_light	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_light)(struct sensor_t*);$/;"	m	struct:sensor_t
 sensor_get_stream	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_stream)(struct sensor_t*);$/;"	m	struct:sensor_t
@@ -354,7 +361,7 @@ sensor_get_values	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_values
 sensor_release	Software\auto_control\auto_sensor.h	/^	void (*sensor_release)(struct sensor_t**,int);$/;"	m	struct:sensor_t
 sensor_t	Software\auto_control\auto_sensor.h	/^typedef struct sensor_t {$/;"	s
 sensor_t	Software\auto_control\auto_sensor.h	/^} sensor_t;$/;"	t	typeref:struct:sensor_t
-traffic	Software\auto_control\auto_sensor.h	/^	int traffic[COLLECT_CNT];$/;"	m	struct:sensor_t
+traffic	Software\auto_control\auto_sensor.h	/^	int traffic, light;$/;"	m	struct:sensor_t
 traffic	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon28
 uart2	Software\auto_control\auto_sensor.h	/^	uart_t *uart2;$/;"	m	struct:sensor_t
 value_t	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	t	typeref:enum:__anon28
@@ -377,14 +384,23 @@ Default_debuglevel	Software\initstart\loadfile.h	17;"	d
 FILE_PARAM	Software\initstart\loadfile.h	12;"	d
 FileSize	Software\initstart\loadfile.h	11;"	d
 __loadfile_h__	Software\initstart\loadfile.h	8;"	d
+DEF_KAL_A	Software\kalman\kalman.c	3;"	d	file:
+DEF_KAL_CFT	Software\kalman\kalman.c	7;"	d	file:
+DEF_KAL_H	Software\kalman\kalman.c	4;"	d	file:
+DEF_KAL_Q	Software\kalman\kalman.c	5;"	d	file:
+DEF_KAL_R	Software\kalman\kalman.c	6;"	d	file:
+kal_filter	Software\kalman\kalman.c	/^static float kal_filter(struct kalman_t *this, float kal_Z)$/;"	f	file:
+kal_release	Software\kalman\kalman.c	/^void kal_release(struct kalman_t **this,int isptr)$/;"	f
+kalman_init	Software\kalman\kalman.c	/^struct kalman_t *kalman_init(kalman_t *this,int A,int H,int Q,int R)$/;"	f
 __KALMAN_H__	Software\kalman\kalman.h	2;"	d
 kal_A	Software\kalman\kalman.h	/^	float kal_A, kal_H, kal_Q, kal_R;$/;"	m	struct:kalman_t
 kal_H	Software\kalman\kalman.h	/^	float kal_A, kal_H, kal_Q, kal_R;$/;"	m	struct:kalman_t
-kal_P	Software\kalman\kalman.h	/^	float kal_X_last, kal_P, kal_P_last;$/;"	m	struct:kalman_t
-kal_P_last	Software\kalman\kalman.h	/^	float kal_X_last, kal_P, kal_P_last;$/;"	m	struct:kalman_t
+kal_P	Software\kalman\kalman.h	/^	float kal_X, kal_P;$/;"	m	struct:kalman_t
 kal_Q	Software\kalman\kalman.h	/^	float kal_A, kal_H, kal_Q, kal_R;$/;"	m	struct:kalman_t
 kal_R	Software\kalman\kalman.h	/^	float kal_A, kal_H, kal_Q, kal_R;$/;"	m	struct:kalman_t
-kal_X_last	Software\kalman\kalman.h	/^	float kal_X_last, kal_P, kal_P_last;$/;"	m	struct:kalman_t
+kal_X	Software\kalman\kalman.h	/^	float kal_X, kal_P;$/;"	m	struct:kalman_t
+kal_filter	Software\kalman\kalman.h	/^	float (*kal_filter)(struct kalman_t*,float);$/;"	m	struct:kalman_t
+kal_release	Software\kalman\kalman.h	/^	void (*kal_release)(struct kalman_t**,int);$/;"	m	struct:kalman_t
 kalman_t	Software\kalman\kalman.h	/^typedef struct kalman_t{$/;"	s
 kalman_t	Software\kalman\kalman.h	/^} kalman_t;$/;"	t	typeref:struct:kalman_t
 wiz_Query	Software\lamp\wizdom.c	/^static int wiz_Query(struct wizdom_t*this,client_t *client,result_t *res)$/;"	f	file:
@@ -536,28 +552,40 @@ thread_UserProc	Software\ztcc\Interface.h	/^	pthread_t thread_UserProc ;$/;"	m	s
 warn	Software\ztcc\Interface.h	/^	struct Warn_t 	*warn;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Warn_t
 zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon35
 main	User\main.c	/^int main(int argc,char *argv[])$/;"	f
+check_errno	config\Create_Database.sh	/^check_errno(){$/;"	f
 BARD_E6018	config\config.h	10;"	d
-CFG_COM485	config\config.h	44;"	d
-CFG_COMDIDO	config\config.h	45;"	d
-CFG_PWMAX	config\config.h	46;"	d
-CFG_ReuseAddr	config\config.h	38;"	d
-CFG_client_max	config\config.h	37;"	d
-CFG_keepcount	config\config.h	41;"	d
-CFG_keepidle	config\config.h	39;"	d
-CFG_keepinterval	config\config.h	40;"	d
+CFG_COM485	config\config.h	56;"	d
+CFG_COMDIDO	config\config.h	57;"	d
+CFG_DB_NAME	config\config.h	36;"	d
+CFG_PWMAX	config\config.h	58;"	d
+CFG_ReuseAddr	config\config.h	50;"	d
+CFG_client_max	config\config.h	49;"	d
+CFG_keepcount	config\config.h	53;"	d
+CFG_keepidle	config\config.h	51;"	d
+CFG_keepinterval	config\config.h	52;"	d
+CFG_tb_coordi	config\config.h	37;"	d
+CFG_tb_gpinfo	config\config.h	45;"	d
+CFG_tb_light_info	config\config.h	41;"	d
+CFG_tb_pwm	config\config.h	44;"	d
+CFG_tb_single	config\config.h	38;"	d
+CFG_tb_task	config\config.h	39;"	d
+CFG_tb_tasklist	config\config.h	40;"	d
+CFG_tb_tunnel	config\config.h	43;"	d
+CFG_tb_warn	config\config.h	42;"	d
 Config_EC_6018	config\config.h	19;"	d
+Config_KALMAN	config\config.h	27;"	d
 Config_Log	config\config.h	20;"	d
-Config_Log	config\config.h	30;"	d
+Config_Log	config\config.h	31;"	d
 Config_Meter	config\config.h	18;"	d
 Config_Sqlite	config\config.h	25;"	d
-Config_TCP_Server	config\config.h	28;"	d
+Config_TCP_Server	config\config.h	29;"	d
 Config_UART	config\config.h	26;"	d
 Config_autoControl	config\config.h	22;"	d
 Config_ether	config\config.h	23;"	d
 Config_operate	config\config.h	21;"	d
-Config_operate	config\config.h	31;"	d
+Config_operate	config\config.h	32;"	d
 Config_serial	config\config.h	24;"	d
-Config_wizdom	config\config.h	29;"	d
+Config_wizdom	config\config.h	30;"	d
 Config_ztcc	config\config.h	11;"	d
 __config_h__	config\config.h	8;"	d
 MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
@@ -1488,7 +1516,6 @@ regAddr	library\e6018\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon23
 regData	library\e6018\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon23
 reserved	library\e6018\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon22
 width	library\e6018\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon22
-Database_Path	sqlite\database.c	8;"	d	file:
 sql_Init	sqlite\database.c	/^sql_t *sql_Init(sql_t *this)$/;"	f
 sql_Insert	sqlite\database.c	/^static int sql_Insert(const char *sql)$/;"	f	file:
 sql_delete	sqlite\database.c	/^static int sql_delete(const char *sql)$/;"	f	file:
@@ -1504,9 +1531,9 @@ Cmd	sqlite\database.h	/^	u8	Cmd[300];	\/\/任务命令$/;"	m	struct:__anon41
 Coor_gid	sqlite\database.h	/^	u32 Coor_gid;             \/\/协调器组ID$/;"	m	struct:__anon37
 Coor_id	sqlite\database.h	/^	u32 Coor_id;                \/\/对应的协调器的地址$/;"	m	struct:__anon38
 End_Date	sqlite\database.h	/^	time_t	End_Date;		\/\/结束日期$/;"	m	struct:__anon40
-Get_CountByColumn	sqlite\database.h	18;"	d
-Get_CountByCondition	sqlite\database.h	14;"	d
-Get_light_info_count	sqlite\database.h	19;"	d
+Get_CountByColumn	sqlite\database.h	20;"	d
+Get_CountByCondition	sqlite\database.h	16;"	d
+Get_light_info_count	sqlite\database.h	21;"	d
 Grade	sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon42
 Inter_Time	sqlite\database.h	/^	u32	Inter_Time; 		\/\/运行时间间隔$/;"	m	struct:__anon40
 Map_Addr	sqlite\database.h	/^	u32 Map_Addr;	         \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon37
@@ -1526,7 +1553,6 @@ TableCoordi_t	sqlite\database.h	/^} TableCoordi_t;$/;"	t	typeref:struct:__anon37
 TableSingle_t	sqlite\database.h	/^} TableSingle_t;$/;"	t	typeref:struct:__anon38
 TableTask_t	sqlite\database.h	/^} TableTask_t;$/;"	t	typeref:struct:__anon40
 TableTasklist_t	sqlite\database.h	/^} TableTasklist_t;$/;"	t	typeref:struct:__anon41
-Table_Info	sqlite\database.h	12;"	d
 Tableinfolight_t	sqlite\database.h	/^} Tableinfolight_t;$/;"	t	typeref:struct:__anon39
 Tablewarn_t	sqlite\database.h	/^} Tablewarn_t;$/;"	t	typeref:struct:__anon42
 Tk_id	sqlite\database.h	/^	u32	Tk_id;		\/\/任务表id$/;"	m	struct:__anon41
@@ -1556,7 +1582,7 @@ operate_flags	sqlite\database.h	/^	u32 operate_flags; \/\/操作设备状态$/;"
 rtime	sqlite\database.h	/^	u32 rtime;			\/\/更新时间$/;"	m	struct:__anon39
 sql_delete	sqlite\database.h	/^	int (*sql_delete)(const char*);$/;"	m	struct:sql_t
 sql_insert	sqlite\database.h	/^	int (*sql_insert)(const char*);$/;"	m	struct:sql_t
-sql_isexist	sqlite\database.h	21;"	d
+sql_isexist	sqlite\database.h	23;"	d
 sql_release	sqlite\database.h	/^	void (*sql_release)(struct sql_t**);$/;"	m	struct:sql_t
 sql_select	sqlite\database.h	/^	int (*sql_select)(const char*, char*,int,int,int,...);$/;"	m	struct:sql_t
 sql_t	sqlite\database.h	/^typedef struct sql_t{$/;"	s

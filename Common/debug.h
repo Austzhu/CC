@@ -52,8 +52,8 @@ typedef enum{
 #define DEBUG_autosensor 	1
 #define DEBUG_UART 			1
 #define DEBUG_sensor 		0
-#define DEBUG_calc 			1
-#define DEBUG_kalman 		1
+#define DEBUG_calc 			0
+#define DEBUG_kalman 		0
 
 #if 	MY_DEBUG == 1
 	#define debug(level,fmt,args...)  do{ if(level<=LEVEL) printf(fmt,##args); }while(0)

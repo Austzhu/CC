@@ -101,13 +101,15 @@ static int sensor_get_light(struct sensor_t *this)
 
 static void sensor_release(struct sensor_t **this,int Is_ptr)
 {
-	assert_param(this,;);
+	if(!this || !*this) return ;
+	sensor_t *_this = Is_ptr ? *this : (sensor_t *)this;
+
 	#ifdef Config_UART
-	DELETE((*this)->uart2,uart_relese);
+	DELETE(_this->uart2,uart_relese);
 	#endif
 	#ifdef Config_KALMAN
-	DELETE((*this)->kalman_light,kal_release);
-	DELETE((*this)->kalman_stream,kal_release);
+	DELETE(_this->kalman_light,kal_release,true);
+	DELETE(_this->kalman_stream,kal_release,true);
 	#endif
 	if(Is_ptr)  FREE(*this);
 }
@@ -125,6 +127,7 @@ sensor_t *sensor_init(struct sensor_t *this)
 	this->sensor_get_stream = sensor_get_stream;
 	this->sensor_get_light = sensor_get_light;
 	this->sensor_release = sensor_release;
+
 	#ifdef Config_UART
 	this->uart2 = uart_init(NULL,2,"9600,8,1,N");
 	if(!this->uart2) goto out;

@@ -251,7 +251,7 @@ static int TopUser_Relese(appitf_t *this)
 	DELETE(this->meter,meter_release);
 	#endif
 	#ifdef  Config_autoControl
-	DELETE(this->auto_mode,control_release,true);
+	DELETE(this->auto_mode,ctrl_release,true);
 	#endif
 	_exit(0);
 }
@@ -272,7 +272,7 @@ static int appitf_init(appitf_t *this)
 	this->thread_RecvInsert 	= -1;
 	this->thread_UserProc 		= -1;
 	this->pthread_start 		=   1;
-	if( access("cc_corl.db",F_OK))
+	if( access(CFG_DB_NAME,F_OK))
 		system("./config/Create_Database.sh");
 
 	INIT_FAIL(this->Queue,Queue_Init,this);		/* init for Queue */

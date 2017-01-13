@@ -1,11 +1,10 @@
 /********************************************************************
-	> File Name:		database.c
+	> File Name:	database.c
 	> Author:		Austzhu
 	> Mail:			153462902@qq.com.com
 	> Created Time:	2016年03月30日 星期三 10时38分53秒
  *******************************************************************/
 #include "database.h"
-#define Database_Path "cc_corl.db"
 
 /**
  * [ 往数据库里插入一条数据]
@@ -20,7 +19,7 @@ static int sql_Insert(const char *sql)
 	sqlite3* db = NULL;
 	sqlite3_stmt* stmt = NULL;
 
-	int res = sqlite3_open(Database_Path,&db);
+	int res = sqlite3_open(CFG_DB_NAME,&db);
 	if( SQLITE_OK != res ){
 		debug(DEBUG_sqlite3,"[In %s %d] Open Sqlite fail!\n",__func__,__LINE__);
 		//Write_log(err,Asprintf("[In %s %d] Open Sqlite fail!",__func__,__LINE__)  );
@@ -60,7 +59,7 @@ static int sql_delete(const char *sql)
 
 	sqlite3 *db = NULL;
 	sqlite3_stmt *stmt = NULL;
-	int res =  sqlite3_open(Database_Path,&db);
+	int res =  sqlite3_open(CFG_DB_NAME,&db);
 	if( SQLITE_OK != res){
 		debug(DEBUG_sqlite3,"[In %s %s %d] Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
 		//Write_log(err,Asprintf("[In %s %s %d] Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
@@ -113,7 +112,7 @@ static int sql_update(const char *table,const char *Condition)
 	char* const sql = calloc(strlen(table) + strlen(Condition) + 12 , sizeof(char));
 	if(!sql) goto out;
 
-	res = sqlite3_open(Database_Path,&db);
+	res = sqlite3_open(CFG_DB_NAME,&db);
 	if( SQLITE_OK != res ){
 		debug(DEBUG_sqlite3,"In %s %s %d:Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
 		//Write_log(err,Asprintf("In %s %s %d:Open Sqlite fail!",__FILE__,__func__,__LINE__)  );
@@ -183,7 +182,7 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 		}va_end(arg_ptr);
 	}
 
-	int res = sqlite3_open(Database_Path,&db);
+	int res = sqlite3_open(CFG_DB_NAME,&db);
 	if( SQLITE_OK != res ){
 		debug(DEBUG_sqlite3,"[In %s-%s-%d] Open Sqlite fail!\n",__FILE__,__func__,__LINE__);
 		goto out;

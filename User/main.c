@@ -20,8 +20,11 @@ int main(int argc,char *argv[])
 		g_appity.TopUser_relese(&g_appity);
 	}
 	while(true){
-		if(g_appity.param.ControlMethod == 0x03 && g_appity.Connect_status == Connect_ok)
-			g_appity.auto_mode->control_start(g_appity.auto_mode);
+		if(g_appity.param.ControlMethod == 0x03 && g_appity.Connect_status == Connect_ok){
+			g_appity.auto_mode->ctrl_start(g_appity.auto_mode);
+		}else{
+			g_appity.auto_mode->ctrl_stop(g_appity.auto_mode);
+		}
 		msleep(5000);
 	}
 }
