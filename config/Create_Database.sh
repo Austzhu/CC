@@ -177,10 +177,10 @@ CREATE UNIQUE INDEX ${TB_TASKLIST}_index_id ON ${TB_TASKLIST}(id ASC);
 CREATE UNIQUE INDEX ${TB_WARN}_index_id ON ${TB_WARN}(id ASC);
 EOF
 
-for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 ; do
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ; do
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
-insert into ${TB_PWM} values($i +1,$i,$i *10,$i *10+9);
+insert into ${TB_PWM} values($i ,$i,($i -1)*1000,($i -1) *1000+999);
 EOF
 done
 

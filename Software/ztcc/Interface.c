@@ -214,6 +214,10 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 	return FAIL;
 }
 
+static int TopUser_setMode(struct appitf_t *this, int mode)
+{
+	return SUCCESS;
+}
 
 static int TopUser_Relese(appitf_t *this)
 {
@@ -223,14 +227,17 @@ static int TopUser_Relese(appitf_t *this)
 	this->pthread_start = 0;
 	if(this->thread_Keepalive > 0 ){
 		pthread_join(this->thread_Keepalive,NULL);
+		this->thread_Keepalive = -1;
 		printf("thread_Keepalive exit!\n");
 	}
 	if(this->thread_RecvInsert > 0 ){
 		pthread_join(this->thread_RecvInsert,NULL);
+		this->thread_RecvInsert = -1;
 		printf("thread_RecvInsert exit!\n");
 	}
 	if(this->thread_UserProc > 0 ){
 		pthread_join(this->thread_UserProc,NULL);
+		this->thread_UserProc = -1;
 		printf("thread_UserProc exit!\n");
 	}
 
@@ -319,4 +326,5 @@ appitf_t g_appity = {
 	.TopUser_Keepalive = TopUser_Keepalive,
 	.TopUser_RecvPackage = TopUser_RecvPackage,
 	.TopUser_pakgchk = package_check,
+	.TopUser_setMode = TopUser_setMode,
 };

@@ -72,11 +72,16 @@ static int calc_light_enter(struct calc_t *this)
 	if(FAIL == K) return FAIL;
 
 	this->args.extern_light = this->sensor->sensor_get_values(this->sensor,light);
-	this->args.light_enter[0] = (K * this->args.extern_light)/1000; 	//入口1段
+	this->args.light_enter[0] = (K * this->args.extern_light)/1000; 		//入口1段
 	this->args.light_enter[1] = this->args.light_enter[0]/2;				//入口2段
+	#if DEBUG_calc
+		static int32_t light_last = 0;
+		debug(DEBUG_calc,"extern light value is %d, △ light = %d\n",\
+			this->args.extern_light,this->args.extern_light-light_last);
+		debug(DEBUG_calc,"enter 1~2 is %d,%d\n",this->args.light_enter[0],this->args.light_enter[1]);
+		light_last = this->args.extern_light;
+	#endif
 
-	debug(DEBUG_calc,"enter 1~2 is %d,%d\n",\
-		this->args.light_enter[0],this->args.light_enter[1]);
 	return SUCCESS;
 }
 

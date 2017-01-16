@@ -304,6 +304,7 @@ ctrl_openloop	Software\auto_control\auto_control.c	/^static int ctrl_openloop(co
 ctrl_output	Software\auto_control\auto_control.c	/^static int ctrl_output(control_t *this, int32_t group, int32_t light)$/;"	f	file:
 ctrl_pthread	Software\auto_control\auto_control.c	/^static void *ctrl_pthread(void *args)$/;"	f	file:
 ctrl_release	Software\auto_control\auto_control.c	/^static void ctrl_release(control_t **this, int Is_ptr)$/;"	f	file:
+ctrl_set_group_info	Software\auto_control\auto_control.c	/^static int32_t ctrl_set_group_info(control_t *this,sql_t *sql)$/;"	f	file:
 ctrl_set_light_current	Software\auto_control\auto_control.c	/^static void ctrl_set_light_current(control_t *this)$/;"	f	file:
 ctrl_start	Software\auto_control\auto_control.c	/^static int ctrl_start(control_t *this)$/;"	f	file:
 ctrl_stop	Software\auto_control\auto_control.c	/^static int ctrl_stop(control_t *this)$/;"	f	file:

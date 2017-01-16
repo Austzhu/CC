@@ -134,7 +134,8 @@ s32 CallBack_Config(Node_t *node,void *parent)
 				_parent->param.ControlMethod = package->data[1];
 				system(Asprintf("sed -i \"s/ *	*ControlMethod *	*= *	*.*$"\
 					"/ControlMethod	= %d/\" ./config/fileparam.ini ", package->data[1]));
-				res = SUCCESS;
+				_parent->param.ControlMethod = package->data[1];
+				res = _parent->TopUser_setMode(_parent,package->data[1]);
 			}else 	res = FAIL;
 			MakeShortResponse(AckBuffer,03,0xA3,0x04,res);
 			Append2Queue(AckBuffer,_parent->Queue);

@@ -101,6 +101,7 @@ typedef struct appitf_t {
 	int (*const TopUser_Init)(struct appitf_t *this);
 	int (*const TopUser_relese)(struct appitf_t*);
 	int (*const TopUser_pakgchk)(void*);
+	int (*const TopUser_setMode)(struct appitf_t *this, int);
 } appitf_t;
 
 extern appitf_t g_appity;

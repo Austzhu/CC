@@ -42,6 +42,13 @@ static int ctrl_getvalues(control_t *this)
 			return FAIL;
 		}
 	}
+	#if DEBUG_auto&0
+		printf("\nenter_0=%d,enter_1=%d,transit_0=%d,"\
+			"transit_1=%d,transit_2=%d,base_0=%d,exit_0=%d,exit_1=%d\n",\
+			this->calc->args.light_enter[0],this->calc->args.light_enter[1],this->calc->args.light_transit[0],\
+			this->calc->args.light_transit[1],this->calc->args.light_transit[2],this->calc->args.light_base[0],\
+			this->calc->args.light_exit[0],this->calc->args.light_exit[1]);
+	#endif
 	return SUCCESS;
 }
 
@@ -70,7 +77,7 @@ static int32_t ctrl_update_info(control_t *this,sql_t *sql)
 	assert_param(this,FAIL);
 	light_info_t *info = NULL;
 	int32_t keyword[2] = {0};
-
+	debug(DEBUG_auto,"\nafter calc tunnel light values:");
 	for(int i=0; i<CFG_COLUMN; ++i){
 		info = this->light_info + i;
 		/* 获取各段计算出的亮度 */
@@ -122,6 +129,7 @@ static int32_t ctrl_update_info(control_t *this,sql_t *sql)
 			if(SUCCESS !=select_pwm_level(sql, \
 				&info->pwm_level[left], keyword[left] ) ) goto out;
 			info->pwm_level[right] = info->pwm_level[left];
+			debug(DEBUG_auto,"%d ",keyword[left]);
 		}else{		//双向车道
 			if(SUCCESS !=select_pwm_level(sql, \
 				&info->pwm_level[left], keyword[left] ) ) goto out;
@@ -129,6 +137,7 @@ static int32_t ctrl_update_info(control_t *this,sql_t *sql)
 				&info->pwm_level[right], keyword[right] ) ) goto out;
 		}	//end of if(ONE_WAY...)
 	}		//end of for(...)
+	debug(DEBUG_auto,"\n");
 	return SUCCESS;
 out:
 	return FAIL;
@@ -169,34 +178,37 @@ static int ctrl_exec(control_t *this, sql_t *sql)
 	sql->sql_select("select distinct gid,pwm_value from db_group_info "\
 		"order by gid;",(char*)g_info,sizeof(struct g_info_t),this->group_cnt,0);
 	/* 打印数据库中提取出来的group 和 pwm 信息 */
-	#if DEBUG_auto
-		printf("id\tgit\tpwm value\n---\t----\t------------\n");
+	#if DEBUG_auto && DEBUG_autocontrol
+		printf("-------------------------------------------------------------------------\n");
+		printf("---------group pwm info----------\nid\tgid\tpwm value\n---\t----\t------------\n");
 		for(int i=0; i<this->group_cnt; ++i)
 			printf("%d\t%d\t%d\n",i,g_info[i].gid,g_info[i].pwm);
-		printf("\n----------tunnel set pwm value----------\n");
+		printf("----------tunnel set pwm value----------\n");
 		printf("id\tleft pwm\tright pwm\n----\t-----------\t---------------\n");
 		for(int i=0; i<CFG_COLUMN; ++i){
 			printf("%d\t%d\t\t%d\n",i,this->light_info[i].pwm_level[left],this->light_info[i].pwm_level[right]);
 		}
+		printf("-------------------------------------------------------------------------\n");
 	#endif
 	/* 根据组号和pwm等级，与隧道对应的段对比,不在范围则实施控制操作 */
-	light_info_t *light_info = NULL;
 	uint32_t index = 0;
+	struct light_info_t *light_info = NULL;
 	for(struct g_info_t *pinfo = g_info; (pinfo-g_info) < this->group_cnt; ++pinfo){
 		/* 指向对应段的数据 */
-		index = pinfo->gid%10;
-		light_info = this->light_info + index;
+		index = (pinfo->gid%10)/5;
+		light_info = this->light_info + pinfo->gid/10;
 		/**
 		 * 计算出的亮度与当前的pwm对应的亮度范围之外
-		 * index=pinfo->gid%10 = 0~9  index = 0~1
-		 * 双向车道0表示左边对应的段，1表示右边对应的段
+		 * index=pinfo->gid/10 = 0~9  index = 0~1
+		 * index 双向车道0表示左边对应的段，1表示右边对应的段
 		 * 单向车道时 左边和右边效果一样
 		 */
-		if(light_info->pwm_level[index/5] != pinfo->pwm){
-			debug(DEBUG_auto,"group=%d, light value=%d\n",pinfo->gid,light_info->pwm_level[index/5]);
-			this->ctrl_output(this,pinfo->gid, light_info->pwm_level[index/5]);
+		//if(abs(light_info->pwm_level[(pinfo->gid%10)/5] - pinfo->pwm) > 0){
+		if(light_info->pwm_level[index] != pinfo->pwm){
+			debug(DEBUG_auto,"group=%d, light value=%d\n",pinfo->gid,light_info->pwm_level[index]);
+			this->ctrl_output(this,pinfo->gid, light_info->pwm_level[index]);
 		}
-	}
+	}	//end of for(pinfo = g_info;
 	FREE(g_info);
 	return SUCCESS;
 }
@@ -290,14 +302,19 @@ static int ctrl_start(control_t *this)
 		debug(DEBUG_auto,"update group info error!\n");
 		return FAIL;
 	}
-
+	debug(DEBUG_autocontrol,"auto control mode starting...\n");
+	for(int i=0; i<10; ++i){
+		this->ctrl_getvalues(this);
+		msleep(300);
+	}
+	//sleep(10);
 	this->pthread_start = 1;
 	if(pthread_create(&this->ctrl_thread, NULL,ctrl_pthread,this)){
 		debug(DEBUG_autocontrol,"In class auto control pthread create error!\n");
 		return FAIL;
 	}
 
-	debug(DEBUG_autocontrol,"auto contrl is starting!\n");
+
 	return SUCCESS;
 }
 

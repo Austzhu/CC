@@ -47,12 +47,12 @@ typedef enum{
 #define DEBUG_reset 			1
 #define DEBUG_server 			1
 #define DEBUG_config 			1
-#define DEBUG_autocontrol 	1
+#define DEBUG_autocontrol 	0
 #define DEBUG_auto 			1
 #define DEBUG_autosensor 	1
 #define DEBUG_UART 			1
 #define DEBUG_sensor 		0
-#define DEBUG_calc 			0
+#define DEBUG_calc 			1
 #define DEBUG_kalman 		0
 
 #if 	MY_DEBUG == 1
