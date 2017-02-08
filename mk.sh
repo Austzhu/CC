@@ -25,7 +25,7 @@ CPATH=${CPATH}:${CURDIR}/config:${CURDIR}/sqlite:${CURDIR}/task/taskque:${CURDIR
 CPATH=${CPATH}:${HARDIR}/ethernet:${HARDIR}/serial:${HARDIR}/single:${HARDIR}/Meter
 CPATH=${CPATH}:${SOFTDIR}/process:${SOFTDIR}/initstart:${SOFTDIR}/Log:${SOFTDIR}/Warn
 CPATH=${CPATH}:${SOFTDIR}/ztcc:${SOFTDIR}/lamp:${SOFTDIR}/operate:${SOFTDIR}/auto_control
-CPATH=${CPATH}:${SOFTDIR}/kalman
+CPATH=${CPATH}:${SOFTDIR}/kalman:${CURDIR}/task/timertask
 
 case ${Config_bord} in
 	e6018)

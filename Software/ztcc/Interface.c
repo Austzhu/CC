@@ -13,6 +13,21 @@
 #include "single.h"
 #include "loadfile.h"
 
+#if 0
+typedef struct allow_cmd_t { uint8_t cmd; uint8_t subcmd; } allow_cmd_t;
+
+allow_cmd_t allow_cmd[][128] ={
+	/* 应急模式允许操作的命令 */
+	{{0xA3,0X04},{0XFF,0XFF}},
+	/* 时控模式 */
+	{{0XFF,0XFF}},
+	/* 手动模式 */
+	{{0XFF,0XFF}},
+	/* 自动模式 */
+	{{0XFF,0XFF}},
+};
+#endif
+
 static void *KeepaliveThread(void *args)
 {
 	if(!args){
@@ -91,6 +106,20 @@ static s32 TopUser_InsertQue(appitf_t *this)
 	if(SUCCESS != this->TopUser_Uidchk(this,&recvbuf[1]) ){    // 增加对集中器UID的判断
 		debug(DEBUG_TaskAppend,"CC UID Unmatch!\n");
 		return FAIL;
+	}
+	faalpkt_t *pkt = (faalpkt_t*)recvbuf;
+	/* 判断模式允许的操作 */
+	if(pkt->ctrl != 0x80){
+		if(this->param.ControlMethod == 0x00){	//应急模式,只允许模式切换操作
+			if(pkt->ctrl != 0xA3 || pkt->data[0] != 0x04)
+				return SUCCESS;
+		}else{
+			if(this->param.ControlMethod != 0x02){	//切换到手动模式
+				this->TopUser_stopMode(this,this->param.ControlMethod);
+				this->param.ControlMethod = 0x02;
+				//this->TopUser_setMode(this,2);
+			}
+		}
 	}
 
 	/* get Queue type and level
@@ -214,8 +243,43 @@ static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)
 	return FAIL;
 }
 
-static int TopUser_setMode(struct appitf_t *this, int mode)
+static int TopUser_stopMode(struct appitf_t *this, uint8_t mode)
 {
+	if(!this || mode > 3) return FAIL;
+	switch(mode){
+		case 0x03:
+			this->auto_mode->ctrl_stop(this->auto_mode);
+			break;
+		default:break;
+	}
+	return SUCCESS;
+}
+
+static int TopUser_setMode(struct appitf_t *this, uint8_t mode)
+{
+	if(!this || mode >3 )
+		return FAIL;
+	if(mode != this->param.ControlMethod){
+		if(SUCCESS != TopUser_stopMode(this,this->param.ControlMethod))
+			return FAIL;
+		this->param.ControlMethod = mode;
+		system(Asprintf("sed -i 's/^ *ControlMethod.*$/"\
+			"ControlMethod = %d/' "CFG_FILE_PRAM, mode) );
+	}
+	/* start mode */
+	switch(mode){
+		/* 应急模式 */
+		case 0x00:	break;
+		/* 时控模式 */
+		case 0x01:	break;
+		/* 手动模式 */
+		case 0x02:	break;
+		/* 自动模式 */
+		case 0x03:
+			this->auto_mode->ctrl_start(this->auto_mode);
+			break;
+		default:	break;
+	}
 	return SUCCESS;
 }
 
@@ -275,14 +339,14 @@ static int appitf_init(appitf_t *this)
 	loadParam(&g_appity);
 	this->Connect_status 		= Connect_error;
 	this->HeartBeat_status 	= HeartBeat_error;
-	this->thread_Keepalive 		= -1;
+	this->thread_Keepalive 	= -1;
 	this->thread_RecvInsert 	= -1;
 	this->thread_UserProc 		= -1;
 	this->pthread_start 		=   1;
 	if( access(CFG_DB_NAME,F_OK))
 		system("./config/Create_Database.sh");
 
-	INIT_FAIL(this->Queue,Queue_Init,this);		/* init for Queue */
+	INIT_FAIL(this->Queue,Queue_Init,this);			/* init for Queue */
 	INIT_FAIL(this->opt_Itf,operate_init,&(this->param));
 	#ifdef Config_serial								/* init for serial */
 	INIT_FAIL(this->Serial,serial_Init,((0x01<<CFG_COM485) | (0x01<<CFG_COMDIDO)),9600,9600);
@@ -327,4 +391,5 @@ appitf_t g_appity = {
 	.TopUser_RecvPackage = TopUser_RecvPackage,
 	.TopUser_pakgchk = package_check,
 	.TopUser_setMode = TopUser_setMode,
+	.TopUser_stopMode = TopUser_stopMode,
 };

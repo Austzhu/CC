@@ -37,6 +37,7 @@ create table ${TB_COOR}(
 EOF
 check_errno $?  ${TB_COOR}
 
+
 #建立单灯记录表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -54,6 +55,8 @@ create table ${TB_SINGLE}(
 );
 EOF
 check_errno $?  ${TB_SINGLE}
+
+
 #单灯信息表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -68,10 +71,10 @@ create table ${TB_INFO}(
 	Rate_PF 		integer default 0,
 	light_status 	integer default 0,
 	light_val  		integer default 0,
-	light_E 		integer default 0,
-	light_P 		integer default 0,
-	light_V 		integer default 0,
-	light_D 		integer default 0,
+	light_E 			integer default 0,
+	light_P 			integer default 0,
+	light_V 			integer default 0,
+	light_D 			integer default 0,
 	rtime 			integer default 0,
 	PRIMARY KEY (id),
 	UNIQUE (Base_Addr),
@@ -79,39 +82,47 @@ create table ${TB_INFO}(
 );
 EOF
 check_errno $?  ${TB_INFO}
+
+
 #建立任务表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
 drop table if exists ${TB_TASK} ;
 create table ${TB_TASK}(
 	id			integer,
-	Name		text NOT NULL,
-	Priority	integer NOT NULL,
-	Start_Date	integer NOT NULL,
-	End_Date	integer NOT NULL,
-	Run_Time	integer NOT NULL,
-	Inter_Time	integer NOT NULL,
-	Type		integer NOT NULL,
-	State		integer NOT NULL,
+	name		text NOT NULL,
+	priority		integer NOT NULL,
+	start		integer NOT NULL,
+	end 		integer NOT NULL,
+	flow_up 	integer,
+	flow_down	integer,
+	light_up 	integer,
+	light_down	integer,
+	repeat_cnt	integer NOT NULL,
+	repeat_tm	integer NOT NULL,
+	status 		integer NOT NULL,
 	PRIMARY KEY (id)
 );
 EOF
 check_errno $?  ${TB_TASK}
+
+
 #建立任务明细表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
 drop table if exists ${TB_TASKLIST} ;
 create table ${TB_TASKLIST}(
 	id			integer,
-	Tk_id		integer NOT NULL,
-	Rank		integer NOT NULL,
-	Cmd			text 	NOT NULL,
-	Wait_time	integer NOT NULL,
+	task_id		integer NOT NULL,
+	rank		integer NOT NULL,
+	cmd		text 	NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY(Tk_id) REFERENCES ${TB_TASK}(id) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY(task_id) REFERENCES ${TB_TASK}(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 EOF
 check_errno $? ${TB_TASKLIST}
+
+
 #建立报警表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -128,6 +139,8 @@ create table ${TB_WARN}(
 );
 EOF
 check_errno $? ${TB_WARN}
+
+
 #隧道信息表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -142,6 +155,8 @@ create table ${TB_TUNNEL}(
 );
 EOF
 check_errno $? ${TB_TUNNEL}
+
+
 #PWM对照表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -155,6 +170,8 @@ create table ${TB_PWM}(
 );
 EOF
 check_errno $? ${TB_PWM}
+
+
 #隧道组信息表
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
@@ -167,6 +184,8 @@ create table ${TB_GRPINFO}(
 );
 EOF
 check_errno $? ${TB_GRPINFO}
+
+
 #建立唯一性约束索引(升序)
 sqlite3 ${DB} << EOF
 CREATE UNIQUE INDEX ${TB_COOR}_index_id ON ${TB_COOR}(id ASC);
@@ -187,6 +206,17 @@ done
 sqlite3 ${DB} << EOF
 PRAGMA foreign_keys = ON;
 insert into ${TB_TUNNEL} values(1,0,80,400,1);
+EOF
+
+
+sqlite3 ${DB} << EOF
+PRAGMA foreign_keys = ON;
+insert into ${TB_TASK} values(1,'NO.1',1,100,300,700,1200,2000,2500,2,3600,0);
+insert into ${TB_TASK} values(2,'NO.2',2,110,320,800,1250,2500,3000,0,0,0);
+insert into ${TB_TASK} values(3,'NO.3',3,150,340,900,1300,3000,3500,5,600,0);
+insert into ${TB_TASK} values(4,'NO.4',4,160,350,950,1350,3500,4000,0,0,0);
+insert into ${TB_TASK} values(5,'NO.5',5,190,370,1000,1400,4000,4200,3,300,0);
+insert into ${TB_TASK} values(6,'NO.6',6,240,380,1050,1450,4200,4500,6,100,0);
 EOF
 
 if [ $? ];then

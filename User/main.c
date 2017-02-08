@@ -14,16 +14,16 @@
 
 int main(int argc,char *argv[])
 {
-	int res = g_appity.TopUser_Init(&g_appity);
-	if(res != SUCCESS){
+	appitf_t *this = &g_appity;
+	if(this->TopUser_Init(this) != SUCCESS ){
 		debug(DEBUG_app,"system init error!\n");
-		g_appity.TopUser_relese(&g_appity);
+		this->TopUser_relese(this);
 	}
 	while(true){
-		if(g_appity.param.ControlMethod == 0x03 && g_appity.Connect_status == Connect_ok){
-			g_appity.auto_mode->ctrl_start(g_appity.auto_mode);
+		if(this->Connect_status == Connect_ok){
+			this->TopUser_setMode(this,this->param.ControlMethod);
 		}else{
-			g_appity.auto_mode->ctrl_stop(g_appity.auto_mode);
+			this->TopUser_stopMode(this,this->param.ControlMethod);
 		}
 		msleep(5000);
 	}

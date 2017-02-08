@@ -49,7 +49,7 @@ typedef struct{
 /* 单灯信息记录表（db_info_light） */
 typedef struct {
 	s32 id;				//主键
-	s32 Base_Addr;	//单灯地址
+	s32 Base_Addr;		//单灯地址
 	u32 operate_flags; //操作设备状态
 	u32 Warn_flags;	//报警的标志
 	u32 Rate_v;			//额定电压
@@ -57,34 +57,13 @@ typedef struct {
 	u32 Rate_PF;		//功率因数
 	s32 light_status;	//灯状态
 	u32 light_val;		//灯调光值
-	u32 light_E;		//灯电流值
+	u32 light_E;			//灯电流值
 	u32 light_P;		//灯功率值
 	u32 light_V;		//灯电压值
 	u32 light_D;		//灯电量值
 	u32 rtime;			//更新时间
 } Tableinfolight_t;
 
-/* 任务表(db_task) */
-typedef struct{
-	u32 	id;
-	u8		Name[32];		//任务名称
-	u32  	Priority; 		//优先级
-	time_t 	Start_Date;		//开始日期
-	time_t	End_Date;		//结束日期
-	time_t	Run_Time;		//运行时间
-	u32	Inter_Time; 		//运行时间间隔
-	u32	Type;			//任务类型，单次/循环
-	u32	State;			//任务执行状态
-} TableTask_t;
-
-/* 任务明细表（db_tasklist） */
-typedef struct{
-	u32 	id;
-	u32	Tk_id;		//任务表id
-	u32	Rank;		//执行顺序
-	u8	Cmd[300];	//任务命令
-	u32	Wait_time;	//执行延迟时间
-} TableTasklist_t;
 
 /* 报警日志记录表（db_warn） */
 typedef struct{

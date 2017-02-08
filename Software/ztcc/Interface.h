@@ -29,10 +29,13 @@
 #include "auto_calc.h"
 #include "auto_sensor.h"
 #endif
-
 #ifdef Config_UART
 #include "UART.h"
 #endif
+#ifdef Config_TIMETASK
+#include "timertask.h"
+#endif
+
 
 #define Connect_ok 		0
 #define Connect_error 		-1
@@ -101,7 +104,8 @@ typedef struct appitf_t {
 	int (*const TopUser_Init)(struct appitf_t *this);
 	int (*const TopUser_relese)(struct appitf_t*);
 	int (*const TopUser_pakgchk)(void*);
-	int (*const TopUser_setMode)(struct appitf_t *this, int);
+	int (*const TopUser_setMode)(struct appitf_t *this, uint8_t);
+	int (*const TopUser_stopMode)(struct appitf_t *this, uint8_t);
 } appitf_t;
 
 extern appitf_t g_appity;

@@ -82,6 +82,7 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^reboot success.....\n");
 			sync();
+			IoctlBuzzer(100,0);
 			reboot(RB_AUTOBOOT);
 			break;
 		case 0x03:	//time tick
@@ -105,6 +106,8 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^poweroff success.....\n");
 			sync();
+			IoctlBuzzer(100,0);
+			sleep(2);
 			reboot(RB_POWER_OFF);
 			break;
 		default:break;
@@ -130,13 +133,7 @@ s32 CallBack_Config(Node_t *node,void *parent)
 			debug(DEBUG_reset,"Tunnel config %s\n",res==SUCCESS? "success!":"error!");
 			break;
 		case 0x04:		//模式切换
-			if(package->data[1] > 0 && package->data[1] < 5){
-				_parent->param.ControlMethod = package->data[1];
-				system(Asprintf("sed -i \"s/ *	*ControlMethod *	*= *	*.*$"\
-					"/ControlMethod	= %d/\" ./config/fileparam.ini ", package->data[1]));
-				_parent->param.ControlMethod = package->data[1];
-				res = _parent->TopUser_setMode(_parent,package->data[1]);
-			}else 	res = FAIL;
+			res = _parent->TopUser_setMode(_parent,package->data[1]);
 			MakeShortResponse(AckBuffer,03,0xA3,0x04,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_config,"config control method %d %s\n",\

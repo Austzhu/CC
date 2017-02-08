@@ -313,8 +313,6 @@ static int ctrl_start(control_t *this)
 		debug(DEBUG_autocontrol,"In class auto control pthread create error!\n");
 		return FAIL;
 	}
-
-
 	return SUCCESS;
 }
 

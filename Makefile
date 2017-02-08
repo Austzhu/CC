@@ -15,6 +15,7 @@ OBJS_PATH := ${ROOTDIR}/Common/common
 OBJS_PATH +=${ROOTDIR}/Common/crc16
 OBJS_PATH +=${ROOTDIR}/User
 OBJS_PATH +=${ROOTDIR}/task/taskque
+OBJS_PATH +=${ROOTDIR}/task/timertask
 OBJS_PATH +=${ROOTDIR}/sqlite
 OBJS_PATH +=${ROOTDIR}/hardware/ethernet
 OBJS_PATH +=${ROOTDIR}/hardware/serial

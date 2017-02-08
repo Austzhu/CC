@@ -25,6 +25,7 @@
 	#define Config_Sqlite
 	#define Config_UART
 	#define Config_KALMAN
+	#define Config_TIMETASK
 #elif defined(BORD_E3100)
 	#define Config_TCP_Server
 	#define Config_wizdom
@@ -53,6 +54,7 @@
 #define CFG_keepcount 		3 		//keepalive 探测次数
 #endif
 
+#define CFG_FILE_PRAM 		"./config/fileparam.ini"		//配置文件
 #define CFG_COM485 			1 		//和协调器通讯的串口
 #define CFG_COMDIDO		3 		//和扩展DIDO通讯的串口
 #define CFG_PWMAX			0x1D 	//PWM的峰值

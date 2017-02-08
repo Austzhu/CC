@@ -70,3 +70,21 @@ void display_pack(const char *mes,const char *buf, int length)
 		printf("%02x ",*buf++);
 	printf("\n");
 }
+
+char *mystrcpy(char *dest, const char *src)
+{
+	if(!dest || !src) return 	NULL;
+	char *ret = dest;
+	int cnt = 0;
+	while(src[cnt++] != '\0');
+	--cnt;
+
+	if(dest > src && dest <= src+cnt ){	//内存有重叠部分
+		dest += cnt;
+		src += cnt;
+		while(cnt--)	*dest-- = *src--;
+	}else{
+		while((*dest++=*src++) != '\0');
+	}
+	return ret;
+}

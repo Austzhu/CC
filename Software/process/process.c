@@ -188,6 +188,7 @@ int delete_sql(u8 *Pdata,appitf_t *app)
 				return FAIL;
 			}	break;
 		case 0x02:		//任务表
+		#if 0
 			if(*Pdata == 0x01){//名称
 				return app->sqlite->sql_delete(Asprintf("delete from db_task where Name=%s;",Pdata+1));
 			}else if(*Pdata++ == 0x02){//时间范围
@@ -198,7 +199,9 @@ int delete_sql(u8 *Pdata,appitf_t *app)
 			}else{
 				debug(DEBUG_DelSql,"db_task have no coilmn type %d\n",*(Pdata-1));
 				return FAIL;
-			}	break;
+			}
+		#endif
+			break;
 		case 0x03:		//报警日志记录表
 			if(*Pdata++ == 0x02){//名称
 				Mktime(&tim,Pdata,start);
