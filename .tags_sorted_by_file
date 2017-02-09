@@ -24,6 +24,7 @@ Str2Hex	Common\common\common.c	/^u8 *Str2Hex(u8 *dest,const char *src)$/;"	f
 display_pack	Common\common\common.c	/^void display_pack(const char *mes,const char *buf, int length)$/;"	f
 get_check_sum	Common\common\common.c	/^int get_check_sum(void *pkg,int size)$/;"	f
 msleep	Common\common\common.c	/^void msleep(u32 ms)$/;"	f
+mystrcpy	Common\common\common.c	/^char *mystrcpy(char *dest, const char *src)$/;"	f
 Asprintf	Common\common\common.h	39;"	d
 Asprintf_Strlen	Common\common\common.h	38;"	d
 DELETE	Common\common\common.h	51;"	d
@@ -34,6 +35,7 @@ INIT_FAIL	Common\common\common.h	70;"	d
 INIT_NPTR	Common\common\common.h	72;"	d
 MessageBuffersize	Common\common\common.h	15;"	d
 NEW	Common\common\common.h	45;"	d
+PARAM_INT	Common\common\common.h	77;"	d
 __COMMON_H__	Common\common\common.h	13;"	d
 assert_fail	Common\common\common.h	34;"	d
 assert_null	Common\common\common.h	33;"	d
@@ -83,6 +85,7 @@ DEBUG_server	Common\debug.h	48;"	d
 DEBUG_server2cc	Common\debug.h	27;"	d
 DEBUG_single	Common\debug.h	38;"	d
 DEBUG_sqlite3	Common\debug.h	36;"	d
+DEBUG_tmtask	Common\debug.h	57;"	d
 DEBUG_update	Common\debug.h	41;"	d
 ERROR	Common\debug.h	/^	ERROR,$/;"	e	enum:__anon1
 ERR_PRINT	Common\debug.h	4;"	d
@@ -93,12 +96,12 @@ MY_DEBUG	Common\debug.h	5;"	d
 NOTICE	Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon1
 WARNING	Common\debug.h	/^	WARNING,$/;"	e	enum:__anon1
 __DEBUG_H__	Common\debug.h	2;"	d
-debug	Common\debug.h	59;"	d
-debug	Common\debug.h	61;"	d
-debug	Common\debug.h	63;"	d
+debug	Common\debug.h	60;"	d
+debug	Common\debug.h	62;"	d
+debug	Common\debug.h	64;"	d
 debug_level	Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon1
-err_Print	Common\debug.h	67;"	d
-err_Print	Common\debug.h	69;"	d
+err_Print	Common\debug.h	68;"	d
+err_Print	Common\debug.h	70;"	d
 ERRORS	Common\err_code.h	21;"	d
 FAIL	Common\err_code.h	18;"	d
 Open_FAIL	Common\err_code.h	22;"	d
@@ -473,16 +476,18 @@ MakeShortResponse	Software\process\Callback_function.c	5;"	d	file:
 MakeSingleResponse	Software\process\Callback_function.c	17;"	d	file:
 MakeUpdateResponse	Software\process\Callback_function.c	28;"	d	file:
 __CALLBACE_FUNCTION_H__	Software\process\Callback_function.h	2;"	d
-CC_Inquire_Version	Software\process\process.c	/^int CC_Inquire_Version(u8 *buf,int size)$/;"	f
-CoordiConfig	Software\process\process.c	/^int CoordiConfig(u8 *package,  appitf_t *app)$/;"	f
+Config_Coordi	Software\process\process.c	/^int Config_Coordi(uint8_t *package,  appitf_t *app)$/;"	f
+Config_Single	Software\process\process.c	/^int Config_Single(uint8_t *package,appitf_t *app)$/;"	f
+Config_delete	Software\process\process.c	/^int Config_delete(uint8_t *Pdata,appitf_t *app)$/;"	f
+Config_task	Software\process\process.c	/^int Config_task(uint8_t *pf,appitf_t *app)$/;"	f
+Config_tasklist	Software\process\process.c	/^int Config_tasklist(uint8_t *package,appitf_t *app)$/;"	f
+Config_tunnel	Software\process\process.c	/^int Config_tunnel(uint8_t *package,appitf_t *app)$/;"	f
 Mktime	Software\process\process.c	15;"	d	file:
-Query_time	Software\process\process.c	/^int Query_time(u8 *buf,int bufsize)$/;"	f
-Reset2DoFunctions	Software\process\process.c	/^int Reset2DoFunctions(void)$/;"	f
-SingleConfig	Software\process\process.c	/^int SingleConfig(u8 *package,appitf_t *app)$/;"	f
-delete_sql	Software\process\process.c	/^int delete_sql(u8 *Pdata,appitf_t *app)$/;"	f
-gettime	Software\process\process.c	26;"	d	file:
-time_tick	Software\process\process.c	/^int time_tick(u8 *package)$/;"	f
-tunnel_config	Software\process\process.c	/^int tunnel_config(u8 *package,appitf_t *app)$/;"	f
+gettime	Software\process\process.c	25;"	d	file:
+opt_reset	Software\process\process.c	/^int opt_reset(void)$/;"	f
+opt_tmquery	Software\process\process.c	/^int opt_tmquery(uint8_t *buf,int bufsize)$/;"	f
+opt_tmtick	Software\process\process.c	/^int opt_tmtick(uint8_t *package)$/;"	f
+opt_version	Software\process\process.c	/^int opt_version(uint8_t *buf,int size)$/;"	f
 __PROCESS_H__	Software\process\process.h	13;"	d
 KeepaliveThread	Software\ztcc\Interface.c	/^static void *KeepaliveThread(void *args)$/;"	f	file:
 RecvInsertQueueThread	Software\ztcc\Interface.c	/^static void *RecvInsertQueueThread(void *args)$/;"	f	file:
@@ -491,6 +496,8 @@ TopUser_Keepalive	Software\ztcc\Interface.c	/^static int TopUser_Keepalive(appit
 TopUser_ProcQue	Software\ztcc\Interface.c	/^static s32 TopUser_ProcQue(appitf_t *this)$/;"	f	file:
 TopUser_RecvPackage	Software\ztcc\Interface.c	/^static int TopUser_RecvPackage(appitf_t *this,u8 *buffer,int bufsize)$/;"	f	file:
 TopUser_Relese	Software\ztcc\Interface.c	/^static int TopUser_Relese(appitf_t *this)$/;"	f	file:
+TopUser_setMode	Software\ztcc\Interface.c	/^static int TopUser_setMode(struct appitf_t *this, uint8_t mode)$/;"	f	file:
+TopUser_stopMode	Software\ztcc\Interface.c	/^static int TopUser_stopMode(struct appitf_t *this, uint8_t mode)$/;"	f	file:
 UID_Check	Software\ztcc\Interface.c	/^static s32 inline UID_Check(appitf_t *this,void *r_uid)$/;"	f	file:
 UserQueProcThread	Software\ztcc\Interface.c	/^static void *UserQueProcThread(void *args)$/;"	f	file:
 app_exit	Software\ztcc\Interface.c	/^static void app_exit(int signal)$/;"	f	file:
@@ -498,14 +505,14 @@ appitf_init	Software\ztcc\Interface.c	/^static int appitf_init(appitf_t *this)$/
 g_appity	Software\ztcc\Interface.c	/^appitf_t g_appity = {$/;"	v
 package_check	Software\ztcc\Interface.c	/^static int package_check(void *package)$/;"	f	file:
 CCUID	Software\ztcc\Interface.h	/^	u8 CCUID[6]; 			\/\/集中控制器的UID$/;"	m	struct:param_t
-Connect_error	Software\ztcc\Interface.h	38;"	d
-Connect_ok	Software\ztcc\Interface.h	37;"	d
+Connect_error	Software\ztcc\Interface.h	41;"	d
+Connect_ok	Software\ztcc\Interface.h	40;"	d
 Connect_status	Software\ztcc\Interface.h	/^	int Connect_status;		\/\/网络连接状态$/;"	m	struct:appitf_t
 ControlMethod	Software\ztcc\Interface.h	/^	u8 ControlMethod;		\/\/控制模式$/;"	m	struct:param_t
 DebugLevel	Software\ztcc\Interface.h	/^	u8 DebugLevel; 		 \/\/调试等级$/;"	m	struct:param_t
 HeartBCycle	Software\ztcc\Interface.h	/^	u8 HeartBCycle;		\/\/心跳周期$/;"	m	struct:param_t
-HeartBeat_error	Software\ztcc\Interface.h	40;"	d
-HeartBeat_ok	Software\ztcc\Interface.h	39;"	d
+HeartBeat_error	Software\ztcc\Interface.h	43;"	d
+HeartBeat_ok	Software\ztcc\Interface.h	42;"	d
 HeartBeat_status	Software\ztcc\Interface.h	/^	int HeartBeat_status;	\/\/心跳状态$/;"	m	struct:appitf_t
 Is_TCP	Software\ztcc\Interface.h	/^	u8 Is_TCP;				\/\/与服务器的连接方式$/;"	m	struct:param_t
 ItfWay	Software\ztcc\Interface.h	/^	u8 ItfWay;				\/\/集中器的操作方法$/;"	m	struct:param_t
@@ -524,6 +531,8 @@ TopUser_RecvPackage	Software\ztcc\Interface.h	/^	int (*const TopUser_RecvPackage
 TopUser_Uidchk	Software\ztcc\Interface.h	/^	int (*const TopUser_Uidchk)(struct appitf_t *this,void*r_uid);$/;"	m	struct:appitf_t
 TopUser_pakgchk	Software\ztcc\Interface.h	/^	int (*const TopUser_pakgchk)(void*);$/;"	m	struct:appitf_t
 TopUser_relese	Software\ztcc\Interface.h	/^	int (*const TopUser_relese)(struct appitf_t*);$/;"	m	struct:appitf_t
+TopUser_setMode	Software\ztcc\Interface.h	/^	int (*const TopUser_setMode)(struct appitf_t *this, uint8_t);$/;"	m	struct:appitf_t
+TopUser_stopMode	Software\ztcc\Interface.h	/^	int (*const TopUser_stopMode)(struct appitf_t *this, uint8_t);$/;"	m	struct:appitf_t
 __Interface_h__	Software\ztcc\Interface.h	13;"	d
 appitf_t	Software\ztcc\Interface.h	/^typedef struct appitf_t {$/;"	s
 appitf_t	Software\ztcc\Interface.h	/^} appitf_t;$/;"	t	typeref:struct:appitf_t
@@ -555,38 +564,40 @@ zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,
 main	User\main.c	/^int main(int argc,char *argv[])$/;"	f
 check_errno	config\Create_Database.sh	/^check_errno(){$/;"	f
 BARD_E6018	config\config.h	10;"	d
-CFG_COM485	config\config.h	56;"	d
-CFG_COMDIDO	config\config.h	57;"	d
-CFG_DB_NAME	config\config.h	36;"	d
-CFG_PWMAX	config\config.h	58;"	d
-CFG_ReuseAddr	config\config.h	50;"	d
-CFG_client_max	config\config.h	49;"	d
-CFG_keepcount	config\config.h	53;"	d
-CFG_keepidle	config\config.h	51;"	d
-CFG_keepinterval	config\config.h	52;"	d
-CFG_tb_coordi	config\config.h	37;"	d
-CFG_tb_gpinfo	config\config.h	45;"	d
-CFG_tb_light_info	config\config.h	41;"	d
-CFG_tb_pwm	config\config.h	44;"	d
-CFG_tb_single	config\config.h	38;"	d
-CFG_tb_task	config\config.h	39;"	d
-CFG_tb_tasklist	config\config.h	40;"	d
-CFG_tb_tunnel	config\config.h	43;"	d
-CFG_tb_warn	config\config.h	42;"	d
+CFG_COM485	config\config.h	58;"	d
+CFG_COMDIDO	config\config.h	59;"	d
+CFG_DB_NAME	config\config.h	37;"	d
+CFG_FILE_PRAM	config\config.h	57;"	d
+CFG_PWMAX	config\config.h	60;"	d
+CFG_ReuseAddr	config\config.h	51;"	d
+CFG_client_max	config\config.h	50;"	d
+CFG_keepcount	config\config.h	54;"	d
+CFG_keepidle	config\config.h	52;"	d
+CFG_keepinterval	config\config.h	53;"	d
+CFG_tb_coordi	config\config.h	38;"	d
+CFG_tb_gpinfo	config\config.h	46;"	d
+CFG_tb_light_info	config\config.h	42;"	d
+CFG_tb_pwm	config\config.h	45;"	d
+CFG_tb_single	config\config.h	39;"	d
+CFG_tb_task	config\config.h	40;"	d
+CFG_tb_tasklist	config\config.h	41;"	d
+CFG_tb_tunnel	config\config.h	44;"	d
+CFG_tb_warn	config\config.h	43;"	d
 Config_EC_6018	config\config.h	19;"	d
 Config_KALMAN	config\config.h	27;"	d
 Config_Log	config\config.h	20;"	d
-Config_Log	config\config.h	31;"	d
+Config_Log	config\config.h	32;"	d
 Config_Meter	config\config.h	18;"	d
 Config_Sqlite	config\config.h	25;"	d
-Config_TCP_Server	config\config.h	29;"	d
+Config_TCP_Server	config\config.h	30;"	d
+Config_TIMETASK	config\config.h	28;"	d
 Config_UART	config\config.h	26;"	d
 Config_autoControl	config\config.h	22;"	d
 Config_ether	config\config.h	23;"	d
 Config_operate	config\config.h	21;"	d
-Config_operate	config\config.h	32;"	d
+Config_operate	config\config.h	33;"	d
 Config_serial	config\config.h	24;"	d
-Config_wizdom	config\config.h	30;"	d
+Config_wizdom	config\config.h	31;"	d
 Config_ztcc	config\config.h	11;"	d
 __config_h__	config\config.h	8;"	d
 MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
@@ -1523,57 +1534,41 @@ sql_delete	sqlite\database.c	/^static int sql_delete(const char *sql)$/;"	f	file
 sql_release	sqlite\database.c	/^static void sql_release(struct sql_t**this)$/;"	f	file:
 sql_select	sqlite\database.c	/^static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)$/;"	f	file:
 sql_update	sqlite\database.c	/^static int sql_update(const char *table,const char *Condition)$/;"	f	file:
-Add_time	sqlite\database.h	/^	u32		Add_time;	\/\/报警时间$/;"	m	struct:__anon42
-Base_Addr	sqlite\database.h	/^	s32 Base_Addr;	\/\/单灯地址$/;"	m	struct:__anon39
+Add_time	sqlite\database.h	/^	u32		Add_time;	\/\/报警时间$/;"	m	struct:__anon40
+Base_Addr	sqlite\database.h	/^	s32 Base_Addr;		\/\/单灯地址$/;"	m	struct:__anon39
 Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/协调器地址$/;"	m	struct:__anon37
 Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/单灯地址$/;"	m	struct:__anon38
 CC_id	sqlite\database.h	/^	s8 CC_id[16];               \/\/集中器ID$/;"	m	struct:__anon37
-Cmd	sqlite\database.h	/^	u8	Cmd[300];	\/\/任务命令$/;"	m	struct:__anon41
 Coor_gid	sqlite\database.h	/^	u32 Coor_gid;             \/\/协调器组ID$/;"	m	struct:__anon37
 Coor_id	sqlite\database.h	/^	u32 Coor_id;                \/\/对应的协调器的地址$/;"	m	struct:__anon38
-End_Date	sqlite\database.h	/^	time_t	End_Date;		\/\/结束日期$/;"	m	struct:__anon40
 Get_CountByColumn	sqlite\database.h	20;"	d
 Get_CountByCondition	sqlite\database.h	16;"	d
 Get_light_info_count	sqlite\database.h	21;"	d
-Grade	sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon42
-Inter_Time	sqlite\database.h	/^	u32	Inter_Time; 		\/\/运行时间间隔$/;"	m	struct:__anon40
+Grade	sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon40
 Map_Addr	sqlite\database.h	/^	u32 Map_Addr;	         \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon37
 Map_Addr	sqlite\database.h	/^	u32 Map_Addr;           \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon38
-Name	sqlite\database.h	/^	u8		Name[32];		\/\/任务名称$/;"	m	struct:__anon40
-Priority	sqlite\database.h	/^	u32  	Priority; 		\/\/优先级$/;"	m	struct:__anon40
-Rank	sqlite\database.h	/^	u32	Rank;		\/\/执行顺序$/;"	m	struct:__anon41
 Rate_PF	sqlite\database.h	/^	u32 Rate_PF;		\/\/功率因数$/;"	m	struct:__anon39
 Rate_p	sqlite\database.h	/^	u32 Rate_p;		\/\/额定功率$/;"	m	struct:__anon39
 Rate_v	sqlite\database.h	/^	u32 Rate_v;			\/\/额定电压$/;"	m	struct:__anon39
-Remark	sqlite\database.h	/^	u8	Remark[48];	\/\/备注$/;"	m	struct:__anon42
-Run_Time	sqlite\database.h	/^	time_t	Run_Time;		\/\/运行时间$/;"	m	struct:__anon40
-Start_Date	sqlite\database.h	/^	time_t 	Start_Date;		\/\/开始日期$/;"	m	struct:__anon40
-State	sqlite\database.h	/^	u32		State;		\/\/状态$/;"	m	struct:__anon42
-State	sqlite\database.h	/^	u32	State;			\/\/任务执行状态$/;"	m	struct:__anon40
+Remark	sqlite\database.h	/^	u8	Remark[48];	\/\/备注$/;"	m	struct:__anon40
+State	sqlite\database.h	/^	u32		State;		\/\/状态$/;"	m	struct:__anon40
 TableCoordi_t	sqlite\database.h	/^} TableCoordi_t;$/;"	t	typeref:struct:__anon37
 TableSingle_t	sqlite\database.h	/^} TableSingle_t;$/;"	t	typeref:struct:__anon38
-TableTask_t	sqlite\database.h	/^} TableTask_t;$/;"	t	typeref:struct:__anon40
-TableTasklist_t	sqlite\database.h	/^} TableTasklist_t;$/;"	t	typeref:struct:__anon41
 Tableinfolight_t	sqlite\database.h	/^} Tableinfolight_t;$/;"	t	typeref:struct:__anon39
-Tablewarn_t	sqlite\database.h	/^} Tablewarn_t;$/;"	t	typeref:struct:__anon42
-Tk_id	sqlite\database.h	/^	u32	Tk_id;		\/\/任务表id$/;"	m	struct:__anon41
-Type	sqlite\database.h	/^	u32		Type;		\/\/报警类型$/;"	m	struct:__anon42
-Type	sqlite\database.h	/^	u32	Type;			\/\/任务类型，单次\/循环$/;"	m	struct:__anon40
-Wait_time	sqlite\database.h	/^	u32	Wait_time;	\/\/执行延迟时间$/;"	m	struct:__anon41
+Tablewarn_t	sqlite\database.h	/^} Tablewarn_t;$/;"	t	typeref:struct:__anon40
+Type	sqlite\database.h	/^	u32		Type;		\/\/报警类型$/;"	m	struct:__anon40
 Warn_flags	sqlite\database.h	/^	u32 Warn_flags;	\/\/报警的标志$/;"	m	struct:__anon39
 Warn_flags	sqlite\database.h	/^	u32 Warn_flags;$/;"	m	struct:__anon37
 Wl_Addr	sqlite\database.h	/^	u32 Wl_Addr;              \/\/物理地址$/;"	m	struct:__anon37
 Wl_Addr	sqlite\database.h	/^	u32 Wl_Addr;              \/\/物理地址$/;"	m	struct:__anon38
 __database_h__	sqlite\database.h	8;"	d
-addr	sqlite\database.h	/^	u32 	addr;		\/\/单灯\/协调器地址$/;"	m	struct:__anon42
+addr	sqlite\database.h	/^	u32 	addr;		\/\/单灯\/协调器地址$/;"	m	struct:__anon40
 id	sqlite\database.h	/^	s32 id;				\/\/主键$/;"	m	struct:__anon39
 id	sqlite\database.h	/^	u32 	id;$/;"	m	struct:__anon40
-id	sqlite\database.h	/^	u32 	id;$/;"	m	struct:__anon41
-id	sqlite\database.h	/^	u32 	id;$/;"	m	struct:__anon42
 id	sqlite\database.h	/^	u32 id;	                         \/\/主键ID$/;"	m	struct:__anon37
 id	sqlite\database.h	/^	u32 id;                           \/\/主键ID$/;"	m	struct:__anon38
 light_D	sqlite\database.h	/^	u32 light_D;		\/\/灯电量值$/;"	m	struct:__anon39
-light_E	sqlite\database.h	/^	u32 light_E;		\/\/灯电流值$/;"	m	struct:__anon39
+light_E	sqlite\database.h	/^	u32 light_E;			\/\/灯电流值$/;"	m	struct:__anon39
 light_P	sqlite\database.h	/^	u32 light_P;		\/\/灯功率值$/;"	m	struct:__anon39
 light_V	sqlite\database.h	/^	u32 light_V;		\/\/灯电压值$/;"	m	struct:__anon39
 light_status	sqlite\database.h	/^	s32 light_status;	\/\/灯状态$/;"	m	struct:__anon39
@@ -2651,25 +2646,25 @@ Clean_list	task\taskque\taskque.c	10;"	d	file:
 Create_QueueHeader	task\taskque\taskque.c	/^static int Create_QueueHeader(Queue_t *this)$/;"	f	file:
 ProcessFunc	task\taskque\taskque.c	/^Proclist_t  ProcessFunc[][64]={$/;"	v
 Que_classify	task\taskque\taskque.c	/^static Que_classify_t  Que_classify[][255] = {$/;"	v	file:
-Que_classify_t	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	t	typeref:struct:__anon43	file:
+Que_classify_t	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	t	typeref:struct:__anon41	file:
 Queue_Init	task\taskque\taskque.c	/^Queue_t *Queue_Init(Queue_t *this,struct appitf_t *topuser)$/;"	f
 Queue_Relese	task\taskque\taskque.c	/^static void Queue_Relese(Queue_t **this)$/;"	f	file:
 Select_Task	task\taskque\taskque.c	/^static s32 Select_Task(Queue_t *this,Node_t **node)$/;"	f	file:
 Task_Append	task\taskque\taskque.c	/^static s32 Task_Append(Queue_t *this,u32 Que_type,u32 task_level,void *pakect,int size)$/;"	f	file:
 Task_Exec	task\taskque\taskque.c	/^static s32 Task_Exec(Queue_t *this)$/;"	f	file:
-cmdname	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon43	file:
+cmdname	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon41	file:
 get_Quetype	task\taskque\taskque.c	/^static s32 get_Quetype(struct Queue_t *this,u8 ctrl)$/;"	f	file:
-level	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon43	file:
-Node_header	task\taskque\taskque.h	/^	Node_t *Node_header;$/;"	m	struct:__anon45
-Node_t	task\taskque\taskque.h	/^} Node_t;$/;"	t	typeref:struct:__anon44
-Proclist_t	task\taskque\taskque.h	/^} Proclist_t;$/;"	t	typeref:struct:__anon47
-PureCmdArry_t	task\taskque\taskque.h	/^} PureCmdArry_t;$/;"	t	typeref:struct:__anon46
+level	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon41	file:
+Node_header	task\taskque\taskque.h	/^	Node_t *Node_header;$/;"	m	struct:__anon43
+Node_t	task\taskque\taskque.h	/^} Node_t;$/;"	t	typeref:struct:__anon42
+Proclist_t	task\taskque\taskque.h	/^} Proclist_t;$/;"	t	typeref:struct:__anon45
+PureCmdArry_t	task\taskque\taskque.h	/^} PureCmdArry_t;$/;"	t	typeref:struct:__anon44
 Que_header	task\taskque\taskque.h	/^	Taskque_t *Que_header;$/;"	m	struct:Queue_t
 Que_release	task\taskque\taskque.h	/^	void (*Que_release)(struct Queue_t**);$/;"	m	struct:Queue_t
 Queue_t	task\taskque\taskque.h	/^typedef struct Queue_t{$/;"	s
 Queue_t	task\taskque\taskque.h	/^} Queue_t;$/;"	t	typeref:struct:Queue_t
-Task_Append	task\taskque\taskque.h	/^	s32 (*Task_Append)(struct Queue_t*,u32,u32 ,void *,int);$/;"	m	struct:Queue_t
-Task_Exec	task\taskque\taskque.h	/^	s32 (*Task_Exec)(struct Queue_t*);$/;"	m	struct:Queue_t
+Task_Append	task\taskque\taskque.h	/^	int32_t (*Task_Append)(struct Queue_t*,u32,u32 ,void *,int);$/;"	m	struct:Queue_t
+Task_Exec	task\taskque\taskque.h	/^	int32_t (*Task_Exec)(struct Queue_t*);$/;"	m	struct:Queue_t
 Task_count	task\taskque\taskque.h	/^	Task_count,$/;"	e	enum:Task_type
 Task_level	task\taskque\taskque.h	/^enum Task_level{$/;"	g
 Task_level_cc	task\taskque\taskque.h	/^	Task_level_cc = 1,$/;"	e	enum:Task_level
@@ -2679,24 +2674,64 @@ Task_type	task\taskque\taskque.h	/^enum Task_type{$/;"	g
 Task_type_cc	task\taskque\taskque.h	/^	Task_type_cc = 1,$/;"	e	enum:Task_type
 Task_type_device485	task\taskque\taskque.h	/^	Task_type_device485,$/;"	e	enum:Task_type
 Task_type_ethernet	task\taskque\taskque.h	/^	Task_type_ethernet,$/;"	e	enum:Task_type
-Taskque_t	task\taskque\taskque.h	/^} Taskque_t;$/;"	t	typeref:struct:__anon45
+Taskque_t	task\taskque\taskque.h	/^} Taskque_t;$/;"	t	typeref:struct:__anon43
 __TASKQUE_H__	task\taskque\taskque.h	8;"	d
-ctrl	task\taskque\taskque.h	/^	u8 ctrl;$/;"	m	struct:__anon46
-ctrl	task\taskque\taskque.h	/^	u8 ctrl;$/;"	m	struct:__anon47
-data	task\taskque\taskque.h	/^	u8 data[0];$/;"	m	struct:__anon46
-entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon44	typeref:struct:__anon44::list_head
-entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon45	typeref:struct:__anon45::list_head
-get_Quetype	task\taskque\taskque.h	/^	s32 (*get_Quetype)(struct Queue_t*,u8 ctrl);$/;"	m	struct:Queue_t
-len	task\taskque\taskque.h	/^	u8 len;$/;"	m	struct:__anon46
-package	task\taskque\taskque.h	/^	u8	package[0];$/;"	m	struct:__anon44
-package_len	task\taskque\taskque.h	/^	s32 package_len;$/;"	m	struct:__anon44
+ctrl	task\taskque\taskque.h	/^	uint8_t ctrl;$/;"	m	struct:__anon44
+ctrl	task\taskque\taskque.h	/^	uint8_t ctrl;$/;"	m	struct:__anon45
+data	task\taskque\taskque.h	/^	uint8_t data[0];$/;"	m	struct:__anon44
+entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon42	typeref:struct:__anon42::list_head
+entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon43	typeref:struct:__anon43::list_head
+get_Quetype	task\taskque\taskque.h	/^	int32_t (*get_Quetype)(struct Queue_t*,u8 ctrl);$/;"	m	struct:Queue_t
+len	task\taskque\taskque.h	/^	uint8_t len;$/;"	m	struct:__anon44
+package	task\taskque\taskque.h	/^	uint8_t	package[0];$/;"	m	struct:__anon42
+package_len	task\taskque\taskque.h	/^	int32_t package_len;$/;"	m	struct:__anon42
 parent	task\taskque\taskque.h	/^	struct appitf_t *parent;$/;"	m	struct:Queue_t	typeref:struct:Queue_t::appitf_t
-pf	task\taskque\taskque.h	/^	s32 (*pf)(Node_t*node,void*);$/;"	m	struct:__anon47
-queue_type	task\taskque\taskque.h	/^	u32 queue_type;$/;"	m	struct:__anon45
-task_level	task\taskque\taskque.h	/^	u32  task_level;$/;"	m	struct:__anon44
-task_queue_lock	task\taskque\taskque.h	/^	pthread_mutex_t task_queue_lock;$/;"	m	struct:__anon45
-task_type	task\taskque\taskque.h	/^	u32  task_type;$/;"	m	struct:__anon44
-tm	task\taskque\taskque.h	/^	time_t	tm;$/;"	m	struct:__anon44
+pf	task\taskque\taskque.h	/^	int32_t (*pf)(Node_t*node,void*);$/;"	m	struct:__anon45
+queue_type	task\taskque\taskque.h	/^	uint32_t queue_type;$/;"	m	struct:__anon43
+task_level	task\taskque\taskque.h	/^	uint32_t  task_level;$/;"	m	struct:__anon42
+task_queue_lock	task\taskque\taskque.h	/^	pthread_mutex_t task_queue_lock;$/;"	m	struct:__anon43
+task_type	task\taskque\taskque.h	/^	uint32_t  task_type;$/;"	m	struct:__anon42
+tm	task\taskque\taskque.h	/^	time_t	tm;$/;"	m	struct:__anon42
+GetCmd_AppendQueue	task\timertask\timertask.c	/^static void GetCmd_AppendQueue(struct tmtask_t *this,int32_t task_id)$/;"	f	file:
+do_tmtask	task\timertask\timertask.c	/^static void do_tmtask(int signum)$/;"	f	file:
+do_tmtask_begin	task\timertask\timertask.c	/^static int do_tmtask_begin(struct tmtask_t *this)$/;"	f	file:
+do_tmtask_end	task\timertask\timertask.c	/^static int do_tmtask_end(struct tmtask_t *this)$/;"	f	file:
+tmtask	task\timertask\timertask.c	/^static tmtask_t *tmtask = NULL;$/;"	v	file:
+tmtask_exec	task\timertask\timertask.c	/^static int tmtask_exec(struct tmtask_t *this)$/;"	f	file:
+tmtask_init	task\timertask\timertask.c	/^struct tmtask_t *tmtask_init(tmtask_t *this, sensor_t *ser, Queue_t *que)$/;"	f
+tmtask_release	task\timertask\timertask.c	/^static void tmtask_release(struct tmtask_t **this)$/;"	f	file:
+tmtask_start	task\timertask\timertask.c	/^static int tmtask_start(struct tmtask_t *this)$/;"	f	file:
+tmtask_stop	task\timertask\timertask.c	/^static int tmtask_stop(struct tmtask_t *this)$/;"	f	file:
+tmtask_update	task\timertask\timertask.c	/^static int tmtask_update(struct tmtask_t *this)$/;"	f	file:
+Is_start	task\timertask\timertask.h	/^	int32_t Is_start;$/;"	m	struct:tmtask_t
+Queue	task\timertask\timertask.h	/^	struct Queue_t *Queue;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::Queue_t
+RPTCNT	task\timertask\timertask.h	8;"	d
+__TIMERTASK_H__	task\timertask\timertask.h	2;"	d
+second	task\timertask\timertask.h	/^	int32_t second;$/;"	m	struct:tmtask_t
+sensor	task\timertask\timertask.h	/^	struct sensor_t *sensor;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::sensor_t
+sql	task\timertask\timertask.h	/^	struct sql_t *sql;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::sql_t
+task_cnt	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
+task_end	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon46
+task_endid	task\timertask\timertask.h	/^	int32_t task_endtm, task_endid[RPTCNT];$/;"	m	struct:tmtask_t
+task_endtm	task\timertask\timertask.h	/^	int32_t task_endtm, task_endid[RPTCNT];$/;"	m	struct:tmtask_t
+task_flowdown	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon46
+task_flowup	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon46
+task_id	task\timertask\timertask.h	/^	int32_t task_id;$/;"	m	struct:__anon46
+task_lightdown	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon46
+task_lightup	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon46
+task_start	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon46
+task_startid	task\timertask\timertask.h	/^	int32_t task_starttm, task_startid[RPTCNT];$/;"	m	struct:tmtask_t
+task_starttm	task\timertask\timertask.h	/^	int32_t task_starttm, task_startid[RPTCNT];$/;"	m	struct:tmtask_t
+task_status	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
+task_tm	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
+tmparam_t	task\timertask\timertask.h	/^} tmparam_t;$/;"	t	typeref:struct:__anon46
+tmtask_exec	task\timertask\timertask.h	/^	int (*tmtask_exec)(struct tmtask_t*);$/;"	m	struct:tmtask_t
+tmtask_release	task\timertask\timertask.h	/^	void (*tmtask_release)(struct tmtask_t**);$/;"	m	struct:tmtask_t
+tmtask_start	task\timertask\timertask.h	/^	int (*tmtask_start)(struct tmtask_t*);$/;"	m	struct:tmtask_t
+tmtask_stop	task\timertask\timertask.h	/^	int (*tmtask_stop)(struct tmtask_t*);$/;"	m	struct:tmtask_t
+tmtask_t	task\timertask\timertask.h	/^typedef struct tmtask_t{$/;"	s
+tmtask_t	task\timertask\timertask.h	/^} tmtask_t;$/;"	t	typeref:struct:tmtask_t
+tmtask_update	task\timertask\timertask.h	/^	int (*tmtask_update)(struct tmtask_t*);$/;"	m	struct:tmtask_t
 UEVENT_BUFFER_SIZE	tools\AutoMountUsb.c	16;"	d	file:
 find_block	tools\AutoMountUsb.c	/^static const char *find_block(const char *buffer,const char *coulmn)$/;"	f	file:
 init_hotplug_sock	tools\AutoMountUsb.c	/^static int init_hotplug_sock(void)$/;"	f	file:

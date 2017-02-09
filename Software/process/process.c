@@ -22,7 +22,6 @@
 	_time = mktime(_tm);\
 }while(0)
 
-
 #define gettime(pbf,_tm) do{\
 	*pbf++ = (_tm)->tm_year %100;\
 	*pbf++ = (_tm)->tm_mon + 1;\
@@ -33,12 +32,12 @@
 	*pbf++ = (_tm)->tm_sec;\
 }while(0)
 
-int Reset2DoFunctions(void)
+int opt_reset(void)
 {
 	return SUCCESS;
 }
 
-int time_tick(u8 *package)
+int opt_tmtick(uint8_t *package)
 {
 	assert_param(package,FAIL);
 	struct timeval tv = {0};
@@ -55,7 +54,7 @@ int time_tick(u8 *package)
 	return  settimeofday(&tv,NULL) == 0 ? SUCCESS : FAIL;
 }
 
-int Query_time(u8 *buf,int bufsize)
+int opt_tmquery(uint8_t *buf,int bufsize)
 {
 	assert_param(buf,FAIL);
 	u8 *const pbuf = buf;
@@ -84,7 +83,7 @@ out:
 	return *(pbuf+20) = FAIL;
 }
 
-int CC_Inquire_Version(u8 *buf,int size)
+int opt_version(uint8_t *buf,int size)
 {
 	assert_param(buf,FAIL);
 	bzero(buf,size);
@@ -96,7 +95,7 @@ int CC_Inquire_Version(u8 *buf,int size)
 	return SUCCESS;
 }
 
-int SingleConfig(u8 *package,appitf_t *app)
+int Config_Single(uint8_t *package,appitf_t *app)
 {
 	assert_param(package,FAIL);
 	assert_param(app,FAIL);
@@ -132,7 +131,7 @@ int SingleConfig(u8 *package,appitf_t *app)
 	return res;
 }
 
-int CoordiConfig(u8 *package,  appitf_t *app)
+int Config_Coordi(uint8_t *package,  appitf_t *app)
 {
 	assert_param(package,FAIL);
 	assert_param(app,FAIL);
@@ -162,7 +161,7 @@ int CoordiConfig(u8 *package,  appitf_t *app)
 	}
 }
 
-int delete_sql(u8 *Pdata,appitf_t *app)
+int Config_delete(uint8_t *Pdata,appitf_t *app)
 {
 	assert_param(Pdata,FAIL);
 	assert_param(app,FAIL);
@@ -217,7 +216,7 @@ int delete_sql(u8 *Pdata,appitf_t *app)
 	return FAIL;
 }
 
-int tunnel_config(u8 *package,appitf_t *app)
+int Config_tunnel(uint8_t *package,appitf_t *app)
 {
 	assert_param(package,FAIL);
 	assert_param(app,FAIL);
@@ -232,4 +231,52 @@ int tunnel_config(u8 *package,appitf_t *app)
 		tun.one_way,tun.speed,tun.lenth,tun.sensor);
 	return app->sqlite->sql_insert(Asprintf("insert into db_tunnel_info(tun_bothway,tun_speed,"\
 		"tun_length,tun_sensor) values(%d,%d,%d,%d);",tun.one_way,tun.speed,tun.lenth,tun.sensor));
+}
+
+int Config_task(uint8_t *pf,appitf_t *app)
+{
+	assert_param(pf,FAIL);
+	assert_param(app,FAIL);
+	struct task_t{
+		int32_t task_id;		int32_t priority;
+		int32_t start;		int32_t end;
+		int32_t flow_up;	int32_t flow_down;
+		int32_t light_up;	int32_t light_down;
+		int32_t repeat_cnt;	int32_t repeat_tm;
+	} task = {
+		.task_id = PARAM_SHORT(pf),
+		.priority = *(pf+2),
+		.start = PARAM_INT(pf+3),
+		.end = PARAM_INT(pf+7),
+		.flow_up = PARAM_SHORT(pf+11),
+		.flow_down = PARAM_SHORT(pf+13),
+		.light_up = PARAM_SHORT(pf+15),
+		.light_down = PARAM_SHORT(pf+17),
+		.repeat_cnt = PARAM_INT(pf+19),
+		.repeat_tm = PARAM_INT(pf+23)
+	};
+	debug(DEBUG_tmtask,"task_id:%d,priority:%d,start time:%d,end time:%d,flow %d~%d,"\
+		"light %d~%d,repeat_cnt:%d,repeat_tm:%d\n",task.task_id,task.priority,task.start,task.end,\
+			task.flow_up,task.flow_down,task.light_up,task.light_down,task.repeat_cnt,task.repeat_tm);
+
+	return app->sqlite->sql_insert(Asprintf("insert into "CFG_tb_task \
+		"values(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,0);",task.task_id,task.priority,task.start,\
+		task.end,task.flow_up,task.flow_down,task.light_up,task.light_down,task.repeat_cnt,task.repeat_tm) );
+}
+
+int Config_tasklist(uint8_t *pf,appitf_t *app)
+{
+	assert_param(pf,FAIL);
+	assert_param(app,FAIL);
+
+	int16_t task_id = PARAM_SHORT(pf), task_rank = PARAM_SHORT(pf+2);
+	uint8_t cmd_len = *(pf+5) + 2;
+	char *text = calloc(cmd_len+1, sizeof(short));
+	if(!text) return FAIL;
+	Hex2Str(text,pf+4,cmd_len);
+	debug(DEBUG_tmtask,"task list str:%s\n",text);
+	int res = app->sqlite->sql_insert(Asprintf("insert into "CFG_tb_tasklist \
+		"(task_id,rank,cmd) values(%d,%d,'%s')",task_id,task_rank,text));
+	FREE(text);
+	return res;
 }

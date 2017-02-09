@@ -73,6 +73,10 @@ extern char MessageBuffer[];
 	if(NULL == func(ptr,##args)) return rtn;\
 }while(0)
 
+/* 数据报文从高到底转为int数据 */
+#define PARAM_INT(ptr) ( ( *(ptr) << 24 ) | ( *(ptr+1) << 16 ) | ( *(ptr+2) << 8 ) | ( *(ptr+3) << 0)  )
+#define PARAM_SHORT(ptr) ( ( *(ptr) << 8 ) | ( *(ptr+1) << 0) )
+
 extern int get_check_sum(void *pkg,int size);
 extern char* Hex2Str(char*dest,const u8 *src,int size);
 extern u8 *Str2Hex(u8 *dest,const char *src);

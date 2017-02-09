@@ -60,7 +60,7 @@ DESTOBJS := ${ROOTDIR}/output/*.o
 all: autoconf.mk Version ${target} Automountusb  Watchrsh
 
 ${target}: compile
-	$(CC) $(CFLAGS) $(DFLAGS) $(LINKFLAGS) $(LDFLAGS)  -o ${ROOTDIR}/Applications/$@  $(DESTOBJS)
+	$(CC)  $(CFLAGS) $(DFLAGS) $(LINKFLAGS) $(LDFLAGS)  -o ${ROOTDIR}/Applications/$@  $(DESTOBJS)
 
 Version:
 	@`./version/setlocalversion`

@@ -15,13 +15,16 @@
 #include "taskque.h"
 #include "Interface.h"
 
-extern int Reset2DoFunctions(void);
-extern int time_tick(u8*);
-extern int Query_time(u8 *buf,int bufsize);
-extern int CC_Inquire_Version(u8 *buf,int size);
-extern int SingleConfig(u8 *package,appitf_t *app);
-extern int CoordiConfig(u8 *package,appitf_t *app);
-extern int delete_sql(u8 *package,appitf_t *app);
-extern int tunnel_config(u8 *package,appitf_t *app);
+extern int opt_reset(void);
+extern int opt_tmtick(uint8_t*);
+extern int opt_tmquery(uint8_t *buf,int bufsize);
+extern int opt_version(uint8_t *buf,int size);
+
+extern int Config_Single(uint8_t *,appitf_t *);
+extern int Config_Coordi(uint8_t *,appitf_t *);
+extern int Config_delete(uint8_t *,appitf_t *);
+extern int Config_tunnel(uint8_t *,appitf_t *);
+extern int Config_task(uint8_t *,appitf_t *);
+extern int Config_tasklist(uint8_t *,appitf_t *);
 
 #endif

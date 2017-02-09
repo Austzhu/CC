@@ -72,12 +72,12 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 	int res = -1;
 	switch(package->data[0]){
 		case 0x01:	//reset
-			res = Reset2DoFunctions();
+			res = opt_reset();
 			MakeShortResponse(AckBuffer,03,0xA2,0x01,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^reset %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
-		case 0x02:		//reboot
+		case 0x02:	//reboot
 			MakeShortResponse(AckBuffer,03,0xA2,0x02,SUCCESS);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^reboot success.....\n");
@@ -86,18 +86,18 @@ s32 CallBack_Reset(Node_t *node,void *parent)
 			reboot(RB_AUTOBOOT);
 			break;
 		case 0x03:	//time tick
-			res = time_tick(&package->data[1]);
+			res = opt_tmtick(&package->data[1]);
 			MakeShortResponse(AckBuffer,03,0xA2,0x03,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^Time tick %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
 		case 0x04:	//Query time
-			res = Query_time(AckBuffer,sizeof(AckBuffer));
+			res = opt_tmquery(AckBuffer,sizeof(AckBuffer));
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^Query time %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
 		case 0x05: 	//Query time
-			res = CC_Inquire_Version(AckBuffer,sizeof(AckBuffer));
+			res = opt_version(AckBuffer,sizeof(AckBuffer));
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"^^^^^Inquire Version %s^^^^^\n",res == SUCCESS ? "success":"error");
 			break;
@@ -127,34 +127,44 @@ s32 CallBack_Config(Node_t *node,void *parent)
 	switch(package->data[0]){
 		case 0x01:break;
 		case 0x02:
-			res = tunnel_config(package->data +1,_parent);
+			res = Config_tunnel(package->data +1,_parent);
 			MakeShortResponse(AckBuffer,03,0xA3,0x02,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"Tunnel config %s\n",res==SUCCESS? "success!":"error!");
 			break;
-		case 0x04:		//模式切换
+		case 0x04:	//模式切换
 			res = _parent->TopUser_setMode(_parent,package->data[1]);
 			MakeShortResponse(AckBuffer,03,0xA3,0x04,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_config,"config control method %d %s\n",\
 				_parent->param.ControlMethod, res==SUCCESS? "success!":"error!");
 			break;
-		case 0x05:		//单灯配置
-			res = SingleConfig(package->data +1,_parent);
+		case 0x05:	//单灯配置
+			res = Config_Single(package->data +1,_parent);
 			MakeShortResponse(AckBuffer,03,0xA3,0x05,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"Single config %s\n",res==SUCCESS? "success!":"error!");
 			break;
-		case 0x06:		//协调器配置
-			res = CoordiConfig(package->data +1,_parent);
+		case 0x06:	//协调器配置
+			res = Config_Coordi(package->data +1,_parent);
 			MakeShortResponse(AckBuffer,03,0xA3,0x06,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"Coordinate config %s\n",res==SUCCESS? "success!":"error!");
 			break;
-		case 0x07:break;
-		case 0x08:break;
+		case 0x07:	//时序任务配置
+			res = Config_task(package->data +1,_parent);
+			MakeShortResponse(AckBuffer,03,0xA3,0x07,res);
+			Append2Queue(AckBuffer,_parent->Queue);
+			debug(DEBUG_reset,"config task %s\n",res==SUCCESS? "success!":"error!");
+			break;
+		case 0x08:	//时序任务操作明细配置
+			res = Config_task(package->data +1,_parent);
+			MakeShortResponse(AckBuffer,03,0xA3,0x08,res);
+			Append2Queue(AckBuffer,_parent->Queue);
+			debug(DEBUG_reset,"config task list %s\n",res==SUCCESS? "success!":"error!");
+			break;
 		case 0x09:
-			res = delete_sql(package->data +1,_parent);
+			res = Config_delete(package->data +1,_parent);
 			MakeShortResponse(AckBuffer,03,0xA3,0x09,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"delete sql table %s\n",res==SUCCESS? "success!":"error!");
