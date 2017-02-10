@@ -21,15 +21,15 @@ typedef struct tmtask_t{
 	struct sql_t *sql;
 	struct sensor_t *sensor;
 	struct Queue_t *Queue;
-	int32_t task_starttm, task_startid[RPTCNT];
-	int32_t task_endtm, task_endid[RPTCNT];
+	uint32_t task_starttm, task_startid[RPTCNT];
+	uint32_t task_endtm, task_endid[RPTCNT];
 
 	int (*tmtask_start)(struct tmtask_t*);
 	int (*tmtask_stop)(struct tmtask_t*);
 	int (*tmtask_exec)(struct tmtask_t*);
 	int (*tmtask_update)(struct tmtask_t*);
 
-	void (*tmtask_release)(struct tmtask_t**);
+	void (*tmtask_release)(struct tmtask_t**,int);
 } tmtask_t;
 
 extern tmtask_t *tmtask_init(struct tmtask_t*,sensor_t*,Queue_t*);

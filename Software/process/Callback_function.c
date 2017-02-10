@@ -158,7 +158,7 @@ s32 CallBack_Config(Node_t *node,void *parent)
 			debug(DEBUG_reset,"config task %s\n",res==SUCCESS? "success!":"error!");
 			break;
 		case 0x08:	//时序任务操作明细配置
-			res = Config_task(package->data +1,_parent);
+			res = Config_tasklist(package->data +1,_parent);
 			MakeShortResponse(AckBuffer,03,0xA3,0x08,res);
 			Append2Queue(AckBuffer,_parent->Queue);
 			debug(DEBUG_reset,"config task list %s\n",res==SUCCESS? "success!":"error!");

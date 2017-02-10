@@ -95,6 +95,9 @@ typedef struct appitf_t {
 	#ifdef  Config_autoControl
 		control_t *auto_mode;
 	#endif
+	#ifdef Config_TIMETASK
+		tmtask_t *tmtask;
+	#endif
 
 	int (*const TopUser_Uidchk)(struct appitf_t *this,void*r_uid);
 	int (*const TopUser_InsertQue)(struct appitf_t *this);

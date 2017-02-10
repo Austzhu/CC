@@ -58,8 +58,8 @@ typedef struct {
 	s32 light_status;	//灯状态
 	u32 light_val;		//灯调光值
 	u32 light_E;			//灯电流值
-	u32 light_P;		//灯功率值
-	u32 light_V;		//灯电压值
+	u32 light_P;			//灯功率值
+	u32 light_V;			//灯电压值
 	u32 light_D;		//灯电量值
 	u32 rtime;			//更新时间
 } Tableinfolight_t;

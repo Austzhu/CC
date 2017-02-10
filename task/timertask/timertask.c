@@ -19,6 +19,7 @@ static int tmtask_start(struct tmtask_t *this)
 		this->Is_start = !0;
 		return SUCCESS;
 	}
+	debug(DEBUG_tmtask,"start time task mode error!\n");
 	return FAIL;
 }
 
@@ -41,7 +42,7 @@ static void GetCmd_AppendQueue(struct tmtask_t *this,int32_t task_id)
 	char *cmd_text = malloc(cmd_cnt*512);
 	if(!cmd_text) return;
 	bzero(cmd_text,cmd_cnt*512);
-	this->sql->sql_select(Asprintf("select cmd from"CFG_tb_tasklist \
+	this->sql->sql_select(Asprintf("select cmd from "CFG_tb_tasklist \
 		" where task_id=%d;",task_id),cmd_text,512,cmd_cnt,1,512);
 
 	for(char *ptext = cmd_text; cmd_cnt--; ptext += 512){
@@ -65,10 +66,10 @@ static int do_tmtask_begin(struct tmtask_t *this)
 	bzero(&tmstart,sizeof(tmparam_t));
 
 	for(int i=0; i<RPTCNT; ++i){
-		if(this->task_startid[i] <= 0)
-			break;
+		if(this->task_startid[i] <= 0)	break;
+
 		this->sql->sql_select(Asprintf("select id,start,end,flow_up,flow_down,"\
-			"light_up,light_down,repeat_cnt,repeat_tm,status from"CFG_tb_task \
+			"light_up,light_down,repeat_cnt,repeat_tm,status from "CFG_tb_task \
 			" where id=%d;",this->task_startid[i]),(char*)&tmstart,sizeof(tmstart),1,0);
 		/* update db_task info */
 		--tmstart.task_cnt;
@@ -81,15 +82,13 @@ static int do_tmtask_begin(struct tmtask_t *this)
 		/* compare flow and light */
 		if(tmstart.task_flowup != 0 && tmstart.task_flowdown !=0 ){
 			this->sensor->sensor_get_stream(this->sensor);
-			if(this->sensor->traffic < tmstart.task_flowdown ||\
-				this->sensor->traffic > tmstart.task_flowup )
-					continue;
+			if(this->sensor->traffic < tmstart.task_flowdown || this->sensor->traffic > tmstart.task_flowup )
+				continue;
 		}
 		if(tmstart.task_lightup != 0 && tmstart.task_lightdown !=0 ){
 			this->sensor->sensor_get_light(this->sensor);
-			if(this->sensor->light < tmstart.task_lightdown ||\
-				this->sensor->light > tmstart.task_lightup )
-					continue;
+			if(this->sensor->light < tmstart.task_lightdown || this->sensor->light > tmstart.task_lightup )
+				continue;
 		}
 		/* get cmd from db_tasklist */
 		/* format text cmd to hex cmd */
@@ -116,7 +115,7 @@ static int do_tmtask_end(struct tmtask_t *this)
 			tmend.task_status = 1;
 		else
 			tmend.task_status = 0;
-		this->sql->sql_update(CFG_tb_task,Asprintf("set ,end=%ld,status=%d "\
+		this->sql->sql_update(CFG_tb_task,Asprintf("set end=%ld,status=%d "\
 				"where id=%d",tmend.task_end,tmend.task_status,tmend.task_id));
 	}
 	return SUCCESS;
@@ -126,19 +125,14 @@ static int tmtask_exec(struct tmtask_t *this)
 {
 	assert_param(this,FAIL);
 
-	if(this->task_starttm < this->task_endtm){		//start
-		if(this->task_starttm >0)
-			do_tmtask_begin(this);
-	}else if(this->task_starttm > this->task_endtm){	//end
-		if(this->task_endtm >0)
-			do_tmtask_end(this);
-	}else{	// both start and end
-		if(this->task_starttm >0){
-			do_tmtask_begin(this);
-			do_tmtask_end(this);
-		}
+	if(this->task_starttm < this->task_endtm)
+		do_tmtask_begin(this);
+	else if(this->task_starttm > this->task_endtm)
+		do_tmtask_end(this);
+	else{
+		do_tmtask_begin(this);
+		do_tmtask_end(this);
 	}
-
 	/* update time task */
 	if(SUCCESS == this->tmtask_update(this)){
 		if(this->second >= 0)
@@ -154,39 +148,45 @@ static int tmtask_update(struct tmtask_t *this)
 	assert_param(this,FAIL);
 	time_t tmtask_now = time(NULL);
 	/* 需要更新开始的任务时间和id */
-	this->task_starttm = 0;
+	this->task_starttm = ~0;
 	bzero(this->task_startid,sizeof(this->task_startid));
-	this->sql->sql_select(Asprintf("select min(start),from "CFG_tb_task \
+	this->sql->sql_select(Asprintf("select min(start) from "CFG_tb_task \
 			" where repeat_cnt != 0 and status = 0 and %ld < start;",\
 				tmtask_now), (char*)&this->task_starttm,sizeof(int32_t),1,0);
-	if(this->task_starttm > 0)
-		this->sql->sql_select(Asprintf("select id,from "CFG_tb_task \
+	debug(DEBUG_tmtask,"task start time:%d\n",this->task_starttm);
+	if(this->task_starttm != ~0)
+		this->sql->sql_select(Asprintf("select id from "CFG_tb_task \
 			" where repeat_cnt != 0 and status = 0 and %d = start;",\
 				this->task_starttm), (char*)this->task_startid,sizeof(int32_t),RPTCNT,0);
 
 	/* 需要更新结束的任务时间和id */
-	this->task_endtm = 0;
+	this->task_endtm = ~0;
 	bzero(this->task_endid,sizeof(this->task_endid));
-	this->sql->sql_select(Asprintf("select min(end),from "CFG_tb_task \
+	this->sql->sql_select(Asprintf("select min(end) from "CFG_tb_task \
 			" where status = 2;"), (char*)&this->task_endtm,sizeof(int32_t),1,0);
-	if(this->task_endtm > 0)
-		this->sql->sql_select(Asprintf("select id,from "CFG_tb_task" where status = 2 "\
+	debug(DEBUG_tmtask,"task end time:%d\n",this->task_endtm);
+	if(this->task_endtm != ~0)
+		this->sql->sql_select(Asprintf("select id from "CFG_tb_task" where status = 2 "\
 			"and  %d = end;",this->task_endtm), (char*)this->task_endid,sizeof(int32_t),RPTCNT,0);
-
-	this->second = (this->task_starttm > this->task_endtm) ? \
-		this->task_endtm-tmtask_now : this->task_starttm - tmtask_now ;
+	if(~0 == this->task_starttm && ~0 == this->task_endtm){
+		this->second = 0;
+	}else{
+		this->second =  this->task_starttm < this->task_endtm ?\
+			this->task_starttm - tmtask_now : this->task_endtm - tmtask_now;
+	}
+	debug(DEBUG_tmtask,"next exec time task second:%d\n",this->second);
 	return SUCCESS;
 }
 
 
-static void tmtask_release(struct tmtask_t **this)
+static void tmtask_release(struct tmtask_t **this,int flg)
 {
 	if(!tmtask) return ;
 
 	assert_param(this,;);
 	assert_param(*this,;);
 	FREE((*this)->sql);
-	FREE(*this);
+	if(flg)	FREE(*this);
 	tmtask = NULL;
 }
 

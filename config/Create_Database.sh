@@ -207,17 +207,6 @@ PRAGMA foreign_keys = ON;
 insert into ${TB_TUNNEL} values(1,0,80,400,1);
 EOF
 
-
-sqlite3 ${DB} << EOF
-PRAGMA foreign_keys = ON;
-insert into ${TB_TASK} values(1,1,100,300,700,1200,2000,2500,2,3600,0);
-insert into ${TB_TASK} values(2,2,110,320,800,1250,2500,3000,0,0,0);
-insert into ${TB_TASK} values(3,3,150,340,900,1300,3000,3500,5,600,0);
-insert into ${TB_TASK} values(4,4,160,350,950,1350,3500,4000,0,0,0);
-insert into ${TB_TASK} values(5,5,190,370,1000,1400,4000,4200,3,300,0);
-insert into ${TB_TASK} values(6,6,240,380,1050,1450,4200,4500,6,100,0);
-EOF
-
 if [ $? ];then
 	echo "Create database success!"
 else

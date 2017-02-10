@@ -109,17 +109,9 @@ static s32 TopUser_InsertQue(appitf_t *this)
 	}
 	faalpkt_t *pkt = (faalpkt_t*)recvbuf;
 	/* 判断模式允许的操作 */
-	if(pkt->ctrl != 0x80){
-		if(this->param.ControlMethod == 0x00){	//应急模式,只允许模式切换操作
-			if(pkt->ctrl != 0xA3 || pkt->data[0] != 0x04)
-				return SUCCESS;
-		}else{
-			if(this->param.ControlMethod != 0x02){	//切换到手动模式
-				this->TopUser_stopMode(this,this->param.ControlMethod);
-				this->param.ControlMethod = 0x02;
-				//this->TopUser_setMode(this,2);
-			}
-		}
+	if(pkt->ctrl != 0x80 && this->param.ControlMethod == 0x00 ){	//应急模式,只允许模式切换操作
+		if(pkt->ctrl != 0xA3 || pkt->data[0] != 0x04)
+			return SUCCESS;
 	}
 
 	/* get Queue type and level
@@ -247,9 +239,8 @@ static int TopUser_stopMode(struct appitf_t *this, uint8_t mode)
 {
 	if(!this || mode > 3) return FAIL;
 	switch(mode){
-		case 0x03:
-			this->auto_mode->ctrl_stop(this->auto_mode);
-			break;
+		case 0x01:	return this->tmtask->tmtask_stop(this->tmtask);
+		case 0x03:	return this->auto_mode->ctrl_stop(this->auto_mode);
 		default:break;
 	}
 	return SUCCESS;
@@ -271,7 +262,8 @@ static int TopUser_setMode(struct appitf_t *this, uint8_t mode)
 		/* 应急模式 */
 		case 0x00:	break;
 		/* 时控模式 */
-		case 0x01:	break;
+		case 0x01:
+			return this->tmtask->tmtask_start(this->tmtask);
 		/* 手动模式 */
 		case 0x02:	break;
 		/* 自动模式 */
@@ -324,6 +316,10 @@ static int TopUser_Relese(appitf_t *this)
 	#ifdef  Config_autoControl
 	DELETE(this->auto_mode,ctrl_release,true);
 	#endif
+	#ifdef Config_TIMETASK
+		DELETE(this->tmtask,tmtask_release,true);
+	#endif
+
 	_exit(0);
 }
 
@@ -366,6 +362,9 @@ static int appitf_init(appitf_t *this)
 	#ifdef  Config_autoControl
 		INIT_FAIL(this->auto_mode,control_init,this->single);
 		//this->auto_mode->control_start(this->auto_mode);
+	#endif
+	#ifdef Config_TIMETASK
+		INIT_FAIL(this->tmtask,tmtask_init,this->auto_mode->calc->sensor,this->Queue);
 	#endif
 
 	/*  create thread */

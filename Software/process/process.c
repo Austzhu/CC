@@ -237,31 +237,20 @@ int Config_task(uint8_t *pf,appitf_t *app)
 {
 	assert_param(pf,FAIL);
 	assert_param(app,FAIL);
-	struct task_t{
-		int32_t task_id;		int32_t priority;
-		int32_t start;		int32_t end;
-		int32_t flow_up;	int32_t flow_down;
-		int32_t light_up;	int32_t light_down;
-		int32_t repeat_cnt;	int32_t repeat_tm;
-	} task = {
-		.task_id = PARAM_SHORT(pf),
-		.priority = *(pf+2),
-		.start = PARAM_INT(pf+3),
-		.end = PARAM_INT(pf+7),
-		.flow_up = PARAM_SHORT(pf+11),
-		.flow_down = PARAM_SHORT(pf+13),
-		.light_up = PARAM_SHORT(pf+15),
-		.light_down = PARAM_SHORT(pf+17),
-		.repeat_cnt = PARAM_INT(pf+19),
-		.repeat_tm = PARAM_INT(pf+23)
-	};
-	debug(DEBUG_tmtask,"task_id:%d,priority:%d,start time:%d,end time:%d,flow %d~%d,"\
-		"light %d~%d,repeat_cnt:%d,repeat_tm:%d\n",task.task_id,task.priority,task.start,task.end,\
-			task.flow_up,task.flow_down,task.light_up,task.light_down,task.repeat_cnt,task.repeat_tm);
 
-	return app->sqlite->sql_insert(Asprintf("insert into "CFG_tb_task \
-		"values(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,0);",task.task_id,task.priority,task.start,\
-		task.end,task.flow_up,task.flow_down,task.light_up,task.light_down,task.repeat_cnt,task.repeat_tm) );
+	struct tm tim[2] = {
+		[0] = { .tm_year = *(pf+3) + 100, .tm_mon = *(pf+4) - 1,
+			.tm_mday = *(pf+5),.tm_hour = *(pf+6), .tm_min = *(pf+7), .tm_sec = *(pf+8) },
+		[1] = { .tm_year = *(pf+9) + 100, .tm_mon = *(pf+10) - 1,
+			.tm_mday = *(pf+11), .tm_hour = *(pf+12), .tm_min = *(pf+13), .tm_sec = *(pf+14) }
+	};
+	char *sql = Asprintf("insert into "CFG_tb_task" values(%d,%d,%ld,%ld,%d,%d,%d,%d,%d,%d,0);",\
+		PARAM_SHORT(pf),*(pf+2),mktime(tim),mktime(tim+1),PARAM_SHORT(pf+15),PARAM_SHORT(pf+17),\
+		PARAM_SHORT(pf+19),PARAM_SHORT(pf+21),PARAM_INT(pf+23),PARAM_INT(pf+27));
+	debug(DEBUG_tmtask,"CFG time task:%s\n",sql);
+	/* update time task */
+	return app->sqlite->sql_insert(sql);
+
 }
 
 int Config_tasklist(uint8_t *pf,appitf_t *app)
@@ -274,9 +263,9 @@ int Config_tasklist(uint8_t *pf,appitf_t *app)
 	char *text = calloc(cmd_len+1, sizeof(short));
 	if(!text) return FAIL;
 	Hex2Str(text,pf+4,cmd_len);
-	debug(DEBUG_tmtask,"task list str:%s\n",text);
+	debug(DEBUG_tmtask,"task list str:%s,cmd len:%d\n",text,cmd_len);
 	int res = app->sqlite->sql_insert(Asprintf("insert into "CFG_tb_tasklist \
-		"(task_id,rank,cmd) values(%d,%d,'%s')",task_id,task_rank,text));
+			"(task_id,rank,cmd) values(%d,%d,'%s')",task_id,task_rank,text));
 	FREE(text);
 	return res;
 }
