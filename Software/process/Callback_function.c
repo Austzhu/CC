@@ -384,28 +384,33 @@ s32 CallBack_meter(Node_t *node,void*parent)
 	assert_param(node,FAIL);
 	assert_param(parent,FAIL);
 	PureCmdArry_t *package = (PureCmdArry_t*)node->package;
-	appitf_t *_parent = (appitf_t*)parent;
-	 int res = -1;
-	switch(package->data[0]){
+	appitf_t *top = (appitf_t*)parent;
+	uint8_t *pd = package->data;
+	int32_t res = -1;
+	switch(*pd){
 		case 0x01:
-			res = _parent->meter->meter_open(_parent->meter,package->data[1],package->data[2]);
+			res = top->meter->meter_open(top->meter,*(pd+1),*(pd+2),PARAM_INT(pd+3));
 			debug(DEBUG_reset,"meter open %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x02:
-			res = _parent->meter->meter_close(_parent->meter,package->data[1],package->data[2]);
+			res = top->meter->meter_close(top->meter,*(pd+1),*(pd+2),PARAM_INT(pd+3));
 			debug(DEBUG_reset,"meter close %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x03:
-			res = _parent->meter->meter_reado(_parent->meter,package->data[1],package->data[2],sub_reado);
+			res = top->meter->meter_reado(top->meter,*(pd+1),*(pd+2));
 			debug(DEBUG_reset,"meter read do %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x04:
-			res = _parent->meter->meter_readi(_parent->meter,package->data[1],package->data[2],sub_readi);
+			res = top->meter->meter_readi(top->meter,*(pd+1),*(pd+2));
 			debug(DEBUG_reset,"meter read di %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		case 0x05:
-			res = _parent->meter->meter_flashopen(_parent->meter,package->data[1],package->data[2],package->data[3]);
-			debug(DEBUG_reset,"meter read di %s!\n",SUCCESS == res ? "ok":"error");
+			res = top->meter->meter_flashopen(top->meter,*(pd+1),*(pd+2),PARAM_INT(pd+3),*(pd+7));
+			debug(DEBUG_reset,"meter flash open %s!\n",SUCCESS == res ? "ok":"error");
+			break;
+		case 0x06:
+			res = top->meter->meter_query_dido(top->meter,*(pd+1),pd+2);
+			debug(DEBUG_reset,"meter query dido %s!\n",SUCCESS == res ? "ok":"error");
 			break;
 		default:break;
 	}

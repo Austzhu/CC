@@ -126,6 +126,16 @@ static int uart_config(struct uart_t *this)
 #endif
 }
 
+static int uart_readall(struct uart_t *this, char *buf,uint32_t block)
+{
+	if(!this || !buf || this->uart_fd < 0) return FAIL;
+	int fd = this->uart_fd;
+	int length = 0;
+	msleep(block);
+	ioctl(fd,FIONREAD,&length);	//获取内核中缓存了多少数据
+	return read(fd,buf,length);
+}
+
 static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t block)
 {
 	if(!this || !buf || this->uart_fd < 0) return FAIL;
@@ -219,6 +229,7 @@ struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)
 	this->uart_open = uart_open;
 	this->uart_close = uart_close;
 	this->uart_config = uart_config;
+	this->uart_readall = uart_readall;
 	this->uart_recv = uart_recv;
 	this->uart_send = uart_send;
 	this->uart_flush = uart_flush;

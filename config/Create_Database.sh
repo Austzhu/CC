@@ -10,6 +10,7 @@ TB_INFO=db_info_light
 TB_TUNNEL=db_tunnel_info
 TB_PWM=db_index_pwm
 TB_GRPINFO=db_group_info
+TB_DIDO=db_dido_info
 
 check_errno(){
 	if [ $1 -eq 1 ] ; then
@@ -183,6 +184,24 @@ create table ${TB_GRPINFO}(
 );
 EOF
 check_errno $? ${TB_GRPINFO}
+
+#DIDO信息表
+sqlite3 ${DB} << EOF
+PRAGMA foreign_keys = ON;
+drop table if exists ${TB_DIDO} ;
+create table ${TB_DIDO}(
+	id 			integer,
+	addr 		integer NOT NULL,
+	ndo		integer default 8,
+	ndi 			integer default 8,
+	do_stat 	integer default 0,
+	di_stat		integer default 0,
+	PRIMARY KEY (id)
+);
+EOF
+check_errno $? ${TB_DIDO}
+
+
 
 
 #建立唯一性约束索引(升序)

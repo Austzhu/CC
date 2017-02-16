@@ -25,6 +25,10 @@
 #define Pointer_Err 	0xFB
 #define Pointer_NULL 	0xFA
 #define RECV_NOTEN 	0xF9
+#define ERROR 		-1
+#define FALSE			0
+#define TRUE 			!FALSE
+
 
 
 #endif

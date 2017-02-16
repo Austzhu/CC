@@ -5,6 +5,8 @@
 	> Created Time:	2016年03月30日 星期三 10时38分53秒
  *******************************************************************/
 #include "database.h"
+static struct sql_t *base_sql = NULL;
+static pthread_mutex_t sql_lock;
 
 /**
  * [ 往数据库里插入一条数据]
@@ -240,34 +242,37 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 	return FAIL;
 }
 
+static int sql_Isexist(const char *table, const char *condition)
+{
+	if(!base_sql) return FALSE;
+	int32_t  id = FALSE;
+	sql_t *SQL = base_sql;
+	SQL->sql_select(Asprintf("select id from %s where %s;",table,condition),(char*)&id,sizeof(int),1,0);
+	return id == FALSE ? FALSE : TRUE;
+}
 
 static void sql_release(struct sql_t**this)
 {
-	assert_param(this,;);
-	assert_param(*this,;);
 	FREE(*this);
 }
 
 sql_t *sql_Init(sql_t *this)
 {
+	//if(base_sql) return base_sql;
+
 	sql_t *sql = this;
 	if(!this){
 		sql= malloc(sizeof(sql_t));
 		if(!sql) return NULL;
+		base_sql = sql;
 	}
 	bzero(sql,sizeof(sql_t));
-
+	pthread_mutex_init(&sql_lock,NULL);
 	sql->sql_insert = sql_Insert;
 	sql->sql_delete = sql_delete;
 	sql->sql_update = sql_update;
 	sql->sql_select = sql_select;
+	sql->sql_Isexist = sql_Isexist;
 	sql->sql_release = sql_release;
-
-	if( !sql->sql_insert || !sql->sql_delete || !sql->sql_update ||\
-		!sql->sql_select  ||  !sql->sql_release)
-		goto out;
 	return sql;
-out:
-	if(!this)  FREE(sql);
-	return NULL;
 }

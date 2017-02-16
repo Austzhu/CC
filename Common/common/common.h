@@ -51,7 +51,6 @@ extern char MessageBuffer[];
 #define DELETE(ptr,func,args...) do{\
 	if(ptr && (ptr)->func ) \
 		(ptr)->func(&ptr,##args);\
-	if(!ptr) free(ptr); ptr = NULL;\
 }while(0)
 
 #define DELETE_NPTR(ptr,func) do{\

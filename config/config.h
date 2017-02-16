@@ -44,6 +44,7 @@
 #define CFG_tb_tunnel 	"db_tunnel_info"
 #define CFG_tb_pwm 		"db_index_pwm"
 #define CFG_tb_gpinfo		"db_group_info"
+#define CFG_tb_dido 		"db_dido_info"
 #endif
 
 #ifdef Config_TCP_Server

@@ -12,18 +12,28 @@
 #ifndef __Meter_H__
 #define __Meter_H__
 #include "include.h"
+#include "UART.h"
+#include "database.h"
+
+enum { UP_DI,UP_DO,UP_ALL };
 
 typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;
 struct appitf_t;
 typedef struct Meter_t{
 	struct appitf_t *topuser;
-	//struct CRC_t *crc;
+	struct uart_t *uart;
+	struct sql_t *sql;
 
-	int (*meter_open)(struct Meter_t*,u8 slave_addr, u8 ndo);
-	int (*meter_close)(struct Meter_t*,u8 slave_addr, u8 ndo);
-	int (*meter_readi)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
-	int (*meter_reado)(struct Meter_t*,u8 slave_addr,u8 ndo,subcmd_t);
-	int (*meter_flashopen)(struct Meter_t*,u8 slave_addr,u8 ndo,int ms);
+	int (*meter_querydi)(struct Meter_t*,uint8_t addr,uint8_t ndi);
+	int (*meter_querydo)(struct Meter_t*,uint8_t addr, uint8_t ndo);
+
+	int (*meter_open)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);
+	int (*meter_close)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);
+
+	int (*meter_readi)(struct Meter_t*,uint8_t addr, uint8_t num);
+	int (*meter_reado)(struct Meter_t*,uint8_t addr, uint8_t num);
+	int (*meter_query_dido)(struct Meter_t*,uint8_t,uint8_t*);
+	int (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms);
 	void (*meter_release)(struct Meter_t**);
 } Meter_t;
 
