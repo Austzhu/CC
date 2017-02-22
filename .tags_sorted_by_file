@@ -28,15 +28,15 @@ mystrcpy	Common\common\common.c	/^char *mystrcpy(char *dest, const char *src)$/;
 Asprintf	Common\common\common.h	39;"	d
 Asprintf_Strlen	Common\common\common.h	38;"	d
 DELETE	Common\common\common.h	51;"	d
-DELETE_NPTR	Common\common\common.h	57;"	d
-FREE	Common\common\common.h	61;"	d
-INIT	Common\common\common.h	65;"	d
-INIT_FAIL	Common\common\common.h	70;"	d
-INIT_NPTR	Common\common\common.h	72;"	d
+DELETE_NPTR	Common\common\common.h	56;"	d
+FREE	Common\common\common.h	60;"	d
+INIT	Common\common\common.h	64;"	d
+INIT_FAIL	Common\common\common.h	69;"	d
+INIT_NPTR	Common\common\common.h	71;"	d
 MessageBuffersize	Common\common\common.h	15;"	d
 NEW	Common\common\common.h	45;"	d
-PARAM_INT	Common\common\common.h	77;"	d
-PARAM_SHORT	Common\common\common.h	78;"	d
+PARAM_INT	Common\common\common.h	76;"	d
+PARAM_SHORT	Common\common\common.h	77;"	d
 __COMMON_H__	Common\common\common.h	13;"	d
 assert_fail	Common\common\common.h	34;"	d
 assert_null	Common\common\common.h	33;"	d
@@ -195,22 +195,22 @@ Title_Security	Software\Log\log.c	25;"	d	file:
 Title_Server_ctrl_CC	Software\Log\log.c	16;"	d	file:
 Title_Timed_ctrl	Software\Log\log.c	19;"	d	file:
 Write_log	Software\Log\log.c	/^s32 Write_log(int cmd, ...)$/;"	f
-CC	Software\Log\log.h	/^	CC		= 0X01,$/;"	e	enum:__anon31
-Coordinate	Software\Log\log.h	/^	Coordinate	= 0X02,$/;"	e	enum:__anon31
+CC	Software\Log\log.h	/^	CC		= 0X01,$/;"	e	enum:__anon32
+Coordinate	Software\Log\log.h	/^	Coordinate	= 0X02,$/;"	e	enum:__anon32
 LogCount	Software\Log\log.h	10;"	d
-Log_err	Software\Log\log.h	/^	Log_err 	= 0x100$/;"	e	enum:__anon31
-Logfile_t	Software\Log\log.h	/^}Logfile_t;$/;"	t	typeref:enum:__anon31
+Log_err	Software\Log\log.h	/^	Log_err 	= 0x100$/;"	e	enum:__anon32
+Logfile_t	Software\Log\log.h	/^}Logfile_t;$/;"	t	typeref:enum:__anon32
 __log_h__	Software\Log\log.h	8;"	d
-err	Software\Log\log.h	/^	err,$/;"	e	enum:__anon31
-warring	Software\Log\log.h	/^	warring,$/;"	e	enum:__anon31
+err	Software\Log\log.h	/^	err,$/;"	e	enum:__anon32
+warring	Software\Log\log.h	/^	warring,$/;"	e	enum:__anon32
 Judge_fault	Software\Warn\Warn.c	/^static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)$/;"	f	file:
 JudgeforSingle	Software\Warn\Warn.c	/^static int JudgeforSingle(Warn_t *this,struct sin_warn_t *info,int infosize)$/;"	f	file:
 Message	Software\Warn\Warn.c	/^fault_Message_t Message[] = {$/;"	v
 clean_flags	Software\Warn\Warn.c	/^static int clean_flags(Warn_t *this,int flags,int set_enu,int condition)$/;"	f	file:
-fault	Software\Warn\Warn.c	/^	int fault;$/;"	m	struct:__anon32	file:
-fault_Message_t	Software\Warn\Warn.c	/^}fault_Message_t;$/;"	t	typeref:struct:__anon32	file:
+fault	Software\Warn\Warn.c	/^	int fault;$/;"	m	struct:__anon33	file:
+fault_Message_t	Software\Warn\Warn.c	/^}fault_Message_t;$/;"	t	typeref:struct:__anon33	file:
 get_mark	Software\Warn\Warn.c	/^static const char *get_mark(int type)$/;"	f	file:
-message	Software\Warn\Warn.c	/^	const char *message;$/;"	m	struct:__anon32	file:
+message	Software\Warn\Warn.c	/^	const char *message;$/;"	m	struct:__anon33	file:
 set_flags	Software\Warn\Warn.c	/^static int set_flags(Warn_t *this,int flags,int set_enu,int condition)$/;"	f	file:
 warn_Insert	Software\Warn\Warn.c	/^static int warn_Insert(struct Warn_t *this,int addr,int type)$/;"	f	file:
 warn_init	Software\Warn\Warn.c	/^Warn_t *warn_init(Warn_t *this,void *topuser)$/;"	f
@@ -241,30 +241,30 @@ Warn_t	Software\Warn\Warn.h	/^} Warn_t;$/;"	t	typeref:struct:Warn_t
 __WARN_H__	Software\Warn\Warn.h	13;"	d
 addr	Software\Warn\Warn.h	/^	int addr;$/;"	m	struct:sin_warn_t
 elec	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;    \/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
-fault_communication	Software\Warn\Warn.h	/^	fault_communication = 0x04,	\/\/通讯故障$/;"	e	enum:__anon34
-fault_coordi	Software\Warn\Warn.h	/^	fault_coordi       = 0x02,			\/\/协调器设备故障$/;"	e	enum:__anon34
+fault_communication	Software\Warn\Warn.h	/^	fault_communication = 0x04,	\/\/通讯故障$/;"	e	enum:__anon35
+fault_coordi	Software\Warn\Warn.h	/^	fault_coordi       = 0x02,			\/\/协调器设备故障$/;"	e	enum:__anon35
 fault_flags	Software\Warn\Warn.h	/^	fault_t fault_flags;                  \/\/故障内容$/;"	m	struct:sin_warn_t
 fault_flags	Software\Warn\Warn.h	/^	int fault_flags;$/;"	m	struct:Warn_info_t
-fault_light	Software\Warn\Warn.h	/^	fault_light 		= 0x08,			\/\/灯具故障$/;"	e	enum:__anon34
-fault_module	Software\Warn\Warn.h	/^	fault_module 	= 0x20,			\/\/一盏灯具有多个模组，其中一个或多个模组坏了$/;"	e	enum:__anon34
-fault_none	Software\Warn\Warn.h	/^	fault_none         = 0x00,			\/\/没有故障$/;"	e	enum:__anon34
-fault_single	Software\Warn\Warn.h	/^	fault_single        = 0x01,			\/\/单灯设备故障$/;"	e	enum:__anon34
-fault_t	Software\Warn\Warn.h	/^}  fault_t;$/;"	t	typeref:enum:__anon34
-fault_valtage	Software\Warn\Warn.h	/^	fault_valtage	= 0x10,			\/\/供电电压故障$/;"	e	enum:__anon34
-flags_enum	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	t	typeref:enum:__anon33
+fault_light	Software\Warn\Warn.h	/^	fault_light 		= 0x08,			\/\/灯具故障$/;"	e	enum:__anon35
+fault_module	Software\Warn\Warn.h	/^	fault_module 	= 0x20,			\/\/一盏灯具有多个模组，其中一个或多个模组坏了$/;"	e	enum:__anon35
+fault_none	Software\Warn\Warn.h	/^	fault_none         = 0x00,			\/\/没有故障$/;"	e	enum:__anon35
+fault_single	Software\Warn\Warn.h	/^	fault_single        = 0x01,			\/\/单灯设备故障$/;"	e	enum:__anon35
+fault_t	Software\Warn\Warn.h	/^}  fault_t;$/;"	t	typeref:enum:__anon35
+fault_valtage	Software\Warn\Warn.h	/^	fault_valtage	= 0x10,			\/\/供电电压故障$/;"	e	enum:__anon35
+flags_enum	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	t	typeref:enum:__anon34
 light	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;    \/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
 opt_flags	Software\Warn\Warn.h	/^	int opt_flags;$/;"	m	struct:sin_warn_t
 sin_warn_t	Software\Warn\Warn.h	/^typedef struct sin_warn_t{$/;"	s
 sin_warn_t	Software\Warn\Warn.h	/^} sin_warn_t;$/;"	t	typeref:struct:sin_warn_t
 single_info	Software\Warn\Warn.h	/^	sin_warn_t *single_info;$/;"	m	struct:Warn_info_t
-so_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-so_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-so_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-sw_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-sw_coordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-sw_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-sw_inCoordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
-sw_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon33
+so_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+so_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+so_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+sw_brocast	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+sw_coordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+sw_group	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+sw_inCoordi	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
+sw_single	Software\Warn\Warn.h	/^typedef enum {sw_single,sw_group,sw_brocast,sw_inCoordi,sw_coordi,so_single,so_group,so_brocast } flags_enum;$/;"	e	enum:__anon34
 topuser	Software\Warn\Warn.h	/^	struct appitf_t *topuser;$/;"	m	struct:Warn_t	typeref:struct:Warn_t::appitf_t
 vol	Software\Warn\Warn.h	/^	int light;    int elec;  int vol;    \/\/实际 状态,调光值,电流,电压$/;"	m	struct:sin_warn_t
 warn_Insert	Software\Warn\Warn.h	/^	int (*warn_Insert)(struct Warn_t*,int addr,int type);$/;"	m	struct:Warn_t
@@ -279,8 +279,8 @@ calc_light_enter	Software\auto_control\auto_calc.c	/^static int calc_light_enter
 calc_light_exit	Software\auto_control\auto_calc.c	/^static int calc_light_exit(struct calc_t *this)$/;"	f	file:
 calc_light_transit	Software\auto_control\auto_calc.c	/^static int calc_light_transit(struct calc_t *this)$/;"	f	file:
 calc_release	Software\auto_control\auto_calc.c	/^static void calc_release(struct calc_t **this,int Is_ptr)$/;"	f	file:
-ONE_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon25
-TWO_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon25
+ONE_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon26
+TWO_WAY	Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon26
 __AUTO_CALC_H__	Software\auto_control\auto_calc.h	13;"	d
 args	Software\auto_control\auto_calc.h	/^	calc_args_t args;$/;"	m	struct:calc_t
 bothway	Software\auto_control\auto_calc.h	/^	int bothway;			\/\/单双向车道$/;"	m	struct:calc_args_t
@@ -320,10 +320,10 @@ select_pwm_level	Software\auto_control\auto_control.c	/^static int32_t inline se
 CFG_COLUMN	Software\auto_control\auto_control.h	16;"	d
 __AUTO_CONTROL_H__	Software\auto_control\auto_control.h	13;"	d
 args	Software\auto_control\auto_control.h	/^	struct calc_args_t *args;$/;"	m	struct:control_t	typeref:struct:control_t::calc_args_t
-base_0	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon27
-base_1	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon27
+base_0	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon28
+base_1	Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon28
 calc	Software\auto_control\auto_control.h	/^	struct calc_t *calc;$/;"	m	struct:control_t	typeref:struct:control_t::calc_t
-column_t	Software\auto_control\auto_control.h	/^} column_t;$/;"	t	typeref:enum:__anon27
+column_t	Software\auto_control\auto_control.h	/^} column_t;$/;"	t	typeref:enum:__anon28
 control_t	Software\auto_control\auto_control.h	/^typedef struct control_t{$/;"	s
 control_t	Software\auto_control\auto_control.h	/^} control_t;$/;"	t	typeref:struct:control_t
 ctrl_PID	Software\auto_control\auto_control.h	/^	int (*ctrl_PID)(struct control_t*);$/;"	m	struct:control_t
@@ -335,22 +335,22 @@ ctrl_release	Software\auto_control\auto_control.h	/^	void (*ctrl_release)(struct
 ctrl_start	Software\auto_control\auto_control.h	/^	int (*ctrl_start)(struct control_t*);$/;"	m	struct:control_t
 ctrl_stop	Software\auto_control\auto_control.h	/^	int (*ctrl_stop)(struct control_t*);$/;"	m	struct:control_t
 ctrl_thread	Software\auto_control\auto_control.h	/^	pthread_t ctrl_thread;$/;"	m	struct:control_t
-enter_0	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon27
-enter_1	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon27
-exit_0	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon27
-exit_1	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon27
+enter_0	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon28
+enter_1	Software\auto_control\auto_control.h	/^	enter_0 = 0,	enter_1,				\/* 入口段 *\/$/;"	e	enum:__anon28
+exit_0	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon28
+exit_1	Software\auto_control\auto_control.h	/^	exit_0, exit_1,							\/* 出口段 *\/$/;"	e	enum:__anon28
 group_cnt	Software\auto_control\auto_control.h	/^	int32_t group_cnt;$/;"	m	struct:control_t
-intensify_0	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
-intensify_1	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
-intensify_2	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon27
-left	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon26
+intensify_0	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon28
+intensify_1	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon28
+intensify_2	Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon28
+left	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon27
 light_current	Software\auto_control\auto_control.h	/^	int32_t *light_current;$/;"	m	struct:light_info_t
 light_info	Software\auto_control\auto_control.h	/^	light_info_t light_info[CFG_COLUMN];$/;"	m	struct:control_t
 light_info_t	Software\auto_control\auto_control.h	/^typedef struct light_info_t{$/;"	s
 light_info_t	Software\auto_control\auto_control.h	/^} light_info_t;$/;"	t	typeref:struct:light_info_t
 pthread_start	Software\auto_control\auto_control.h	/^	int32_t pthread_start;$/;"	m	struct:control_t
 pwm_level	Software\auto_control\auto_control.h	/^	int32_t pwm_level[2];$/;"	m	struct:light_info_t
-right	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon26
+right	Software\auto_control\auto_control.h	/^enum { left=0, right };$/;"	e	enum:__anon27
 single	Software\auto_control\auto_control.h	/^	struct Single_t 	*single;$/;"	m	struct:control_t	typeref:struct:control_t::Single_t
 sensor_get_light	Software\auto_control\auto_sensor.c	/^static int sensor_get_light(struct sensor_t *this)$/;"	f	file:
 sensor_get_stream	Software\auto_control\auto_sensor.c	/^static int sensor_get_stream(struct sensor_t *this)$/;"	f	file:
@@ -362,7 +362,7 @@ __AUTO_SENSOR_H__	Software\auto_control\auto_sensor.h	13;"	d
 kalman_light	Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_light;$/;"	m	struct:sensor_t
 kalman_stream	Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_stream;$/;"	m	struct:sensor_t
 light	Software\auto_control\auto_sensor.h	/^	int traffic, light;$/;"	m	struct:sensor_t
-light	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon28
+light	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon29
 sensor_get_light	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_light)(struct sensor_t*);$/;"	m	struct:sensor_t
 sensor_get_stream	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_stream)(struct sensor_t*);$/;"	m	struct:sensor_t
 sensor_get_values	Software\auto_control\auto_sensor.h	/^	int (*sensor_get_values)(struct sensor_t*,value_t);$/;"	m	struct:sensor_t
@@ -370,9 +370,9 @@ sensor_release	Software\auto_control\auto_sensor.h	/^	void (*sensor_release)(str
 sensor_t	Software\auto_control\auto_sensor.h	/^typedef struct sensor_t {$/;"	s
 sensor_t	Software\auto_control\auto_sensor.h	/^} sensor_t;$/;"	t	typeref:struct:sensor_t
 traffic	Software\auto_control\auto_sensor.h	/^	int traffic, light;$/;"	m	struct:sensor_t
-traffic	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon28
+traffic	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	e	enum:__anon29
 uart2	Software\auto_control\auto_sensor.h	/^	uart_t *uart2;$/;"	m	struct:sensor_t
-value_t	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	t	typeref:enum:__anon28
+value_t	Software\auto_control\auto_sensor.h	/^typedef enum{ traffic = 0, light } value_t;$/;"	t	typeref:enum:__anon29
 AssignmentParam	Software\initstart\loadfile.c	/^static s32 AssignmentParam(s8 *filebuf ,void *app)$/;"	f	file:
 GetHexParam	Software\initstart\loadfile.c	/^static s32 GetHexParam(s8 *filebuf, const s8 *Column, u8 *dest, s32 nL)$/;"	f	file:
 GetIntParam	Software\initstart\loadfile.c	/^static u32 GetIntParam(s8*filebuf,const char *Column)$/;"	f	file:
@@ -417,19 +417,19 @@ wiz_getaddr	Software\lamp\wizdom.c	/^static int wiz_getaddr(struct wizdom_t*this
 wiz_init	Software\lamp\wizdom.c	/^wizdom_t *wiz_init(wizdom_t *this)$/;"	f
 wiz_release	Software\lamp\wizdom.c	/^static void wiz_release(struct wizdom_t**this)$/;"	f	file:
 wiz_setaddr	Software\lamp\wizdom.c	/^static int wiz_setaddr(struct wizdom_t*this,char addr)$/;"	f	file:
-Register	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon30
-Register_brigt	Software\lamp\wizdom.h	/^	Register_brigt 		= 0x0100, 		\/\/光照$/;"	e	enum:__anon29
-Register_rain	Software\lamp\wizdom.h	/^	Register_rain 		= 0x0400, 		\/\/雨量$/;"	e	enum:__anon29
-Register_soil	Software\lamp\wizdom.h	/^	Register_soil 		= 0x0700, 		\/\/土壤$/;"	e	enum:__anon29
-Register_stive	Software\lamp\wizdom.h	/^	Register_stive 		= 0x0700, 		\/\/粉尘$/;"	e	enum:__anon29
-Register_temperature	Software\lamp\wizdom.h	/^	Register_temperature 	= 0x0200, 	\/\/温度$/;"	e	enum:__anon29
-Register_wind	Software\lamp\wizdom.h	/^	Register_wind 		= 0x0600, 		\/\/风速$/;"	e	enum:__anon29
+Register	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon31
+Register_brigt	Software\lamp\wizdom.h	/^	Register_brigt 		= 0x0100, 		\/\/光照$/;"	e	enum:__anon30
+Register_rain	Software\lamp\wizdom.h	/^	Register_rain 		= 0x0400, 		\/\/雨量$/;"	e	enum:__anon30
+Register_soil	Software\lamp\wizdom.h	/^	Register_soil 		= 0x0700, 		\/\/土壤$/;"	e	enum:__anon30
+Register_stive	Software\lamp\wizdom.h	/^	Register_stive 		= 0x0700, 		\/\/粉尘$/;"	e	enum:__anon30
+Register_temperature	Software\lamp\wizdom.h	/^	Register_temperature 	= 0x0200, 	\/\/温度$/;"	e	enum:__anon30
+Register_wind	Software\lamp\wizdom.h	/^	Register_wind 		= 0x0600, 		\/\/风速$/;"	e	enum:__anon30
 __WIZDOM_H__	Software\lamp\wizdom.h	14;"	d
-addr	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon30
+addr	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon31
 ether_server	Software\lamp\wizdom.h	/^	server_t *ether_server;$/;"	m	struct:wizdom_t
-result	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon30
-result_size	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon30
-result_t	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	t	typeref:struct:__anon30
+result	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon31
+result_size	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	m	struct:__anon31
+result_t	Software\lamp\wizdom.h	/^typedef struct { u8 addr;  int Register;  void *result;  int result_size; } result_t;$/;"	t	typeref:struct:__anon31
 wiz_Query	Software\lamp\wizdom.h	/^	int (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);$/;"	m	struct:wizdom_t
 wiz_display	Software\lamp\wizdom.h	/^	void (*wiz_display)(const char*,const char*,int);$/;"	m	struct:wizdom_t
 wiz_getaddr	Software\lamp\wizdom.h	/^	int (*wiz_getaddr)(struct wizdom_t*);$/;"	m	struct:wizdom_t
@@ -520,7 +520,7 @@ HeartBeat_ok	Software\ztcc\Interface.h	42;"	d
 HeartBeat_status	Software\ztcc\Interface.h	/^	int HeartBeat_status;	\/\/心跳状态$/;"	m	struct:appitf_t
 Is_TCP	Software\ztcc\Interface.h	/^	u8 Is_TCP;				\/\/与服务器的连接方式$/;"	m	struct:param_t
 ItfWay	Software\ztcc\Interface.h	/^	u8 ItfWay;				\/\/集中器的操作方法$/;"	m	struct:param_t
-ItfWay_t	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	t	typeref:enum:__anon35
+ItfWay_t	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	t	typeref:enum:__anon36
 KwhReadInter	Software\ztcc\Interface.h	/^	u8 KwhReadInter;		\/\/电量的读取间隔$/;"	m	struct:param_t
 KwhSaveDay	Software\ztcc\Interface.h	/^	u8 KwhSaveDay;		\/\/电路保存天数$/;"	m	struct:param_t
 Queue	Software\ztcc\Interface.h	/^	struct Queue_t *Queue;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Queue_t
@@ -541,22 +541,22 @@ __Interface_h__	Software\ztcc\Interface.h	13;"	d
 appitf_t	Software\ztcc\Interface.h	/^typedef struct appitf_t {$/;"	s
 appitf_t	Software\ztcc\Interface.h	/^} appitf_t;$/;"	t	typeref:struct:appitf_t
 auto_mode	Software\ztcc\Interface.h	/^		control_t *auto_mode;$/;"	m	struct:appitf_t
-ctrl	Software\ztcc\Interface.h	/^	unsigned char ctrl;			\/\/控制域C$/;"	m	struct:__anon36
-data	Software\ztcc\Interface.h	/^	unsigned char data[0];$/;"	m	struct:__anon36
-dep	Software\ztcc\Interface.h	/^	unsigned char dep;			\/\/=68H$/;"	m	struct:__anon36
-ether_net	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon35
-faalpkt_t	Software\ztcc\Interface.h	/^} faalpkt_t;$/;"	t	typeref:struct:__anon36
-gprs	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon35
-head	Software\ztcc\Interface.h	/^	unsigned char head;		\/\/=68H$/;"	m	struct:__anon36
-len	Software\ztcc\Interface.h	/^	unsigned char len;			\/\/data length$/;"	m	struct:__anon36
-lora	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon35
+ctrl	Software\ztcc\Interface.h	/^	unsigned char ctrl;			\/\/控制域C$/;"	m	struct:__anon37
+data	Software\ztcc\Interface.h	/^	unsigned char data[0];$/;"	m	struct:__anon37
+dep	Software\ztcc\Interface.h	/^	unsigned char dep;			\/\/=68H$/;"	m	struct:__anon37
+ether_net	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon36
+faalpkt_t	Software\ztcc\Interface.h	/^} faalpkt_t;$/;"	t	typeref:struct:__anon37
+gprs	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon36
+head	Software\ztcc\Interface.h	/^	unsigned char head;		\/\/=68H$/;"	m	struct:__anon37
+len	Software\ztcc\Interface.h	/^	unsigned char len;			\/\/data length$/;"	m	struct:__anon37
+lora	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon36
 meter	Software\ztcc\Interface.h	/^	struct Meter_t *meter;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Meter_t
 opt_Itf	Software\ztcc\Interface.h	/^	struct operate_t *opt_Itf;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::operate_t
 param	Software\ztcc\Interface.h	/^	struct param_t param;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::param_t
 param_t	Software\ztcc\Interface.h	/^typedef struct param_t{$/;"	s
 param_t	Software\ztcc\Interface.h	/^} param_t;$/;"	t	typeref:struct:param_t
 pthread_start	Software\ztcc\Interface.h	/^	int pthread_start;$/;"	m	struct:appitf_t
-rtua	Software\ztcc\Interface.h	/^	unsigned char rtua[6];$/;"	m	struct:__anon36
+rtua	Software\ztcc\Interface.h	/^	unsigned char rtua[6];$/;"	m	struct:__anon37
 single	Software\ztcc\Interface.h	/^	struct Single_t 	*single;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Single_t
 sqlite	Software\ztcc\Interface.h	/^	struct sql_t 	*sqlite;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::sql_t
 tcp_server	Software\ztcc\Interface.h	/^	struct server_t 	*tcp_server;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::server_t
@@ -565,21 +565,22 @@ thread_RecvInsert	Software\ztcc\Interface.h	/^	pthread_t thread_RecvInsert;$/;"	
 thread_UserProc	Software\ztcc\Interface.h	/^	pthread_t thread_UserProc ;$/;"	m	struct:appitf_t
 tmtask	Software\ztcc\Interface.h	/^		tmtask_t *tmtask;$/;"	m	struct:appitf_t
 warn	Software\ztcc\Interface.h	/^	struct Warn_t 	*warn;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Warn_t
-zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon35
+zigbee	Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon36
 main	User\main.c	/^int main(int argc,char *argv[])$/;"	f
 check_errno	config\Create_Database.sh	/^check_errno(){$/;"	f
 BARD_E6018	config\config.h	10;"	d
-CFG_COM485	config\config.h	58;"	d
-CFG_COMDIDO	config\config.h	59;"	d
+CFG_COM485	config\config.h	59;"	d
+CFG_COMDIDO	config\config.h	60;"	d
 CFG_DB_NAME	config\config.h	37;"	d
-CFG_FILE_PRAM	config\config.h	57;"	d
-CFG_PWMAX	config\config.h	60;"	d
-CFG_ReuseAddr	config\config.h	51;"	d
-CFG_client_max	config\config.h	50;"	d
-CFG_keepcount	config\config.h	54;"	d
-CFG_keepidle	config\config.h	52;"	d
-CFG_keepinterval	config\config.h	53;"	d
+CFG_FILE_PRAM	config\config.h	58;"	d
+CFG_PWMAX	config\config.h	61;"	d
+CFG_ReuseAddr	config\config.h	52;"	d
+CFG_client_max	config\config.h	51;"	d
+CFG_keepcount	config\config.h	55;"	d
+CFG_keepidle	config\config.h	53;"	d
+CFG_keepinterval	config\config.h	54;"	d
 CFG_tb_coordi	config\config.h	38;"	d
+CFG_tb_dido	config\config.h	47;"	d
 CFG_tb_gpinfo	config\config.h	46;"	d
 CFG_tb_light_info	config\config.h	42;"	d
 CFG_tb_pwm	config\config.h	45;"	d
@@ -605,42 +606,48 @@ Config_serial	config\config.h	24;"	d
 Config_wizdom	config\config.h	31;"	d
 Config_ztcc	config\config.h	11;"	d
 __config_h__	config\config.h	8;"	d
-MakeSlave	hardware\Meter\Meter.c	18;"	d	file:
-MakeSlaveOpenAll	hardware\Meter\Meter.c	23;"	d	file:
+Get_statusofdi	hardware\Meter\Meter.c	24;"	d	file:
+Get_statusofdo	hardware\Meter\Meter.c	33;"	d	file:
+Query_dido	hardware\Meter\Meter.c	/^static int Query_dido(struct Meter_t*this, uint8_t addr, uint32_t *result)$/;"	f	file:
 RecvTimeout	hardware\Meter\Meter.c	16;"	d	file:
 SendTimeout	hardware\Meter\Meter.c	15;"	d	file:
-Task_merter	hardware\Meter\Meter.c	29;"	d	file:
+Set_status	hardware\Meter\Meter.c	19;"	d	file:
+WAITDI_RES	hardware\Meter\Meter.c	17;"	d	file:
 meter_close	hardware\Meter\Meter.c	/^static int meter_close(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
-meter_flashopen	hardware\Meter\Meter.c	/^static int meter_flashopen(struct Meter_t *this,u8 slave_addr,u8 ndo,int ms)$/;"	f	file:
+meter_flashopen	hardware\Meter\Meter.c	/^static int meter_flashopen(struct Meter_t *this,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms)$/;"	f	file:
 meter_init	hardware\Meter\Meter.c	/^Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)$/;"	f
 meter_open	hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
+meter_query_dido	hardware\Meter\Meter.c	/^static int meter_query_dido(struct Meter_t*this, uint8_t cnt,uint8_t *pd)$/;"	f	file:
 meter_querydi	hardware\Meter\Meter.c	/^static int meter_querydi(struct Meter_t *this,uint8_t addr,uint8_t ndi)$/;"	f	file:
 meter_querydo	hardware\Meter\Meter.c	/^static int meter_querydo(struct Meter_t *this,uint8_t addr,uint8_t ndo)$/;"	f	file:
-meter_readi	hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,uint8_t addr)$/;"	f	file:
-meter_reado	hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,uint8_t addr)$/;"	f	file:
+meter_readi	hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,uint8_t addr,uint8_t num)$/;"	f	file:
+meter_reado	hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,uint8_t addr,uint8_t num)$/;"	f	file:
 meter_release	hardware\Meter\Meter.c	/^static void meter_release(struct Meter_t **this)$/;"	f	file:
-meter_res_atonce	hardware\Meter\Meter.c	/^static int meter_res_atonce(appitf_t *topuser,int subcmd,u8 slave_addr,u8 ndo,u8 res,int reslut)$/;"	f	file:
 meter_resatonce	hardware\Meter\Meter.c	/^static int meter_resatonce(appitf_t *topuser,uint8_t *ackbuf, uint32_t length)$/;"	f	file:
 meter_sendpackage	hardware\Meter\Meter.c	/^static int meter_sendpackage(Meter_t *this,uint8_t addr,uint8_t do_num,uint32_t stat)$/;"	f	file:
-reado	hardware\Meter\Meter.c	/^static int reado(Meter_t *this,u8 slave_addr)$/;"	f	file:
+meter_update_sql	hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,uint8_t num,int flag,uint32_t status)$/;"	f	file:
 Meter_t	hardware\Meter\Meter.h	/^typedef struct Meter_t{$/;"	s
 Meter_t	hardware\Meter\Meter.h	/^} Meter_t;$/;"	t	typeref:struct:Meter_t
+UP_ALL	hardware\Meter\Meter.h	/^enum { UP_DI,UP_DO,UP_ALL };$/;"	e	enum:__anon3
+UP_DI	hardware\Meter\Meter.h	/^enum { UP_DI,UP_DO,UP_ALL };$/;"	e	enum:__anon3
+UP_DO	hardware\Meter\Meter.h	/^enum { UP_DI,UP_DO,UP_ALL };$/;"	e	enum:__anon3
 __Meter_H__	hardware\Meter\Meter.h	13;"	d
 meter_close	hardware\Meter\Meter.h	/^	int (*meter_close)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
-meter_flashopen	hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t ndo,int ms);$/;"	m	struct:Meter_t
+meter_flashopen	hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms);$/;"	m	struct:Meter_t
 meter_open	hardware\Meter\Meter.h	/^	int (*meter_open)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
+meter_query_dido	hardware\Meter\Meter.h	/^	int (*meter_query_dido)(struct Meter_t*,uint8_t,uint8_t*);$/;"	m	struct:Meter_t
 meter_querydi	hardware\Meter\Meter.h	/^	int (*meter_querydi)(struct Meter_t*,uint8_t addr,uint8_t ndi);$/;"	m	struct:Meter_t
 meter_querydo	hardware\Meter\Meter.h	/^	int (*meter_querydo)(struct Meter_t*,uint8_t addr, uint8_t ndo);$/;"	m	struct:Meter_t
-meter_readi	hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,uint8_t addr);$/;"	m	struct:Meter_t
-meter_reado	hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,uint8_t addr);$/;"	m	struct:Meter_t
+meter_readi	hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
+meter_reado	hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
 meter_release	hardware\Meter\Meter.h	/^	void (*meter_release)(struct Meter_t**);$/;"	m	struct:Meter_t
 sql	hardware\Meter\Meter.h	/^	struct sql_t *sql;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::sql_t
-sub_close	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon3
-sub_flash	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon3
-sub_open	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon3
-sub_readi	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon3
-sub_reado	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon3
-subcmd_t	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	t	typeref:enum:__anon3
+sub_close	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
+sub_flash	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
+sub_open	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
+sub_readi	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
+sub_reado	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	e	enum:__anon4
+subcmd_t	hardware\Meter\Meter.h	/^typedef enum { sub_open  = 1,sub_close,sub_reado,sub_readi,sub_flash } subcmd_t;$/;"	t	typeref:enum:__anon4
 topuser	hardware\Meter\Meter.h	/^	struct appitf_t *topuser;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::appitf_t
 uart	hardware\Meter\Meter.h	/^	struct uart_t *uart;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::uart_t
 HeartSize	hardware\ethernet\ether.c	79;"	d	file:
@@ -713,7 +720,7 @@ uart_config	hardware\serial\UART.c	/^static int uart_config(struct uart_t *this)
 uart_flush	hardware\serial\UART.c	/^static void uart_flush(struct uart_t *this)$/;"	f	file:
 uart_init	hardware\serial\UART.c	/^struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)$/;"	f
 uart_open	hardware\serial\UART.c	/^static int uart_open(struct uart_t *this)$/;"	f	file:
-uart_readall	hardware\serial\UART.c	/^static int uart_readall(struct uart_t *this, char *buf,uint32_t block)$/;"	f	file:
+uart_readall	hardware\serial\UART.c	/^static int uart_readall(struct uart_t *this, char *buf)$/;"	f	file:
 uart_recv	hardware\serial\UART.c	/^static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t block)$/;"	f	file:
 uart_relese	hardware\serial\UART.c	/^static void uart_relese(struct uart_t **this)$/;"	f	file:
 uart_send	hardware\serial\UART.c	/^static int uart_send(struct uart_t *this,const char * buf,uint32_t length,int32_t block)$/;"	f	file:
@@ -726,7 +733,7 @@ uart_flush	hardware\serial\UART.h	/^	void (*uart_flush)(struct uart_t*);$/;"	m	s
 uart_open	hardware\serial\UART.h	/^	int 	(*uart_open)(struct uart_t*);$/;"	m	struct:uart_t
 uart_parity	hardware\serial\UART.h	/^	uint8_t uart_parity;$/;"	m	struct:uart_t
 uart_port	hardware\serial\UART.h	/^	uint8_t uart_port;$/;"	m	struct:uart_t
-uart_readall	hardware\serial\UART.h	/^	int   (*uart_readall)(struct uart_t *this, char *buf,uint32_t block);$/;"	m	struct:uart_t
+uart_readall	hardware\serial\UART.h	/^	int   (*uart_readall)(struct uart_t *this, char *buf);$/;"	m	struct:uart_t
 uart_recv	hardware\serial\UART.h	/^	int 	(*uart_recv)(struct uart_t*, char *buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
 uart_relese	hardware\serial\UART.h	/^	void (*uart_relese)(struct uart_t**);$/;"	m	struct:uart_t
 uart_send	hardware\serial\UART.h	/^	int 	(*uart_send)(struct uart_t*,const char * buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
@@ -754,9 +761,9 @@ serial_send	hardware\serial\serial.h	/^	int 	(*serial_send)(struct serial_t*,u32
 serial_t	hardware\serial\serial.h	/^typedef struct serial_t{$/;"	s
 serial_t	hardware\serial\serial.h	/^} serial_t;$/;"	t	typeref:struct:serial_t
 serialfd	hardware\serial\serial.h	/^	int 	serialfd[SerialMax];$/;"	m	struct:serial_t
-Coor_Addr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-Coor_Addr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon6	file:
-CoordiAddr_t	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	t	typeref:struct:__anon6	file:
+Coor_Addr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+Coor_Addr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon7	file:
+CoordiAddr_t	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	t	typeref:struct:__anon7	file:
 Display_package	hardware\single\single.c	/^static void Display_package(const char *Message,void *buffer,int size)$/;"	f	file:
 Instert_Table	hardware\single\single.c	/^static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\\$/;"	f	file:
 MakeSinglePack	hardware\single\single.c	32;"	d	file:
@@ -769,19 +776,19 @@ Query_status	hardware\single\single.c	/^static int Query_status(Single_t*this,in
 RecvTimeout	hardware\single\single.c	23;"	d	file:
 Response_PC	hardware\single\single.c	/^static int Response_PC(Single_t *this,  Sqlbuf_t *light_info,\\$/;"	f	file:
 SendTimeout	hardware\single\single.c	22;"	d	file:
-SingleAddr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-Single_Addr	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon5	file:
-Single_Addr	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon4	file:
-Sqlbuf_t	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	t	typeref:struct:__anon7	file:
+SingleAddr	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+Single_Addr	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon6	file:
+Single_Addr	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon5	file:
+Sqlbuf_t	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	t	typeref:struct:__anon8	file:
 Task_append	hardware\single\single.c	25;"	d	file:
-Warn_flags	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-electric_recv_t	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	t	typeref:struct:__anon5	file:
-light	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon4	file:
-light	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-light_E	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon5	file:
-light_E	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-light_V	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon5	file:
-light_V	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
+Warn_flags	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+electric_recv_t	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	t	typeref:struct:__anon6	file:
+light	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon5	file:
+light	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+light_E	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon6	file:
+light_E	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+light_V	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u16 light_V; u16 light_E; } electric_recv_t;$/;"	m	struct:__anon6	file:
+light_V	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
 sin_Config	hardware\single\single.c	/^static int sin_Config(Single_t *this,sin_cfg_t cmd,void *package)$/;"	f	file:
 sin_Queryelectric	hardware\single\single.c	/^static int sin_Queryelectric(Single_t *this,int cmd, u32 Addr)$/;"	f	file:
 sin_Querystatus	hardware\single\single.c	/^static int sin_Querystatus(Single_t *this,int cmd, u32 Addr)$/;"	f	file:
@@ -791,45 +798,45 @@ sin_open	hardware\single\single.c	/^static int sin_open(Single_t *this,int cmd, 
 sin_release	hardware\single\single.c	/^static void sin_release(struct Single_t **this)$/;"	f	file:
 sin_reply	hardware\single\single.c	/^static int sin_reply(Single_t *this,int cmd,int subcmd,int res)$/;"	f	file:
 sin_update	hardware\single\single.c	/^static int sin_update(Single_t*this,int addr)$/;"	f	file:
-single_Count	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon6	file:
+single_Count	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 single_Count; } CoordiAddr_t;$/;"	m	struct:__anon7	file:
 single_Init	hardware\single\single.c	/^Single_t *single_Init(Single_t *single,struct appitf_t *topuser)$/;"	f
-stat	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon4	file:
-status	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon7	file:
-status_recv_t	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	t	typeref:struct:__anon4	file:
+stat	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	m	struct:__anon5	file:
+status	hardware\single\single.c	/^typedef struct {u32 Coor_Addr;  u32 SingleAddr;  u32 Warn_flags; u32 status;   u32 light;   u32 light_V;   u32 light_E; } Sqlbuf_t;$/;"	m	struct:__anon8	file:
+status_recv_t	hardware\single\single.c	/^typedef struct {u16 Single_Addr;  u8 stat;  u8 light;} status_recv_t;$/;"	t	typeref:struct:__anon5	file:
 update_status	hardware\single\single.c	/^static int update_status(Single_t *this,Sqlbuf_t *light_info,int info_size)$/;"	f	file:
-Cmd	hardware\single\single.h	/^	u8 	Cmd[2];                  \/\/高字节在前，低字节在后$/;"	m	struct:__anon11
-Coordi_Addr	hardware\single\single.h	/^	u8 	Coordi_Addr;$/;"	m	struct:__anon11
-Crc16	hardware\single\single.h	/^	u8 	Crc16[2];$/;"	m	struct:__anon11
-Ctrl	hardware\single\single.h	/^	u8 	Ctrl;$/;"	m	struct:__anon11
-Data	hardware\single\single.h	/^	u8 	Data[2];$/;"	m	struct:__anon11
+Cmd	hardware\single\single.h	/^	u8 	Cmd[2];                  \/\/高字节在前，低字节在后$/;"	m	struct:__anon12
+Coordi_Addr	hardware\single\single.h	/^	u8 	Coordi_Addr;$/;"	m	struct:__anon12
+Crc16	hardware\single\single.h	/^	u8 	Crc16[2];$/;"	m	struct:__anon12
+Ctrl	hardware\single\single.h	/^	u8 	Ctrl;$/;"	m	struct:__anon12
+Data	hardware\single\single.h	/^	u8 	Data[2];$/;"	m	struct:__anon12
 Display	hardware\single\single.h	/^	void (*Display)(const char*,void*,int);$/;"	m	struct:Single_t
 GetSingleCunt	hardware\single\single.h	33;"	d
-Group_Addr	hardware\single\single.h	/^	u8 	Group_Addr;$/;"	m	struct:__anon11
-Header	hardware\single\single.h	/^	u8	Header;$/;"	m	struct:__anon11
-Query_elec	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	e	enum:__anon10
+Group_Addr	hardware\single\single.h	/^	u8 	Group_Addr;$/;"	m	struct:__anon12
+Header	hardware\single\single.h	/^	u8	Header;$/;"	m	struct:__anon12
+Query_elec	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	e	enum:__anon11
 Query_nores	hardware\single\single.h	35;"	d
 Query_res	hardware\single\single.h	34;"	d
-Query_stat	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	e	enum:__anon10
-Query_t	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	t	typeref:enum:__anon10
+Query_stat	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	e	enum:__anon11
+Query_t	hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	t	typeref:enum:__anon11
 Set_db_group_info	hardware\single\single.h	18;"	d
-Single_Addr	hardware\single\single.h	/^	u8 	Single_Addr[2];   \/\/高地址在前，低地址在后$/;"	m	struct:__anon11
+Single_Addr	hardware\single\single.h	/^	u8 	Single_Addr[2];   \/\/高地址在前，低地址在后$/;"	m	struct:__anon12
 Single_t	hardware\single\single.h	/^typedef struct Single_t{$/;"	s
 Single_t	hardware\single\single.h	/^} Single_t;$/;"	t	typeref:struct:Single_t
 __single_h__	hardware\single\single.h	13;"	d
-cfg_coorMap	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon8
-cfg_sinGroup	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon8
-cfg_sinMap	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon8
-cmd_broadcast	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon9
-cmd_broadlight	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon9
-cmd_group	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon9
-cmd_grouplight	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon9
-cmd_single	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon9
-cmd_t	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	t	typeref:enum:__anon9
-light_t	hardware\single\single.h	/^}light_t;$/;"	t	typeref:struct:__anon11
+cfg_coorMap	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon9
+cfg_sinGroup	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon9
+cfg_sinMap	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	e	enum:__anon9
+cmd_broadcast	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon10
+cmd_broadlight	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon10
+cmd_group	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon10
+cmd_grouplight	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon10
+cmd_single	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	e	enum:__anon10
+cmd_t	hardware\single\single.h	/^typedef enum{cmd_single,  cmd_group,  cmd_broadcast,  cmd_grouplight,  cmd_broadlight } cmd_t;$/;"	t	typeref:enum:__anon10
+light_t	hardware\single\single.h	/^}light_t;$/;"	t	typeref:struct:__anon12
 sin_Queryelectric	hardware\single\single.h	/^	int (*sin_Queryelectric)(struct Single_t*,int,u32);$/;"	m	struct:Single_t
 sin_Querystatus	hardware\single\single.h	/^	int (*sin_Querystatus)(struct Single_t*,int,u32);$/;"	m	struct:Single_t
 sin_RecvPackage	hardware\single\single.h	/^	int (*sin_RecvPackage)(struct Single_t*,void*,int,int);$/;"	m	struct:Single_t
-sin_cfg_t	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	t	typeref:enum:__anon8
+sin_cfg_t	hardware\single\single.h	/^typedef enum {cfg_sinMap,  cfg_sinGroup,  cfg_coorMap } sin_cfg_t;$/;"	t	typeref:enum:__anon9
 sin_close	hardware\single\single.h	/^	int (*sin_close)(struct Single_t*,int,u32);$/;"	m	struct:Single_t
 sin_config	hardware\single\single.h	/^	int (*sin_config)(struct Single_t*,sin_cfg_t,void*);$/;"	m	struct:Single_t
 sin_open	hardware\single\single.h	/^	int (*sin_open)(struct Single_t*,int,u32,u32);$/;"	m	struct:Single_t
@@ -846,42 +853,42 @@ update_slave	hardware\single\update.c	/^static int update_slave(struct update_t 
 update_start	hardware\single\update.c	/^static int update_start(struct update_t *this,int addr,char Image)$/;"	f	file:
 ACK	hardware\single\update.h	19;"	d
 CAN	hardware\single\update.h	21;"	d
-CRC16	hardware\single\update.h	/^	u8 CRC16[2];        \/\/低在前，高位在后$/;"	m	struct:__anon13
+CRC16	hardware\single\update.h	/^	u8 CRC16[2];        \/\/低在前，高位在后$/;"	m	struct:__anon14
 CTRLZ	hardware\single\update.h	22;"	d
-Coor_addr	hardware\single\update.h	/^	u8 Coor_addr;$/;"	m	struct:__anon13
+Coor_addr	hardware\single\update.h	/^	u8 Coor_addr;$/;"	m	struct:__anon14
 EOT	hardware\single\update.h	18;"	d
 NAK	hardware\single\update.h	20;"	d
 SOH	hardware\single\update.h	16;"	d
 STX	hardware\single\update.h	17;"	d
 UPACKSIZE	hardware\single\update.h	23;"	d
 __UPDATE_H__	hardware\single\update.h	13;"	d
-data	hardware\single\update.h	/^	u8 data[UPACKSIZE];$/;"	m	struct:__anon13
-frame	hardware\single\update.h	/^	u8 frame[2];          \/\/第一个字节存第几帧数据，第2个字节存第一个字节的反码$/;"	m	struct:__anon13
-header	hardware\single\update.h	/^	u8 header;$/;"	m	struct:__anon13
+data	hardware\single\update.h	/^	u8 data[UPACKSIZE];$/;"	m	struct:__anon14
+frame	hardware\single\update.h	/^	u8 frame[2];          \/\/第一个字节存第几帧数据，第2个字节存第一个字节的反码$/;"	m	struct:__anon14
+header	hardware\single\update.h	/^	u8 header;$/;"	m	struct:__anon14
 info	hardware\single\update.h	/^	update_Info_t info;$/;"	m	struct:update_t
 package	hardware\single\update.h	/^	package_t package;$/;"	m	struct:update_t
-package_t	hardware\single\update.h	/^} package_t;$/;"	t	typeref:struct:__anon13
-single_addr	hardware\single\update.h	/^	u8 single_addr[2];$/;"	m	struct:__anon13
+package_t	hardware\single\update.h	/^} package_t;$/;"	t	typeref:struct:__anon14
+single_addr	hardware\single\update.h	/^	u8 single_addr[2];$/;"	m	struct:__anon14
 subclass	hardware\single\update.h	/^	struct Single_t *subclass;      \/\/继承update的子类$/;"	m	struct:update_t	typeref:struct:update_t::Single_t
-update_Info_t	hardware\single\update.h	/^} update_Info_t;$/;"	t	typeref:struct:__anon12
-update_cframe	hardware\single\update.h	/^	int update_cframe;      \/\/当前第几帧数据$/;"	m	struct:__anon12
-update_checkType	hardware\single\update.h	/^	int update_checkType;$/;"	m	struct:__anon12
-update_fd	hardware\single\update.h	/^	int update_fd;$/;"	m	struct:__anon12
-update_frame	hardware\single\update.h	/^	int update_frame;        \/\/一共有多少帧数据$/;"	m	struct:__anon12
-update_isCoordi	hardware\single\update.h	/^	int update_isCoordi;$/;"	m	struct:__anon12
-update_isImageA	hardware\single\update.h	/^	int update_isImageA;$/;"	m	struct:__anon12
-update_ok	hardware\single\update.h	/^	int update_ok;$/;"	m	struct:__anon12
-update_pend	hardware\single\update.h	/^	int update_pend;$/;"	m	struct:__anon12
+update_Info_t	hardware\single\update.h	/^} update_Info_t;$/;"	t	typeref:struct:__anon13
+update_cframe	hardware\single\update.h	/^	int update_cframe;      \/\/当前第几帧数据$/;"	m	struct:__anon13
+update_checkType	hardware\single\update.h	/^	int update_checkType;$/;"	m	struct:__anon13
+update_fd	hardware\single\update.h	/^	int update_fd;$/;"	m	struct:__anon13
+update_frame	hardware\single\update.h	/^	int update_frame;        \/\/一共有多少帧数据$/;"	m	struct:__anon13
+update_isCoordi	hardware\single\update.h	/^	int update_isCoordi;$/;"	m	struct:__anon13
+update_isImageA	hardware\single\update.h	/^	int update_isImageA;$/;"	m	struct:__anon13
+update_ok	hardware\single\update.h	/^	int update_ok;$/;"	m	struct:__anon13
+update_pend	hardware\single\update.h	/^	int update_pend;$/;"	m	struct:__anon13
 update_recv_onebyte	hardware\single\update.h	/^	u8 (*update_recv_onebyte)(struct update_t*);$/;"	m	struct:update_t
 update_release	hardware\single\update.h	/^	void (*update_release)(struct update_t**);$/;"	m	struct:update_t
-update_repeat	hardware\single\update.h	/^	int update_repeat;$/;"	m	struct:__anon12
+update_repeat	hardware\single\update.h	/^	int update_repeat;$/;"	m	struct:__anon13
 update_send_package	hardware\single\update.h	/^	int (*update_send_package)(struct update_t*);$/;"	m	struct:update_t
-update_size	hardware\single\update.h	/^	int update_size;$/;"	m	struct:__anon12
+update_size	hardware\single\update.h	/^	int update_size;$/;"	m	struct:__anon13
 update_slave	hardware\single\update.h	/^	int (*update_slave)(struct update_t *);$/;"	m	struct:update_t
 update_start	hardware\single\update.h	/^	int (*update_start)(struct update_t*,int addr,char Image);$/;"	m	struct:update_t
 update_t	hardware\single\update.h	/^typedef struct update_t {$/;"	s
 update_t	hardware\single\update.h	/^} update_t;$/;"	t	typeref:struct:update_t
-update_timeout	hardware\single\update.h	/^	int update_timeout;$/;"	m	struct:__anon12
+update_timeout	hardware\single\update.h	/^	int update_timeout;$/;"	m	struct:__anon13
 CFG_ADC_LIB	library\e3100\libs_emfuture_odm.h	66;"	d
 CFG_ADC_LIB	library\e3100\libs_emfuture_odm.h	78;"	d
 CFG_ADC_LIB	library\e3100\libs_emfuture_odm.h	89;"	d
@@ -975,8 +982,8 @@ FUNC	library\e3100\libs_emfuture_odm.h	/^typedef void (*FUNC) (int sig);$/;"	t
 HFUNC	library\e3100\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int sig, siginfo_t *extra, void *args);$/;"	t
 IIO_MAX_NAME_LENGTH	library\e3100\libs_emfuture_odm.h	136;"	d
 LIBS_EMFUTURE_ODM_H_	library\e3100\libs_emfuture_odm.h	9;"	d
-PIO_MODE_IN	library\e3100\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon19
-PIO_MODE_OUT	library\e3100\libs_emfuture_odm.h	/^	PIO_MODE_OUT = 0,$/;"	e	enum:__anon19
+PIO_MODE_IN	library\e3100\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon20
+PIO_MODE_OUT	library\e3100\libs_emfuture_odm.h	/^	PIO_MODE_OUT = 0,$/;"	e	enum:__anon20
 PORT0_GPIO	library\e3100\libs_emfuture_odm.h	1338;"	d
 PORT1_GPIO	library\e3100\libs_emfuture_odm.h	1340;"	d
 PORT2_GPIO	library\e3100\libs_emfuture_odm.h	1342;"	d
@@ -990,35 +997,35 @@ PORTDEV	library\e3100\libs_emfuture_odm.h	312;"	d
 PORTD_GPIO	library\e3100\libs_emfuture_odm.h	1343;"	d
 PORTE_GPIO	library\e3100\libs_emfuture_odm.h	1345;"	d
 PORTF_GPIO	library\e3100\libs_emfuture_odm.h	1347;"	d
-PORT_BANK_2	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_2 = 0,$/;"	e	enum:__anon16
-PORT_BANK_4	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_4,$/;"	e	enum:__anon16
-PORT_BANK_5	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_5,$/;"	e	enum:__anon16
-PORT_BANK_6	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_6,$/;"	e	enum:__anon16
-PORT_BANK_7	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_7,$/;"	e	enum:__anon16
-PORT_WIDTH_16	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_16,$/;"	e	enum:__anon15
-PORT_WIDTH_32	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon15
-PORT_WIDTH_8	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon15
-RS232_MODE	library\e3100\libs_emfuture_odm.h	/^	RS232_MODE = 0,$/;"	e	enum:__anon14
-RS422_MODE	library\e3100\libs_emfuture_odm.h	/^	RS422_MODE,$/;"	e	enum:__anon14
-RS485_MODE	library\e3100\libs_emfuture_odm.h	/^	RS485_MODE$/;"	e	enum:__anon14
+PORT_BANK_2	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_2 = 0,$/;"	e	enum:__anon17
+PORT_BANK_4	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_4,$/;"	e	enum:__anon17
+PORT_BANK_5	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_5,$/;"	e	enum:__anon17
+PORT_BANK_6	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_6,$/;"	e	enum:__anon17
+PORT_BANK_7	library\e3100\libs_emfuture_odm.h	/^	PORT_BANK_7,$/;"	e	enum:__anon17
+PORT_WIDTH_16	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_16,$/;"	e	enum:__anon16
+PORT_WIDTH_32	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon16
+PORT_WIDTH_8	library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon16
+RS232_MODE	library\e3100\libs_emfuture_odm.h	/^	RS232_MODE = 0,$/;"	e	enum:__anon15
+RS422_MODE	library\e3100\libs_emfuture_odm.h	/^	RS422_MODE,$/;"	e	enum:__anon15
+RS485_MODE	library\e3100\libs_emfuture_odm.h	/^	RS485_MODE$/;"	e	enum:__anon15
 TRACE	library\e3100\libs_emfuture_odm.h	1445;"	d
 TRACE	library\e3100\libs_emfuture_odm.h	1447;"	d
 UP_KEY	library\e3100\libs_emfuture_odm.h	1144;"	d
 UP_THRESHOLD_DOWN	library\e3100\libs_emfuture_odm.h	1140;"	d
 __float_to_dacout	library\e3100\libs_emfuture_odm.h	/^struct __float_to_dacout {$/;"	s
 __sample_to_float	library\e3100\libs_emfuture_odm.h	/^struct __sample_to_float {$/;"	s
-bank	library\e3100\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon17
+bank	library\e3100\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon18
 be	library\e3100\libs_emfuture_odm.h	/^	unsigned be;$/;"	m	struct:iio_channel_info
 bits_used	library\e3100\libs_emfuture_odm.h	/^	unsigned bits_used;$/;"	m	struct:iio_channel_info
 bytes	library\e3100\libs_emfuture_odm.h	/^	unsigned bytes;$/;"	m	struct:iio_channel_info
-com_type_t	library\e3100\libs_emfuture_odm.h	/^} com_type_t;$/;"	t	typeref:enum:__anon14
+com_type_t	library\e3100\libs_emfuture_odm.h	/^} com_type_t;$/;"	t	typeref:enum:__anon15
 cyg_adc_sample	library\e3100\libs_emfuture_odm.h	/^typedef unsigned short cyg_adc_sample;$/;"	t
 cyg_dac_out	library\e3100\libs_emfuture_odm.h	/^typedef unsigned short cyg_dac_out;$/;"	t
 enabled	library\e3100\libs_emfuture_odm.h	/^	unsigned enabled;$/;"	m	struct:iio_channel_info
 fvalue	library\e3100\libs_emfuture_odm.h	/^	float fvalue;$/;"	m	struct:__float_to_dacout
 fvalue	library\e3100\libs_emfuture_odm.h	/^	float fvalue;$/;"	m	struct:__sample_to_float
 generic_name	library\e3100\libs_emfuture_odm.h	/^	char *generic_name;$/;"	m	struct:iio_channel_info
-gpio_mode_t	library\e3100\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon19
+gpio_mode_t	library\e3100\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon20
 iio_channel_info	library\e3100\libs_emfuture_odm.h	/^struct iio_channel_info {$/;"	s
 index	library\e3100\libs_emfuture_odm.h	/^	unsigned index;$/;"	m	struct:iio_channel_info
 is_signed	library\e3100\libs_emfuture_odm.h	/^	unsigned is_signed;$/;"	m	struct:iio_channel_info
@@ -1028,16 +1035,16 @@ location	library\e3100\libs_emfuture_odm.h	/^	unsigned location;$/;"	m	struct:ii
 mask	library\e3100\libs_emfuture_odm.h	/^	unsigned mask;$/;"	m	struct:iio_channel_info
 name	library\e3100\libs_emfuture_odm.h	/^	char *name;$/;"	m	struct:iio_channel_info
 offset	library\e3100\libs_emfuture_odm.h	/^	float offset;$/;"	m	struct:iio_channel_info
-port_attr_t	library\e3100\libs_emfuture_odm.h	/^} port_attr_t;$/;"	t	typeref:struct:__anon17
-port_bank_t	library\e3100\libs_emfuture_odm.h	/^} port_bank_t;$/;"	t	typeref:enum:__anon16
-port_data_t	library\e3100\libs_emfuture_odm.h	/^} port_data_t;$/;"	t	typeref:struct:__anon18
-port_wid_t	library\e3100\libs_emfuture_odm.h	/^} port_wid_t;$/;"	t	typeref:enum:__anon15
-regAddr	library\e3100\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon18
-regData	library\e3100\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon18
-reserved	library\e3100\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon17
+port_attr_t	library\e3100\libs_emfuture_odm.h	/^} port_attr_t;$/;"	t	typeref:struct:__anon18
+port_bank_t	library\e3100\libs_emfuture_odm.h	/^} port_bank_t;$/;"	t	typeref:enum:__anon17
+port_data_t	library\e3100\libs_emfuture_odm.h	/^} port_data_t;$/;"	t	typeref:struct:__anon19
+port_wid_t	library\e3100\libs_emfuture_odm.h	/^} port_wid_t;$/;"	t	typeref:enum:__anon16
+regAddr	library\e3100\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon19
+regData	library\e3100\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon19
+reserved	library\e3100\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon18
 scale	library\e3100\libs_emfuture_odm.h	/^	float scale;$/;"	m	struct:iio_channel_info
 shift	library\e3100\libs_emfuture_odm.h	/^	unsigned shift;$/;"	m	struct:iio_channel_info
-width	library\e3100\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon17
+width	library\e3100\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon18
 FORMAT_SCAN_ELEMENTS_DIR	library\e6018\iio_utils.h	23;"	d
 FORMAT_TYPE_FILE	library\e6018\iio_utils.h	24;"	d
 IIO_MAX_NAME_LENGTH	library\e6018\iio_utils.h	21;"	d
@@ -1496,8 +1503,8 @@ FIFO_RESET_IOCFG	library\e6018\libs_emfuture_odm.h	633;"	d
 FUNC	library\e6018\libs_emfuture_odm.h	/^typedef void (*FUNC) (int sig);$/;"	t
 HFUNC	library\e6018\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int sig, siginfo_t *extra, void *args);$/;"	t
 LIBS_EMFUTURE_ODM_H_	library\e6018\libs_emfuture_odm.h	9;"	d
-PIO_MODE_IN	library\e6018\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon24
-PIO_MODE_OUT	library\e6018\libs_emfuture_odm.h	/^	PIO_MODE_OUT = 0,$/;"	e	enum:__anon24
+PIO_MODE_IN	library\e6018\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon25
+PIO_MODE_OUT	library\e6018\libs_emfuture_odm.h	/^	PIO_MODE_OUT = 0,$/;"	e	enum:__anon25
 PORT0_GPIO	library\e6018\libs_emfuture_odm.h	1656;"	d
 PORT1_GPIO	library\e6018\libs_emfuture_odm.h	1658;"	d
 PORT2_GPIO	library\e6018\libs_emfuture_odm.h	1660;"	d
@@ -1511,89 +1518,90 @@ PORTDEV	library\e6018\libs_emfuture_odm.h	629;"	d
 PORTD_GPIO	library\e6018\libs_emfuture_odm.h	1661;"	d
 PORTE_GPIO	library\e6018\libs_emfuture_odm.h	1663;"	d
 PORTF_GPIO	library\e6018\libs_emfuture_odm.h	1665;"	d
-PORT_BANK_2	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_2 = 0,$/;"	e	enum:__anon21
-PORT_BANK_4	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_4,$/;"	e	enum:__anon21
-PORT_BANK_5	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_5,$/;"	e	enum:__anon21
-PORT_BANK_6	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_6,$/;"	e	enum:__anon21
-PORT_BANK_7	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_7,$/;"	e	enum:__anon21
-PORT_WIDTH_16	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_16,$/;"	e	enum:__anon20
-PORT_WIDTH_32	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon20
-PORT_WIDTH_8	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon20
+PORT_BANK_2	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_2 = 0,$/;"	e	enum:__anon22
+PORT_BANK_4	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_4,$/;"	e	enum:__anon22
+PORT_BANK_5	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_5,$/;"	e	enum:__anon22
+PORT_BANK_6	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_6,$/;"	e	enum:__anon22
+PORT_BANK_7	library\e6018\libs_emfuture_odm.h	/^	PORT_BANK_7,$/;"	e	enum:__anon22
+PORT_WIDTH_16	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_16,$/;"	e	enum:__anon21
+PORT_WIDTH_32	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon21
+PORT_WIDTH_8	library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon21
 TRACE	library\e6018\libs_emfuture_odm.h	1751;"	d
 TRACE	library\e6018\libs_emfuture_odm.h	1753;"	d
 UP_KEY	library\e6018\libs_emfuture_odm.h	1462;"	d
 UP_THRESHOLD_DOWN	library\e6018\libs_emfuture_odm.h	1458;"	d
 __float_to_dacout	library\e6018\libs_emfuture_odm.h	/^struct __float_to_dacout {$/;"	s
 __sample_to_float	library\e6018\libs_emfuture_odm.h	/^struct __sample_to_float {$/;"	s
-bank	library\e6018\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon22
+bank	library\e6018\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon23
 cyg_adc_sample	library\e6018\libs_emfuture_odm.h	/^typedef unsigned short cyg_adc_sample;$/;"	t
 cyg_dac_out	library\e6018\libs_emfuture_odm.h	/^typedef unsigned short cyg_dac_out;$/;"	t
 fvalue	library\e6018\libs_emfuture_odm.h	/^	float fvalue;$/;"	m	struct:__float_to_dacout
 fvalue	library\e6018\libs_emfuture_odm.h	/^	float fvalue;$/;"	m	struct:__sample_to_float
-gpio_mode_t	library\e6018\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon24
+gpio_mode_t	library\e6018\libs_emfuture_odm.h	/^} gpio_mode_t;$/;"	t	typeref:enum:__anon25
 ivalue	library\e6018\libs_emfuture_odm.h	/^	cyg_adc_sample ivalue;$/;"	m	struct:__sample_to_float
 ivalue	library\e6018\libs_emfuture_odm.h	/^	cyg_dac_out ivalue;$/;"	m	struct:__float_to_dacout
-port_attr_t	library\e6018\libs_emfuture_odm.h	/^} port_attr_t;$/;"	t	typeref:struct:__anon22
-port_bank_t	library\e6018\libs_emfuture_odm.h	/^} port_bank_t;$/;"	t	typeref:enum:__anon21
-port_data_t	library\e6018\libs_emfuture_odm.h	/^} port_data_t;$/;"	t	typeref:struct:__anon23
-port_wid_t	library\e6018\libs_emfuture_odm.h	/^} port_wid_t;$/;"	t	typeref:enum:__anon20
-regAddr	library\e6018\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon23
-regData	library\e6018\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon23
-reserved	library\e6018\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon22
-width	library\e6018\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon22
+port_attr_t	library\e6018\libs_emfuture_odm.h	/^} port_attr_t;$/;"	t	typeref:struct:__anon23
+port_bank_t	library\e6018\libs_emfuture_odm.h	/^} port_bank_t;$/;"	t	typeref:enum:__anon22
+port_data_t	library\e6018\libs_emfuture_odm.h	/^} port_data_t;$/;"	t	typeref:struct:__anon24
+port_wid_t	library\e6018\libs_emfuture_odm.h	/^} port_wid_t;$/;"	t	typeref:enum:__anon21
+regAddr	library\e6018\libs_emfuture_odm.h	/^	int regAddr;$/;"	m	struct:__anon24
+regData	library\e6018\libs_emfuture_odm.h	/^	int regData;$/;"	m	struct:__anon24
+reserved	library\e6018\libs_emfuture_odm.h	/^	short reserved;$/;"	m	struct:__anon23
+width	library\e6018\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon23
 base_sql	sqlite\database.c	/^static struct sql_t *base_sql = NULL;$/;"	v	typeref:struct:sql_t	file:
 sql_Init	sqlite\database.c	/^sql_t *sql_Init(sql_t *this)$/;"	f
 sql_Insert	sqlite\database.c	/^static int sql_Insert(const char *sql)$/;"	f	file:
 sql_Isexist	sqlite\database.c	/^static int sql_Isexist(const char *table, const char *condition)$/;"	f	file:
 sql_delete	sqlite\database.c	/^static int sql_delete(const char *sql)$/;"	f	file:
+sql_lock	sqlite\database.c	/^static pthread_mutex_t sql_lock;$/;"	v	file:
 sql_release	sqlite\database.c	/^static void sql_release(struct sql_t**this)$/;"	f	file:
 sql_select	sqlite\database.c	/^static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)$/;"	f	file:
 sql_update	sqlite\database.c	/^static int sql_update(const char *table,const char *Condition)$/;"	f	file:
-Add_time	sqlite\database.h	/^	u32		Add_time;	\/\/报警时间$/;"	m	struct:__anon40
-Base_Addr	sqlite\database.h	/^	s32 Base_Addr;		\/\/单灯地址$/;"	m	struct:__anon39
-Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/协调器地址$/;"	m	struct:__anon37
-Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/单灯地址$/;"	m	struct:__anon38
-CC_id	sqlite\database.h	/^	s8 CC_id[16];               \/\/集中器ID$/;"	m	struct:__anon37
-Coor_gid	sqlite\database.h	/^	u32 Coor_gid;             \/\/协调器组ID$/;"	m	struct:__anon37
-Coor_id	sqlite\database.h	/^	u32 Coor_id;                \/\/对应的协调器的地址$/;"	m	struct:__anon38
+Add_time	sqlite\database.h	/^	u32		Add_time;	\/\/报警时间$/;"	m	struct:__anon41
+Base_Addr	sqlite\database.h	/^	s32 Base_Addr;		\/\/单灯地址$/;"	m	struct:__anon40
+Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/协调器地址$/;"	m	struct:__anon38
+Base_Addr	sqlite\database.h	/^	u32 Base_Addr;          \/\/单灯地址$/;"	m	struct:__anon39
+CC_id	sqlite\database.h	/^	s8 CC_id[16];               \/\/集中器ID$/;"	m	struct:__anon38
+Coor_gid	sqlite\database.h	/^	u32 Coor_gid;             \/\/协调器组ID$/;"	m	struct:__anon38
+Coor_id	sqlite\database.h	/^	u32 Coor_id;                \/\/对应的协调器的地址$/;"	m	struct:__anon39
 Get_CountByColumn	sqlite\database.h	20;"	d
 Get_CountByCondition	sqlite\database.h	16;"	d
 Get_light_info_count	sqlite\database.h	21;"	d
-Grade	sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon40
-Map_Addr	sqlite\database.h	/^	u32 Map_Addr;	         \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon37
-Map_Addr	sqlite\database.h	/^	u32 Map_Addr;           \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon38
-Rate_PF	sqlite\database.h	/^	u32 Rate_PF;		\/\/功率因数$/;"	m	struct:__anon39
-Rate_p	sqlite\database.h	/^	u32 Rate_p;		\/\/额定功率$/;"	m	struct:__anon39
-Rate_v	sqlite\database.h	/^	u32 Rate_v;			\/\/额定电压$/;"	m	struct:__anon39
-Remark	sqlite\database.h	/^	u8	Remark[48];	\/\/备注$/;"	m	struct:__anon40
-State	sqlite\database.h	/^	u32		State;		\/\/状态$/;"	m	struct:__anon40
-TableCoordi_t	sqlite\database.h	/^} TableCoordi_t;$/;"	t	typeref:struct:__anon37
-TableSingle_t	sqlite\database.h	/^} TableSingle_t;$/;"	t	typeref:struct:__anon38
-Tableinfolight_t	sqlite\database.h	/^} Tableinfolight_t;$/;"	t	typeref:struct:__anon39
-Tablewarn_t	sqlite\database.h	/^} Tablewarn_t;$/;"	t	typeref:struct:__anon40
-Type	sqlite\database.h	/^	u32		Type;		\/\/报警类型$/;"	m	struct:__anon40
-Warn_flags	sqlite\database.h	/^	u32 Warn_flags;	\/\/报警的标志$/;"	m	struct:__anon39
-Warn_flags	sqlite\database.h	/^	u32 Warn_flags;$/;"	m	struct:__anon37
-Wl_Addr	sqlite\database.h	/^	u32 Wl_Addr;              \/\/物理地址$/;"	m	struct:__anon37
+Grade	sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon41
+Map_Addr	sqlite\database.h	/^	u32 Map_Addr;	         \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon38
+Map_Addr	sqlite\database.h	/^	u32 Map_Addr;           \/\/被映射到Base_Addr的实际地址$/;"	m	struct:__anon39
+Rate_PF	sqlite\database.h	/^	u32 Rate_PF;		\/\/功率因数$/;"	m	struct:__anon40
+Rate_p	sqlite\database.h	/^	u32 Rate_p;		\/\/额定功率$/;"	m	struct:__anon40
+Rate_v	sqlite\database.h	/^	u32 Rate_v;			\/\/额定电压$/;"	m	struct:__anon40
+Remark	sqlite\database.h	/^	u8	Remark[48];	\/\/备注$/;"	m	struct:__anon41
+State	sqlite\database.h	/^	u32		State;		\/\/状态$/;"	m	struct:__anon41
+TableCoordi_t	sqlite\database.h	/^} TableCoordi_t;$/;"	t	typeref:struct:__anon38
+TableSingle_t	sqlite\database.h	/^} TableSingle_t;$/;"	t	typeref:struct:__anon39
+Tableinfolight_t	sqlite\database.h	/^} Tableinfolight_t;$/;"	t	typeref:struct:__anon40
+Tablewarn_t	sqlite\database.h	/^} Tablewarn_t;$/;"	t	typeref:struct:__anon41
+Type	sqlite\database.h	/^	u32		Type;		\/\/报警类型$/;"	m	struct:__anon41
+Warn_flags	sqlite\database.h	/^	u32 Warn_flags;	\/\/报警的标志$/;"	m	struct:__anon40
+Warn_flags	sqlite\database.h	/^	u32 Warn_flags;$/;"	m	struct:__anon38
 Wl_Addr	sqlite\database.h	/^	u32 Wl_Addr;              \/\/物理地址$/;"	m	struct:__anon38
+Wl_Addr	sqlite\database.h	/^	u32 Wl_Addr;              \/\/物理地址$/;"	m	struct:__anon39
 __database_h__	sqlite\database.h	8;"	d
-addr	sqlite\database.h	/^	u32 	addr;		\/\/单灯\/协调器地址$/;"	m	struct:__anon40
-id	sqlite\database.h	/^	s32 id;				\/\/主键$/;"	m	struct:__anon39
-id	sqlite\database.h	/^	u32 	id;$/;"	m	struct:__anon40
-id	sqlite\database.h	/^	u32 id;	                         \/\/主键ID$/;"	m	struct:__anon37
-id	sqlite\database.h	/^	u32 id;                           \/\/主键ID$/;"	m	struct:__anon38
-light_D	sqlite\database.h	/^	u32 light_D;		\/\/灯电量值$/;"	m	struct:__anon39
-light_E	sqlite\database.h	/^	u32 light_E;			\/\/灯电流值$/;"	m	struct:__anon39
-light_P	sqlite\database.h	/^	u32 light_P;			\/\/灯功率值$/;"	m	struct:__anon39
-light_V	sqlite\database.h	/^	u32 light_V;			\/\/灯电压值$/;"	m	struct:__anon39
-light_status	sqlite\database.h	/^	s32 light_status;	\/\/灯状态$/;"	m	struct:__anon39
-light_val	sqlite\database.h	/^	u32 light_val;		\/\/灯调光值$/;"	m	struct:__anon39
-lt_gid	sqlite\database.h	/^	u32 lt_gid;                    \/\/单灯组ID$/;"	m	struct:__anon38
-operate_flags	sqlite\database.h	/^	u32 operate_flags; \/\/操作设备状态$/;"	m	struct:__anon39
-rtime	sqlite\database.h	/^	u32 rtime;			\/\/更新时间$/;"	m	struct:__anon39
+addr	sqlite\database.h	/^	u32 	addr;		\/\/单灯\/协调器地址$/;"	m	struct:__anon41
+id	sqlite\database.h	/^	s32 id;				\/\/主键$/;"	m	struct:__anon40
+id	sqlite\database.h	/^	u32 	id;$/;"	m	struct:__anon41
+id	sqlite\database.h	/^	u32 id;	                         \/\/主键ID$/;"	m	struct:__anon38
+id	sqlite\database.h	/^	u32 id;                           \/\/主键ID$/;"	m	struct:__anon39
+light_D	sqlite\database.h	/^	u32 light_D;		\/\/灯电量值$/;"	m	struct:__anon40
+light_E	sqlite\database.h	/^	u32 light_E;			\/\/灯电流值$/;"	m	struct:__anon40
+light_P	sqlite\database.h	/^	u32 light_P;			\/\/灯功率值$/;"	m	struct:__anon40
+light_V	sqlite\database.h	/^	u32 light_V;			\/\/灯电压值$/;"	m	struct:__anon40
+light_status	sqlite\database.h	/^	s32 light_status;	\/\/灯状态$/;"	m	struct:__anon40
+light_val	sqlite\database.h	/^	u32 light_val;		\/\/灯调光值$/;"	m	struct:__anon40
+lt_gid	sqlite\database.h	/^	u32 lt_gid;                    \/\/单灯组ID$/;"	m	struct:__anon39
+operate_flags	sqlite\database.h	/^	u32 operate_flags; \/\/操作设备状态$/;"	m	struct:__anon40
+rtime	sqlite\database.h	/^	u32 rtime;			\/\/更新时间$/;"	m	struct:__anon40
+sql_Isexist	sqlite\database.h	/^	int (*sql_Isexist)(const char *table,const char *condition);$/;"	m	struct:sql_t
 sql_delete	sqlite\database.h	/^	int (*sql_delete)(const char*);$/;"	m	struct:sql_t
 sql_insert	sqlite\database.h	/^	int (*sql_insert)(const char*);$/;"	m	struct:sql_t
-sql_isexist	sqlite\database.h	/^	int (*sql_isexist)(const char *table,const char *condition);$/;"	m	struct:sql_t
 sql_isexist	sqlite\database.h	23;"	d
 sql_release	sqlite\database.h	/^	void (*sql_release)(struct sql_t**);$/;"	m	struct:sql_t
 sql_select	sqlite\database.h	/^	int (*sql_select)(const char*, char*,int,int,int,...);$/;"	m	struct:sql_t
@@ -2662,19 +2670,19 @@ Clean_list	task\taskque\taskque.c	10;"	d	file:
 Create_QueueHeader	task\taskque\taskque.c	/^static int Create_QueueHeader(Queue_t *this)$/;"	f	file:
 ProcessFunc	task\taskque\taskque.c	/^Proclist_t  ProcessFunc[][64]={$/;"	v
 Que_classify	task\taskque\taskque.c	/^static Que_classify_t  Que_classify[][255] = {$/;"	v	file:
-Que_classify_t	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	t	typeref:struct:__anon41	file:
+Que_classify_t	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	t	typeref:struct:__anon42	file:
 Queue_Init	task\taskque\taskque.c	/^Queue_t *Queue_Init(Queue_t *this,struct appitf_t *topuser)$/;"	f
 Queue_Relese	task\taskque\taskque.c	/^static void Queue_Relese(Queue_t **this)$/;"	f	file:
 Select_Task	task\taskque\taskque.c	/^static s32 Select_Task(Queue_t *this,Node_t **node)$/;"	f	file:
 Task_Append	task\taskque\taskque.c	/^static s32 Task_Append(Queue_t *this,u32 Que_type,u32 task_level,void *pakect,int size)$/;"	f	file:
 Task_Exec	task\taskque\taskque.c	/^static s32 Task_Exec(Queue_t *this)$/;"	f	file:
-cmdname	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon41	file:
+cmdname	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon42	file:
 get_Quetype	task\taskque\taskque.c	/^static s32 get_Quetype(struct Queue_t *this,u8 ctrl)$/;"	f	file:
-level	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon41	file:
-Node_header	task\taskque\taskque.h	/^	Node_t *Node_header;$/;"	m	struct:__anon43
-Node_t	task\taskque\taskque.h	/^} Node_t;$/;"	t	typeref:struct:__anon42
-Proclist_t	task\taskque\taskque.h	/^} Proclist_t;$/;"	t	typeref:struct:__anon45
-PureCmdArry_t	task\taskque\taskque.h	/^} PureCmdArry_t;$/;"	t	typeref:struct:__anon44
+level	task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	m	struct:__anon42	file:
+Node_header	task\taskque\taskque.h	/^	Node_t *Node_header;$/;"	m	struct:__anon44
+Node_t	task\taskque\taskque.h	/^} Node_t;$/;"	t	typeref:struct:__anon43
+Proclist_t	task\taskque\taskque.h	/^} Proclist_t;$/;"	t	typeref:struct:__anon46
+PureCmdArry_t	task\taskque\taskque.h	/^} PureCmdArry_t;$/;"	t	typeref:struct:__anon45
 Que_header	task\taskque\taskque.h	/^	Taskque_t *Que_header;$/;"	m	struct:Queue_t
 Que_release	task\taskque\taskque.h	/^	void (*Que_release)(struct Queue_t**);$/;"	m	struct:Queue_t
 Queue_t	task\taskque\taskque.h	/^typedef struct Queue_t{$/;"	s
@@ -2690,24 +2698,24 @@ Task_type	task\taskque\taskque.h	/^enum Task_type{$/;"	g
 Task_type_cc	task\taskque\taskque.h	/^	Task_type_cc = 1,$/;"	e	enum:Task_type
 Task_type_device485	task\taskque\taskque.h	/^	Task_type_device485,$/;"	e	enum:Task_type
 Task_type_ethernet	task\taskque\taskque.h	/^	Task_type_ethernet,$/;"	e	enum:Task_type
-Taskque_t	task\taskque\taskque.h	/^} Taskque_t;$/;"	t	typeref:struct:__anon43
+Taskque_t	task\taskque\taskque.h	/^} Taskque_t;$/;"	t	typeref:struct:__anon44
 __TASKQUE_H__	task\taskque\taskque.h	8;"	d
-ctrl	task\taskque\taskque.h	/^	uint8_t ctrl;$/;"	m	struct:__anon44
 ctrl	task\taskque\taskque.h	/^	uint8_t ctrl;$/;"	m	struct:__anon45
-data	task\taskque\taskque.h	/^	uint8_t data[0];$/;"	m	struct:__anon44
-entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon42	typeref:struct:__anon42::list_head
+ctrl	task\taskque\taskque.h	/^	uint8_t ctrl;$/;"	m	struct:__anon46
+data	task\taskque\taskque.h	/^	uint8_t data[0];$/;"	m	struct:__anon45
 entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon43	typeref:struct:__anon43::list_head
+entries	task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon44	typeref:struct:__anon44::list_head
 get_Quetype	task\taskque\taskque.h	/^	int32_t (*get_Quetype)(struct Queue_t*,u8 ctrl);$/;"	m	struct:Queue_t
-len	task\taskque\taskque.h	/^	uint8_t len;$/;"	m	struct:__anon44
-package	task\taskque\taskque.h	/^	uint8_t	package[0];$/;"	m	struct:__anon42
-package_len	task\taskque\taskque.h	/^	int32_t package_len;$/;"	m	struct:__anon42
+len	task\taskque\taskque.h	/^	uint8_t len;$/;"	m	struct:__anon45
+package	task\taskque\taskque.h	/^	uint8_t	package[0];$/;"	m	struct:__anon43
+package_len	task\taskque\taskque.h	/^	int32_t package_len;$/;"	m	struct:__anon43
 parent	task\taskque\taskque.h	/^	struct appitf_t *parent;$/;"	m	struct:Queue_t	typeref:struct:Queue_t::appitf_t
-pf	task\taskque\taskque.h	/^	int32_t (*pf)(Node_t*node,void*);$/;"	m	struct:__anon45
-queue_type	task\taskque\taskque.h	/^	uint32_t queue_type;$/;"	m	struct:__anon43
-task_level	task\taskque\taskque.h	/^	uint32_t  task_level;$/;"	m	struct:__anon42
-task_queue_lock	task\taskque\taskque.h	/^	pthread_mutex_t task_queue_lock;$/;"	m	struct:__anon43
-task_type	task\taskque\taskque.h	/^	uint32_t  task_type;$/;"	m	struct:__anon42
-tm	task\taskque\taskque.h	/^	time_t	tm;$/;"	m	struct:__anon42
+pf	task\taskque\taskque.h	/^	int32_t (*pf)(Node_t*node,void*);$/;"	m	struct:__anon46
+queue_type	task\taskque\taskque.h	/^	uint32_t queue_type;$/;"	m	struct:__anon44
+task_level	task\taskque\taskque.h	/^	uint32_t  task_level;$/;"	m	struct:__anon43
+task_queue_lock	task\taskque\taskque.h	/^	pthread_mutex_t task_queue_lock;$/;"	m	struct:__anon44
+task_type	task\taskque\taskque.h	/^	uint32_t  task_type;$/;"	m	struct:__anon43
+tm	task\taskque\taskque.h	/^	time_t	tm;$/;"	m	struct:__anon43
 GetCmd_AppendQueue	task\timertask\timertask.c	/^static void GetCmd_AppendQueue(struct tmtask_t *this,int32_t task_id)$/;"	f	file:
 do_tmtask	task\timertask\timertask.c	/^static void do_tmtask(int signum)$/;"	f	file:
 do_tmtask_begin	task\timertask\timertask.c	/^static int do_tmtask_begin(struct tmtask_t *this)$/;"	f	file:
@@ -2726,21 +2734,21 @@ __TIMERTASK_H__	task\timertask\timertask.h	2;"	d
 second	task\timertask\timertask.h	/^	int32_t second;$/;"	m	struct:tmtask_t
 sensor	task\timertask\timertask.h	/^	struct sensor_t *sensor;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::sensor_t
 sql	task\timertask\timertask.h	/^	struct sql_t *sql;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::sql_t
-task_cnt	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
-task_end	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon46
+task_cnt	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon47
+task_end	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon47
 task_endid	task\timertask\timertask.h	/^	uint32_t task_endtm, task_endid[RPTCNT];$/;"	m	struct:tmtask_t
 task_endtm	task\timertask\timertask.h	/^	uint32_t task_endtm, task_endid[RPTCNT];$/;"	m	struct:tmtask_t
-task_flowdown	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon46
-task_flowup	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon46
-task_id	task\timertask\timertask.h	/^	int32_t task_id;$/;"	m	struct:__anon46
-task_lightdown	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon46
-task_lightup	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon46
-task_start	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon46
+task_flowdown	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon47
+task_flowup	task\timertask\timertask.h	/^	int32_t task_flowup, task_flowdown;$/;"	m	struct:__anon47
+task_id	task\timertask\timertask.h	/^	int32_t task_id;$/;"	m	struct:__anon47
+task_lightdown	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon47
+task_lightup	task\timertask\timertask.h	/^	int32_t task_lightup, task_lightdown;$/;"	m	struct:__anon47
+task_start	task\timertask\timertask.h	/^	time_t task_start, task_end;$/;"	m	struct:__anon47
 task_startid	task\timertask\timertask.h	/^	uint32_t task_starttm, task_startid[RPTCNT];$/;"	m	struct:tmtask_t
 task_starttm	task\timertask\timertask.h	/^	uint32_t task_starttm, task_startid[RPTCNT];$/;"	m	struct:tmtask_t
-task_status	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
-task_tm	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon46
-tmparam_t	task\timertask\timertask.h	/^} tmparam_t;$/;"	t	typeref:struct:__anon46
+task_status	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon47
+task_tm	task\timertask\timertask.h	/^	int32_t task_cnt, task_tm, task_status;$/;"	m	struct:__anon47
+tmparam_t	task\timertask\timertask.h	/^} tmparam_t;$/;"	t	typeref:struct:__anon47
 tmtask_exec	task\timertask\timertask.h	/^	int (*tmtask_exec)(struct tmtask_t*);$/;"	m	struct:tmtask_t
 tmtask_release	task\timertask\timertask.h	/^	void (*tmtask_release)(struct tmtask_t**,int);$/;"	m	struct:tmtask_t
 tmtask_start	task\timertask\timertask.h	/^	int (*tmtask_start)(struct tmtask_t*);$/;"	m	struct:tmtask_t

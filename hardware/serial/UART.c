@@ -126,14 +126,25 @@ static int uart_config(struct uart_t *this)
 #endif
 }
 
-static int uart_readall(struct uart_t *this, char *buf,uint32_t block)
+static int uart_readall(struct uart_t *this, char *buf)
 {
-	if(!this || !buf || this->uart_fd < 0) return FAIL;
+	if(!this || !buf || this->uart_fd < 0) return -1;
 	int fd = this->uart_fd;
 	int length = 0;
-	msleep(block);
-	ioctl(fd,FIONREAD,&length);	//获取内核中缓存了多少数据
-	return read(fd,buf,length);
+	fd_set fdset;
+	struct timeval tv = { .tv_sec = 1,.tv_usec= 0 };
+	FD_ZERO(&fdset);
+	FD_SET(fd,&fdset);
+	switch(select(fd+1, &fdset,NULL,NULL,&tv)){
+		case 0:		/* time out */
+		case -1: 	/* select error */
+			debug(DEBUG_UART,"select err:%s\n",strerror(errno));
+			return -1;
+		default:
+			msleep(10);
+			ioctl(fd,FIONREAD,&length);	//获取内核中缓存了多少数据
+			return read(fd,buf,length);
+	}
 }
 
 static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t block)
@@ -149,7 +160,6 @@ static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t bloc
 		.tv_usec= block%1000000,
 	};
 	bzero(buf,length);
-	//ioctl(fd,FIONREAD,&CombufSize);	//读出内核缓存中有多少字节的数据
  repeat:
 	FD_ZERO(&fdset);
 	FD_SET(fd,&fdset);

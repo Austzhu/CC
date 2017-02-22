@@ -244,10 +244,12 @@ static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int str
 
 static int sql_Isexist(const char *table, const char *condition)
 {
-	if(!base_sql) return FALSE;
+	if(!base_sql || !table || !condition) return FALSE;
 	int32_t  id = FALSE;
 	sql_t *SQL = base_sql;
-	SQL->sql_select(Asprintf("select id from %s where %s;",table,condition),(char*)&id,sizeof(int),1,0);
+	char buf[12] = {0};
+	strcpy(buf,condition);
+	SQL->sql_select(Asprintf("select id from %s where %s;",table,buf),(char*)&id,sizeof(int),1,0);
 	return id == FALSE ? FALSE : TRUE;
 }
 
