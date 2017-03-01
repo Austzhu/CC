@@ -29,6 +29,7 @@ typedef struct client_t {
 } client_t;
 
 typedef struct server_t {
+	int32_t Point_flag;
 	client_t *client_header;
 	pthread_t thread_listen;      //监听客户端线程
 	pthread_t thread_status;     //监测客户端是否断开线程
@@ -43,7 +44,7 @@ typedef struct server_t {
 	int (*ser_start)(struct server_t*,u16 port);
 	int (*ser_stop)(struct server_t*);
 	void (*ser_flush)(int);
-	void (*ser_release)(struct server_t**);
+	void (*ser_release)(struct server_t*);
 } server_t;
 
 extern server_t *ser_init(server_t *);

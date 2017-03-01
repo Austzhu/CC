@@ -28,13 +28,13 @@ typedef struct { u8 addr;  int Register;  void *result;  int result_size; } resu
 
 typedef struct wizdom_t{
 	server_t *ether_server;
-	//CRC_t *crc;
-	int (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);
-	int (*wiz_getaddr)(struct wizdom_t*);
-	int (*wiz_setaddr)(struct wizdom_t*,char addr);
+	int32_t Point_flag;
+	int32_t (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);
+	int32_t (*wiz_getaddr)(struct wizdom_t*);
+	int32_t (*wiz_setaddr)(struct wizdom_t*,char addr);
 
 	void (*wiz_display)(const char*,const char*,int);
-	void (*wiz_release)(struct wizdom_t**);
+	void (*wiz_release)(struct wizdom_t*);
 } wizdom_t;
 
 extern wizdom_t *wiz_init(wizdom_t*);

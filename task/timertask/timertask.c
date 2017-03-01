@@ -179,27 +179,28 @@ static int tmtask_update(struct tmtask_t *this)
 }
 
 
-static void tmtask_release(struct tmtask_t **this,int flg)
+static void tmtask_release(struct tmtask_t *this)
 {
 	if(!tmtask) return ;
-
 	assert_param(this,;);
-	assert_param(*this,;);
-	FREE((*this)->sql);
-	if(flg)	FREE(*this);
-	tmtask = NULL;
+	DELETE(this->sql,sql_release);
+	if(this->Point_flag){
+		FREE(this);
+		tmtask = NULL;
+	}
 }
 
 struct tmtask_t *tmtask_init(tmtask_t *this, sensor_t *ser, Queue_t *que)
 {
 	if(tmtask) return tmtask;
 
-	tmtask_t *pthis = this;
+	tmtask_t *const pthis = this;
 	if(!pthis){
 		this = malloc(sizeof(tmtask_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(tmtask_t));
+	this->Point_flag = (!pthis)?1:0;
 
 	this->tmtask_start = tmtask_start;
 	this->tmtask_stop = tmtask_stop;

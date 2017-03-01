@@ -41,17 +41,12 @@ extern char MessageBuffer[];
 							MessageBuffer;})
 /* 大小端转化 */
 #define bigend2littlend_2(dd)  (  ((0xff&(dd))<<8)  |  (((dd)>>8)&0xff)  )
-
-#define NEW(type,func,args...)  ({\
-	type *ptr = NULL;\
-	ptr = func ? func(args) : calloc(1,sizeof(type));\
-	ptr;\
-})
-
+/* 释放类 */
 #define DELETE(ptr,func,args...) do{\
-	if(ptr && (ptr)->func ) \
-		(ptr)->func(&ptr,##args);\
+	if(ptr&&(ptr)->func) 	(ptr)->func(ptr,##args);\
 }while(0)
+
+
 
 #define DELETE_NPTR(ptr,func) do{\
 	(ptr)->func((typeof(ptr)*)ptr,false);\

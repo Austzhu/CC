@@ -58,14 +58,15 @@ struct Warn_info_t{
 
 struct appitf_t;
 typedef struct Warn_t{
-	struct appitf_t *topuser;
+	int32_t Point_flag;
+	struct sql_t *sql;
 	int (*warn_setflags)(struct Warn_t*,int,int,int);
 	int (*warn_cleanflags)(struct Warn_t*,int,int,int);
 	int (*warn_Insert)(struct Warn_t*,int addr,int type);
 	int (*warn_verdict)(struct Warn_t*);
-	void(*warn_relese)(struct Warn_t**);
+	void(*warn_relese)(struct Warn_t*);
 } Warn_t;
 
-extern Warn_t *warn_init(Warn_t*,void*);
+extern Warn_t *warn_init(Warn_t*);
 
 #endif	//end of  __WARN_H__

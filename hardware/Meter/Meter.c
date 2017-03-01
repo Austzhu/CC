@@ -24,6 +24,7 @@
 static uint8_t inline Get_statusofdi(Meter_t *this,int32_t *result, uint8_t addr)
 {
 	if(!this || !result) return 0;
+	if(addr == 0xfe) return 8;
 	*result = this->meter_querydi(this,addr,8);
 	if(-1 != *result)	return 8;
 	*result = this->meter_querydi(this,addr,16);
@@ -36,6 +37,7 @@ static uint8_t inline Get_statusofdi(Meter_t *this,int32_t *result, uint8_t addr
 static uint8_t inline Get_statusofdo(Meter_t *this,int32_t *result, uint8_t addr)
 {
 	if(!this || !result) return 0;
+	if(addr == 0xfe)	return 8;
 	*result = this->meter_querydo(this,addr,8);
 	if(-1 != *result)	return 8;
 	*result = this->meter_querydo(this,addr,16);
@@ -112,12 +114,16 @@ static int meter_open(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)
 	assert_param(this,FAIL);
 
 	int res = SUCCESS;
-	uint32_t status = this->meter_querydo(this, addr,num);
+	uint32_t status = 0;
+	if(addr == 0xfe)
+		goto broadcast;
+	status = this->meter_querydo(this, addr,num);
 	if(status == ~0){
 		debug(DEBUG_DIDO,"meter open query do error!\n");
 		res = FAIL;
 		goto out;
 	}
+broadcast:
 	status |= ndo;
 	uint8_t ackbuf[] = {
 		0x68,0,0,0,0,0,0,0x68,0x80,0x08,0xe1, 0x01, addr,
@@ -136,12 +142,16 @@ static int meter_close(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)
 {
 	assert_param(this,FAIL);
 	int32_t res = SUCCESS;
-	uint32_t status = this->meter_querydo(this, addr,num);
+	uint32_t status = 0;
+	if(addr == 0xfe)
+		goto broadcast;
+	status = this->meter_querydo(this, addr,num);
 	if( 0xffffffff == status ){
 		debug(DEBUG_DIDO,"meter open query do error!\n");
 		res = FAIL;
 		goto out;
 	}
+broadcast:
 	status &= ~ndo;
 	uint8_t ackbuf[] = {
 		0x68,0,0,0,0,0,0,0x68,0x80,0x08,0xe1, 0x02, addr,
@@ -285,17 +295,8 @@ static int Query_dido(struct Meter_t*this, uint8_t addr, uint32_t *result)
 	assert_param(this,FAIL);
 	assert_param(result,FAIL);
 
-	int32_t id = 0;
-	this->sql->sql_select(Asprintf("select id from "CFG_tb_dido\
-		" where addr=%d order by add_time desc;",addr),(char*)&id,sizeof(int),1,0);
-	if(id != 0){
-		this->sql->sql_select( Asprintf("select do_stat from "\
-			CFG_tb_dido" where id=%d;",id),(char*)result,sizeof(uint32_t),1,0);
-		Get_statusofdi(this,(int32_t*)result+1,addr);
-	}else{
-		Get_statusofdo(this,(int32_t*)result,addr);
-		Get_statusofdi(this,(int32_t*)result+1,addr);
-	}
+	Get_statusofdo(this,(int32_t*)result,addr);
+	Get_statusofdi(this,(int32_t*)result+1,addr);
 
 	if(*result != -1 && *(result+1) != -1)
 		return SUCCESS;
@@ -324,24 +325,61 @@ static int meter_query_dido(struct Meter_t*this, uint8_t cnt,uint8_t *pd)
 	return meter_resatonce(this->topuser, ackbuf,ackbuf[9]+10);
 }
 
-static void meter_release(struct Meter_t **this)
+static void meter_recover_status(struct Meter_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
-	DELETE((*this)->sql,sql_release);
-	DELETE((*this)->uart,uart_relese);
-	FREE(*this);
+	struct status { uint32_t Addr; uint32_t ndo; uint32_t stat;uint32_t time;  } pstatus[10];
+	bzero(pstatus,sizeof(pstatus));
+	/* 获取DIDO设备地址和状态 */
+	/* select * from (select * from db_dido_info order by add_time desc) group by addr; */
+	this->sql->sql_select("select addr,ndo,do_stat,add_time from db_dido_info group by addr order by addr;",\
+				(char*)pstatus,sizeof(pstatus[0]),sizeof(pstatus)/sizeof(pstatus[0]),0);
+	/* 解析数据 */
+	struct status *broadcast = NULL;
+	/* 查询之前是否有过广播操作 */
+	for(int i=0; i<sizeof(pstatus)/sizeof(pstatus[0]); ++i){
+		if(pstatus[i].Addr == 0xfe){
+			broadcast = &pstatus[i];
+			break;
+		}	//end of if(pstatus[i].addr == 0xfe)
+	}	//end of for(int i=0; i<sizeof(pstatus)
+	/* 有广播操作，与单播操作时间对比 */
+	if(broadcast)
+		for(int i=0; i < sizeof(pstatus)/sizeof(pstatus[0]); ++i){
+			if(pstatus[i].Addr != 0xfe && pstatus[i].time < broadcast->time){
+				pstatus[i].stat = broadcast->stat;
+			}
+		}	//end of for(int i=0;
+
+	/* 恢复DIDO状态 */
+	for(int i=0; pstatus[i].Addr != 0; ++i){
+		debug(DEBUG_DIDO,"addr=0x%X,ndo=%d,stat=0x%X,add_time=%u\n",\
+			pstatus[i].Addr,pstatus[i].ndo,pstatus[i].stat,pstatus[i].time);
+		if(pstatus[i].Addr != 0xfe )
+			meter_sendpackage(this,pstatus[i].Addr,pstatus[i].ndo,pstatus[i].stat);
+	}
+}
+
+static void meter_release(struct Meter_t *this)
+{
+	assert_param(this,;);
+	DELETE(this->sql,sql_release);
+	DELETE(this->uart,uart_relese,CFG_COMDIDO);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)
 {
 	assert_param(topuser,NULL);
-	Meter_t*pth = this;
+	Meter_t  *const pth = this;
 	if(!pth){
 		this = malloc(sizeof(Meter_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(Meter_t));
+	this->Point_flag = (!pth)?1:0;
+
 	this->topuser = topuser;
 	this->sql = sql_Init(NULL);
 	if(!this->sql) goto out;
@@ -359,12 +397,12 @@ Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)
 	this->meter_querydi = meter_querydi;
 	this->meter_querydo = meter_querydo;
 	this->meter_query_dido = meter_query_dido;
-
+	this->meter_recover_status = meter_recover_status;
+	meter_recover_status(this);		//恢复重启前的状态
 	return this;
 out:
-
 	if(!this->sql) DELETE(this->sql,sql_release);
-	if(!this->uart) DELETE( this->uart,uart_relese);
+	if(!this->uart) DELETE( this->uart,uart_relese,CFG_COMDIDO);
 	if(!pth) FREE(this);
 	return NULL;
 }

@@ -192,7 +192,7 @@ static void ser_flush(int socketfd)
 
 static int ser_stop(struct server_t*this)
 {
-	if(!this) return FAIL;
+	assert_param(this,FAIL);
 	this->thread_on = 0; 				//stop pthread_status and pthread_listen
 	sleep(1);
 	if(this->server_fd > 0){
@@ -216,12 +216,13 @@ static int ser_stop(struct server_t*this)
 	return SUCCESS;
 }
 
-static void ser_release(server_t **this)
+static void ser_release(server_t *this)
 {
-	if(!this || !*this) return ;
-	(*this)->ser_stop(*this);
-	FREE((*this)->client_header);
-	FREE(*this);
+	assert_param(this,;);
+	this->ser_stop(this);
+	FREE(this->client_header);
+	if(this->Point_flag)
+		FREE(this);
 }
 
  server_t *ser_init(server_t *ser)
@@ -230,8 +231,9 @@ static void ser_release(server_t **this)
 	if(!temp){
 		ser = malloc(sizeof(server_t));
 		if(!ser) return NULL;
-	}	bzero(ser,sizeof(server_t));
-
+	}
+	bzero(ser,sizeof(server_t));
+	ser->Point_flag = (!temp)?1:0;
 	pthread_mutex_init(&ser->client_lock,NULL);
 	ser->client_header = malloc(sizeof(client_t));
 	if(!ser->client_header) {

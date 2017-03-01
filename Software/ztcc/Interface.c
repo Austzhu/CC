@@ -278,25 +278,23 @@ static int TopUser_setMode(struct appitf_t *this, uint8_t mode)
 static int TopUser_Relese(appitf_t *this)
 {
 	assert_param(this,FAIL);
-	printf("  app exit!\n");
-
+	debug(DEBUG_exit,"\nApplication will exit!\n");
 	this->pthread_start = 0;
 	if(this->thread_Keepalive > 0 ){
 		pthread_join(this->thread_Keepalive,NULL);
 		this->thread_Keepalive = -1;
-		printf("thread_Keepalive exit!\n");
+		debug(DEBUG_exit,"Thread_Keepalive exit!\n");
 	}
 	if(this->thread_RecvInsert > 0 ){
 		pthread_join(this->thread_RecvInsert,NULL);
 		this->thread_RecvInsert = -1;
-		printf("thread_RecvInsert exit!\n");
+		debug(DEBUG_exit,"Thread_RecvInsert exit!\n");
 	}
 	if(this->thread_UserProc > 0 ){
 		pthread_join(this->thread_UserProc,NULL);
 		this->thread_UserProc = -1;
-		printf("thread_UserProc exit!\n");
+		debug(DEBUG_exit,"Thread_UserProc exit!\n");
 	}
-
 	DELETE(this->Queue,Que_release);
 	DELETE(this->opt_Itf,opt_relese);
 	DELETE(this->warn,warn_relese);
@@ -314,13 +312,12 @@ static int TopUser_Relese(appitf_t *this)
 	DELETE(this->meter,meter_release);
 	#endif
 	#ifdef  Config_autoControl
-	DELETE(this->auto_mode,ctrl_release,true);
+	DELETE(this->auto_mode,ctrl_release);
 	#endif
 	#ifdef Config_TIMETASK
-		DELETE(this->tmtask,tmtask_release,true);
+		DELETE(this->tmtask,tmtask_release);
 	#endif
-
-	_exit(0);
+	exit(0);
 }
 
 static void app_exit(int signal)
@@ -354,7 +351,7 @@ static int appitf_init(appitf_t *this)
 	#ifdef Config_Meter
 	INIT_FAIL(this->meter,meter_init,this);				/* init for dido */
 	#endif
-	INIT_FAIL(this->warn,warn_init,this);				/* init for warn */
+	INIT_FAIL(this->warn,warn_init);					/* init for warn */
 	#ifdef  Config_TCP_Server
 		INIT_FAIL(this->tcp_server,ser_init);				/* init for tcp server */
 		this->tcp_server->ser_start(g_appity.tcp_server,8889);

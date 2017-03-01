@@ -16,6 +16,8 @@
 #include "libs_emfuture_odm.h"
 #endif
 
+#define CFG_UART_CNT	10
+
 typedef struct uart_t{
 	int32_t 	uart_fd;
 	uint32_t uart_speed;
@@ -23,15 +25,16 @@ typedef struct uart_t{
 	uint8_t uart_bits;
 	uint8_t uart_stop;
 	uint8_t uart_parity;
-
-	int 	(*uart_open)(struct uart_t*);
-	int 	(*uart_close)(struct uart_t*);
-	int 	(*uart_config)(struct uart_t*);
-	int   (*uart_readall)(struct uart_t *this, char *buf);
-	int 	(*uart_recv)(struct uart_t*, char *buf,uint32_t length,int32_t block);
-	int 	(*uart_send)(struct uart_t*,const char * buf,uint32_t length,int32_t block);
+	int32_t Point_flag;
+	pthread_mutex_t uart_lock;
+	int32_t 	(*uart_open)(struct uart_t*);
+	int32_t 	(*uart_close)(struct uart_t*);
+	int32_t 	(*uart_config)(struct uart_t*);
+	int32_t  (*uart_readall)(struct uart_t *this, char *buf);
+	int32_t 	(*uart_recv)(struct uart_t*, char *buf,uint32_t length,int32_t block);
+	int32_t 	(*uart_send)(struct uart_t*,const char * buf,uint32_t length,int32_t block);
 	void (*uart_flush)(struct uart_t*);
-	void (*uart_relese)(struct uart_t**);
+	void (*uart_relese)(struct uart_t*,int32_t);
 } uart_t;
 
 extern uart_t *uart_init(uart_t*,uint8_t port,const char*);

@@ -137,20 +137,17 @@ static int update_send_package(struct update_t *this)
 		CFG_COM485,(s8*)&this->package,sizeof(package_t),2000000);
 }
 
-static void update_release(struct update_t **this)
+static void update_release(struct update_t *this)
 {
-	assert_param(*this,;);
 	assert_param(this,;);
-
-	memset (*this,0,sizeof(update_t));
-	free(*this);  *this = NULL;
+	FREE(this);
 }
 
 update_t *update_init(struct Single_t *subclass)
 {
 	update_t *update = malloc(sizeof(update_t));
 	if(!update)  return NULL;
-	memset(update,0,sizeof(update_t));
+	bzero(update,sizeof(update_t));
 
 	update->subclass = subclass;
 	update->update_start = update_start;
@@ -159,15 +156,7 @@ update_t *update_init(struct Single_t *subclass)
 	update->update_recv_onebyte = update_recv_onebyte;
 	update->update_slave = update_slave;
 
-	if(!update->subclass || !update->update_start ||\
-		!update->update_release || !update->update_send_package ||\
-		!update->update_recv_onebyte || !update->update_slave){
-		goto out;
-	}
 	return update;
-out:
-	free(update);
-	return NULL;
 }
 
 

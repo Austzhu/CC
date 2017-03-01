@@ -53,8 +53,7 @@ struct appitf_t;
 typedef struct Single_t{
 	struct appitf_t *topuser;
 	struct update_t *update;
-	//struct CRC_t *crc;
-
+	int32_t Point_flag;
 	int (*sin_open)(struct Single_t*,int,u32,u32);
 	int (*sin_close)(struct Single_t*,int,u32);
 	int (*sin_reply)(struct Single_t*,int,int,int);
@@ -63,7 +62,7 @@ typedef struct Single_t{
 	int (*sin_Querystatus)(struct Single_t*,int,u32);
 	int (*sin_RecvPackage)(struct Single_t*,void*,int,int);
 	int (*sin_update)(struct Single_t*,int);
-	void (*sin_release)(struct Single_t**);
+	void (*sin_release)(struct Single_t*);
 	void (*Display)(const char*,void*,int);
 } Single_t;
 

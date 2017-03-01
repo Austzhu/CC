@@ -713,8 +713,8 @@ GetStringParam	.\Software\initstart\loadfile.c	/^static s32 GetStringParam(s8*fi
 Get_CountByColumn	.\sqlite\database.h	20;"	d
 Get_CountByCondition	.\sqlite\database.h	16;"	d
 Get_light_info_count	.\sqlite\database.h	21;"	d
-Get_statusofdi	.\hardware\Meter\Meter.c	24;"	d	file:
-Get_statusofdo	.\hardware\Meter\Meter.c	33;"	d	file:
+Get_statusofdi	.\hardware\Meter\Meter.c	/^static uint8_t inline Get_statusofdi(Meter_t *this,int32_t *result, uint8_t addr)$/;"	f	file:
+Get_statusofdo	.\hardware\Meter\Meter.c	/^static uint8_t inline Get_statusofdo(Meter_t *this,int32_t *result, uint8_t addr)$/;"	f	file:
 Grade	.\sqlite\database.h	/^	u32		Grade;		\/\/报警等级$/;"	m	struct:__anon41
 Group_Addr	.\hardware\single\single.h	/^	u8 	Group_Addr;$/;"	m	struct:__anon12
 HFUNC	.\library\e3100\libs_emfuture_odm.h	/^typedef void (*HFUNC) (int sig, siginfo_t *extra, void *args);$/;"	t
@@ -1876,6 +1876,7 @@ meter_close	.\hardware\Meter\Meter.h	/^	int (*meter_close)(struct Meter_t*,uint8
 meter_flashopen	.\hardware\Meter\Meter.c	/^static int meter_flashopen(struct Meter_t *this,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms)$/;"	f	file:
 meter_flashopen	.\hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms);$/;"	m	struct:Meter_t
 meter_init	.\hardware\Meter\Meter.c	/^Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)$/;"	f
+meter_insert_sql	.\hardware\Meter\Meter.c	/^static int meter_insert_sql(Meter_t *this,uint8_t addr,int32_t di_stat,int32_t do_stat,uint16_t dido_cnt)$/;"	f	file:
 meter_open	.\hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
 meter_open	.\hardware\Meter\Meter.h	/^	int (*meter_open)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
 meter_query_dido	.\hardware\Meter\Meter.c	/^static int meter_query_dido(struct Meter_t*this, uint8_t cnt,uint8_t *pd)$/;"	f	file:
@@ -1892,7 +1893,7 @@ meter_release	.\hardware\Meter\Meter.c	/^static void meter_release(struct Meter_
 meter_release	.\hardware\Meter\Meter.h	/^	void (*meter_release)(struct Meter_t**);$/;"	m	struct:Meter_t
 meter_resatonce	.\hardware\Meter\Meter.c	/^static int meter_resatonce(appitf_t *topuser,uint8_t *ackbuf, uint32_t length)$/;"	f	file:
 meter_sendpackage	.\hardware\Meter\Meter.c	/^static int meter_sendpackage(Meter_t *this,uint8_t addr,uint8_t do_num,uint32_t stat)$/;"	f	file:
-meter_update_sql	.\hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,uint8_t num,int flag,uint32_t status)$/;"	f	file:
+meter_update_sql	.\hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,int32_t flags,int32_t status)$/;"	f	file:
 mprintf	.\sqlite\sqlite3ext.h	/^  char * (*mprintf)(const char*,...);$/;"	m	struct:sqlite3_api_routines
 msize	.\sqlite\sqlite3ext.h	/^  sqlite3_uint64 (*msize)(void*);$/;"	m	struct:sqlite3_api_routines
 msleep	.\Common\common\common.c	/^void msleep(u32 ms)$/;"	f

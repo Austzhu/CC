@@ -10,6 +10,7 @@
 ** 版　本:	V1.0
 *******************************************************************/
 #include "UART.h"
+static uart_t *UART_PTR[CFG_UART_CNT] = {0};
 
 static int uart_open(struct uart_t *this)
 {
@@ -27,7 +28,7 @@ static int uart_open(struct uart_t *this)
 	if(this->uart_fd < 0) goto out;
 #endif
 	return SUCCESS;
- out:
+out:
 	debug(DEBUG_UART,"Open Serial port %d error!\n",this->uart_port);
 	return FAIL;
 }
@@ -142,8 +143,11 @@ static int uart_readall(struct uart_t *this, char *buf)
 			return -1;
 		default:
 			msleep(10);
-			ioctl(fd,FIONREAD,&length);	//获取内核中缓存了多少数据
-			return read(fd,buf,length);
+			ioctl(fd,FIONREAD,&length);				//获取内核中缓存了多少数据
+			pthread_mutex_lock(&this->uart_lock); 	//获取锁
+			length = read(fd,buf,length);
+			pthread_mutex_unlock(&this->uart_lock); 	//释放锁
+			return length;
 	}
 }
 
@@ -160,25 +164,30 @@ static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t bloc
 		.tv_usec= block%1000000,
 	};
 	bzero(buf,length);
+	pthread_mutex_lock(&this->uart_lock); 	//获取锁
  repeat:
 	FD_ZERO(&fdset);
 	FD_SET(fd,&fdset);
 	switch(select(fd+1, &fdset,NULL,NULL,&tv)){
-		case -1:	debug(DEBUG_UART,"select err:%s\n",strerror(errno));
-			return FAIL;
-		case 0:	return FAIL;	/* time out */
+		case -1:
+			debug(DEBUG_UART,"select err:%s\n",strerror(errno));
+			goto out;
+		case 0:	goto out;	/* time out */
 		default:
 		if(FD_ISSET(fd, &fdset)){
 			cnt = read(fd,buf+rptr,length-rptr);
 			if(cnt < 0){
 				perror("uart read");
-				return FAIL;
+				goto out;
 			}
 			rptr += cnt;
 			if(rptr < length) goto repeat;
+			pthread_mutex_unlock(&this->uart_lock); 	//释放锁
 			return SUCCESS;
 		}	break;
 	}	//end of switch
+out:
+	pthread_mutex_unlock(&this->uart_lock); 	//释放锁
 	return FAIL;
 }
 
@@ -202,7 +211,9 @@ static int uart_send(struct uart_t *this,const char * buf,uint32_t length,int32_
 		case 0:	return FAIL;	/* time out */
 		default:
 		if(FD_ISSET(fd, &fdset)){
+			pthread_mutex_lock(&this->uart_lock); 	//获取锁
 			cnt = write( fd, buf+wptr, length-wptr);
+			pthread_mutex_unlock(&this->uart_lock);	//释放锁
 			if(cnt < 0)	return FAIL;
 			wptr += cnt;
 			if(wptr < length) goto repeat;
@@ -215,26 +226,38 @@ static int uart_send(struct uart_t *this,const char * buf,uint32_t length,int32_
 static void uart_flush(struct uart_t *this)
 {
 	if(!this) return ;
+	pthread_mutex_lock(&this->uart_lock);
 	tcflush(this->uart_fd,TCIFLUSH|TCOFLUSH);
+	pthread_mutex_unlock(&this->uart_lock);
 }
 
-static void uart_relese(struct uart_t **this)
+static void uart_relese(struct uart_t *this,int32_t port)
 {
-	if(!this || !*this) return;
-	(*this)->uart_close(*this);
-	FREE(*this);
+	if(!UART_PTR[port]) return ;
+	assert_param(this,;);
+	pthread_mutex_unlock(&this->uart_lock);
+	pthread_mutex_destroy(&this->uart_lock);
+	this->uart_close(this);
+	if(this->Point_flag){
+		//printf("free uart port %d\n",port);
+		//printf("UART_PTR=%p,this=%p\n",UART_PTR[port],this);
+		FREE(this);
+		UART_PTR[port] = NULL;
+	}
 }
-
 
 struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)
 {
+	if(UART_PTR[port])
+		return UART_PTR[port];
 	assert_param(cfg,NULL);
-	uart_t *pthis = this;
+	uart_t *const pthis = this;
 	if(!pthis){
 		this = malloc(sizeof(uart_t));
 		if(!this)	return NULL;
 	}
 	bzero(this,sizeof(uart_t));
+	this->Point_flag = (!pthis)?1:0;
 
 	this->uart_open = uart_open;
 	this->uart_close = uart_close;
@@ -245,6 +268,7 @@ struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)
 	this->uart_flush = uart_flush;
 	this->uart_relese = uart_relese;
 	this->uart_fd = -1;
+	pthread_mutex_init(&this->uart_lock,NULL);
 
 	const char*pcfg=cfg;
 	this->uart_port = port;
@@ -256,12 +280,14 @@ struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)
 	while(*pcfg != ',' && *pcfg != '\0') ++pcfg;
 	this->uart_parity = *(++pcfg);
 
-	debug(DEBUG_UART,"CFG: speed=%d,bits=%d,stop=%d,parity=%c\n",\
-		this->uart_speed,this->uart_bits,this->uart_stop,this->uart_parity);
+	debug(DEBUG_UART,"CFG tty%d: speed=%d,bits=%d,stop=%d,parity=%c\n",\
+		this->uart_port,this->uart_speed,this->uart_bits,this->uart_stop,this->uart_parity);
 	if(SUCCESS != this->uart_config(this)) goto out;
+	UART_PTR[port] = this;
 
 	return this;
 out:
+	pthread_mutex_destroy(&this->uart_lock);
 	if(!pthis) FREE(this);
 	return NULL;
 }

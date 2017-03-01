@@ -135,12 +135,12 @@ out:
 	return FAIL;
 }
 
-static void Queue_Relese(Queue_t **this)
+static void Queue_Relese(Queue_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
-	Clean_Que(*this);
-	FREE(*this);
+	Clean_Que(this);
+	if(this->Point_flag) 	 	//释放malloc对象
+		FREE(this);
 }
 
 static int Create_QueueHeader(Queue_t *this)
@@ -180,13 +180,14 @@ static int Create_QueueHeader(Queue_t *this)
 
 Queue_t *Queue_Init(Queue_t *this,struct appitf_t *topuser)
 {
-	assert_null(topuser);
+	assert_param(topuser,NULL);
 	Queue_t *pthis = this;
 	if(!pthis){
 		this = malloc(sizeof(Queue_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(Queue_t));
+	this->Point_flag = (pthis==NULL)?1:0;
 	if(SUCCESS != Create_QueueHeader(this)){
 		err_Print(DEBUG_Queue," Create Queue Header error!\n");
 		goto out;

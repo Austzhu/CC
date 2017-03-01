@@ -100,16 +100,15 @@ static int opt_recv(struct operate_t *this,u8 *buf, int size)
 	return SUCCESS;
 }
 
-static void opt_relese(struct operate_t **this)
+static void opt_relese(struct operate_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
 
-	switch((*this)->opt_param.param->ItfWay){
+	switch( this->opt_param.param->ItfWay){
 		case ether_net:
 		#ifdef Config_ether
-			((ethernet_t*)(*this)->opt_Itfway)->ether_relese( (ethernet_t**)&((*this)->opt_Itfway) );
-			(*this)->opt_Itfway = NULL;
+			((ethernet_t*)(this->opt_Itfway))->ether_relese( (ethernet_t*)(this->opt_Itfway) );
+			this->opt_Itfway = NULL;
 		#endif
 			break;
 		case gprs:break;
@@ -118,9 +117,9 @@ static void opt_relese(struct operate_t **this)
 		default:break;
 	}
 	/* release recv buffer */
-	FREE((*this)->opt_param.r_buf);
-	FREE(*this);
-	*this = NULL;
+	FREE(this->opt_param.r_buf);
+	if(this->Point_flag)		//释放malloc对象
+		FREE(this);
 }
 
 operate_t *operate_init(struct operate_t *this, struct param_t *param)
@@ -133,17 +132,17 @@ operate_t *operate_init(struct operate_t *this, struct param_t *param)
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(operate_t));
+	this->Point_flag = (temp==NULL)?1:0;
 	/* malloc for recv buffer */
-	this->opt_param.r_buf = calloc(Buffer_Size,sizeof(char));
+	this->opt_param.r_buf = calloc(CFG_Recvbuf,sizeof(char));
 	if(!this->opt_param.r_buf)  goto out1;
-
 	this->opt_param.param = param;
 	switch(param->ItfWay){
 		case ether_net:
-		#ifdef Config_ether
-			this->opt_Itfway = ether_Init(this->opt_Itfway,&(this->opt_param));
-			if(!this->opt_Itfway) goto out;
-		#endif
+			#ifdef Config_ether
+				this->opt_Itfway = ether_Init(this->opt_Itfway,&(this->opt_param));
+				if(!this->opt_Itfway) goto out;
+			#endif
 			break;
 		case gprs:break;
 		case zigbee:break;
@@ -155,7 +154,7 @@ operate_t *operate_init(struct operate_t *this, struct param_t *param)
 
 	this->opt_connect 		= opt_connect;
 	this->opt_logon 		= opt_logon;
-	this->opt_send 		= opt_send;
+	this->opt_send 			= opt_send;
 	this->opt_heartbeat 	= opt_heartbeat;
 	this->opt_getchar 		= opt_getchar;
 	this->opt_recv 			= opt_recv;

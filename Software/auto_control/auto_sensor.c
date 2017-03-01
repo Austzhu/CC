@@ -99,29 +99,29 @@ static int sensor_get_light(struct sensor_t *this)
 	return FAIL;
 }
 
-static void sensor_release(struct sensor_t **this,int Is_ptr)
+static void sensor_release(struct sensor_t *this)
 {
-	if(!this || !*this) return ;
-	sensor_t *_this = Is_ptr ? *this : (sensor_t *)this;
-
+	if(!this ) return ;
 	#ifdef Config_UART
-	DELETE(_this->uart2,uart_relese);
+	DELETE(this->uart2,uart_relese,CFG_SENSOR);
 	#endif
 	#ifdef Config_KALMAN
-	DELETE(_this->kalman_light,kal_release,true);
-	DELETE(_this->kalman_stream,kal_release,true);
+	DELETE(this->kalman_light,kal_release);
+	DELETE(this->kalman_stream,kal_release);
 	#endif
-	if(Is_ptr)  FREE(*this);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 sensor_t *sensor_init(struct sensor_t *this)
 {
-	sensor_t *temp = this;
+	sensor_t *const temp = this;
 	if(!temp){
 		this = malloc(sizeof(sensor_t));
 		if(!this)  return NULL;
 	}
 	bzero(this,sizeof(sensor_t));
+	this->Point_flag = (!temp)?1:0;
 
 	this->sensor_get_values = sensor_get_values;
 	this->sensor_get_stream = sensor_get_stream;
@@ -129,7 +129,7 @@ sensor_t *sensor_init(struct sensor_t *this)
 	this->sensor_release = sensor_release;
 
 	#ifdef Config_UART
-	this->uart2 = uart_init(NULL,2,"9600,8,1,N");
+	this->uart2 = uart_init(NULL,CFG_SENSOR,"9600,8,1,N");
 	if(!this->uart2) goto out;
 	#endif
 	#ifdef Config_KALMAN

@@ -21,6 +21,7 @@
 
 typedef enum{ traffic = 0, light } value_t;
 typedef struct sensor_t {
+	int32_t Point_flag;
 	int traffic, light;
 	#ifdef Config_UART
 	uart_t *uart2;
@@ -32,7 +33,7 @@ typedef struct sensor_t {
 	int (*sensor_get_values)(struct sensor_t*,value_t);
 	int (*sensor_get_stream)(struct sensor_t*);
 	int (*sensor_get_light)(struct sensor_t*);
-	void (*sensor_release)(struct sensor_t**,int);
+	void (*sensor_release)(struct sensor_t*);
 
 } sensor_t;
 

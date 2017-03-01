@@ -206,51 +206,49 @@ static void serial_flush(serial_t *this,int port)
 	tcflush(this->serialfd[port],TCIFLUSH|TCOFLUSH);
 }
 
-static void serial_Relese(serial_t **this)
+static void serial_Relese(serial_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
 	for(int i=0;i<SerialMax;++i)
-		if( (*this)->serialfd[i] > 0 )
-			close( (*this)->serialfd[i] );
-	FREE(*this);
+		if( this->serialfd[i] > 0 )
+			close( this->serialfd[i] );
+	if(this->Point_flag)
+		FREE(this);
 }
 
 serial_t *serial_Init(serial_t *this,u32 port,...)
 {
-	int speed = 0;
+	int32_t speed = 0;
 	va_list 	arg_ptr;
-	serial_t *temp = this;
-	if(!this){
-		temp = malloc(sizeof(serial_t));
-		if(!temp) return NULL;
-	}	bzero(temp,sizeof(serial_t));
-	memset(temp->serialfd,-1,sizeof(temp->serialfd));
+	serial_t *const temp = this;
+	if(!temp){
+		this = malloc(sizeof(serial_t));
+		if(!this) return NULL;
+	}
+	bzero(this,sizeof(serial_t));
+	this->Point_flag = (temp==NULL)?1:0;
+	memset(this->serialfd,-1,sizeof(this->serialfd));
 
-	temp->serial_open = serial_Open;
-	temp->serial_close = serial_Close;
-	temp->serial_config = serial_Config;
-	temp->serial_recv = serial_Recv;
-	temp->serial_send = serial_Send;
-	temp->serial_flush = serial_flush;
-	temp->serial_relese = serial_Relese;
-	if( !temp->serial_open  ||  !temp->serial_close  || !temp->serial_config ||\
-		 !temp->serial_recv  || !temp->serial_send  || !temp->serial_flush  || !temp->serial_relese)
-		goto out1;
+	this->serial_open = serial_Open;
+	this->serial_close = serial_Close;
+	this->serial_config = serial_Config;
+	this->serial_recv = serial_Recv;
+	this->serial_send = serial_Send;
+	this->serial_flush = serial_flush;
+	this->serial_relese = serial_Relese;
 
 	va_start(arg_ptr,port);
 	for(int i=0; i<SerialMax; ++i,port >>= 1){
 		if(!(port&0x01)) continue;
-		if( SUCCESS == temp->serial_open(temp,i) ){
+		if( SUCCESS == this->serial_open(this,i) ){
 			speed = va_arg(arg_ptr, int);
-			if(SUCCESS != temp->serial_config(temp,i,speed,8,1,'N')) goto out;
+			if(SUCCESS != this->serial_config(this,i,speed,8,1,'N')) goto out;
 		}else  goto out;
 	}
 	va_end(arg_ptr);
-	return temp;
+	return this;
 out:
 	va_end(arg_ptr);
-out1:
-	if(!this)  FREE(temp);
+	if(!temp)  FREE(this);
 	return NULL;
 }

@@ -193,7 +193,7 @@ create table ${TB_DIDO}(
 	id 			integer,
 	addr 		integer NOT NULL,
 	add_time 	integer NOT NULL,
-	ndo		integer default 8,
+	ndo			integer default 8,
 	ndi 			integer default 8,
 	do_stat 	integer default 0,
 	di_stat		integer default 0,

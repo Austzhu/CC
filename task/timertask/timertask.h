@@ -16,6 +16,7 @@ typedef struct {
 } tmparam_t;
 
 typedef struct tmtask_t{
+	int32_t Point_flag;
 	int32_t Is_start;
 	int32_t second;
 	struct sql_t *sql;
@@ -29,7 +30,7 @@ typedef struct tmtask_t{
 	int (*tmtask_exec)(struct tmtask_t*);
 	int (*tmtask_update)(struct tmtask_t*);
 
-	void (*tmtask_release)(struct tmtask_t**,int);
+	void (*tmtask_release)(struct tmtask_t*);
 } tmtask_t;
 
 extern tmtask_t *tmtask_init(struct tmtask_t*,sensor_t*,Queue_t*);

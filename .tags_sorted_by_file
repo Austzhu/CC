@@ -606,8 +606,8 @@ Config_serial	config\config.h	24;"	d
 Config_wizdom	config\config.h	31;"	d
 Config_ztcc	config\config.h	11;"	d
 __config_h__	config\config.h	8;"	d
-Get_statusofdi	hardware\Meter\Meter.c	24;"	d	file:
-Get_statusofdo	hardware\Meter\Meter.c	33;"	d	file:
+Get_statusofdi	hardware\Meter\Meter.c	/^static uint8_t inline Get_statusofdi(Meter_t *this,int32_t *result, uint8_t addr)$/;"	f	file:
+Get_statusofdo	hardware\Meter\Meter.c	/^static uint8_t inline Get_statusofdo(Meter_t *this,int32_t *result, uint8_t addr)$/;"	f	file:
 Query_dido	hardware\Meter\Meter.c	/^static int Query_dido(struct Meter_t*this, uint8_t addr, uint32_t *result)$/;"	f	file:
 RecvTimeout	hardware\Meter\Meter.c	16;"	d	file:
 SendTimeout	hardware\Meter\Meter.c	15;"	d	file:
@@ -616,6 +616,7 @@ WAITDI_RES	hardware\Meter\Meter.c	17;"	d	file:
 meter_close	hardware\Meter\Meter.c	/^static int meter_close(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
 meter_flashopen	hardware\Meter\Meter.c	/^static int meter_flashopen(struct Meter_t *this,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms)$/;"	f	file:
 meter_init	hardware\Meter\Meter.c	/^Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)$/;"	f
+meter_insert_sql	hardware\Meter\Meter.c	/^static int meter_insert_sql(Meter_t *this,uint8_t addr,int32_t di_stat,int32_t do_stat,uint16_t dido_cnt)$/;"	f	file:
 meter_open	hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
 meter_query_dido	hardware\Meter\Meter.c	/^static int meter_query_dido(struct Meter_t*this, uint8_t cnt,uint8_t *pd)$/;"	f	file:
 meter_querydi	hardware\Meter\Meter.c	/^static int meter_querydi(struct Meter_t *this,uint8_t addr,uint8_t ndi)$/;"	f	file:
@@ -625,7 +626,7 @@ meter_reado	hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,uint8_
 meter_release	hardware\Meter\Meter.c	/^static void meter_release(struct Meter_t **this)$/;"	f	file:
 meter_resatonce	hardware\Meter\Meter.c	/^static int meter_resatonce(appitf_t *topuser,uint8_t *ackbuf, uint32_t length)$/;"	f	file:
 meter_sendpackage	hardware\Meter\Meter.c	/^static int meter_sendpackage(Meter_t *this,uint8_t addr,uint8_t do_num,uint32_t stat)$/;"	f	file:
-meter_update_sql	hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,uint8_t num,int flag,uint32_t status)$/;"	f	file:
+meter_update_sql	hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,int32_t flags,int32_t status)$/;"	f	file:
 Meter_t	hardware\Meter\Meter.h	/^typedef struct Meter_t{$/;"	s
 Meter_t	hardware\Meter\Meter.h	/^} Meter_t;$/;"	t	typeref:struct:Meter_t
 UP_ALL	hardware\Meter\Meter.h	/^enum { UP_DI,UP_DO,UP_ALL };$/;"	e	enum:__anon3

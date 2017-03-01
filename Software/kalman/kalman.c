@@ -21,20 +21,22 @@ static float kal_filter(struct kalman_t *this, float kal_Z)
 	return X_now;
 }
 
-void kal_release(struct kalman_t **this,int isptr)
+void kal_release(struct kalman_t *this)
 {
 	if(!this)	return ;
-	if(isptr) FREE(*this);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 struct kalman_t *kalman_init(kalman_t *this,int A,int H,int Q,int R)
 {
-	kalman_t *pthis = this;
+	kalman_t *const pthis = this;
 	if(!pthis){
 		this = (kalman_t*)malloc(sizeof(kalman_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(kalman_t));
+	this->Point_flag = (!pthis)?1:0;
 	this->kal_A 	=   (A == 0)	? DEF_KAL_A : A/DEF_KAL_CFT;
 	this->kal_H 	=   (H == 0)	? DEF_KAL_H : H/DEF_KAL_CFT;
 	this->kal_Q 	=   (Q == 0)	? DEF_KAL_Q : Q/DEF_KAL_CFT;

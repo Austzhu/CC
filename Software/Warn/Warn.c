@@ -29,34 +29,34 @@ fault_Message_t Message[] = {
 static int set_flags(Warn_t *this,int flags,int set_enu,int condition)
 {
 	assert_param(this,FAIL);
-	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
+	assert_param(this->sql,FAIL);
 
 	switch(set_enu){
 		case sw_single:
-			return sqlite->sql_update("db_info_light",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light",Asprintf("set Warn_flags="\
 					"Warn_flags|%d where Base_Addr=0x%x;",flags,condition));
 		case sw_group:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags|%d where Base_Addr in (select Base_Addr "\
 								"from db_light b where b.lt_gid=0x%x);",flags,condition));
 		case sw_brocast:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags|%d;",flags));
 		case sw_inCoordi:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags|%d where Base_Addr in (select Base_Addr "\
 										"from db_light where Coor_id=0x%x);",flags,condition));
 		case sw_coordi:
-			return sqlite->sql_update("db_coordinator ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_coordinator ",Asprintf("set Warn_flags="\
 							"Warn_flags|%d where Base_Addr=0x%x;",flags,condition));
 		case so_single:
-			return sqlite->sql_update("db_info_light",Asprintf("set operate_flags=%d "\
+			return this->sql->sql_update("db_info_light",Asprintf("set operate_flags=%d "\
 					"where Base_Addr=0x%x;",flags,condition));
 		case so_group:
-			sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=%d "\
+			this->sql->sql_update("db_info_light ",Asprintf("set operate_flags=%d "\
 			"where Base_Addr in (select Base_Addr from db_light b where b.lt_gid=0x%x);",flags,condition));
 		case so_brocast:
-			return sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=%d",flags));
+			return this->sql->sql_update("db_info_light ",Asprintf("set operate_flags=%d",flags));
 		default:break;
 	}
 	return FAIL;
@@ -65,34 +65,33 @@ static int set_flags(Warn_t *this,int flags,int set_enu,int condition)
 static int clean_flags(Warn_t *this,int flags,int set_enu,int condition)
 {
 	assert_param(this,FAIL);
-	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
-
+	assert_param(this->sql,FAIL);
 	switch(set_enu){
 		case sw_single:
-			return sqlite->sql_update("db_info_light",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light",Asprintf("set Warn_flags="\
 					"Warn_flags&~%d where Base_Addr=0x%x;",flags,condition));
 		case sw_group:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags&~%d where Base_Addr in (select Base_Addr "\
 								"from db_light b where b.lt_gid=0x%x);",flags,condition));
 		case sw_brocast:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags&~%d;",flags));
 		case sw_inCoordi:
-			return sqlite->sql_update("db_info_light ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_info_light ",Asprintf("set Warn_flags="\
 							"Warn_flags&~%d where Base_Addr in (select Base_Addr "\
 										"from db_light where Coor_id=0x%x);",flags,condition));
 		case sw_coordi:
-			return sqlite->sql_update("db_coordinator ",Asprintf("set Warn_flags="\
+			return this->sql->sql_update("db_coordinator ",Asprintf("set Warn_flags="\
 							"Warn_flags&~%d where Base_Addr=0x%x;",flags,condition));
 		case so_single:
-			return sqlite->sql_update("db_info_light",Asprintf("set operate_flags=0 "\
+			return this->sql->sql_update("db_info_light",Asprintf("set operate_flags=0 "\
 					"where Base_Addr=0x%x;",condition));
 		case so_group:
-			sqlite->sql_update("db_info_light ",Asprintf("set operate_flags=0 "\
+			this->sql->sql_update("db_info_light ",Asprintf("set operate_flags=0 "\
 			"where Base_Addr in (select Base_Addr from db_light b where b.lt_gid=0x%x);",condition));
 		case so_brocast:
-			return sqlite->sql_update("db_info_light ","set operate_flags=0;");
+			return this->sql->sql_update("db_info_light ","set operate_flags=0;");
 		default:break;
 	}
 	return FAIL;
@@ -134,13 +133,13 @@ static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)
 {
 	assert_param(this,FAIL);
 	assert_param(info,FAIL);
+	assert_param(this->sql,FAIL);
 
-	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
 	int count = 0, errcount = 0;
 	for(int i=0;i<infosize;++i){
-		sqlite->sql_select(Asprintf("select count(*) from db_light "\
+		this->sql->sql_select(Asprintf("select count(*) from db_light "\
 			"where Coor_id=0x%x;",info[i].Coor_Addr),(s8*)&count,sizeof(int),1,0);
-		sqlite->sql_select(Asprintf("select count(*) from db_info_light a,db_light b "\
+		this->sql->sql_select(Asprintf("select count(*) from db_info_light a,db_light b "\
 			"where a.Base_Addr=b.Base_Addr  AND  b.Coor_id=0x%x AND a.Warn_flags&%u=%u;",\
 					info[i].Coor_Addr,Warn_Single_All,Warn_Single_All),(s8*)&errcount,sizeof(int),1,0);
 		if(count == errcount){	/* 一个协调器下面的所有单灯都故障,则认为协调器可能有问题 */
@@ -158,27 +157,26 @@ static int Judge_fault(Warn_t *this,struct Warn_info_t *info,int infosize)
 static int warn_verdict(struct Warn_t *this)
 {
 	assert_param(this,FAIL);
-
+	assert_param(this->sql,FAIL);
 	int Coordi_count = 0; int res = -1;
 	struct Warn_info_t *Warn_info = NULL;
-	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
-	sqlite->sql_select("select count(*) from db_coordinator;",(s8*)&Coordi_count,sizeof(int),1,0);
+	this->sql->sql_select("select count(*) from db_coordinator;",(s8*)&Coordi_count,sizeof(int),1,0);
 	if(Coordi_count <=0) goto out;
 
 	Warn_info = calloc(Coordi_count,sizeof(struct Warn_info_t));
 	if(!Warn_info) goto out;
 
-	res = sqlite->sql_select("select Base_Addr,Warn_flags from db_coordinator;",\
+	res = this->sql->sql_select("select Base_Addr,Warn_flags from db_coordinator;",\
 						(s8*)Warn_info,sizeof(struct Warn_info_t),Coordi_count,0);
 	if(res != SUCCESS) goto out;
 	for(int i=0;i<Coordi_count;++i){
-		sqlite->sql_select(Asprintf("select count(*) from db_info_light a,"\
+		this->sql->sql_select(Asprintf("select count(*) from db_info_light a,"\
 			"db_light b where a.Base_Addr=b.Base_Addr and b.Coor_id=0x%x ;",\
 			Warn_info[i].Coor_Addr),(s8*)&Warn_info[i].Single_count,sizeof(int),1,0);
 		if(Warn_info[i].Single_count <= 0) continue;
 		Warn_info[i].single_info = calloc(Warn_info[i].Single_count,sizeof(sin_warn_t));
 		if(!Warn_info[i].single_info) goto out;
-		res = sqlite->sql_select(Asprintf("select a.Base_Addr,a.Warn_flags,a.operate_flags,a.Rate_p,a.Rate_v,"\
+		res = this->sql->sql_select(Asprintf("select a.Base_Addr,a.Warn_flags,a.operate_flags,a.Rate_p,a.Rate_v,"\
 			"a.Rate_PF,a.light_val,a.light_E,a.light_V from db_info_light a,db_light b where a.Base_Addr=b.Base_Addr "\
 			"and b.Coor_id=0x%x ;",Warn_info[i].Coor_Addr),(s8*)Warn_info[i].single_info,sizeof(sin_warn_t),Warn_info[i].Single_count,0);
 		if(SUCCESS != res) goto out;
@@ -211,51 +209,49 @@ static const char *get_mark(int type)
 static int warn_Insert(struct Warn_t *this,int addr,int type)
 {
 	assert_param(this,FAIL);
-
+	assert_param(this->sql,FAIL);
 	const char *pmessage = NULL;
 	int Index = 0x01;
-	sql_t *sqlite = ((appitf_t*)this->topuser)->sqlite;
 	do{
 		if(type&Index){
 			pmessage = get_mark(Index);
-			sqlite->sql_insert(Asprintf("insert into db_warn(Add_time,Type,"\
+			this->sql->sql_insert(Asprintf("insert into db_warn(Add_time,Type,"\
 				"Grade,State,Addr,Remark) values(%ld,%d,%d,1,%d,\'%s\');",time(NULL),\
 				Index,Index==fault_coordi?0:1,addr,NULL==pmessage?"unknow warn type!":pmessage));
 		}
 	}while(Index<<=1);
 	/* 删除两个月之前的表 */
-	sqlite->sql_delete(Asprintf("delete from db_warn where Add_time < (%ld-60*24*60*60)",time(NULL)) );
+	this->sql->sql_delete(Asprintf("delete from db_warn where Add_time < (%ld-60*24*60*60)",time(NULL)) );
 	return SUCCESS;
 }
 
-static void warn_relese(Warn_t **this)
+static void warn_relese(Warn_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
-	FREE(*this);
+	if(this->Point_flag)
+		FREE(this);
 }
 
-Warn_t *warn_init(Warn_t *this,void *topuser)
+Warn_t *warn_init(Warn_t *this)
 {
-	Warn_t *warn = this;
-	if(!this){
-		warn = (Warn_t*)malloc(sizeof(Warn_t));
-		if(!warn) return NULL;
+	Warn_t *const warn = this;
+	if(!warn){
+		this = (Warn_t*)malloc(sizeof(Warn_t));
+		if(!this) return NULL;
 	}
-	bzero(warn,sizeof(Warn_t));
-
-	warn->topuser = topuser;
-	warn->warn_relese = warn_relese;
-	warn->warn_setflags = set_flags;
-	warn->warn_cleanflags = clean_flags;
-	warn->warn_verdict = warn_verdict;
-	warn->warn_Insert = warn_Insert;
-
-	if(!warn->topuser || !warn->warn_relese || !warn->warn_setflags ||\
-		!warn->warn_cleanflags || !warn->warn_verdict || !warn->warn_Insert )
-		goto out;
-	return warn;
+	bzero(this,sizeof(Warn_t));
+	this->Point_flag = (NULL == warn)?1:0;
+	#ifdef Config_Sqlite
+		this->sql = sql_Init(NULL);
+		if(!this->sql)  goto out;
+	#endif
+	this->warn_relese = warn_relese;
+	this->warn_setflags = set_flags;
+	this->warn_cleanflags = clean_flags;
+	this->warn_verdict = warn_verdict;
+	this->warn_Insert = warn_Insert;
+	return this;
 out:
-	if(!this) FREE(warn);
+	if(!warn) FREE(this);
 	return NULL;
 }

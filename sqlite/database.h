@@ -83,7 +83,7 @@ typedef struct sql_t{
 	int (*sql_update)(const char*,const char*);
 	int (*sql_select)(const char*, char*,int,int,int,...);
 	int (*sql_Isexist)(const char *table,const char *condition);
-	void (*sql_release)(struct sql_t**);
+	void (*sql_release)(struct sql_t*);
 } sql_t;
 
 extern sql_t *sql_Init(sql_t*);

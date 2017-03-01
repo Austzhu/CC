@@ -919,7 +919,6 @@ static int sin_update(Single_t*this,int addr)
 	if(SUCCESS != this->update->update_start(this->update,addr,(char)single.Data[0]))
 		goto out;
 
-	//this->update->update_release(&this->update);
 	DELETE(this->update,update_release);
 	return SUCCESS;
  out:
@@ -928,27 +927,23 @@ static int sin_update(Single_t*this,int addr)
  	return FAIL;
 }
 
-static void sin_release(struct Single_t **this)
+static void sin_release(struct Single_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
-
-	DELETE((*this)->update,update_release);
-
-	FREE(*this);
+	DELETE(this->update,update_release);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 {
-	Single_t *pth = single;
+	Single_t *const pth = single;
 	if(!pth){
 		single = (Single_t*)malloc(sizeof(Single_t));
 		if(!single) return NULL;
 	}
 	bzero(single,sizeof(Single_t));
-
-	// single->crc = CRC_init(NULL);
-	// if(!single->crc) goto out1;
+	single->Point_flag = (!pth)?1:0;
 
 	single->topuser 		= topuser;
 	single->Display 			= Display_package;
@@ -962,15 +957,5 @@ Single_t *single_Init(Single_t *single,struct appitf_t *topuser)
 	single->sin_Querystatus 	= sin_Querystatus;
 	single->sin_RecvPackage 	= sin_RecvPackage;
 
-
-	if(!single->topuser || !single->sin_open || !single->sin_close || !single->sin_release ||\
-		!single->sin_reply || !single->sin_config || !single->sin_Queryelectric || !single->sin_update||\
-		!single->sin_Querystatus || !single->sin_RecvPackage || !single->Display)
-		goto out;
 	return single;
-// out:
-// 	//DELETE(single->crc,CRC_release);
-out:
-	if(!pth) FREE(single);
-	return NULL;
 }

@@ -342,25 +342,27 @@ static int ctrl_PID(control_t *this)
 	return FAIL;
 }
 
-static void ctrl_release(control_t **this, int Is_ptr)
+static void ctrl_release(control_t *this)
 {
 	assert_param(this,;);
-	control_t *_this = Is_ptr ? *this : (control_t *)this;
-	if(_this->ctrl_stop(_this) == FAIL){
+
+	if(this->ctrl_stop(this) == FAIL){
 		debug(DEBUG_autocontrol,"auto control stop thread error!\n");
 	}
-	DELETE(_this->calc, calc_release,true);
-	if(Is_ptr)  FREE(*this);
+	DELETE(this->calc, calc_release);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 struct control_t *control_init(struct control_t *this, void *single)
 {
-	control_t *temp = this;
+	control_t *const temp = this;
 	if(!temp){
 		this = malloc(sizeof(control_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(control_t));
+	this->Point_flag = (!temp)?1:0;
 
 	this->single = single;
 	if(!this->single) goto out;

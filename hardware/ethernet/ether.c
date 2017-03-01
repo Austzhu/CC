@@ -133,7 +133,7 @@ static int ether_Getchar(ethernet_t *this,u8 *buf)
 	if(socket_fd < 0) goto out;
 
 	if(this->opt_param->r_len <= 0){
-		this->opt_param->r_len = recv(socket_fd,this->opt_param->r_buf,Buffer_Size, MSG_DONTWAIT);
+		this->opt_param->r_len = recv(socket_fd,this->opt_param->r_buf,CFG_Recvbuf, MSG_DONTWAIT);
 		/* recv error or the peer has performed an orderly shutdown */
 		if( this->opt_param->r_len <= 0  ){
 			/* have no data */
@@ -164,13 +164,12 @@ static int ether_Recv(ethernet_t *this,u8 *buf,int size)
 	return pbuf-buf;
 }
 
-static void ether_Relese(ethernet_t **this)
+static void ether_Relese(ethernet_t *this)
 {
 	assert_param(this,;);
-	assert_param(*this,;);
-
-	(*this)->ether_close(*this);
-	FREE(*this);
+	this->ether_close(this);
+	if(this->Point_flags) 	//通过malloc申请的对象需要释放
+		FREE(this);
 }
 
 ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)
@@ -183,9 +182,10 @@ ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(ethernet_t));
+	this->Point_flags = (pth==NULL) ? 1 : 0;
 
 	this->opt_param = opt_param;
-	this->opt_param->fd 		= -1;
+	this->opt_param->fd 	= -1;
 	this->opt_param->r_ptr	= 0;
 	this->opt_param->r_len	= 0;
 	pthread_mutex_init(&(this->ether_lock),NULL);
@@ -199,14 +199,5 @@ ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)
 	this->ether_recv  = ether_Recv;
 	this->ether_relese  = ether_Relese;
 	this->ether_close  = ether_Close;
-	if( !this->opt_param || !this->ether_connect || !this->ether_logon ||\
-		!this->ether_packagecheck || !this->ether_send || !this->ether_heartbeat || \
-		!this->ether_getchar || !this->ether_recv || !this->ether_relese || !this->ether_close){
-		err_Print(DEBUG_Ethnet,"Here are some Api pointer is NULL!\n");
-		goto out;
-	}
 	return this;
- out:
-	if(!pth) FREE(this);
-	return NULL;
 }

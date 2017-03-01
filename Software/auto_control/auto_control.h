@@ -37,6 +37,7 @@ typedef struct light_info_t{
 } light_info_t;
 
 typedef struct control_t{
+	int32_t Point_flag;
 	pthread_t ctrl_thread;
 	int32_t pthread_start;
 	int32_t group_cnt;
@@ -53,7 +54,7 @@ typedef struct control_t{
 	int (*ctrl_start)(struct control_t*);
 	int (*ctrl_stop)(struct control_t*);
 	int (*ctrl_PID)(struct control_t*);
-	void (*ctrl_release)(struct control_t**,int);
+	void (*ctrl_release)(struct control_t*);
 } control_t;
 
 extern control_t *control_init(struct control_t *,void *);

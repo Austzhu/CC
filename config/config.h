@@ -55,8 +55,10 @@
 #define CFG_keepcount 		3 		//keepalive 探测次数
 #endif
 
+#define CFG_Recvbuf 			2048
 #define CFG_FILE_PRAM 		"./config/fileparam.ini"		//配置文件
 #define CFG_COM485 			1 		//和协调器通讯的串口
+#define CFG_SENSOR			2		//光照车流传感器串口
 #define CFG_COMDIDO		3 		//和扩展DIDO通讯的串口
 #define CFG_PWMAX			0x1D 	//PWM的峰值
 //#define CFG_PWM_N 				//负极性的pwm

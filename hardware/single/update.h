@@ -47,14 +47,14 @@ typedef struct{
 
 struct Single_t;
 typedef struct update_t {
-	update_Info_t info;
-	package_t package;
+	update_Info_t  info;
+	package_t  package;
 	struct Single_t *subclass;      //继承update的子类
 	int (*update_start)(struct update_t*,int addr,char Image);
 	int (*update_slave)(struct update_t *);
 	int (*update_send_package)(struct update_t*);
 	u8 (*update_recv_onebyte)(struct update_t*);
-	void (*update_release)(struct update_t**);
+	void (*update_release)(struct update_t*);
 } update_t;
 
 extern update_t *update_init(struct Single_t *subclass);

@@ -16,9 +16,9 @@
 #include "include.h"
 struct opt_param_t;
 typedef struct ethernet_t{
+	int32_t Point_flags; 	//判断是否为malloc的对象
 	struct opt_param_t *opt_param;
 	pthread_mutex_t ether_lock;
-
 	int (*ether_connect)(struct ethernet_t*);
 	int (*ether_logon)(struct ethernet_t*);
 	int (*ether_packagecheck)(void *package,int size);
@@ -26,7 +26,7 @@ typedef struct ethernet_t{
 	int (*ether_heartbeat)(struct ethernet_t*);
 	int (*ether_getchar)(struct ethernet_t*,u8*);
 	int (*ether_recv)(struct ethernet_t*,u8*,int);
-	void (*ether_relese)(struct ethernet_t**);
+	void (*ether_relese)(struct ethernet_t*);
 	void (*ether_close)(struct ethernet_t*);
 } ethernet_t;
 

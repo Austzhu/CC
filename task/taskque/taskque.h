@@ -60,12 +60,13 @@ typedef struct {
 struct appitf_t;
 /* the class for Queue */
 typedef struct Queue_t{
+	int32_t Point_flag;
 	Taskque_t *Que_header;
 	struct appitf_t *parent;
 	int32_t (*Task_Exec)(struct Queue_t*);
 	int32_t (*Task_Append)(struct Queue_t*,u32,u32 ,void *,int);
 	int32_t (*get_Quetype)(struct Queue_t*,u8 ctrl);
-	void (*Que_release)(struct Queue_t**);
+	void (*Que_release)(struct Queue_t*);
 } Queue_t;
 
 extern Queue_t *Queue_Init(Queue_t*,struct appitf_t *topuser);

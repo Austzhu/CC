@@ -114,33 +114,29 @@ static void wiz_display(const char *Header,const char *Message,int nLen)
 	}	printf("\n");
 }
 
-static void wiz_release(struct wizdom_t**this)
+static void wiz_release(struct wizdom_t*this)
 {
-	if(!this || !*this) return ;
-	DELETE((*this)->ether_server,ser_release);
-	//DELETE((*this)->crc,CRC_release);
-	FREE(*this);
+	if(!this) return ;
+	DELETE_PTR(this->ether_server,ser_release);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 wizdom_t *wiz_init(wizdom_t *this)
 {
 	wizdom_t *const fist = this;
-	if(!this){
+	if(!fist){
 		this = malloc(sizeof(wizdom_t));
 		if(!this) return NULL;
-	}	bzero(this,sizeof(wizdom_t));
-
+	}
+	bzero(this,sizeof(wizdom_t));
+	this->Point_flag = (!fist)?1:0;
 	this->ether_server = ser_init(NULL);
 	if(!this->ether_server){
 		if(!fist) FREE(this);
 		return NULL;
 	}
-	// this->crc = CRC_init(NULL);
-	// if(!this->crc){
-	// 	DELETE(this->ether_server,ser_release);
-	// 	if(!fist) FREE(this);
-	// 	return NULL;
-	// }
+
  	this->wiz_Query = wiz_Query;
 	this->wiz_getaddr = wiz_getaddr;
 	this->wiz_setaddr = wiz_setaddr;

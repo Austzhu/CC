@@ -170,24 +170,26 @@ static int calc_light_exit(struct calc_t *this)
 	return SUCCESS;
 }
 
-static void calc_release(struct calc_t **this,int Is_ptr)
+static void calc_release(struct calc_t *this)
 {
 	assert_param(this,;);
-	calc_t *_this = Is_ptr ? *this : (calc_t *)this;
-	DELETE(_this->sql,sql_release);
-	DELETE(_this->sensor,sensor_release,true);
-	if(Is_ptr)  FREE(*this);
+	DELETE(this->sql,sql_release);
+	DELETE(this->sensor,sensor_release);
+	if(this->Point_flag)
+		FREE(this);
 }
 
 
 calc_t *calc_init(struct calc_t *this)
 {
-	calc_t *temp = this;
+	calc_t * const temp = this;
 	if(!temp){
 		this = malloc(sizeof(calc_t));
 		if(!this) return NULL;
 	}
 	bzero(this,sizeof(calc_t));
+	this->Point_flag = (!temp)?1:0;
+
 	this->sql = sql_Init(NULL);
 	if(!this->sql)  goto out;
 	this->sensor = sensor_init(NULL);
