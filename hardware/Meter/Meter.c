@@ -142,7 +142,7 @@ static int meter_close(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)
 {
 	assert_param(this,FAIL);
 	int32_t res = SUCCESS;
-	uint32_t status = 0;
+	uint32_t status = ~0;
 	if(addr == 0xfe)
 		goto broadcast;
 	status = this->meter_querydo(this, addr,num);
