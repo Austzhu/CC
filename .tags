@@ -14,7 +14,6 @@ BARD_E6018	.\config\config.h	10;"	d
 Base_Addr	.\sqlite\database.h	/^	s32 Base_Addr;		\/\/单灯地址$/;"	m	struct:__anon40
 Base_Addr	.\sqlite\database.h	/^	u32 Base_Addr;          \/\/协调器地址$/;"	m	struct:__anon38
 Base_Addr	.\sqlite\database.h	/^	u32 Base_Addr;          \/\/单灯地址$/;"	m	struct:__anon39
-Buffer_Size	.\Software\operate\operate.h	15;"	d
 CAN	.\hardware\single\update.h	21;"	d
 CC	.\Software\Log\log.h	/^	CC		= 0X01,$/;"	e	enum:__anon32
 CCUID	.\Software\ztcc\Interface.h	/^	u8 CCUID[6]; 			\/\/集中控制器的UID$/;"	m	struct:param_t
@@ -33,8 +32,8 @@ CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	287;"	d
 CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	383;"	d
 CFG_ADC_LIB	.\library\e6018\libs_emfuture_odm.h	394;"	d
 CFG_COLUMN	.\Software\auto_control\auto_control.h	16;"	d
-CFG_COM485	.\config\config.h	59;"	d
-CFG_COMDIDO	.\config\config.h	60;"	d
+CFG_COM485	.\config\config.h	60;"	d
+CFG_COMDIDO	.\config\config.h	62;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	65;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	77;"	d
 CFG_DAC_LIB	.\library\e3100\libs_emfuture_odm.h	90;"	d
@@ -137,7 +136,7 @@ CFG_ENGPIO_LIB	.\library\e6018\libs_emfuture_odm.h	74;"	d
 CFG_ENGPIO_LIB	.\library\e6018\libs_emfuture_odm.h	84;"	d
 CFG_ENGPIO_LIB	.\library\e6018\libs_emfuture_odm.h	94;"	d
 CFG_FIFO_LIB	.\library\e6018\libs_emfuture_odm.h	364;"	d
-CFG_FILE_PRAM	.\config\config.h	58;"	d
+CFG_FILE_PRAM	.\config\config.h	59;"	d
 CFG_GPIO_LIB	.\library\e3100\libs_emfuture_odm.h	104;"	d
 CFG_GPIO_LIB	.\library\e3100\libs_emfuture_odm.h	64;"	d
 CFG_GPIO_LIB	.\library\e3100\libs_emfuture_odm.h	70;"	d
@@ -279,8 +278,10 @@ CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	69;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	79;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	89;"	d
 CFG_MISCS_LIB	.\library\e6018\libs_emfuture_odm.h	99;"	d
-CFG_PWMAX	.\config\config.h	61;"	d
+CFG_PWMAX	.\config\config.h	63;"	d
+CFG_Recvbuf	.\config\config.h	58;"	d
 CFG_ReuseAddr	.\config\config.h	52;"	d
+CFG_SENSOR	.\config\config.h	61;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	107;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	61;"	d
 CFG_TIMER_LIB	.\library\e3100\libs_emfuture_odm.h	73;"	d
@@ -330,6 +331,7 @@ CFG_TIMER_LIB	.\library\e6018\libs_emfuture_odm.h	67;"	d
 CFG_TIMER_LIB	.\library\e6018\libs_emfuture_odm.h	77;"	d
 CFG_TIMER_LIB	.\library\e6018\libs_emfuture_odm.h	87;"	d
 CFG_TIMER_LIB	.\library\e6018\libs_emfuture_odm.h	97;"	d
+CFG_UART_CNT	.\hardware\serial\UART.h	19;"	d
 CFG_USART_LIB	.\library\e3100\libs_emfuture_odm.h	103;"	d
 CFG_USART_LIB	.\library\e3100\libs_emfuture_odm.h	57;"	d
 CFG_USART_LIB	.\library\e3100\libs_emfuture_odm.h	69;"	d
@@ -582,6 +584,7 @@ DEBUG_cc2server	.\Common\debug.h	28;"	d
 DEBUG_chktime	.\Common\debug.h	30;"	d
 DEBUG_config	.\Common\debug.h	49;"	d
 DEBUG_coordinate	.\Common\debug.h	37;"	d
+DEBUG_exit	.\Common\debug.h	58;"	d
 DEBUG_inqTime	.\Common\debug.h	32;"	d
 DEBUG_inqVersion	.\Common\debug.h	33;"	d
 DEBUG_kalman	.\Common\debug.h	56;"	d
@@ -603,8 +606,8 @@ DEF_KAL_CFT	.\Software\kalman\kalman.c	7;"	d	file:
 DEF_KAL_H	.\Software\kalman\kalman.c	4;"	d	file:
 DEF_KAL_Q	.\Software\kalman\kalman.c	5;"	d	file:
 DEF_KAL_R	.\Software\kalman\kalman.c	6;"	d	file:
-DELETE	.\Common\common\common.h	51;"	d
-DELETE_NPTR	.\Common\common\common.h	56;"	d
+DELETE	.\Common\common\common.h	45;"	d
+DELETE_NPTR	.\Common\common\common.h	51;"	d
 DOWN_KEY	.\library\e3100\libs_emfuture_odm.h	1143;"	d
 DOWN_KEY	.\library\e6018\libs_emfuture_odm.h	1461;"	d
 Data	.\hardware\single\single.h	/^	u8 	Data[2];$/;"	m	struct:__anon12
@@ -689,7 +692,7 @@ FORMAT_SCAN_ELEMENTS_DIR	.\library\e3100\libs_emfuture_odm.h	137;"	d
 FORMAT_SCAN_ELEMENTS_DIR	.\library\e6018\iio_utils.h	23;"	d
 FORMAT_TYPE_FILE	.\library\e3100\libs_emfuture_odm.h	138;"	d
 FORMAT_TYPE_FILE	.\library\e6018\iio_utils.h	24;"	d
-FREE	.\Common\common\common.h	60;"	d
+FREE	.\Common\common\common.h	55;"	d
 FTS5_TOKENIZE_AUX	.\sqlite\sqlite3.h	8634;"	d
 FTS5_TOKENIZE_DOCUMENT	.\sqlite\sqlite3.h	8633;"	d
 FTS5_TOKENIZE_PREFIX	.\sqlite\sqlite3.h	8632;"	d
@@ -729,10 +732,10 @@ Hex2Str	.\Common\common\common.c	/^char* Hex2Str(char*dest,const u8 *src,int siz
 IIO_MAX_NAME_LENGTH	.\library\e3100\libs_emfuture_odm.h	136;"	d
 IIO_MAX_NAME_LENGTH	.\library\e6018\iio_utils.h	21;"	d
 INFO	.\Common\debug.h	/^	INFO,$/;"	e	enum:__anon1
-INIT	.\Common\common\common.h	64;"	d
-INIT_FAIL	.\Common\common\common.h	69;"	d
+INIT	.\Common\common\common.h	59;"	d
+INIT_FAIL	.\Common\common\common.h	64;"	d
 INIT_LIST_HEAD	.\Common\list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
-INIT_NPTR	.\Common\common\common.h	71;"	d
+INIT_NPTR	.\Common\common\common.h	66;"	d
 Instert_Table	.\hardware\single\single.c	/^static int Instert_Table(Single_t *this,  Sqlbuf_t *lightinfo,\\$/;"	f	file:
 Is_TCP	.\Software\ztcc\Interface.h	/^	u8 Is_TCP;				\/\/与服务器的连接方式$/;"	m	struct:param_t
 Is_start	.\task\timertask\timertask.h	/^	int32_t Is_start;$/;"	m	struct:tmtask_t
@@ -774,7 +777,6 @@ Meter_t	.\hardware\Meter\Meter.h	/^} Meter_t;$/;"	t	typeref:struct:Meter_t
 Mktime	.\Software\process\process.c	15;"	d	file:
 Mstrcpy	.\Software\initstart\loadfile.c	/^static char *Mstrcpy(char*dest,const char *src,const char EOB)$/;"	f	file:
 NAK	.\hardware\single\update.h	20;"	d
-NEW	.\Common\common\common.h	45;"	d
 NOTICE	.\Common\debug.h	/^	NOTICE,$/;"	e	enum:__anon1
 NOT_WITHIN	.\sqlite\sqlite3.h	8100;"	d
 Node_header	.\task\taskque\taskque.h	/^	Node_t *Node_header;$/;"	m	struct:__anon44
@@ -782,8 +784,8 @@ Node_t	.\task\taskque\taskque.h	/^} Node_t;$/;"	t	typeref:struct:__anon43
 ONE_WAY	.\Software\auto_control\auto_calc.h	/^enum { ONE_WAY = 0, TWO_WAY };$/;"	e	enum:__anon26
 Open_FAIL	.\Common\err_code.h	22;"	d
 Open_log	.\Software\Log\log.c	/^static s32 Open_log(Logfile_t logf)$/;"	f	file:
-PARAM_INT	.\Common\common\common.h	76;"	d
-PARAM_SHORT	.\Common\common\common.h	77;"	d
+PARAM_INT	.\Common\common\common.h	71;"	d
+PARAM_SHORT	.\Common\common\common.h	72;"	d
 PARTLY_WITHIN	.\sqlite\sqlite3.h	8101;"	d
 PIO_MODE_IN	.\library\e3100\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon20
 PIO_MODE_IN	.\library\e6018\libs_emfuture_odm.h	/^	PIO_MODE_IN,$/;"	e	enum:__anon25
@@ -831,6 +833,21 @@ PORT_WIDTH_32	.\library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__
 PORT_WIDTH_32	.\library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_32$/;"	e	enum:__anon21
 PORT_WIDTH_8	.\library\e3100\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon16
 PORT_WIDTH_8	.\library\e6018\libs_emfuture_odm.h	/^	PORT_WIDTH_8 = 0,$/;"	e	enum:__anon21
+Point_flag	.\Software\Warn\Warn.h	/^	int32_t Point_flag;$/;"	m	struct:Warn_t
+Point_flag	.\Software\auto_control\auto_calc.h	/^	int32_t Point_flag;$/;"	m	struct:calc_t
+Point_flag	.\Software\auto_control\auto_control.h	/^	int32_t Point_flag;$/;"	m	struct:control_t
+Point_flag	.\Software\auto_control\auto_sensor.h	/^	int32_t Point_flag;$/;"	m	struct:sensor_t
+Point_flag	.\Software\kalman\kalman.h	/^	int32_t Point_flag;$/;"	m	struct:kalman_t
+Point_flag	.\Software\lamp\wizdom.h	/^	int32_t Point_flag;$/;"	m	struct:wizdom_t
+Point_flag	.\Software\operate\operate.h	/^	int32_t Point_flag;$/;"	m	struct:operate_t
+Point_flag	.\hardware\Meter\Meter.h	/^	int32_t Point_flag;$/;"	m	struct:Meter_t
+Point_flag	.\hardware\ethernet\ether_server.h	/^	int32_t Point_flag;$/;"	m	struct:server_t
+Point_flag	.\hardware\serial\UART.h	/^	int32_t Point_flag;$/;"	m	struct:uart_t
+Point_flag	.\hardware\serial\serial.h	/^	int32_t Point_flag;$/;"	m	struct:serial_t
+Point_flag	.\hardware\single\single.h	/^	int32_t Point_flag;$/;"	m	struct:Single_t
+Point_flag	.\task\taskque\taskque.h	/^	int32_t Point_flag;$/;"	m	struct:Queue_t
+Point_flag	.\task\timertask\timertask.h	/^	int32_t Point_flag;$/;"	m	struct:tmtask_t
+Point_flags	.\hardware\ethernet\ether.h	/^	int32_t Point_flags; 	\/\/判断是否为malloc的对象$/;"	m	struct:ethernet_t
 Pointer_Err	.\Common\err_code.h	25;"	d
 Pointer_NULL	.\Common\err_code.h	26;"	d
 ProcessFunc	.\task\taskque\taskque.c	/^Proclist_t  ProcessFunc[][64]={$/;"	v
@@ -839,7 +856,7 @@ PureCmdArry_t	.\task\taskque\taskque.h	/^} PureCmdArry_t;$/;"	t	typeref:struct:_
 Que_classify	.\task\taskque\taskque.c	/^static Que_classify_t  Que_classify[][255] = {$/;"	v	file:
 Que_classify_t	.\task\taskque\taskque.c	/^typedef struct{u8 cmdname;u8 level;} Que_classify_t;$/;"	t	typeref:struct:__anon42	file:
 Que_header	.\task\taskque\taskque.h	/^	Taskque_t *Que_header;$/;"	m	struct:Queue_t
-Que_release	.\task\taskque\taskque.h	/^	void (*Que_release)(struct Queue_t**);$/;"	m	struct:Queue_t
+Que_release	.\task\taskque\taskque.h	/^	void (*Que_release)(struct Queue_t*);$/;"	m	struct:Queue_t
 Query_Action	.\hardware\single\single.c	/^static int Query_Action(Single_t *this, int flags, Sqlbuf_t*light_info,  int size)$/;"	f	file:
 Query_dido	.\hardware\Meter\Meter.c	/^static int Query_dido(struct Meter_t*this, uint8_t addr, uint32_t *result)$/;"	f	file:
 Query_elec	.\hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query_t;$/;"	e	enum:__anon11
@@ -852,7 +869,7 @@ Query_t	.\hardware\single\single.h	/^typedef enum {Query_elec,Query_stat } Query
 Queue	.\Software\ztcc\Interface.h	/^	struct Queue_t *Queue;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Queue_t
 Queue	.\task\timertask\timertask.h	/^	struct Queue_t *Queue;$/;"	m	struct:tmtask_t	typeref:struct:tmtask_t::Queue_t
 Queue_Init	.\task\taskque\taskque.c	/^Queue_t *Queue_Init(Queue_t *this,struct appitf_t *topuser)$/;"	f
-Queue_Relese	.\task\taskque\taskque.c	/^static void Queue_Relese(Queue_t **this)$/;"	f	file:
+Queue_Relese	.\task\taskque\taskque.c	/^static void Queue_Relese(Queue_t *this)$/;"	f	file:
 Queue_t	.\task\taskque\taskque.h	/^typedef struct Queue_t{$/;"	s
 Queue_t	.\task\taskque\taskque.h	/^} Queue_t;$/;"	t	typeref:struct:Queue_t
 RECV_NOTEN	.\Common\err_code.h	27;"	d
@@ -1327,6 +1344,7 @@ TopUser_setMode	.\Software\ztcc\Interface.h	/^	int (*const TopUser_setMode)(stru
 TopUser_stopMode	.\Software\ztcc\Interface.c	/^static int TopUser_stopMode(struct appitf_t *this, uint8_t mode)$/;"	f	file:
 TopUser_stopMode	.\Software\ztcc\Interface.h	/^	int (*const TopUser_stopMode)(struct appitf_t *this, uint8_t);$/;"	m	struct:appitf_t
 Type	.\sqlite\database.h	/^	u32		Type;		\/\/报警类型$/;"	m	struct:__anon41
+UART_PTR	.\hardware\serial\UART.c	/^static uart_t *UART_PTR[CFG_UART_CNT] = {0};$/;"	v	file:
 UEVENT_BUFFER_SIZE	.\tools\AutoMountUsb.c	16;"	d	file:
 UID_Check	.\Software\ztcc\Interface.c	/^static s32 inline UID_Check(appitf_t *this,void *r_uid)$/;"	f	file:
 UPACKSIZE	.\hardware\single\update.h	23;"	d
@@ -1449,7 +1467,6 @@ bank	.\library\e3100\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__ano
 bank	.\library\e6018\libs_emfuture_odm.h	/^	port_bank_t bank;$/;"	m	struct:__anon23
 base_0	.\Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon28
 base_1	.\Software\auto_control\auto_control.h	/^	base_0, base_1 = 7,  					\/* 基本段 *\/$/;"	e	enum:__anon28
-base_sql	.\sqlite\database.c	/^static struct sql_t *base_sql = NULL;$/;"	v	typeref:struct:sql_t	file:
 be	.\library\e3100\libs_emfuture_odm.h	/^	unsigned be;$/;"	m	struct:iio_channel_info
 be	.\library\e6018\iio_utils.h	/^	unsigned be;$/;"	m	struct:iio_channel_info
 bigend2littlend_2	.\Common\common\common.h	43;"	d
@@ -1483,20 +1500,20 @@ bytes	.\library\e3100\libs_emfuture_odm.h	/^	unsigned bytes;$/;"	m	struct:iio_ch
 bytes	.\library\e6018\iio_utils.h	/^	unsigned bytes;$/;"	m	struct:iio_channel_info
 calc	.\Software\auto_control\auto_control.h	/^	struct calc_t *calc;$/;"	m	struct:control_t	typeref:struct:control_t::calc_t
 calc_K	.\Software\auto_control\auto_calc.c	/^static int calc_K(struct calc_t *this)$/;"	f	file:
-calc_K	.\Software\auto_control\auto_calc.h	/^	int (*calc_K)(struct calc_t*);$/;"	m	struct:calc_t
+calc_K	.\Software\auto_control\auto_calc.h	/^	int32_t (*calc_K)(struct calc_t*);$/;"	m	struct:calc_t
 calc_args_t	.\Software\auto_control\auto_calc.h	/^typedef struct calc_args_t{$/;"	s
 calc_args_t	.\Software\auto_control\auto_calc.h	/^} calc_args_t;$/;"	t	typeref:struct:calc_args_t
 calc_init	.\Software\auto_control\auto_calc.c	/^calc_t *calc_init(struct calc_t *this)$/;"	f
 calc_light_base	.\Software\auto_control\auto_calc.c	/^static int calc_light_base(struct calc_t *this)$/;"	f	file:
-calc_light_base	.\Software\auto_control\auto_calc.h	/^	int (*calc_light_base)(struct calc_t*);$/;"	m	struct:calc_t
+calc_light_base	.\Software\auto_control\auto_calc.h	/^	int32_t (*calc_light_base)(struct calc_t*);$/;"	m	struct:calc_t
 calc_light_enter	.\Software\auto_control\auto_calc.c	/^static int calc_light_enter(struct calc_t *this)$/;"	f	file:
-calc_light_enter	.\Software\auto_control\auto_calc.h	/^	int (*calc_light_enter)(struct calc_t*);$/;"	m	struct:calc_t
+calc_light_enter	.\Software\auto_control\auto_calc.h	/^	int32_t (*calc_light_enter)(struct calc_t*);$/;"	m	struct:calc_t
 calc_light_exit	.\Software\auto_control\auto_calc.c	/^static int calc_light_exit(struct calc_t *this)$/;"	f	file:
-calc_light_exit	.\Software\auto_control\auto_calc.h	/^	int (*calc_light_exit)(struct calc_t*);$/;"	m	struct:calc_t
+calc_light_exit	.\Software\auto_control\auto_calc.h	/^	int32_t (*calc_light_exit)(struct calc_t*);$/;"	m	struct:calc_t
 calc_light_transit	.\Software\auto_control\auto_calc.c	/^static int calc_light_transit(struct calc_t *this)$/;"	f	file:
-calc_light_transit	.\Software\auto_control\auto_calc.h	/^	int (*calc_light_transit)(struct calc_t*);$/;"	m	struct:calc_t
-calc_release	.\Software\auto_control\auto_calc.c	/^static void calc_release(struct calc_t **this,int Is_ptr)$/;"	f	file:
-calc_release	.\Software\auto_control\auto_calc.h	/^	void (*calc_release)(struct calc_t**,int);$/;"	m	struct:calc_t
+calc_light_transit	.\Software\auto_control\auto_calc.h	/^	int32_t (*calc_light_transit)(struct calc_t*);$/;"	m	struct:calc_t
+calc_release	.\Software\auto_control\auto_calc.c	/^static void calc_release(struct calc_t *this)$/;"	f	file:
+calc_release	.\Software\auto_control\auto_calc.h	/^	void (*calc_release)(struct calc_t*);$/;"	m	struct:calc_t
 calc_t	.\Software\auto_control\auto_calc.h	/^typedef struct calc_t{$/;"	s
 calc_t	.\Software\auto_control\auto_calc.h	/^} calc_t;$/;"	t	typeref:struct:calc_t
 cancel_auto_extension	.\sqlite\sqlite3ext.h	/^  int (*cancel_auto_extension)(void(*)(void));$/;"	m	struct:sqlite3_api_routines
@@ -1584,8 +1601,8 @@ ctrl_openloop	.\Software\auto_control\auto_control.h	/^	int (*ctrl_openloop)(str
 ctrl_output	.\Software\auto_control\auto_control.c	/^static int ctrl_output(control_t *this, int32_t group, int32_t light)$/;"	f	file:
 ctrl_output	.\Software\auto_control\auto_control.h	/^	int (*ctrl_output)(struct control_t*,int group, int light);$/;"	m	struct:control_t
 ctrl_pthread	.\Software\auto_control\auto_control.c	/^static void *ctrl_pthread(void *args)$/;"	f	file:
-ctrl_release	.\Software\auto_control\auto_control.c	/^static void ctrl_release(control_t **this, int Is_ptr)$/;"	f	file:
-ctrl_release	.\Software\auto_control\auto_control.h	/^	void (*ctrl_release)(struct control_t**,int);$/;"	m	struct:control_t
+ctrl_release	.\Software\auto_control\auto_control.c	/^static void ctrl_release(control_t *this)$/;"	f	file:
+ctrl_release	.\Software\auto_control\auto_control.h	/^	void (*ctrl_release)(struct control_t*);$/;"	m	struct:control_t
 ctrl_set_group_info	.\Software\auto_control\auto_control.c	/^static int32_t ctrl_set_group_info(control_t *this,sql_t *sql)$/;"	f	file:
 ctrl_set_light_current	.\Software\auto_control\auto_control.c	/^static void ctrl_set_light_current(control_t *this)$/;"	f	file:
 ctrl_start	.\Software\auto_control\auto_control.c	/^static int ctrl_start(control_t *this)$/;"	f	file:
@@ -1610,9 +1627,9 @@ db_mutex	.\sqlite\sqlite3ext.h	/^  sqlite3_mutex *(*db_mutex)(sqlite3*);$/;"	m	s
 db_readonly	.\sqlite\sqlite3ext.h	/^  int (*db_readonly)(sqlite3*,const char*);$/;"	m	struct:sqlite3_api_routines
 db_release_memory	.\sqlite\sqlite3ext.h	/^  int (*db_release_memory)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 db_status	.\sqlite\sqlite3ext.h	/^  int (*db_status)(sqlite3*,int,int*,int*,int);$/;"	m	struct:sqlite3_api_routines
-debug	.\Common\debug.h	60;"	d
-debug	.\Common\debug.h	62;"	d
-debug	.\Common\debug.h	64;"	d
+debug	.\Common\debug.h	61;"	d
+debug	.\Common\debug.h	63;"	d
+debug	.\Common\debug.h	65;"	d
 debug_level	.\Common\debug.h	/^} debug_level;$/;"	t	typeref:enum:__anon1
 declare_vtab	.\sqlite\sqlite3ext.h	/^  int (*declare_vtab)(sqlite3*,const char*);$/;"	m	struct:sqlite3_api_routines
 dedign_speed	.\Software\auto_control\auto_calc.h	/^	int dedign_speed;		\/\/设计时速$/;"	m	struct:calc_args_t
@@ -1637,8 +1654,8 @@ entries	.\hardware\ethernet\ether_server.h	/^	struct list_head  entries;$/;"	m	s
 entries	.\task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon43	typeref:struct:__anon43::list_head
 entries	.\task\taskque\taskque.h	/^	struct list_head  entries;$/;"	m	struct:__anon44	typeref:struct:__anon44::list_head
 err	.\Software\Log\log.h	/^	err,$/;"	e	enum:__anon32
-err_Print	.\Common\debug.h	68;"	d
-err_Print	.\Common\debug.h	70;"	d
+err_Print	.\Common\debug.h	69;"	d
+err_Print	.\Common\debug.h	71;"	d
 errcode	.\sqlite\sqlite3ext.h	/^  int  (*errcode)(sqlite3*db);$/;"	m	struct:sqlite3_api_routines
 errmsg	.\sqlite\sqlite3ext.h	/^  const char * (*errmsg)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
 errmsg16	.\sqlite\sqlite3ext.h	/^  const void * (*errmsg16)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
@@ -1651,7 +1668,7 @@ ether_Getchar	.\hardware\ethernet\ether.c	/^static int ether_Getchar(ethernet_t 
 ether_HeartBeat	.\hardware\ethernet\ether.c	/^static int ether_HeartBeat(ethernet_t *this)$/;"	f	file:
 ether_Init	.\hardware\ethernet\ether.c	/^ethernet_t *ether_Init(ethernet_t *this,struct opt_param_t *opt_param)$/;"	f
 ether_Recv	.\hardware\ethernet\ether.c	/^static int ether_Recv(ethernet_t *this,u8 *buf,int size)$/;"	f	file:
-ether_Relese	.\hardware\ethernet\ether.c	/^static void ether_Relese(ethernet_t **this)$/;"	f	file:
+ether_Relese	.\hardware\ethernet\ether.c	/^static void ether_Relese(ethernet_t *this)$/;"	f	file:
 ether_Send	.\hardware\ethernet\ether.c	/^static int ether_Send(ethernet_t *this,u8 *buffer,int size)$/;"	f	file:
 ether_SocketTimeout	.\hardware\ethernet\ether.c	16;"	d	file:
 ether_close	.\hardware\ethernet\ether.h	/^	void (*ether_close)(struct ethernet_t*);$/;"	m	struct:ethernet_t
@@ -1664,7 +1681,7 @@ ether_logon	.\hardware\ethernet\ether.h	/^	int (*ether_logon)(struct ethernet_t*
 ether_net	.\Software\ztcc\Interface.h	/^typedef enum {ether_net = 1,  gprs,  zigbee ,lora }  ItfWay_t;$/;"	e	enum:__anon36
 ether_packagecheck	.\hardware\ethernet\ether.h	/^	int (*ether_packagecheck)(void *package,int size);$/;"	m	struct:ethernet_t
 ether_recv	.\hardware\ethernet\ether.h	/^	int (*ether_recv)(struct ethernet_t*,u8*,int);$/;"	m	struct:ethernet_t
-ether_relese	.\hardware\ethernet\ether.h	/^	void (*ether_relese)(struct ethernet_t**);$/;"	m	struct:ethernet_t
+ether_relese	.\hardware\ethernet\ether.h	/^	void (*ether_relese)(struct ethernet_t*);$/;"	m	struct:ethernet_t
 ether_send	.\hardware\ethernet\ether.h	/^	int (*ether_send)(struct ethernet_t*,u8 *buffer,int size);$/;"	m	struct:ethernet_t
 ether_server	.\Software\lamp\wizdom.h	/^	server_t *ether_server;$/;"	m	struct:wizdom_t
 ethernet_t	.\hardware\ethernet\ether.h	/^typedef struct ethernet_t{$/;"	s
@@ -1748,7 +1765,7 @@ iio_channel_info	.\library\e3100\libs_emfuture_odm.h	/^struct iio_channel_info {
 iio_channel_info	.\library\e6018\iio_utils.h	/^struct iio_channel_info {$/;"	s
 index	.\library\e3100\libs_emfuture_odm.h	/^	unsigned index;$/;"	m	struct:iio_channel_info
 index	.\library\e6018\iio_utils.h	/^	unsigned index;$/;"	m	struct:iio_channel_info
-info	.\hardware\single\update.h	/^	update_Info_t info;$/;"	m	struct:update_t
+info	.\hardware\single\update.h	/^	update_Info_t  info;$/;"	m	struct:update_t
 init_hotplug_sock	.\tools\AutoMountUsb.c	/^static int init_hotplug_sock(void)$/;"	f	file:
 intensify_0	.\Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon28
 intensify_1	.\Software\auto_control\auto_control.h	/^	intensify_0, intensify_1, intensify_2, 	\/* 加强段 *\/$/;"	e	enum:__anon28
@@ -1768,8 +1785,8 @@ kal_R	.\Software\kalman\kalman.h	/^	float kal_A, kal_H, kal_Q, kal_R;$/;"	m	stru
 kal_X	.\Software\kalman\kalman.h	/^	float kal_X, kal_P;$/;"	m	struct:kalman_t
 kal_filter	.\Software\kalman\kalman.c	/^static float kal_filter(struct kalman_t *this, float kal_Z)$/;"	f	file:
 kal_filter	.\Software\kalman\kalman.h	/^	float (*kal_filter)(struct kalman_t*,float);$/;"	m	struct:kalman_t
-kal_release	.\Software\kalman\kalman.c	/^void kal_release(struct kalman_t **this,int isptr)$/;"	f
-kal_release	.\Software\kalman\kalman.h	/^	void (*kal_release)(struct kalman_t**,int);$/;"	m	struct:kalman_t
+kal_release	.\Software\kalman\kalman.c	/^void kal_release(struct kalman_t *this)$/;"	f
+kal_release	.\Software\kalman\kalman.h	/^	void (*kal_release)(struct kalman_t*);$/;"	m	struct:kalman_t
 kalman_init	.\Software\kalman\kalman.c	/^struct kalman_t *kalman_init(kalman_t *this,int A,int H,int Q,int R)$/;"	f
 kalman_light	.\Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_light;$/;"	m	struct:sensor_t
 kalman_stream	.\Software\auto_control\auto_sensor.h	/^	kalman_t *kalman_stream;$/;"	m	struct:sensor_t
@@ -1872,25 +1889,27 @@ memory_used	.\sqlite\sqlite3ext.h	/^  sqlite3_int64 (*memory_used)(void);$/;"	m	
 message	.\Software\Warn\Warn.c	/^	const char *message;$/;"	m	struct:__anon33	file:
 meter	.\Software\ztcc\Interface.h	/^	struct Meter_t *meter;$/;"	m	struct:appitf_t	typeref:struct:appitf_t::Meter_t
 meter_close	.\hardware\Meter\Meter.c	/^static int meter_close(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
-meter_close	.\hardware\Meter\Meter.h	/^	int (*meter_close)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
+meter_close	.\hardware\Meter\Meter.h	/^	int32_t (*meter_close)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
 meter_flashopen	.\hardware\Meter\Meter.c	/^static int meter_flashopen(struct Meter_t *this,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms)$/;"	f	file:
-meter_flashopen	.\hardware\Meter\Meter.h	/^	int (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms);$/;"	m	struct:Meter_t
+meter_flashopen	.\hardware\Meter\Meter.h	/^	int32_t (*meter_flashopen)(struct Meter_t*,uint8_t addr,uint8_t num,uint32_t ndo,int32_t ms);$/;"	m	struct:Meter_t
 meter_init	.\hardware\Meter\Meter.c	/^Meter_t *meter_init(Meter_t *this,struct appitf_t *topuser)$/;"	f
 meter_insert_sql	.\hardware\Meter\Meter.c	/^static int meter_insert_sql(Meter_t *this,uint8_t addr,int32_t di_stat,int32_t do_stat,uint16_t dido_cnt)$/;"	f	file:
 meter_open	.\hardware\Meter\Meter.c	/^static int meter_open(Meter_t *this,uint8_t addr, uint8_t num,uint32_t ndo)$/;"	f	file:
-meter_open	.\hardware\Meter\Meter.h	/^	int (*meter_open)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
+meter_open	.\hardware\Meter\Meter.h	/^	int32_t (*meter_open)(struct Meter_t*,uint8_t addr, uint8_t num,uint32_t ndo);$/;"	m	struct:Meter_t
 meter_query_dido	.\hardware\Meter\Meter.c	/^static int meter_query_dido(struct Meter_t*this, uint8_t cnt,uint8_t *pd)$/;"	f	file:
-meter_query_dido	.\hardware\Meter\Meter.h	/^	int (*meter_query_dido)(struct Meter_t*,uint8_t,uint8_t*);$/;"	m	struct:Meter_t
+meter_query_dido	.\hardware\Meter\Meter.h	/^	int32_t (*meter_query_dido)(struct Meter_t*,uint8_t,uint8_t*);$/;"	m	struct:Meter_t
 meter_querydi	.\hardware\Meter\Meter.c	/^static int meter_querydi(struct Meter_t *this,uint8_t addr,uint8_t ndi)$/;"	f	file:
-meter_querydi	.\hardware\Meter\Meter.h	/^	int (*meter_querydi)(struct Meter_t*,uint8_t addr,uint8_t ndi);$/;"	m	struct:Meter_t
+meter_querydi	.\hardware\Meter\Meter.h	/^	int32_t (*meter_querydi)(struct Meter_t*,uint8_t addr,uint8_t ndi);$/;"	m	struct:Meter_t
 meter_querydo	.\hardware\Meter\Meter.c	/^static int meter_querydo(struct Meter_t *this,uint8_t addr,uint8_t ndo)$/;"	f	file:
-meter_querydo	.\hardware\Meter\Meter.h	/^	int (*meter_querydo)(struct Meter_t*,uint8_t addr, uint8_t ndo);$/;"	m	struct:Meter_t
+meter_querydo	.\hardware\Meter\Meter.h	/^	int32_t (*meter_querydo)(struct Meter_t*,uint8_t addr, uint8_t ndo);$/;"	m	struct:Meter_t
 meter_readi	.\hardware\Meter\Meter.c	/^static int meter_readi(Meter_t *this,uint8_t addr,uint8_t num)$/;"	f	file:
-meter_readi	.\hardware\Meter\Meter.h	/^	int (*meter_readi)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
+meter_readi	.\hardware\Meter\Meter.h	/^	int32_t (*meter_readi)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
 meter_reado	.\hardware\Meter\Meter.c	/^static int meter_reado(Meter_t *this,uint8_t addr,uint8_t num)$/;"	f	file:
-meter_reado	.\hardware\Meter\Meter.h	/^	int (*meter_reado)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
-meter_release	.\hardware\Meter\Meter.c	/^static void meter_release(struct Meter_t **this)$/;"	f	file:
-meter_release	.\hardware\Meter\Meter.h	/^	void (*meter_release)(struct Meter_t**);$/;"	m	struct:Meter_t
+meter_reado	.\hardware\Meter\Meter.h	/^	int32_t (*meter_reado)(struct Meter_t*,uint8_t addr, uint8_t num);$/;"	m	struct:Meter_t
+meter_recover_status	.\hardware\Meter\Meter.c	/^static void meter_recover_status(struct Meter_t *this)$/;"	f	file:
+meter_recover_status	.\hardware\Meter\Meter.h	/^	void (*meter_recover_status)(struct Meter_t*);$/;"	m	struct:Meter_t
+meter_release	.\hardware\Meter\Meter.c	/^static void meter_release(struct Meter_t *this)$/;"	f	file:
+meter_release	.\hardware\Meter\Meter.h	/^	void (*meter_release)(struct Meter_t*);$/;"	m	struct:Meter_t
 meter_resatonce	.\hardware\Meter\Meter.c	/^static int meter_resatonce(appitf_t *topuser,uint8_t *ackbuf, uint32_t length)$/;"	f	file:
 meter_sendpackage	.\hardware\Meter\Meter.c	/^static int meter_sendpackage(Meter_t *this,uint8_t addr,uint8_t do_num,uint32_t stat)$/;"	f	file:
 meter_update_sql	.\hardware\Meter\Meter.c	/^static int meter_update_sql(Meter_t *this,uint8_t addr,int32_t flags,int32_t status)$/;"	f	file:
@@ -1939,14 +1958,14 @@ opt_heartbeat	.\Software\operate\operate.c	/^static int opt_heartbeat(struct ope
 opt_heartbeat	.\Software\operate\operate.h	/^	int	  (*opt_heartbeat)(struct operate_t*);$/;"	m	struct:operate_t
 opt_logon	.\Software\operate\operate.c	/^static int opt_logon(struct operate_t *this)$/;"	f	file:
 opt_logon	.\Software\operate\operate.h	/^	int	  (*opt_logon)(struct operate_t*);$/;"	m	struct:operate_t
-opt_param	.\Software\operate\operate.h	/^	struct opt_param_t opt_param;$/;"	m	struct:operate_t	typeref:struct:operate_t::opt_param_t
+opt_param	.\Software\operate\operate.h	/^	struct opt_param_t  opt_param;$/;"	m	struct:operate_t	typeref:struct:operate_t::opt_param_t
 opt_param	.\hardware\ethernet\ether.h	/^	struct opt_param_t *opt_param;$/;"	m	struct:ethernet_t	typeref:struct:ethernet_t::opt_param_t
 opt_param_t	.\Software\operate\operate.h	/^typedef struct opt_param_t{$/;"	s
 opt_param_t	.\Software\operate\operate.h	/^} opt_param_t;$/;"	t	typeref:struct:opt_param_t
 opt_recv	.\Software\operate\operate.c	/^static int opt_recv(struct operate_t *this,u8 *buf, int size)$/;"	f	file:
 opt_recv	.\Software\operate\operate.h	/^	int	  (*opt_recv)(struct operate_t*,u8*,int);$/;"	m	struct:operate_t
-opt_relese	.\Software\operate\operate.c	/^static void opt_relese(struct operate_t **this)$/;"	f	file:
-opt_relese	.\Software\operate\operate.h	/^	void (*opt_relese)(struct operate_t**);$/;"	m	struct:operate_t
+opt_relese	.\Software\operate\operate.c	/^static void opt_relese(struct operate_t *this)$/;"	f	file:
+opt_relese	.\Software\operate\operate.h	/^	void (*opt_relese)(struct operate_t*);$/;"	m	struct:operate_t
 opt_reset	.\Software\process\process.c	/^int opt_reset(void)$/;"	f
 opt_send	.\Software\operate\operate.c	/^static int opt_send(struct operate_t *this,u8 *buffer,int size)$/;"	f	file:
 opt_send	.\Software\operate\operate.h	/^	int 	  (*opt_send)(struct operate_t*,u8 *buffer,int size);$/;"	m	struct:operate_t
@@ -1969,7 +1988,7 @@ pNext	.\sqlite\sqlite3.h	/^  sqlite3_vfs *pNext;      \/* Next registered VFS *\
 pUser	.\sqlite\sqlite3.h	/^  void *pUser;                      \/* callback can use this, if desired *\/$/;"	m	struct:sqlite3_rtree_query_info
 pUser	.\sqlite\sqlite3.h	/^  void *pUser;                    \/* Callback implementation user data *\/$/;"	m	struct:sqlite3_rtree_geometry
 pVtab	.\sqlite\sqlite3.h	/^  sqlite3_vtab *pVtab;      \/* Virtual table of this cursor *\/$/;"	m	struct:sqlite3_vtab_cursor
-package	.\hardware\single\update.h	/^	package_t package;$/;"	m	struct:update_t
+package	.\hardware\single\update.h	/^	package_t  package;$/;"	m	struct:update_t
 package	.\task\taskque\taskque.h	/^	uint8_t	package[0];$/;"	m	struct:__anon43
 package_check	.\Software\ztcc\Interface.c	/^static int package_check(void *package)$/;"	f	file:
 package_len	.\task\taskque\taskque.h	/^	int32_t package_len;$/;"	m	struct:__anon43
@@ -2063,8 +2082,8 @@ sensor_get_values	.\Software\auto_control\auto_sensor.c	/^static int sensor_get_
 sensor_get_values	.\Software\auto_control\auto_sensor.h	/^	int (*sensor_get_values)(struct sensor_t*,value_t);$/;"	m	struct:sensor_t
 sensor_init	.\Software\auto_control\auto_sensor.c	/^sensor_t *sensor_init(struct sensor_t *this)$/;"	f
 sensor_pack	.\Software\auto_control\auto_sensor.c	/^static int sensor_pack(struct sensor_t *this,uint8_t *buf)$/;"	f	file:
-sensor_release	.\Software\auto_control\auto_sensor.c	/^static void sensor_release(struct sensor_t **this,int Is_ptr)$/;"	f	file:
-sensor_release	.\Software\auto_control\auto_sensor.h	/^	void (*sensor_release)(struct sensor_t**,int);$/;"	m	struct:sensor_t
+sensor_release	.\Software\auto_control\auto_sensor.c	/^static void sensor_release(struct sensor_t *this)$/;"	f	file:
+sensor_release	.\Software\auto_control\auto_sensor.h	/^	void (*sensor_release)(struct sensor_t*);$/;"	m	struct:sensor_t
 sensor_t	.\Software\auto_control\auto_sensor.h	/^typedef struct sensor_t {$/;"	s
 sensor_t	.\Software\auto_control\auto_sensor.h	/^} sensor_t;$/;"	t	typeref:struct:sensor_t
 ser_flush	.\hardware\ethernet\ether_server.c	/^static void ser_flush(int socketfd)$/;"	f	file:
@@ -2073,8 +2092,8 @@ ser_init	.\hardware\ethernet\ether_server.c	/^ server_t *ser_init(server_t *ser)
 ser_keepalive	.\hardware\ethernet\ether_server.c	/^static int ser_keepalive(int fd)$/;"	f	file:
 ser_recv	.\hardware\ethernet\ether_server.c	/^static int ser_recv(struct server_t *this,client_t *client,void *buffer,int size, int timeout)$/;"	f	file:
 ser_recv	.\hardware\ethernet\ether_server.h	/^	int (*ser_recv)(struct server_t*,client_t*,void*,int,int);$/;"	m	struct:server_t
-ser_release	.\hardware\ethernet\ether_server.c	/^static void ser_release(server_t **this)$/;"	f	file:
-ser_release	.\hardware\ethernet\ether_server.h	/^	void (*ser_release)(struct server_t**);$/;"	m	struct:server_t
+ser_release	.\hardware\ethernet\ether_server.c	/^static void ser_release(server_t *this)$/;"	f	file:
+ser_release	.\hardware\ethernet\ether_server.h	/^	void (*ser_release)(struct server_t*);$/;"	m	struct:server_t
 ser_send	.\hardware\ethernet\ether_server.c	/^static int ser_send(struct server_t *this,client_t *client,void *buffer,int size)$/;"	f	file:
 ser_send	.\hardware\ethernet\ether_server.h	/^	int (*ser_send)(struct server_t*,client_t*,void *,int);$/;"	m	struct:server_t
 ser_start	.\hardware\ethernet\ether_server.c	/^static int ser_start(struct server_t*this,u16 port)$/;"	f	file:
@@ -2086,19 +2105,19 @@ serial_Config	.\hardware\serial\serial.c	/^static int serial_Config(serial_t *th
 serial_Init	.\hardware\serial\serial.c	/^serial_t *serial_Init(serial_t *this,u32 port,...)$/;"	f
 serial_Open	.\hardware\serial\serial.c	/^static int serial_Open(serial_t *this,u32  port)$/;"	f	file:
 serial_Recv	.\hardware\serial\serial.c	/^static int serial_Recv(serial_t *this,u32  port,s8* buf,u32 len,s32  block)$/;"	f	file:
-serial_Relese	.\hardware\serial\serial.c	/^static void serial_Relese(serial_t **this)$/;"	f	file:
+serial_Relese	.\hardware\serial\serial.c	/^static void serial_Relese(serial_t *this)$/;"	f	file:
 serial_Send	.\hardware\serial\serial.c	/^static int serial_Send(serial_t *this,u32  port,s8* buf,u32 len,s32  block)$/;"	f	file:
-serial_close	.\hardware\serial\serial.h	/^	int 	(*serial_close)(struct serial_t*,u32);$/;"	m	struct:serial_t
-serial_config	.\hardware\serial\serial.h	/^	int 	(*serial_config)(struct serial_t*,u32,u32,s32,s32,s8);$/;"	m	struct:serial_t
+serial_close	.\hardware\serial\serial.h	/^	int32_t 	(*serial_close)(struct serial_t*,u32);$/;"	m	struct:serial_t
+serial_config	.\hardware\serial\serial.h	/^	int32_t 	(*serial_config)(struct serial_t*,u32,u32,s32,s32,s8);$/;"	m	struct:serial_t
 serial_flush	.\hardware\serial\serial.c	/^static void serial_flush(serial_t *this,int port)$/;"	f	file:
 serial_flush	.\hardware\serial\serial.h	/^	void (*serial_flush)(struct serial_t*,int);$/;"	m	struct:serial_t
-serial_open	.\hardware\serial\serial.h	/^	int 	(*serial_open)(struct serial_t*,u32);$/;"	m	struct:serial_t
-serial_recv	.\hardware\serial\serial.h	/^	int 	(*serial_recv)(struct serial_t*,u32,  s8*,u32,s32);$/;"	m	struct:serial_t
-serial_relese	.\hardware\serial\serial.h	/^	void (*serial_relese)(struct serial_t**);$/;"	m	struct:serial_t
-serial_send	.\hardware\serial\serial.h	/^	int 	(*serial_send)(struct serial_t*,u32,  s8*,u32,s32);$/;"	m	struct:serial_t
+serial_open	.\hardware\serial\serial.h	/^	int32_t 	(*serial_open)(struct serial_t*,u32);$/;"	m	struct:serial_t
+serial_recv	.\hardware\serial\serial.h	/^	int32_t 	(*serial_recv)(struct serial_t*,u32,  s8*,u32,s32);$/;"	m	struct:serial_t
+serial_relese	.\hardware\serial\serial.h	/^	void (*serial_relese)(struct serial_t*);$/;"	m	struct:serial_t
+serial_send	.\hardware\serial\serial.h	/^	int32_t 	(*serial_send)(struct serial_t*,u32,  s8*,u32,s32);$/;"	m	struct:serial_t
 serial_t	.\hardware\serial\serial.h	/^typedef struct serial_t{$/;"	s
 serial_t	.\hardware\serial\serial.h	/^} serial_t;$/;"	t	typeref:struct:serial_t
-serialfd	.\hardware\serial\serial.h	/^	int 	serialfd[SerialMax];$/;"	m	struct:serial_t
+serialfd	.\hardware\serial\serial.h	/^	int32_t 	serialfd[SerialMax];$/;"	m	struct:serial_t
 server_addr	.\hardware\ethernet\ether_server.h	/^	struct sockaddr_in server_addr;$/;"	m	struct:server_t	typeref:struct:server_t::sockaddr_in
 server_fd	.\hardware\ethernet\ether_server.h	/^	int server_fd;$/;"	m	struct:server_t
 server_t	.\hardware\ethernet\ether_server.h	/^typedef struct server_t {$/;"	s
@@ -2121,8 +2140,8 @@ sin_close	.\hardware\single\single.h	/^	int (*sin_close)(struct Single_t*,int,u3
 sin_config	.\hardware\single\single.h	/^	int (*sin_config)(struct Single_t*,sin_cfg_t,void*);$/;"	m	struct:Single_t
 sin_open	.\hardware\single\single.c	/^static int sin_open(Single_t *this,int cmd, u32 Addr, u32 light)$/;"	f	file:
 sin_open	.\hardware\single\single.h	/^	int (*sin_open)(struct Single_t*,int,u32,u32);$/;"	m	struct:Single_t
-sin_release	.\hardware\single\single.c	/^static void sin_release(struct Single_t **this)$/;"	f	file:
-sin_release	.\hardware\single\single.h	/^	void (*sin_release)(struct Single_t**);$/;"	m	struct:Single_t
+sin_release	.\hardware\single\single.c	/^static void sin_release(struct Single_t *this)$/;"	f	file:
+sin_release	.\hardware\single\single.h	/^	void (*sin_release)(struct Single_t*);$/;"	m	struct:Single_t
 sin_reply	.\hardware\single\single.c	/^static int sin_reply(Single_t *this,int cmd,int subcmd,int res)$/;"	f	file:
 sin_reply	.\hardware\single\single.h	/^	int (*sin_reply)(struct Single_t*,int,int,int);$/;"	m	struct:Single_t
 sin_update	.\hardware\single\single.c	/^static int sin_update(Single_t*this,int addr)$/;"	f	file:
@@ -2144,6 +2163,7 @@ socket_fd	.\hardware\ethernet\ether_server.h	/^	int socket_fd;$/;"	m	struct:clie
 soft_heap_limit	.\sqlite\sqlite3ext.h	/^  void (*soft_heap_limit)(int);$/;"	m	struct:sqlite3_api_routines
 soft_heap_limit64	.\sqlite\sqlite3ext.h	/^  sqlite3_int64 (*soft_heap_limit64)(sqlite3_int64);$/;"	m	struct:sqlite3_api_routines
 sourceid	.\sqlite\sqlite3ext.h	/^  const char *(*sourceid)(void);$/;"	m	struct:sqlite3_api_routines
+sql	.\Software\Warn\Warn.h	/^	struct sql_t *sql;$/;"	m	struct:Warn_t	typeref:struct:Warn_t::sql_t
 sql	.\Software\auto_control\auto_calc.h	/^	struct sql_t *sql;$/;"	m	struct:calc_t	typeref:struct:calc_t::sql_t
 sql	.\hardware\Meter\Meter.h	/^	struct sql_t *sql;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::sql_t
 sql	.\sqlite\sqlite3ext.h	/^  const char *(*sql)(sqlite3_stmt*);$/;"	m	struct:sqlite3_api_routines
@@ -2156,9 +2176,8 @@ sql_delete	.\sqlite\database.c	/^static int sql_delete(const char *sql)$/;"	f	fi
 sql_delete	.\sqlite\database.h	/^	int (*sql_delete)(const char*);$/;"	m	struct:sql_t
 sql_insert	.\sqlite\database.h	/^	int (*sql_insert)(const char*);$/;"	m	struct:sql_t
 sql_isexist	.\sqlite\database.h	23;"	d
-sql_lock	.\sqlite\database.c	/^static pthread_mutex_t sql_lock;$/;"	v	file:
-sql_release	.\sqlite\database.c	/^static void sql_release(struct sql_t**this)$/;"	f	file:
-sql_release	.\sqlite\database.h	/^	void (*sql_release)(struct sql_t**);$/;"	m	struct:sql_t
+sql_release	.\sqlite\database.c	/^static void inline sql_release(struct sql_t*this)$/;"	f	file:
+sql_release	.\sqlite\database.h	/^	void (*sql_release)(struct sql_t*);$/;"	m	struct:sql_t
 sql_select	.\sqlite\database.c	/^static int sql_select(const char *sql, char *buf,int RowSize,int ColSize,int strcount,...)$/;"	f	file:
 sql_select	.\sqlite\database.h	/^	int (*sql_select)(const char*, char*,int,int,int,...);$/;"	m	struct:sql_t
 sql_t	.\sqlite\database.h	/^typedef struct sql_t{$/;"	s
@@ -2500,8 +2519,8 @@ tmtask	.\task\timertask\timertask.c	/^static tmtask_t *tmtask = NULL;$/;"	v	file
 tmtask_exec	.\task\timertask\timertask.c	/^static int tmtask_exec(struct tmtask_t *this)$/;"	f	file:
 tmtask_exec	.\task\timertask\timertask.h	/^	int (*tmtask_exec)(struct tmtask_t*);$/;"	m	struct:tmtask_t
 tmtask_init	.\task\timertask\timertask.c	/^struct tmtask_t *tmtask_init(tmtask_t *this, sensor_t *ser, Queue_t *que)$/;"	f
-tmtask_release	.\task\timertask\timertask.c	/^static void tmtask_release(struct tmtask_t **this,int flg)$/;"	f	file:
-tmtask_release	.\task\timertask\timertask.h	/^	void (*tmtask_release)(struct tmtask_t**,int);$/;"	m	struct:tmtask_t
+tmtask_release	.\task\timertask\timertask.c	/^static void tmtask_release(struct tmtask_t *this)$/;"	f	file:
+tmtask_release	.\task\timertask\timertask.h	/^	void (*tmtask_release)(struct tmtask_t*);$/;"	m	struct:tmtask_t
 tmtask_start	.\task\timertask\timertask.c	/^static int tmtask_start(struct tmtask_t *this)$/;"	f	file:
 tmtask_start	.\task\timertask\timertask.h	/^	int (*tmtask_start)(struct tmtask_t*);$/;"	m	struct:tmtask_t
 tmtask_stop	.\task\timertask\timertask.c	/^static int tmtask_stop(struct tmtask_t *this)$/;"	f	file:
@@ -2510,7 +2529,6 @@ tmtask_t	.\task\timertask\timertask.h	/^typedef struct tmtask_t{$/;"	s
 tmtask_t	.\task\timertask\timertask.h	/^} tmtask_t;$/;"	t	typeref:struct:tmtask_t
 tmtask_update	.\task\timertask\timertask.c	/^static int tmtask_update(struct tmtask_t *this)$/;"	f	file:
 tmtask_update	.\task\timertask\timertask.h	/^	int (*tmtask_update)(struct tmtask_t*);$/;"	m	struct:tmtask_t
-topuser	.\Software\Warn\Warn.h	/^	struct appitf_t *topuser;$/;"	m	struct:Warn_t	typeref:struct:Warn_t::appitf_t
 topuser	.\hardware\Meter\Meter.h	/^	struct appitf_t *topuser;$/;"	m	struct:Meter_t	typeref:struct:Meter_t::appitf_t
 topuser	.\hardware\single\single.h	/^	struct appitf_t *topuser;$/;"	m	struct:Single_t	typeref:struct:Single_t::appitf_t
 total_changes	.\sqlite\sqlite3ext.h	/^  int  (*total_changes)(sqlite3*);$/;"	m	struct:sqlite3_api_routines
@@ -2525,25 +2543,26 @@ uart	.\hardware\Meter\Meter.h	/^	struct uart_t *uart;$/;"	m	struct:Meter_t	typer
 uart2	.\Software\auto_control\auto_sensor.h	/^	uart_t *uart2;$/;"	m	struct:sensor_t
 uart_bits	.\hardware\serial\UART.h	/^	uint8_t uart_bits;$/;"	m	struct:uart_t
 uart_close	.\hardware\serial\UART.c	/^static int uart_close(struct uart_t *this)$/;"	f	file:
-uart_close	.\hardware\serial\UART.h	/^	int 	(*uart_close)(struct uart_t*);$/;"	m	struct:uart_t
+uart_close	.\hardware\serial\UART.h	/^	int32_t 	(*uart_close)(struct uart_t*);$/;"	m	struct:uart_t
 uart_config	.\hardware\serial\UART.c	/^static int uart_config(struct uart_t *this)$/;"	f	file:
-uart_config	.\hardware\serial\UART.h	/^	int 	(*uart_config)(struct uart_t*);$/;"	m	struct:uart_t
+uart_config	.\hardware\serial\UART.h	/^	int32_t 	(*uart_config)(struct uart_t*);$/;"	m	struct:uart_t
 uart_fd	.\hardware\serial\UART.h	/^	int32_t 	uart_fd;$/;"	m	struct:uart_t
 uart_flush	.\hardware\serial\UART.c	/^static void uart_flush(struct uart_t *this)$/;"	f	file:
 uart_flush	.\hardware\serial\UART.h	/^	void (*uart_flush)(struct uart_t*);$/;"	m	struct:uart_t
 uart_init	.\hardware\serial\UART.c	/^struct uart_t *uart_init(uart_t *this, uint8_t port,const char *cfg)$/;"	f
+uart_lock	.\hardware\serial\UART.h	/^	pthread_mutex_t uart_lock;$/;"	m	struct:uart_t
 uart_open	.\hardware\serial\UART.c	/^static int uart_open(struct uart_t *this)$/;"	f	file:
-uart_open	.\hardware\serial\UART.h	/^	int 	(*uart_open)(struct uart_t*);$/;"	m	struct:uart_t
+uart_open	.\hardware\serial\UART.h	/^	int32_t 	(*uart_open)(struct uart_t*);$/;"	m	struct:uart_t
 uart_parity	.\hardware\serial\UART.h	/^	uint8_t uart_parity;$/;"	m	struct:uart_t
 uart_port	.\hardware\serial\UART.h	/^	uint8_t uart_port;$/;"	m	struct:uart_t
 uart_readall	.\hardware\serial\UART.c	/^static int uart_readall(struct uart_t *this, char *buf)$/;"	f	file:
-uart_readall	.\hardware\serial\UART.h	/^	int   (*uart_readall)(struct uart_t *this, char *buf);$/;"	m	struct:uart_t
+uart_readall	.\hardware\serial\UART.h	/^	int32_t  (*uart_readall)(struct uart_t *this, char *buf);$/;"	m	struct:uart_t
 uart_recv	.\hardware\serial\UART.c	/^static int uart_recv(struct uart_t *this, char *buf,uint32_t length,int32_t block)$/;"	f	file:
-uart_recv	.\hardware\serial\UART.h	/^	int 	(*uart_recv)(struct uart_t*, char *buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
-uart_relese	.\hardware\serial\UART.c	/^static void uart_relese(struct uart_t **this)$/;"	f	file:
-uart_relese	.\hardware\serial\UART.h	/^	void (*uart_relese)(struct uart_t**);$/;"	m	struct:uart_t
+uart_recv	.\hardware\serial\UART.h	/^	int32_t 	(*uart_recv)(struct uart_t*, char *buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
+uart_relese	.\hardware\serial\UART.c	/^static void uart_relese(struct uart_t *this,int32_t port)$/;"	f	file:
+uart_relese	.\hardware\serial\UART.h	/^	void (*uart_relese)(struct uart_t*,int32_t);$/;"	m	struct:uart_t
 uart_send	.\hardware\serial\UART.c	/^static int uart_send(struct uart_t *this,const char * buf,uint32_t length,int32_t block)$/;"	f	file:
-uart_send	.\hardware\serial\UART.h	/^	int 	(*uart_send)(struct uart_t*,const char * buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
+uart_send	.\hardware\serial\UART.h	/^	int32_t 	(*uart_send)(struct uart_t*,const char * buf,uint32_t length,int32_t block);$/;"	m	struct:uart_t
 uart_speed	.\hardware\serial\UART.h	/^	uint32_t uart_speed;$/;"	m	struct:uart_t
 uart_stop	.\hardware\serial\UART.h	/^	uint8_t uart_stop;$/;"	m	struct:uart_t
 uart_t	.\hardware\serial\UART.h	/^typedef struct uart_t{$/;"	s
@@ -2565,8 +2584,8 @@ update_ok	.\hardware\single\update.h	/^	int update_ok;$/;"	m	struct:__anon13
 update_pend	.\hardware\single\update.h	/^	int update_pend;$/;"	m	struct:__anon13
 update_recv_onebyte	.\hardware\single\update.c	/^static u8 update_recv_onebyte(struct update_t *this)$/;"	f	file:
 update_recv_onebyte	.\hardware\single\update.h	/^	u8 (*update_recv_onebyte)(struct update_t*);$/;"	m	struct:update_t
-update_release	.\hardware\single\update.c	/^static void update_release(struct update_t **this)$/;"	f	file:
-update_release	.\hardware\single\update.h	/^	void (*update_release)(struct update_t**);$/;"	m	struct:update_t
+update_release	.\hardware\single\update.c	/^static void update_release(struct update_t *this)$/;"	f	file:
+update_release	.\hardware\single\update.h	/^	void (*update_release)(struct update_t*);$/;"	m	struct:update_t
 update_repeat	.\hardware\single\update.h	/^	int update_repeat;$/;"	m	struct:__anon13
 update_send_package	.\hardware\single\update.c	/^static int update_send_package(struct update_t *this)$/;"	f	file:
 update_send_package	.\hardware\single\update.h	/^	int (*update_send_package)(struct update_t*);$/;"	m	struct:update_t
@@ -2623,9 +2642,9 @@ warn	.\Software\ztcc\Interface.h	/^	struct Warn_t 	*warn;$/;"	m	struct:appitf_t	
 warn_Insert	.\Software\Warn\Warn.c	/^static int warn_Insert(struct Warn_t *this,int addr,int type)$/;"	f	file:
 warn_Insert	.\Software\Warn\Warn.h	/^	int (*warn_Insert)(struct Warn_t*,int addr,int type);$/;"	m	struct:Warn_t
 warn_cleanflags	.\Software\Warn\Warn.h	/^	int (*warn_cleanflags)(struct Warn_t*,int,int,int);$/;"	m	struct:Warn_t
-warn_init	.\Software\Warn\Warn.c	/^Warn_t *warn_init(Warn_t *this,void *topuser)$/;"	f
-warn_relese	.\Software\Warn\Warn.c	/^static void warn_relese(Warn_t **this)$/;"	f	file:
-warn_relese	.\Software\Warn\Warn.h	/^	void(*warn_relese)(struct Warn_t**);$/;"	m	struct:Warn_t
+warn_init	.\Software\Warn\Warn.c	/^Warn_t *warn_init(Warn_t *this)$/;"	f
+warn_relese	.\Software\Warn\Warn.c	/^static void warn_relese(Warn_t *this)$/;"	f	file:
+warn_relese	.\Software\Warn\Warn.h	/^	void(*warn_relese)(struct Warn_t*);$/;"	m	struct:Warn_t
 warn_setflags	.\Software\Warn\Warn.h	/^	int (*warn_setflags)(struct Warn_t*,int,int,int);$/;"	m	struct:Warn_t
 warn_verdict	.\Software\Warn\Warn.c	/^static int warn_verdict(struct Warn_t *this)$/;"	f	file:
 warn_verdict	.\Software\Warn\Warn.h	/^	int (*warn_verdict)(struct Warn_t*);$/;"	m	struct:Warn_t
@@ -2633,16 +2652,16 @@ warring	.\Software\Log\log.h	/^	warring,$/;"	e	enum:__anon32
 width	.\library\e3100\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon18
 width	.\library\e6018\libs_emfuture_odm.h	/^	port_wid_t width;$/;"	m	struct:__anon23
 wiz_Query	.\Software\lamp\wizdom.c	/^static int wiz_Query(struct wizdom_t*this,client_t *client,result_t *res)$/;"	f	file:
-wiz_Query	.\Software\lamp\wizdom.h	/^	int (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);$/;"	m	struct:wizdom_t
+wiz_Query	.\Software\lamp\wizdom.h	/^	int32_t (*wiz_Query)(struct wizdom_t*,client_t*,result_t*);$/;"	m	struct:wizdom_t
 wiz_display	.\Software\lamp\wizdom.c	/^static void wiz_display(const char *Header,const char *Message,int nLen)$/;"	f	file:
 wiz_display	.\Software\lamp\wizdom.h	/^	void (*wiz_display)(const char*,const char*,int);$/;"	m	struct:wizdom_t
 wiz_getaddr	.\Software\lamp\wizdom.c	/^static int wiz_getaddr(struct wizdom_t*this)$/;"	f	file:
-wiz_getaddr	.\Software\lamp\wizdom.h	/^	int (*wiz_getaddr)(struct wizdom_t*);$/;"	m	struct:wizdom_t
+wiz_getaddr	.\Software\lamp\wizdom.h	/^	int32_t (*wiz_getaddr)(struct wizdom_t*);$/;"	m	struct:wizdom_t
 wiz_init	.\Software\lamp\wizdom.c	/^wizdom_t *wiz_init(wizdom_t *this)$/;"	f
-wiz_release	.\Software\lamp\wizdom.c	/^static void wiz_release(struct wizdom_t**this)$/;"	f	file:
-wiz_release	.\Software\lamp\wizdom.h	/^	void (*wiz_release)(struct wizdom_t**);$/;"	m	struct:wizdom_t
+wiz_release	.\Software\lamp\wizdom.c	/^static void wiz_release(struct wizdom_t*this)$/;"	f	file:
+wiz_release	.\Software\lamp\wizdom.h	/^	void (*wiz_release)(struct wizdom_t*);$/;"	m	struct:wizdom_t
 wiz_setaddr	.\Software\lamp\wizdom.c	/^static int wiz_setaddr(struct wizdom_t*this,char addr)$/;"	f	file:
-wiz_setaddr	.\Software\lamp\wizdom.h	/^	int (*wiz_setaddr)(struct wizdom_t*,char addr);$/;"	m	struct:wizdom_t
+wiz_setaddr	.\Software\lamp\wizdom.h	/^	int32_t (*wiz_setaddr)(struct wizdom_t*,char addr);$/;"	m	struct:wizdom_t
 wizdom_t	.\Software\lamp\wizdom.h	/^typedef struct wizdom_t{$/;"	s
 wizdom_t	.\Software\lamp\wizdom.h	/^} wizdom_t;$/;"	t	typeref:struct:wizdom_t
 xAccess	.\sqlite\sqlite3.h	/^  int (*xAccess)(sqlite3_vfs*, const char *zName, int flags, int *pResOut);$/;"	m	struct:sqlite3_vfs

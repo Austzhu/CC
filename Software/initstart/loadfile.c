@@ -103,6 +103,7 @@ static s32 AssignmentParam(s8 *filebuf ,void *app)
 	assert_param(filebuf,FAIL);
 	assert_param(app,FAIL);
 	appitf_t *pa = app;
+
 	/* CCUID */
 	if( SUCCESS != GetHexParam(filebuf,"CCUID",pa->param.CCUID, sizeof(pa->param.CCUID)) )
 		StrToHex(pa->param.CCUID,(u8*)Default_CCUID, sizeof(pa->param.CCUID));
@@ -128,13 +129,16 @@ static s32 AssignmentParam(s8 *filebuf ,void *app)
 	if((pa->param.Is_TCP = GetIntParam(filebuf,"Connection")) == ERRORS )
 		pa->param.Is_TCP = Default_TCP;
 
+
 	debug(DEBUG_loadfile,"CCUID:");
-	for(int i=0;i<6;++i) debug(DEBUG_loadfile,"%02X ",pa->param.CCUID[i]);
+	for(int i=0;i<6;++i)
+		debug(DEBUG_loadfile,"%02X ",pa->param.CCUID[i]);
 	debug(DEBUG_loadfile,"\n");
 	debug(DEBUG_loadfile,"IP:%s:%d\n",pa->param.ServerIpaddr,pa->param.ServerPort);
 	debug(DEBUG_loadfile,"DebugLevel=%d,ControlMethod=%d,ItfWay=%d,"\
 		"HeartBeatcycle=%d,Connection:%s\n",pa->param.DebugLevel,pa->param.ControlMethod,\
 		pa->param.ItfWay,pa->param.HeartBCycle,pa->param.Is_TCP?"TCP":"UDP");
+
 	return SUCCESS;
 }
 
@@ -154,23 +158,25 @@ s32 loadParam(void *app)
 	}
 	/* 准备好文件大小的缓存区 */
 	fseek(fp,0,SEEK_END);
-	debug(DEBUG_loadfile,"File size: %d\n",i=ftell(fp));
+	i=ftell(fp);
+	debug(DEBUG_loadfile,"File size: %d\n",i);
 	if( filebuf = malloc(i+1), !filebuf){
 		debug(DEBUG_loadfile,"%s,%d:malloc err!\n",__func__,__LINE__);
 		fclose(fp);
 		 return FAIL;
 	}
-	memset(filebuf,0,i+1);
+	bzero(filebuf,i+1);
  	fseek(fp,0,SEEK_SET);
  	/* 把文件加载到filebuf中 */
  	i=0; while( !feof(fp) ){filebuf[i++] = fgetc(fp);}
  	fclose(fp);
  	system("rm -f ./temp");
+
  	if(SUCCESS != AssignmentParam(filebuf,app)){
  		free(filebuf);
- 		//Write_log(err,"get Config error!");
  		return FAIL;
- 	} free(filebuf);
+ 	}
+ 	free(filebuf);
  	return SUCCESS;
 }
 
